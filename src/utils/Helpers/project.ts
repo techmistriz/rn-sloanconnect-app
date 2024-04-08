@@ -1,0 +1,767 @@
+import {Alert, Linking, Platform, Share, ToastAndroid} from 'react-native';
+import {constants} from '../../common';
+import moment from 'moment';
+import {
+  showMessage,
+  hideMessage,
+  MessageType,
+} from 'react-native-flash-message';
+import {useCallback} from 'react';
+import base64 from 'react-native-base64';
+import {
+  base64EncodeDecode,
+  consoleLog,
+  hexEncodeDecode,
+  hexToDecimal,
+} from './HelperFunction';
+import {BLEService} from 'src/services';
+import {isObjectEmpty} from './array';
+import StorageService from 'src/services/StorageService/StorageService';
+
+/**
+ *
+ * @param {*} value
+ * @returns radion from degree
+ */
+export function setValue(value: any) {
+  return value ?? '';
+}
+
+/**
+ *
+ * @param {*} value
+ * @returns radion from degree
+ */
+export function findObjectFromObjectArray(
+  value: any,
+  data: Array<Object>,
+  options: any,
+) {
+  var result: any = null;
+  if (
+    value &&
+    data &&
+    options &&
+    Array.isArray(data) &&
+    data.length &&
+    typeof options?.searchKey !== 'undefined'
+  ) {
+    result = data.find((item: any) => {
+      return item[options?.searchKey] == value;
+    });
+  }
+  return result;
+}
+
+/**
+ *
+ * @param {*} value
+ * @returns radion from degree
+ */
+export function findIndexById(data: any, item: any) {
+  var index: number = 0;
+  if (data && item && Array.isArray(data) && data.length) {
+    index = data.findIndex(x => x.id === item?.id);
+  }
+  return index;
+}
+
+/**
+ * // "localName": "FAUCET ADSKU02 T0224",
+ * @param {*} str
+ * function which convert First character into Capital letter of String
+ */
+export function getBleDeviceGeneration(str: string | null | undefined = '') {
+  if (!str) return '';
+  if (str.search(/FAUCET/i) >= 0) {
+    return 'gen1';
+  } else if (str.search(/SL/i) >= 0) {
+    return 'gen2';
+  } else if (str.search(/FAUCET/i) >= 0) {
+    return 'gen1';
+  } else if (str.search(/FAUCET/i) >= 0) {
+    return 'gen1';
+  } else {
+    return '';
+  }
+}
+
+/**
+ * // "localName": "FAUCET ADSKU02 T0224",
+ * @param {*} str
+ * function which convert First character into Capital letter of String
+ */
+export function getBleDeviceVersion(
+  str: string | null | undefined = '',
+  gen = 'gen1',
+) {
+  if (!str) return '';
+  var result = '';
+  if (gen == 'gen1') {
+    var arr = str.split(' ');
+
+    if (Array.isArray(arr) && arr.length > 1) {
+      var __version = arr[1];
+      if (__version) {
+        result = __version.replace(/[^0-9]/g, '');
+      }
+    }
+  } else if (gen == 'gen2') {
+    result = '20';
+  } else if (gen == 'gen3') {
+    var arr = str.split(' ');
+
+    if (Array.isArray(arr) && arr.length > 1) {
+      var __version = arr[1];
+      if (__version) {
+        result = __version.replace(/[^0-9]/g, '');
+      }
+    }
+  } else if (gen == 'gen4') {
+    var arr = str.split(' ');
+
+    if (Array.isArray(arr) && arr.length > 1) {
+      var __version = arr[1];
+      if (__version) {
+        result = __version.replace(/[^0-9]/g, '');
+      }
+    }
+  }
+  return result;
+}
+
+/**
+ *
+ * @param {*} connectedDevice
+ * @param {*} BLE_DEVICE_MODELS
+ * @returns device static model object
+ */
+export function getDeviceModelData(
+  connectedDevice: any,
+  BLE_DEVICE_MODELS: any,
+) {
+  var deviceStaticData = null;
+
+  // localName have more relevant name indentification
+  var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
+  if (__deviceName) {
+    const deviceGen = getBleDeviceGeneration(__deviceName);
+    // consoleLog('deviceGen', deviceGen);
+
+    if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] != 'undefined') {
+      const deviceVersion = getBleDeviceVersion(__deviceName, deviceGen);
+      // consoleLog('deviceVersion', deviceVersion);
+
+      const deviceModel = BLE_DEVICE_MODELS[deviceGen];
+      // consoleLog('deviceModel', deviceModel);
+
+      if (deviceModel && typeof deviceModel[deviceVersion] != 'undefined') {
+        deviceStaticData = deviceModel[deviceVersion];
+      }
+    }
+  }
+
+  return deviceStaticData;
+}
+
+/**
+ *
+ * @param {*} data
+ * @returns radion from degree
+ */
+export function getDeviceService(serviceUUID: string, BLE_GATT_SERVICES: any) {
+  var result = null;
+  if (typeof BLE_GATT_SERVICES[serviceUUID] != 'undefined') {
+    result = BLE_GATT_SERVICES[serviceUUID];
+  }
+
+  return result;
+}
+
+/**
+ *
+ * @param {*} data
+ * @returns radion from degree
+ */
+export function getDeviceCharacteristicsByServiceUUID(
+  serviceUUID: string,
+  BLE_GATT_SERVICES: any,
+) {
+  var result = null;
+  if (typeof BLE_GATT_SERVICES[serviceUUID] != 'undefined') {
+    result = BLE_GATT_SERVICES[serviceUUID]?.characteristics ?? null;
+  }
+
+  return result;
+}
+
+/**
+ *
+ * @param {*} data
+ * @returns radion from degree
+ */
+export function getDeviceCharacteristic(
+  services: any,
+  characteristicUUID: string,
+) {
+  var result = null;
+  if (
+    typeof services != 'undefined' &&
+    typeof services?.characteristics != 'undefined' &&
+    services?.characteristics &&
+    typeof services?.characteristics?.[characteristicUUID] != 'undefined' &&
+    services?.characteristics?.[characteristicUUID]
+  ) {
+    result = services?.characteristics?.[characteristicUUID];
+  }
+  return result;
+}
+
+/**
+ *
+ * @param {*} data
+ * @returns radion from degree
+ */
+export function getDeviceCharacteristics(services: any) {
+  var result = null;
+  if (
+    typeof services != 'undefined' &&
+    typeof services?.characteristics != 'undefined' &&
+    services?.characteristics
+  ) {
+    result = services?.characteristics;
+  }
+  return result;
+}
+
+export function getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
+  serviceUUID: string,
+  characteristicUUID: string,
+  BLE_GATT_SERVICES: any,
+) {
+  var result = null;
+  if (serviceUUID && characteristicUUID) {
+    const deviceService = getDeviceService(serviceUUID, BLE_GATT_SERVICES);
+    // consoleLog("deviceService", deviceService);
+    result = getDeviceCharacteristic(deviceService, characteristicUUID);
+  }
+
+  return result;
+}
+
+/**
+ *
+ * @param {*} value
+ * @returns radion from degree
+ */
+export function mapValue(characteristic: any, deviceStaticData: any = null) {
+  var result = '-';
+  var prefix = '';
+  var postfix = '';
+
+  if (characteristic?.value) {
+    var decodedValue = base64EncodeDecode(characteristic?.value, 'decode');
+
+    if (typeof deviceStaticData?.prefix != 'undefined') {
+      prefix = deviceStaticData?.prefix;
+    }
+
+    if (typeof deviceStaticData?.postfix != 'undefined') {
+      postfix = deviceStaticData?.postfix;
+    }
+
+    if (
+      deviceStaticData &&
+      decodedValue &&
+      typeof deviceStaticData?.valueMapped != 'undefined' &&
+      typeof deviceStaticData?.valueMapped[decodedValue] != 'undefined'
+    ) {
+      result = deviceStaticData?.valueMapped[decodedValue];
+    } else {
+      result = decodedValue;
+    }
+  }
+  return `${prefix ?? ''}${result}${postfix ?? ''}`;
+}
+
+export const cleanCharacteristic = (characteristic: any) => {
+  const __characteristic: any = {...characteristic};
+  delete __characteristic._manager;
+  return __characteristic;
+};
+
+export const getBatteryLevel = async (
+  serviceUUID: string,
+  characteristicUUID: string,
+) => {
+  var batteryLevel = 0;
+  // const serviceUUID = '0000180f-0000-1000-8000-00805f9b34fb';
+  // const characteristicUUID = '00002a19-0000-1000-8000-00805f9b34fb';
+
+  const __batteryLevel = await BLEService.readCharacteristicForDevice(
+    serviceUUID,
+    characteristicUUID,
+  );
+  // consoleLog('__batteryLevel __batteryLevel==>', JSON.stringify(__batteryLevel));
+  //  ZA== => d => 64 => 100
+  if (__batteryLevel?.value) {
+    const decodedValue = base64EncodeDecode(__batteryLevel?.value, 'decode');
+    const hexEncodeValue = hexToDecimal(
+      hexEncodeDecode(decodedValue, 'encode'),
+    );
+
+    // consoleLog('__batteryLevel hexEncodeValue==>', hexEncodeValue);
+    batteryLevel = Number(hexEncodeValue);
+  }
+
+  return batteryLevel;
+};
+
+export const getTotalWaterUsase = async (
+  serviceUUID: string,
+  characteristicUUID: string,
+) => {
+  // const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
+  // const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c949';
+  var totalWaterUsage = 0;
+  const __flowRate = await BLEService.readCharacteristicForDevice(
+    serviceUUID,
+    characteristicUUID,
+  );
+  // consoleLog('__flowRate==>', JSON.stringify(__flowRate));
+
+  if (__flowRate?.value) {
+    const flowRateDecodedValue = base64EncodeDecode(
+      __flowRate?.value,
+      'decode',
+    );
+
+    if (flowRateDecodedValue) {
+      const serviceUUID2 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c910';
+      const characteristicUUID2 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c914';
+
+      const __activationsDuration =
+        await BLEService.readCharacteristicForDevice(
+          serviceUUID2,
+          characteristicUUID2,
+        );
+
+      // consoleLog(
+      //   '__activationsDuration __activationsDuration==>',
+      //   JSON.stringify(__activationsDuration),
+      // );
+      if (__activationsDuration?.value) {
+        const activationsDurationDecodedValue = base64EncodeDecode(
+          __activationsDuration?.value,
+          'decode',
+        );
+
+        // consoleLog(
+        //   'activationsDurationDecodedValue',
+        //   activationsDurationDecodedValue,
+        // );
+
+        var __flowRateDecodedValue = 0;
+        var __activationsDurationHexEncodeValue = 0;
+
+        if (flowRateDecodedValue) {
+          __flowRateDecodedValue = Number(flowRateDecodedValue);
+        }
+
+        // const activationsDurationHexEncodeValue = hexToDecimal(
+        //   hexEncodeDecode(activationsDurationDecodedValue, 'encode'),
+        //   32,
+        // );
+
+        if (activationsDurationDecodedValue) {
+          __activationsDurationHexEncodeValue = Number(
+            activationsDurationDecodedValue,
+          );
+        }
+
+        // consoleLog('flowRateDecodedValue', {
+        //   flowRateDecodedValue,
+        //   activationsDurationDecodedValue,
+        // });
+
+        if (__activationsDurationHexEncodeValue) {
+          const __totalWaterUsage =
+            (__flowRateDecodedValue / 10 / 60) *
+            __activationsDurationHexEncodeValue;
+          totalWaterUsage = Number(__totalWaterUsage.toFixed(2));
+        }
+      }
+    }
+  }
+
+  return totalWaterUsage;
+};
+
+export const saveSettings = async (
+  deviceSettingsData: any,
+): Promise<boolean | void> => {
+  const promises = [];
+
+  if (!isObjectEmpty(deviceSettingsData)) {
+    // setLoading(true);
+    for (const [key, value] of Object.entries(deviceSettingsData)) {
+      if (
+        typeof value != 'undefined' &&
+        Array.isArray(value) &&
+        value.length > 0
+      ) {
+        for (let index = 0; index < value.length; index++) {
+          const element = value[index];
+
+          if (
+            element?.serviceUUID &&
+            element?.characteristicUUID &&
+            element?.newValue != ''
+          ) {
+            // const x = await new Promise(r => setTimeout(r, t, i));
+            const promise =
+              await BLEService.writeCharacteristicWithResponseForDevice(
+                element?.serviceUUID,
+                element?.characteristicUUID,
+                base64EncodeDecode(element?.newValue, 'decode'),
+              );
+
+            promises.push(promise);
+          }
+        }
+      }
+    }
+  }
+
+  // wait for all the promises in the promises array to resolve
+  Promise.all(promises).then(results => {
+    // all the fetch requests have completed, and the results are in the "results" array
+    return true;
+  });
+};
+
+export const updatePreviousSettings = async (
+  connectedDevice: any,
+  deviceSettingsData: any,
+  BLE_GATT_SERVICES: any,
+) => {
+  var DEVICE_PREVIOUS_SETTINGS_RAW = await StorageService.getItem(
+    '@DEVICE_PREVIOUS_SETTINGS',
+  );
+  if (DEVICE_PREVIOUS_SETTINGS_RAW) {
+    var DEVICE_PREVIOUS_SETTINGS = JSON.parse(DEVICE_PREVIOUS_SETTINGS_RAW);
+    if (!isObjectEmpty(DEVICE_PREVIOUS_SETTINGS)) {
+    }
+  }
+
+  // consoleLog(
+  //   'DEVICE_PREVIOUS_SETTINGS',
+  //   JSON.stringify(DEVICE_PREVIOUS_SETTINGS),
+  // );
+
+  const deviceGen = getBleDeviceGeneration(connectedDevice?.name);
+  const deviceVersion = getBleDeviceVersion(connectedDevice?.name, deviceGen);
+
+  var DEVICE_NEW_SETTINGS =
+    DEVICE_PREVIOUS_SETTINGS?.[deviceGen]?.[deviceVersion] ?? {};
+
+  // consoleLog('DEVICE_NEW_SETTINGS', JSON.stringify(DEVICE_NEW_SETTINGS));
+
+  for (const [key, value] of Object.entries(deviceSettingsData)) {
+    if (
+      typeof value != 'undefined' &&
+      Array.isArray(value) &&
+      value.length > 0
+    ) {
+      for (let index = 0; index < value.length; index++) {
+        const element = value[index];
+        if (
+          element?.serviceUUID &&
+          element?.characteristicUUID &&
+          element?.newValue != ''
+        ) {
+          const __deviceStaticDataMain =
+            getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
+              element?.serviceUUID,
+              element?.characteristicUUID,
+              BLE_GATT_SERVICES,
+            );
+          if (!isObjectEmpty(__deviceStaticDataMain)) {
+            // DEVICE_NEW_SETTINGS.push({
+            //   serviceUUID: element?.serviceUUID,
+            //   characteristicUUID: element?.characteristicUUID,
+            //   ...__deviceStaticDataMain,
+            //   value: base64EncodeDecode(element?.newValue, 'decode'),
+            // });
+
+            DEVICE_NEW_SETTINGS = {
+              ...DEVICE_NEW_SETTINGS,
+              [element?.characteristicUUID]: {
+                serviceUUID: element?.serviceUUID,
+                characteristicUUID: element?.characteristicUUID,
+                ...__deviceStaticDataMain,
+                value: base64EncodeDecode(element?.newValue, 'decode'),
+              },
+            };
+          }
+        }
+      }
+    }
+  }
+
+  const DEVICE_PREVIOUS_SETTINGS_SAVED = {
+    ...DEVICE_PREVIOUS_SETTINGS,
+    [deviceGen]: {
+      [deviceVersion]: {
+        ...DEVICE_NEW_SETTINGS,
+      },
+    },
+  };
+
+  // consoleLog(
+  //   'DEVICE_PREVIOUS_SETTINGS_SAVED',
+  //   JSON.stringify(DEVICE_PREVIOUS_SETTINGS_SAVED),
+  // );
+
+  await StorageService.setItem(
+    '@DEVICE_PREVIOUS_SETTINGS',
+    DEVICE_PREVIOUS_SETTINGS_SAVED,
+  );
+};
+
+export const hasFlowRateSetting = (deviceSettingsData: any) => {
+  return (
+    typeof deviceSettingsData?.FlowRate !== 'undefined' &&
+    deviceSettingsData?.FlowRate
+  );
+};
+
+export const hasSensorRangeSetting = (deviceSettingsData: any) => {
+  return (
+    typeof deviceSettingsData?.SensorRange !== 'undefined' &&
+    deviceSettingsData?.SensorRange
+  );
+};
+
+export const getSavedSettingsGen1 = async (connectedDevice: any) => {
+  var deviceSettingsData = {};
+  var result = '';
+
+  var DEVICE_PREVIOUS_SETTINGS_RAW = await StorageService.getItem(
+    '@DEVICE_PREVIOUS_SETTINGS',
+  );
+  if (DEVICE_PREVIOUS_SETTINGS_RAW) {
+    var DEVICE_PREVIOUS_SETTINGS = JSON.parse(DEVICE_PREVIOUS_SETTINGS_RAW);
+    if (!isObjectEmpty(DEVICE_PREVIOUS_SETTINGS)) {
+      // consoleLog(
+      //   'DEVICE_PREVIOUS_SETTINGS',
+      //   JSON.stringify(DEVICE_PREVIOUS_SETTINGS),
+      // );
+
+      const deviceGen = getBleDeviceGeneration(connectedDevice?.name);
+      const deviceVersion = getBleDeviceVersion(
+        connectedDevice?.name,
+        deviceGen,
+      );
+
+      var DEVICE_SETTINGS_WITH_VERSION =
+        DEVICE_PREVIOUS_SETTINGS?.[deviceGen]?.[deviceVersion] ?? {};
+      // consoleLog(
+      //   'DEVICE_SETTINGS_WITH_VERSION',
+      //   JSON.stringify(DEVICE_SETTINGS_WITH_VERSION),
+      // );
+
+      if (DEVICE_SETTINGS_WITH_VERSION) {
+        // d0aba888-fb10-4dc9-9b17-bdd8f490c943 Activation Mode
+        if (
+          DEVICE_SETTINGS_WITH_VERSION &&
+          DEVICE_SETTINGS_WITH_VERSION?.['d0aba888-fb10-4dc9-9b17-bdd8f490c943']
+        ) {
+          var settingsArr = [];
+          var characteristic =
+            DEVICE_SETTINGS_WITH_VERSION?.[
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c943'
+            ];
+
+          if (characteristic && characteristic?.value) {
+            var characteristicMainText =
+              characteristic?.valueMapped?.[characteristic?.value];
+
+            result += `${characteristic?.name}:`;
+            result += ` ${characteristicMainText}`;
+
+            settingsArr.push({
+              serviceUUID: characteristic?.serviceUUID,
+              characteristicUUID: characteristic?.uuid,
+              oldValue: null,
+              newValue: characteristic?.value,
+            });
+
+            var characteristic2UUID =
+              characteristic?.UUIDMapped?.[characteristic?.value];
+            if (DEVICE_SETTINGS_WITH_VERSION?.[characteristic2UUID]) {
+              var characteristic2 =
+                DEVICE_SETTINGS_WITH_VERSION?.[characteristic2UUID];
+              var characteristic2Text = characteristic2?.value;
+
+              result += ` ${characteristic2Text}`;
+              result += ` /${characteristic2?.postfix}\n`;
+              // consoleLog('result1===>', result);
+
+              settingsArr.push({
+                serviceUUID: characteristic2?.serviceUUID,
+                characteristicUUID: characteristic2?.uuid,
+                oldValue: null,
+                newValue: characteristic2?.value,
+              });
+            }
+          }
+          if (settingsArr.length > 0) {
+            deviceSettingsData = {
+              ...deviceSettingsData,
+              ...{ActivationMode: settingsArr},
+            };
+          }
+        }
+
+        // d0aba888-fb10-4dc9-9b17-bdd8f490c946 Line Flush
+        if (
+          DEVICE_SETTINGS_WITH_VERSION &&
+          DEVICE_SETTINGS_WITH_VERSION?.['d0aba888-fb10-4dc9-9b17-bdd8f490c946']
+        ) {
+          var settingsArr = [];
+          var characteristic =
+            DEVICE_SETTINGS_WITH_VERSION?.[
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c946'
+            ];
+
+          if (characteristic && characteristic?.value) {
+            var characteristicMainText =
+              characteristic?.valueMapped?.[characteristic?.value];
+            result += `${characteristic?.name}:`;
+            result += ` ${characteristicMainText}`;
+
+            settingsArr.push({
+              serviceUUID: characteristic?.serviceUUID,
+              characteristicUUID: characteristic?.uuid,
+              oldValue: null,
+              newValue: characteristic?.value,
+            });
+
+            var characteristic2UUIDArr =
+              characteristic?.UUIDMapped?.[characteristic?.value];
+
+            if (
+              characteristic2UUIDArr &&
+              Array.isArray(characteristic2UUIDArr) &&
+              characteristic2UUIDArr.length
+            ) {
+              var uuid1 = characteristic2UUIDArr[0];
+              var uuid2 = characteristic2UUIDArr[1];
+              if (uuid1 && DEVICE_SETTINGS_WITH_VERSION?.[uuid1]) {
+                var characteristic2 = DEVICE_SETTINGS_WITH_VERSION?.[uuid1];
+                var characteristic2Text = characteristic2?.value;
+
+                result += ` ${characteristic2Text}`;
+                result += ` /${characteristic2?.postfix}`;
+
+                settingsArr.push({
+                  serviceUUID: characteristic2?.serviceUUID,
+                  characteristicUUID: characteristic2?.uuid,
+                  oldValue: null,
+                  newValue: characteristic2?.value,
+                });
+              }
+
+              if (uuid2 && DEVICE_SETTINGS_WITH_VERSION?.[uuid2]) {
+                var characteristic3 = DEVICE_SETTINGS_WITH_VERSION?.[uuid2];
+                var characteristic3Text = characteristic3?.value;
+
+                result += ` ${characteristic3Text}`;
+                result += ` /${characteristic3?.postfix}\n`;
+
+                settingsArr.push({
+                  serviceUUID: characteristic3?.serviceUUID,
+                  characteristicUUID: characteristic3?.uuid,
+                  oldValue: null,
+                  newValue: characteristic3?.value,
+                });
+              }
+            }
+            // consoleLog('result2===>', result);
+          }
+
+          if (settingsArr.length > 0) {
+            deviceSettingsData = {
+              ...deviceSettingsData,
+              ...{LineFlush: settingsArr},
+            };
+          }
+        }
+
+        // d0aba888-fb10-4dc9-9b17-bdd8f490c949 Flow Rate
+        if (
+          DEVICE_SETTINGS_WITH_VERSION &&
+          DEVICE_SETTINGS_WITH_VERSION?.['d0aba888-fb10-4dc9-9b17-bdd8f490c949']
+        ) {
+          var settingsArr = [];
+          var characteristic =
+            DEVICE_SETTINGS_WITH_VERSION?.[
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c949'
+            ];
+
+          if (characteristic && characteristic?.value) {
+            result += `${characteristic?.name}:`;
+            result += ` ${characteristic?.value / 10}`;
+            result += `${characteristic?.postfix}\n`;
+            // consoleLog('result3===>', result);
+
+            settingsArr.push({
+              serviceUUID: characteristic?.serviceUUID,
+              characteristicUUID: characteristic?.uuid,
+              oldValue: null,
+              newValue: characteristic?.value,
+            });
+          }
+          if (settingsArr.length > 0) {
+            deviceSettingsData = {
+              ...deviceSettingsData,
+              ...{FlowRate: settingsArr},
+            };
+          }
+        }
+
+        // d0aba888-fb10-4dc9-9b17-bdd8f490c942 Sensor Range
+        if (
+          DEVICE_SETTINGS_WITH_VERSION &&
+          DEVICE_SETTINGS_WITH_VERSION?.['d0aba888-fb10-4dc9-9b17-bdd8f490c942']
+        ) {
+          var settingsArr = [];
+          var characteristic =
+            DEVICE_SETTINGS_WITH_VERSION?.[
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c942'
+            ];
+
+          if (characteristic && characteristic?.value) {
+            result += `${characteristic?.name}:`;
+            result += ` ${characteristic?.value}`;
+            // consoleLog('result4===>', result);
+            settingsArr.push({
+              serviceUUID: characteristic?.serviceUUID,
+              characteristicUUID: characteristic?.uuid,
+              oldValue: null,
+              newValue: characteristic?.value,
+            });
+          }
+          if (settingsArr.length > 0) {
+            deviceSettingsData = {
+              ...deviceSettingsData,
+              ...{SensorRange: settingsArr},
+            };
+          }
+        }
+      }
+    }
+  }
+  return {text: result, data: deviceSettingsData};
+};

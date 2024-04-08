@@ -1,0 +1,352 @@
+import React, {Component, Fragment, useEffect, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Image,
+  StatusBar,
+  FlatList,
+  BackHandler,
+} from 'react-native';
+import Theme from 'src/theme';
+import {Images} from 'src/assets';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  consoleLog,
+  getImgSource,
+  showConfirmAlert,
+} from 'src/utils/Helpers/HelperFunction';
+import Typography from 'src/components/Typography';
+import {Wrap, Row, TochableWrap} from 'src/components/Common';
+import TouchableItem from 'src/components/TouchableItem';
+import {Button} from 'src/components/Button';
+import NavigationService from 'src/services/NavigationService/NavigationService';
+import AppInfo from 'src/components/@ProjectComponent/AppInfo';
+import VectorIcon from 'src/components/VectorIcon';
+import {styles} from './styles';
+import Header from 'src/components/Header';
+import AppContainer from 'src/components/AppContainer';
+import EmptyComponent from 'src/components/EmptyState';
+import Loader from 'src/components/Loader';
+import Divider from 'src/components/Divider';
+import {BLEService} from 'src/services';
+import {cloneDeep} from 'src/services/BLEService/cloneDeep';
+import DeviceConnecting from 'src/components/@ProjectComponent/DeviceConnecting';
+import NoDeviceFound from 'src/components/@ProjectComponent/NoDeviceFound';
+import {
+  BleError,
+  BleManager,
+  Characteristic,
+  Device,
+} from 'react-native-ble-plx';
+import {loginResetDataAction} from 'src/redux/actions';
+
+type DeviceExtendedByUpdateTime = Device & {updateTimestamp: number};
+const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
+
+const Index = ({navigation, route}: any) => {
+  const dispatch = useDispatch();
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
+  const [displayText, setDisplaText] = useState<any>('');
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [isSearching, setSearching] = useState(true);
+  const [foundDevices, setFoundDevices] = useState<
+    DeviceExtendedByUpdateTime[]
+  >([]);
+  const connectedDevice: any = BLEService.getDevice();
+
+  /** component hooks method */
+  useEffect(() => {
+    const backAction = () => {
+      if (navigation.isFocused()) {
+        BLEService.manager.stopDeviceScan();
+        NavigationService.replace('ActivateDevice');
+        return true;
+      }
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
+
+  /** component hooks method */
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // The screen is focused
+      // Call any action
+      consoleLog('DeviceSearching focused');
+      initlizeApp();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  const initlizeApp = async () => {
+    if (connectedDevice?.id) {
+      try {
+        await BLEService.disconnectDeviceById(connectedDevice?.id);
+      } catch (error) {
+        consoleLog('error', error);
+      }
+    }
+
+    setFoundDevices([]);
+    consoleLog('connectedDevice?.name', connectedDevice?.name);
+    if (connectedDevice?.name) {
+      // NavigationService.navigate('DeviceDashboard');
+    } else {
+      setSearching(true);
+
+      BLEService.initializeBLE().then(() =>
+        BLEService.scanDevices(addFoundDevice, null, false),
+      );
+    }
+  };
+
+  const addFoundDevice = (device: Device) => {
+    consoleLog('device', device);
+    setFoundDevices(prevState => {
+      if (!isFoundDeviceUpdateNecessary(prevState, device)) {
+        return prevState;
+      }
+      // deep clone
+      const nextState = cloneDeep(prevState);
+      const extendedDevice: DeviceExtendedByUpdateTime = {
+        ...device,
+        updateTimestamp: Date.now() + MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS,
+      } as DeviceExtendedByUpdateTime;
+
+      const indexToReplace = nextState.findIndex(
+        currentDevice => currentDevice.id === device.id,
+      );
+      if (indexToReplace === -1) {
+        return nextState.concat(extendedDevice);
+      }
+      nextState[indexToReplace] = extendedDevice;
+      return nextState;
+    });
+  };
+
+  const isFoundDeviceUpdateNecessary = (
+    currentDevices: DeviceExtendedByUpdateTime[],
+    updatedDevice: Device,
+  ) => {
+    const currentDevice = currentDevices.find(
+      ({id}) => updatedDevice.id === id,
+    );
+    if (!currentDevice) {
+      return true;
+    }
+    return currentDevice.updateTimestamp < Date.now();
+  };
+
+  const onDeviceConnectingPress = (item: any) => {
+    setIsConnecting(true);
+    BLEService.connectToDevice(item?.id, item)
+      .then(onConnectSuccess)
+      .catch(onConnectFail);
+  };
+
+  const onConnectSuccess = async () => {
+    consoleLog('onConnectSuccess');
+    await BLEService.discoverAllServicesAndCharacteristicsForDevice();
+    // NavigationService.navigate('DeviceDashboard');
+    NavigationService.resetAllAction('BottomTabNavigator');
+    setIsConnecting(false);
+  };
+
+  const onConnectFail = (error: any) => {
+    consoleLog('onConnectFail error==>', error);
+    // NavigationService.navigate('BottomTabNavigator');
+    setIsConnecting(false);
+  };
+
+  /**Child flatlist render method */
+  const renderItem = ({item}: any) => {
+    return (
+      <TouchableItem
+        onPress={() => {
+          onDeviceConnectingPress(item);
+        }}
+        style={{}}>
+        <>
+          <Row
+            autoMargin={false}
+            style={{alignItems: 'center', paddingHorizontal: 15}}>
+            <Wrap autoMargin={false} style={{justifyContent: 'flex-start'}}>
+              <Image
+                // @ts-ignore
+                source={getImgSource(
+                  typeof item?.modelStaticData?.models[0]?.image != 'undefined'
+                    ? item?.modelStaticData?.models[0]?.image
+                    : Images.imgHolder,
+                )}
+                style={{height: 80, width: 80}}
+                resizeMode="contain"
+              />
+            </Wrap>
+
+            <Wrap
+              autoMargin={false}
+              style={{flex: 1, justifyContent: 'flex-start', paddingLeft: 10}}>
+              <Typography
+                size={14}
+                text={`${item?.localName ?? item?.name}`}
+                style={{
+                  textAlign: 'left',
+                  // paddingVertical: 10,
+                }}
+                color={Theme.colors.black}
+                noOfLine={2}
+              />
+              <Typography
+                size={12}
+                text={`Version ${item?.modelStaticData?.generation ?? 'N/A'}`}
+                style={{
+                  textAlign: 'left',
+                  fontStyle: 'italic',
+                }}
+                color={Theme.colors.darkGray}
+                noOfLine={1}
+              />
+            </Wrap>
+            <Wrap autoMargin={false} style={{justifyContent: 'flex-end'}}>
+              <VectorIcon
+                iconPack="MaterialCommunityIcons"
+                name={'link-variant'}
+                size={25}
+                color={Theme.colors.lightGray}
+              />
+            </Wrap>
+          </Row>
+          <Divider />
+        </>
+      </TouchableItem>
+    );
+  };
+
+  const flatListHeader = () => {
+    return (
+      <>
+        <Wrap autoMargin={false} style={{paddingVertical: 30}}>
+          <Typography
+            size={18}
+            text={`Connect Your Product`}
+            style={{
+              textAlign: 'center',
+              marginTop: 0,
+              lineHeight: 25,
+            }}
+            color={Theme.colors.primaryColor}
+            ff={Theme.fonts.ThemeFontMedium}
+          />
+        </Wrap>
+        <Divider />
+      </>
+    );
+  };
+
+  if (isConnecting) {
+    return <DeviceConnecting />;
+  } else if (!isSearching) {
+    return <NoDeviceFound onSearchAgainPress={() => setSearching(true)} />;
+  } else {
+    return (
+      <AppContainer
+        scroll={false}
+        scrollViewStyle={{}}
+        backgroundType="solid"
+        haslogOutButton={true}
+        hasRightButton={true}
+        // onLogoutPress={onLogout}
+        onRightPress={() => {
+          initlizeApp();
+        }}
+        headerContainerStyle={{backgroundColor: Theme.colors.primaryColor}}>
+        <Wrap autoMargin={false} style={styles.container}>
+          <Wrap autoMargin={false} style={styles.sectionContainer}>
+            <Wrap autoMargin={false} style={styles.section1}>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={foundDevices ?? []}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index?.toString()}
+                onEndReachedThreshold={0.01}
+                ListHeaderComponent={flatListHeader}
+                ListFooterComponent={() => null}
+                contentContainerStyle={[
+                  {paddingBottom: 10},
+                  foundDevices.length == 0 && {flex: 1},
+                ]}
+                ListEmptyComponent={() => (
+                  <Wrap
+                    autoMargin={false}
+                    style={{
+                      flex: 1,
+                      overflow: 'hidden',
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Loader
+                      visible={true}
+                      loadingText="Searching nearby devices..."
+                    />
+                  </Wrap>
+                )}
+              />
+            </Wrap>
+          </Wrap>
+
+          <Wrap
+            autoMargin={false}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              backgroundColor: 'white',
+            }}>
+            <Row
+              autoMargin={false}
+              style={{
+                alignItems: 'center',
+                paddingVertical: 5,
+                backgroundColor: 'white',
+                shadowRadius: 2,
+                shadowOffset: {
+                  width: 0,
+                  height: -3,
+                },
+                shadowColor: '#000000',
+                elevation: 4,
+                paddingHorizontal: 30,
+                overflow: 'hidden',
+                borderTopWidth: 1,
+                borderTopColor: Theme.colors.lightGray,
+              }}>
+              <Wrap autoMargin={false} style={{}}>
+                <Image
+                  // @ts-ignore
+                  source={getImgSource(Images.appLogoWhite)}
+                  style={{height: 40, width: 80}}
+                  tintColor={Theme.colors.midGray}
+                  resizeMode="contain"
+                />
+              </Wrap>
+              <Wrap autoMargin={false} style={{}}>
+                <AppInfo
+                  style1={{textAlign: 'center', color: Theme.colors.midGray}}
+                  style2={{textAlign: 'center', color: Theme.colors.midGray}}
+                />
+              </Wrap>
+            </Row>
+          </Wrap>
+        </Wrap>
+      </AppContainer>
+    );
+  }
+};
+
+export default Index;

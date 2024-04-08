@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "416444332079",
+    "project_id": "my-medical-store-9d2f8",
+    "storage_bucket": "my-medical-store-9d2f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416444332079:android:061024af90169e339feeda",
+        "android_client_info": {
+          "package_name": "com.sloanconnectapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAR75GiWnBYYZtj6ZaPbkOryiVq7P-LXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

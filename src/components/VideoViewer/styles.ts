@@ -1,0 +1,65 @@
+import {StyleSheet} from 'react-native';
+import Theme from 'src/theme';
+import {constants} from 'src/common';
+
+export const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginTop: 22,
+    borderWidth: 1,
+    borderColor: 'red',
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    position: 'relative',
+  },
+  modalView: {
+    // flex: 1,
+    marginVertical: 120,
+    // backgroundColor: 'white',
+    // borderRadius: 15,
+    // padding: 35,
+    width: constants.screenWidth - 40,
+    height: constants.screenHeight - 400,
+    // alignItems: 'center',
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
+    // elevation: 5,
+    borderWidth: 1,
+    borderColor: 'red',
+  },
+  modalCloseBtnContainer: {
+    // borderWidth: 1,
+    // borderColor: 'red',
+    position: 'absolute',
+    right: 0,
+    top: 10,
+    padding: 15,
+  },
+  videoPlayerContainer: {
+    flex: 1,
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'green',
+    // justifyContent: 'center',
+    // alignContent: 'center',
+    // alignItems: 'center',
+    // alignSelf: 'center',
+  },
+});
