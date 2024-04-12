@@ -1,0 +1,49 @@
+{
+  "gen1": {
+    "02": {
+      "d0aba888-fb10-4dc9-9b17-bdd8f490c946": {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+        "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+        "name": "Flush on/off",
+        "size": "1 bytes",
+        "type": "String",
+        "range": "0-1",
+        "initialValue": "0",
+        "properties": ["R", "W"],
+        "sloanApp": "",
+        "remarks": "",
+        "prefix": null,
+        "postfix": null,
+        "valueMapped": {"0": "Off", "1": "On"},
+        "UUIDMapped": {
+          "0": [
+            "d0aba888-fb10-4dc9-9b17-bdd8f490c947",
+            "d0aba888-fb10-4dc9-9b17-bdd8f490c948"
+          ],
+          "1": [
+            "d0aba888-fb10-4dc9-9b17-bdd8f490c947",
+            "d0aba888-fb10-4dc9-9b17-bdd8f490c948"
+          ]
+        },
+        "value": "0"
+      },
+      "d0aba888-fb10-4dc9-9b17-bdd8f490c942": {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c942",
+        "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c942",
+        "name": "Sensor Range",
+        "size": "1 bytes",
+        "type": "String",
+        "range": "1-5",
+        "initialValue": "0",
+        "properties": ["R", "W"],
+        "sloanApp": "",
+        "remarks": "",
+        "prefix": null,
+        "postfix": null,
+        "value": "4"
+      }
+    }
+  }
+}

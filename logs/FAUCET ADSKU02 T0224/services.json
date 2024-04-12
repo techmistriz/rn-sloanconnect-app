@@ -1,0 +1,254 @@
+[
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "00001800-0000-1000-8000-00805f9b34fb",
+    "id": 1,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "00001801-0000-1000-8000-00805f9b34fb",
+    "id": 4,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "0000180a-0000-1000-8000-00805f9b34fb",
+    "id": 7,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c900",
+    "id": 10,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "0000180f-0000-1000-8000-00805f9b34fb",
+    "id": 31,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c910",
+    "id": 34,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c920",
+    "id": 55,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "id": 88,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c950",
+    "id": 107,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c960",
+    "id": 110,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c970",
+    "id": 128,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  },
+  {
+    "isPrimary": true,
+    "deviceID": "00:0B:57:6E:87:31",
+    "uuid": "1d14d6ee-fd63-4fa1-bfa4-8f47b42119f0",
+    "id": 149,
+    "_manager": {
+      "_eventEmitter": {
+        "_nativeModule": {
+          "StateChangeEvent": "StateChangeEvent",
+          "RestoreStateEvent": "RestoreStateEvent",
+          "ScanEvent": "ScanEvent",
+          "DisconnectionEvent": "DisconnectionEvent",
+          "ReadEvent": "ReadEvent"
+        }
+      },
+      "_uniqueId": 9,
+      "_activePromises": {},
+      "_activeSubscriptions": {},
+      "_scanEventSubscription": null
+    }
+  }
+]

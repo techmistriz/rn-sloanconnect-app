@@ -1,0 +1,57 @@
+{
+  "characteristicMain": {
+    "deviceID": "00:0B:57:6E:87:31",
+    "id": 93,
+    "isIndicatable": false,
+    "isNotifiable": false,
+    "isNotifying": false,
+    "isReadable": true,
+    "isWritableWithResponse": true,
+    "isWritableWithoutResponse": false,
+    "serviceID": 88,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
+    "value": "MA=="
+  },
+  "characteristicRight": {
+    "deviceID": "00:0B:57:6E:87:31",
+    "id": 95,
+    "isIndicatable": false,
+    "isNotifiable": false,
+    "isNotifying": false,
+    "isReadable": true,
+    "isWritableWithResponse": true,
+    "isWritableWithoutResponse": false,
+    "serviceID": 88,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c944",
+    "value": "MzA="
+  },
+  "deviceStaticDataMain": {
+    "UUIDMapped": {
+      "0": "d0aba888-fb10-4dc9-9b17-bdd8f490c944",
+      "1": "d0aba888-fb10-4dc9-9b17-bdd8f490c945"
+    },
+    "initialValue": "0",
+    "name": "Mode Selection",
+    "postfix": null,
+    "prefix": null,
+    "properties": ["R", "W"],
+    "range": "0-1",
+    "remarks": "0: On-demand / 1: Meter",
+    "size": "1 bytes",
+    "sloanApp": "On-demand / meter",
+    "type": "String",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
+    "valueMapped": {"0": "On Demand", "1": "Metered"}
+  },
+  "referrer": "Activation Mode",
+  "setting": {
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
+    "id": 1,
+    "rightText": "-",
+    "route": "ActivationMode",
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "title": "Activation Mode"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "Properties": ["R", "W"],
+  "initialValue": "0",
+  "name": "Mode Selection",
+  "range": "0-1",
+  "remarks": "0: On-demand / 1: Meter",
+  "size": "1 bytes",
+  "sloanApp": "On-demand / meter",
+  "type": "String",
+  "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c943"
+}

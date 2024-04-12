@@ -1,0 +1,10 @@
+{
+  "SensorRange": [
+    {
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c942",
+      "oldValue": "Mw==",
+      "newValue": "NA=="
+    }
+  ]
+}

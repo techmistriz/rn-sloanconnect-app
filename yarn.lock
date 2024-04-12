@@ -1826,10 +1826,10 @@
     opencollective-postinstall "^2.0.3"
     superstruct "^0.6.2"
 
-"@react-native-firebase/crashlytics@^18.8.0":
-  version "18.8.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-18.8.0.tgz#1a0dfd055520799d6f00bf55d829d2d5abc54f5c"
-  integrity sha512-wqcl98CkoUz2wj9IBJzGEHNqgfeXSkIN9EcgMBO4osKganXSgxGXZW+cSJ35IqPdOIL8pWXbFN7YfznHN++wfA==
+"@react-native-firebase/crashlytics@^19.2.0":
+  version "19.2.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-19.2.0.tgz#89404de745ea3c5ffe9a6bed1596221eeb768991"
+  integrity sha512-t5tXB4bI2Hox4I7qbzwYHPt9wKRhemWHg95lTe0ki0+6WSFN9Ou79zfXjIj1KdROzhHzJFUfAAlkivOU7MDh5w==
   dependencies:
     stacktrace-js "^2.0.2"
 
@@ -6430,6 +6430,11 @@ react-native-screens@^3.29.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-sha256@^1.4.10:
+  version "1.4.10"
+  resolved "https://registry.yarnpkg.com/react-native-sha256/-/react-native-sha256-1.4.10.tgz#b4c9990430849ee29a00dfd606fd92f08e003dc7"
+  integrity sha512-x12owcA1jQZ1GMUX2xg2+4IOVJciZChcyNvolt6IjLdAFtu1tttDF9aHsCTW1J1SbLGSoYCo/UTAoNZay/YAsg==
 
 react-native-swiper@^1.6.0:
   version "1.6.0"

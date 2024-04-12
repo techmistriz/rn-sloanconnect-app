@@ -1,0 +1,93 @@
+{
+  "characteristicMain": {
+    "deviceID": "00:0B:57:6E:87:31",
+    "id": 99,
+    "isIndicatable": false,
+    "isNotifiable": false,
+    "isNotifying": false,
+    "isReadable": true,
+    "isWritableWithResponse": true,
+    "isWritableWithoutResponse": false,
+    "serviceID": 88,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+    "value": "MA=="
+  },
+  "characteristicRight": {
+    "deviceID": "00:0B:57:6E:87:31",
+    "id": 101,
+    "isIndicatable": false,
+    "isNotifiable": false,
+    "isNotifying": false,
+    "isReadable": true,
+    "isWritableWithResponse": true,
+    "isWritableWithoutResponse": false,
+    "serviceID": 88,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c947",
+    "value": "MzA="
+  },
+  "characteristicRight2": {
+    "deviceID": "00:0B:57:6E:87:31",
+    "id": 103,
+    "isIndicatable": false,
+    "isNotifiable": false,
+    "isNotifying": false,
+    "isReadable": true,
+    "isWritableWithResponse": true,
+    "isWritableWithoutResponse": false,
+    "serviceID": 88,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c948",
+    "value": "OA=="
+  },
+  "deviceStaticDataMain": {
+    "UUIDMapped": {"0": "[Array]", "1": "[Array]"},
+    "initialValue": "0",
+    "name": "Flush on/off",
+    "postfix": null,
+    "prefix": null,
+    "properties": ["R", "W"],
+    "range": "0-1",
+    "remarks": "",
+    "size": "1 bytes",
+    "sloanApp": "",
+    "type": "String",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+    "valueMapped": {"0": "Off", "1": "On"}
+  },
+  "deviceStaticDataRight": {
+    "initialValue": "0",
+    "name": "Flush time",
+    "postfix": null,
+    "prefix": null,
+    "properties": ["R", "W"],
+    "range": "3-1200",
+    "remarks": "seconds",
+    "size": "4 bytes",
+    "sloanApp": "",
+    "type": "String",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c947"
+  },
+  "deviceStaticDataRight2": {
+    "initialValue": "0",
+    "name": "Flush interval",
+    "postfix": null,
+    "prefix": null,
+    "properties": ["R", "W"],
+    "range": "0-72",
+    "remarks": "hours",
+    "size": "2 bytes",
+    "sloanApp": "",
+    "type": "String",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c948"
+  },
+  "referrer": "Line Flush",
+  "setting": {
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+    "id": 2,
+    "route": "LineFlush",
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "title": "Line Flush"
+  }
+}

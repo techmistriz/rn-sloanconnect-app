@@ -1,0 +1,15 @@
+{
+ 
+  "id": "84:BA:20:4A:92:00",
+  "isConnectable": null,
+  "localName": null,
+  "manufacturerData": null,
+  "mtu": 23,
+  "name": "SL",
+  "overflowServiceUUIDs": null,
+  "rssi": null,
+  "serviceData": null,
+  "serviceUUIDs": null,
+  "solicitedServiceUUIDs": null,
+  "txPowerLevel": null
+}

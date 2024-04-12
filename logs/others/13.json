@@ -1,0 +1,55 @@
+{
+  "text": "Mode Selection: Metered 120 / Sec\nFlush on/off: On 600 / Sec 20 / Hrs\nFlow Rate: 1.9 gpm\nSensor Range: 3",
+  "data": {
+    "ActivationMode": [
+      {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
+        "oldValue": null,
+        "newValue": "1"
+      },
+      {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c944",
+        "oldValue": null,
+        "newValue": "120"
+      }
+    ],
+    "LineFlush": [
+      {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+        "oldValue": null,
+        "newValue": "1"
+      },
+      {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c947",
+        "oldValue": null,
+        "newValue": "600"
+      },
+      {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c948",
+        "oldValue": null,
+        "newValue": "20"
+      }
+    ],
+    "FlowRate": [
+      {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c949",
+        "oldValue": null,
+        "newValue": "19"
+      }
+    ],
+    "SensorRange": [
+      {
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c942",
+        "oldValue": null,
+        "newValue": "3"
+      }
+    ]
+  }
+}

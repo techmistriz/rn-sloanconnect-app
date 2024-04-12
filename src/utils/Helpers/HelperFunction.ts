@@ -8,6 +8,7 @@ import {
 } from 'react-native-flash-message';
 import {useCallback} from 'react';
 import base64 from 'react-native-base64';
+import {sha256, sha256Bytes} from 'react-native-sha256';
 
 /**
  ***********************************************************
@@ -392,11 +393,29 @@ export function base64EncodeDecode(
 /**
  *
  * @param {*} str
+ * function which convert base64 to hexadecimal
+ */
+export function base64ToHex(str: string | any) {
+  if (!str) return str;
+
+  return hexEncodeDecode(base64EncodeDecode(str, 'decode'));
+  // const raw = atob(str);
+  // let result = '';
+  // for (let i = 0; i < raw.length; i++) {
+  //   const hex = raw.charCodeAt(i).toString(16);
+  //   result += hex.length === 2 ? hex : '0' + hex;
+  // }
+  // return result.toUpperCase();
+}
+
+/**
+ *
+ * @param {*} str
  * function which convert First character into Capital letter of String
  */
 export function hexEncodeDecode(
   str: string | null,
-  type: 'encode' | 'decode' = 'encode',
+  type: 'encode' | 'decode' | 'decodeSpecial' = 'encode',
 ) {
   if (!str) return '';
   return type == 'encode'
@@ -404,6 +423,12 @@ export function hexEncodeDecode(
         .split('')
         .map(c => c.charCodeAt(0).toString(16).padStart(2, '0'))
         .join('')
+    : type == 'decodeSpecial'
+    ? str
+        .split(' ')
+        .filter(p => !!p)
+        .map(c => parseInt(c, 16))
+        .join(' ')
     : str
         .split(/(\w\w)/g)
         .filter(p => !!p)
@@ -420,6 +445,53 @@ export const hexToDecimal = (hex: any, base: number = 16) => {
   if (!hex) return hex;
   return parseInt(hex, base);
 };
+
+/**
+ *
+ * @param {*} hex
+ * function which convert First character into Capital letter of String
+ */
+export const decimalToHex = (hex: any, base: number = 16) => {
+  if (!hex) return hex;
+  return hex.toString(base);
+};
+
+export function getCurrentTimestamp() {
+  return Date.now();
+}
+
+export function getTimestampInSeconds() {
+  return Math.floor(Date.now() / 1000);
+}
+
+export function addSpaceIntoString(str: string, n: number) {
+  if (!str) return str;
+  var a = [],
+    start = 0;
+  while (start < str.length) {
+    a.push(str.slice(start, start + n));
+    start += n;
+  }
+  return a.join(' ');
+}
+
+export function mapUint8Array(str: string, length: number) {
+  const result = new Uint8Array(length);
+  if (typeof str != 'undefined' && str) {
+    var array1 = str.split(' ');
+    if (
+      typeof array1 != 'undefined' &&
+      Array.isArray(array1) &&
+      array1.length >= length
+    ) {
+      for (let i = 0; i < length; i++) {
+        result[i] = parseInt(array1[i]);
+      }
+    }
+  }
+
+  return result;
+}
 
 /**
  ***********************************************************
