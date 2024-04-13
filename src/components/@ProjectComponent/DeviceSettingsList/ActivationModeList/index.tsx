@@ -18,7 +18,6 @@ import {
   mapValue,
 } from 'src/utils/Helpers/project';
 import {
-  base64EncodeDecode,
   consoleLog,
   getImgSource,
   getTimezone,
@@ -28,9 +27,10 @@ import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import {useDispatch, useSelector} from 'react-redux';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 
-// FlowRate
-const FlowRate = ({
+// DeviceSettingList
+const DeviceSettingList = ({
   setting,
   borderTop,
   borderBottom,
@@ -196,8 +196,7 @@ FlowRateProps) => {
       const obj = findObject(characteristic?.uuid, __deviceSettingsData, {
         searchKey: 'characteristicUUID',
       });
-
-      consoleLog('obj', obj);
+      // consoleLog('obj', obj);
 
       if (!isObjectEmpty(obj)) {
         var decodedValue = base64EncodeDecode(obj?.newValue, 'decode');
@@ -324,4 +323,4 @@ FlowRateProps) => {
   );
 };
 
-export default FlowRate;
+export default DeviceSettingList;

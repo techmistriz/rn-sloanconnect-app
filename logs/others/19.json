@@ -1,0 +1,22 @@
+[
+  {
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c942",
+    "newValue": "NQ==",
+    "oldValue": "NA==",
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+  },
+  {
+    "allowedInPreviousSetting": false,
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c922",
+    "newValue": "2404131332",
+    "oldValue": null,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+  },
+  {
+    "allowedInPreviousSetting": false,
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c92A",
+    "newValue": "0123456789",
+    "oldValue": null,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+  }
+]

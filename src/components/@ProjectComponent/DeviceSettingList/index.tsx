@@ -17,9 +17,15 @@ import {
   getDeviceService,
   mapValue,
 } from 'src/utils/Helpers/project';
-import {base64EncodeDecode, consoleLog, getImgSource, getTimezone, parseDateHumanFormat} from 'src/utils/Helpers/HelperFunction';
+import {
+  consoleLog,
+  getImgSource,
+  getTimezone,
+  parseDateHumanFormat,
+} from 'src/utils/Helpers/HelperFunction';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 
 // DeviceSettingList
 const DeviceSettingList = ({
@@ -28,8 +34,8 @@ const DeviceSettingList = ({
   borderBottom,
   style,
   navigation,
-  // onSettingChange,
-}: DeviceSettingListProps) => {
+}: // onSettingChange,
+DeviceSettingListProps) => {
   const [characteristicMain, setCharacteristicMain] = useState<any>();
   const [characteristicMainDecodeValue, setCharacteristicMainDecodeValue] =
     useState<string>('');

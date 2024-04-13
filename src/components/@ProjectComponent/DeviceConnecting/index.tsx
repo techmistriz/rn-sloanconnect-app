@@ -17,14 +17,6 @@ import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
 import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import {
-  PERMISSIONS_RESULTS,
-  checkBluetoothPermissions,
-  requestBluetoothPermissions,
-  checkLocationPermissions,
-  requestLocationPermissions,
-} from 'src/utils/Permissions';
-import {_BleManager} from 'src/utils/BleService';
 import Loader from 'src/components/Loader';
 
 const Index = ({navigation, route}: any) => {

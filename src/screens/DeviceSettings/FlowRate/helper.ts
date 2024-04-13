@@ -1,4 +1,4 @@
-import {base64EncodeDecode, consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import {
   BLEDevice,
   BLEService,

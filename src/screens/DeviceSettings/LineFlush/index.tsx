@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {Keyboard} from 'react-native';
 import Theme from 'src/theme';
 import {
-  base64EncodeDecode,
   consoleLog,
   showSimpleAlert,
   showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -17,10 +17,13 @@ import Input from 'src/components/Input';
 import Toggle from 'src/components/Toggle';
 import {BLEService} from 'src/services/BLEService/BLEService';
 import {getFlushTypeType, getFlushTypeValue} from './helper';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
+import {hasDateSetting, hasPhoneSetting} from 'src/utils/Helpers/project';
 
 const Index = ({navigation, route}: any) => {
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
   const {
     referrer,
@@ -62,81 +65,128 @@ const Index = ({navigation, route}: any) => {
     var params = [];
     const checkValid = checkValidation();
     if (checkValid) {
-      const payload = {
-        lineFlushType: lineFlushType,
-        lineFlushTime: lineFlushTime,
-        lineFlushInterval: lineFlushInterval,
-      };
+      // consoleLog('LineFlush onDonePress==>', {
+      //   lineFlushTypeOld,
+      //   lineFlushType,
+      //   lineFlushTimeOld,
+      //   lineFlushTime,
+      //   lineFlushIntervalOld,
+      //   lineFlushInterval,
+      // });
+      if (
+        lineFlushTypeOld != lineFlushType ||
+        lineFlushTimeOld != lineFlushTime ||
+        lineFlushIntervalOld != lineFlushInterval
+      ) {
+        params.push({
+          serviceUUID: characteristicMain?.serviceUUID,
+          characteristicUUID: characteristicMain?.uuid,
+          oldValue: base64EncodeDecode(lineFlushTypeOld),
+          newValue: base64EncodeDecode(lineFlushType),
+        });
 
-      // const writeCharacteristicWithResponseForDevice1 =
-      //   await BLEService.writeCharacteristicWithResponseForDevice(
-      //     characteristicMain?.serviceUUID,
-      //     characteristicMain?.uuid,
-      //     lineFlushType,
-      //   );
-      params.push({
-        serviceUUID: characteristicMain?.serviceUUID,
-        characteristicUUID: characteristicMain?.uuid,
-        oldValue: base64EncodeDecode(lineFlushTypeOld),
-        newValue: base64EncodeDecode(lineFlushType),
-      });
-      // consoleLog(
-      //   'onDonePress writeCharacteristicWithResponseForDevice1==>',
-      //   JSON.stringify(writeCharacteristicWithResponseForDevice1),
-      // );
+        const dateSettingResponse = hasDateSetting(deviceStaticDataMain);
+        if (!isObjectEmpty(dateSettingResponse)) {
+          params.push({
+            ...dateSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
+
+        const phoneSettingResponse = hasPhoneSetting(
+          deviceStaticDataMain,
+          user,
+        );
+        if (!isObjectEmpty(phoneSettingResponse)) {
+          params.push({
+            ...phoneSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
+      }
 
       if (
         lineFlushType == '1' &&
         typeof deviceStaticDataMain?.UUIDMapped != 'undefined' &&
-        typeof deviceStaticDataMain?.UUIDMapped[lineFlushType] != 'undefined'
+        typeof deviceStaticDataMain?.UUIDMapped[lineFlushType] != 'undefined' &&
+        lineFlushTimeOld != lineFlushTime
       ) {
-        // const writeCharacteristicWithResponseForDevice2 =
-        //   await BLEService.writeCharacteristicWithResponseForDevice(
-        //     characteristicMain?.serviceUUID,
-        //     characteristicRight?.uuid,
-        //     lineFlushTime,
-        //   );
         params.push({
           serviceUUID: characteristicMain?.serviceUUID,
           characteristicUUID: characteristicRight?.uuid,
           oldValue: base64EncodeDecode(lineFlushTimeOld),
           newValue: base64EncodeDecode(lineFlushTime),
         });
-        // consoleLog(
-        //   'onDonePress writeCharacteristicWithResponseForDevice2==>',
-        //   JSON.stringify(writeCharacteristicWithResponseForDevice2),
-        // );
 
-        // const writeCharacteristicWithResponseForDevice3 =
-        //   await BLEService.writeCharacteristicWithResponseForDevice(
-        //     characteristicMain?.serviceUUID,
-        //     characteristicRight2?.uuid,
-        //     lineFlushInterval,
-        //   );
+        const dateSettingResponse = hasDateSetting(deviceStaticDataRight);
+        if (!isObjectEmpty(dateSettingResponse)) {
+          params.push({
+            ...dateSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
+
+        const phoneSettingResponse = hasPhoneSetting(
+          deviceStaticDataRight,
+          user,
+        );
+        if (!isObjectEmpty(phoneSettingResponse)) {
+          params.push({
+            ...phoneSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
+      }
+
+      if (
+        lineFlushType == '1' &&
+        typeof deviceStaticDataMain?.UUIDMapped != 'undefined' &&
+        typeof deviceStaticDataMain?.UUIDMapped[lineFlushType] != 'undefined' &&
+        lineFlushIntervalOld != lineFlushInterval
+      ) {
         params.push({
           serviceUUID: characteristicMain?.serviceUUID,
           characteristicUUID: characteristicRight2?.uuid,
           oldValue: base64EncodeDecode(lineFlushIntervalOld),
           newValue: base64EncodeDecode(lineFlushInterval),
         });
-        // consoleLog(
-        //   'onDonePress writeCharacteristicWithResponseForDevice3==>',
-        //   JSON.stringify(writeCharacteristicWithResponseForDevice3),
-        // );
+
+        const dateSettingResponse = hasDateSetting(deviceStaticDataRight2);
+        if (!isObjectEmpty(dateSettingResponse)) {
+          params.push({
+            ...dateSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
+
+        const phoneSettingResponse = hasPhoneSetting(
+          deviceStaticDataRight2,
+          user,
+        );
+        if (!isObjectEmpty(phoneSettingResponse)) {
+          params.push({
+            ...phoneSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
       }
 
-      // showToastMessage('Success', 'success', 'Settings changed successfully.');
-      dispatch(
-        deviceSettingsSuccessAction({
-          data: {LineFlush: params},
-        }),
-      );
+      if (params.length) {
+        dispatch(
+          deviceSettingsSuccessAction({
+            data: {LineFlush: params},
+          }),
+        );
+      }
       NavigationService.goBack();
     }
   };
 
   /**validation checking for email */
   const checkValidation = () => {
+    if (lineFlushType == '0') {
+      return true;
+    }
     if (lineFlushTime.trim() === '') {
       showSimpleAlert('Please enter timeout in seconds');
       return false;
@@ -270,7 +320,6 @@ const Index = ({navigation, route}: any) => {
                 </Row>
               </Wrap>
             )}
-            
           </Wrap>
 
           <Wrap autoMargin={false} style={styles.section2}>

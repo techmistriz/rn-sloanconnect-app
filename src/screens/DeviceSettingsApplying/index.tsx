@@ -4,11 +4,11 @@ import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  base64EncodeDecode,
   consoleLog,
   getImgSource,
   showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
+import { base64EncodeDecode } from 'src/utils/Helpers/encryption';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';

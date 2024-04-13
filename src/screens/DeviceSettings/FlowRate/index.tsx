@@ -11,7 +11,6 @@ import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  base64EncodeDecode,
   consoleLog,
   getImgSource,
   showSimpleAlert,
@@ -26,13 +25,6 @@ import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
 import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import {
-  PERMISSIONS_RESULTS,
-  checkBluetoothPermissions,
-  requestBluetoothPermissions,
-  checkLocationPermissions,
-  requestLocationPermissions,
-} from 'src/utils/Permissions';
 import Loader from 'src/components/Loader';
 import Input from 'src/components/Input';
 import Toggle from 'src/components/Toggle';
@@ -44,12 +36,12 @@ import {
   getCalculatedValue,
 } from './helper';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
+import {hasDateSetting, hasPhoneSetting} from 'src/utils/Helpers/project';
 
 const Index = ({navigation, route}: any) => {
-  // const {referrer} = route?.params || {referrer: undefined};
-  // const {user, loading, token, message, media_storage, type} = useSelector(
-  //   (state: any) => state?.AuthReducer,
-  // );
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
 
   const {
@@ -86,48 +78,40 @@ const Index = ({navigation, route}: any) => {
   const onDonePress = async () => {
     Keyboard.dismiss();
     var params = [];
-    const checkValid = checkValidation();
-    if (checkValid) {
-      const payload = {
-        flowRateType: flowRateType,
-        flowRate: flowRate,
-      };
 
-      // const writeCharacteristicWithResponseForDevice1 =
-      //   await BLEService.writeCharacteristicWithResponseForDevice(
-      //     characteristicMain?.serviceUUID,
-      //     characteristicMain?.uuid,
-      //     flowRate,
-      //   );
+    if (flowRateOld != flowRate) {
       params.push({
         serviceUUID: characteristicMain?.serviceUUID,
         characteristicUUID: characteristicMain?.uuid,
         oldValue: base64EncodeDecode(flowRateOld),
         newValue: base64EncodeDecode(flowRate),
       });
-      // consoleLog(
-      //   'onDonePress writeCharacteristicWithResponseForDevice1==>',
-      //   JSON.stringify(writeCharacteristicWithResponseForDevice1),
-      // );
+    }
 
-      // showToastMessage('Success', 'success', 'Settings changed successfully.');
+    if (params.length) {
       dispatch(
         deviceSettingsSuccessAction({
           data: {FlowRate: params},
         }),
       );
-      NavigationService.goBack();
-    }
-  };
 
-  /**validation checking for email */
-  const checkValidation = () => {
-    if (flowRate.trim() === '') {
-      showSimpleAlert('Please enter a option');
-      return false;
-    } else {
-      return true;
+      const dateSettingResponse = hasDateSetting(deviceStaticDataMain);
+      if (!isObjectEmpty(dateSettingResponse)) {
+        params.push({
+          ...dateSettingResponse,
+          allowedInPreviousSetting: false,
+        });
+      }
+
+      const phoneSettingResponse = hasPhoneSetting(deviceStaticDataMain, user);
+      if (!isObjectEmpty(phoneSettingResponse)) {
+        params.push({
+          ...phoneSettingResponse,
+          allowedInPreviousSetting: false,
+        });
+      }
     }
+    NavigationService.goBack();
   };
 
   return (

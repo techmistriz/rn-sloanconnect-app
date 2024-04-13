@@ -32,15 +32,21 @@ import {
   addSpaceIntoString,
   base64EncodeDecode,
   base64ToHex,
-  consoleLog,
+  base64ToText,
   decimalToHex,
-  getImgSource,
+  fromHexString,
   getTimestampInSeconds,
   hexEncodeDecode,
   hexToDecimal,
   mapUint8Array,
+} from 'src/utils/Helpers/encryption';
+
+import {
+  consoleLog,
+  getImgSource,
   showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
+
 import Typography from 'src/components/Typography';
 import {Wrap, Row, TochableWrap} from 'src/components/Common';
 import TouchableItem from 'src/components/TouchableItem';
@@ -136,7 +142,7 @@ const Index = ({navigation, route}: any) => {
 
   /** component hooks method */
   useEffect(() => {
-    initlizeAppGen2();
+    // initlizeAppGen2();
   }, []);
 
   const initlizeAppGen2 = async () => {
@@ -218,7 +224,7 @@ const Index = ({navigation, route}: any) => {
     );
     console.log('initlizeAppGen2 sessionKey==>', sessionKey);
 
-    // Session Key 
+    // Session Key
     const sessionKeyServoiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
     const sessionKeyCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559C5';
 
@@ -255,10 +261,10 @@ const Index = ({navigation, route}: any) => {
     var session_time = [];
     var session_key = [];
 
-    session_time[0] = unixTimestamp[3];
-    session_time[1] = unixTimestamp[2];
-    session_time[2] = unixTimestamp[0];
-    session_time[3] = unixTimestamp[1];
+    session_time[0] = unixTimestamp[0];
+    session_time[1] = unixTimestamp[1];
+    session_time[2] = unixTimestamp[2];
+    session_time[3] = unixTimestamp[3];
 
     // HOW TO GENERATE SESSION KEY
     const MASTER_KEY_LEN = 32;
@@ -332,9 +338,6 @@ const Index = ({navigation, route}: any) => {
     console.log('generateSessionKey session_key==>', session_key);
     return session_key.join('');
   };
-
-  const fromHexString = hexString =>
-    Uint8Array.from(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
   const initlizeApp = async () => {
     const deviceStaticData = getDeviceModelData(
@@ -424,8 +427,8 @@ const Index = ({navigation, route}: any) => {
       characteristicUUID,
     );
 
-    if (__batteryLevel > 0) {
-      setBatteryLevel(Number(__batteryLevel));
+    if (__batteryLevel > 0 && __batteryLevel < 101) {
+      setBatteryLevel(__batteryLevel);
     }
   };
 
@@ -927,7 +930,7 @@ const Index = ({navigation, route}: any) => {
                 setting={{
                   id: 3,
                   title: 'Confirm Flow Rate',
-                  subTitle: 'Galons Per Minute',
+                  // subTitle: 'Galons Per Minute',
                   route: 'FlowRate',
                   serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
                   characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',

@@ -18,12 +18,12 @@ import {
   mapValue,
 } from 'src/utils/Helpers/project';
 import {
-  base64EncodeDecode,
   consoleLog,
   getImgSource,
   getTimezone,
   parseDateHumanFormat,
 } from 'src/utils/Helpers/HelperFunction';
+import { base64EncodeDecode } from 'src/utils/Helpers/encryption';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';

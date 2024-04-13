@@ -151,13 +151,16 @@ export const BLE_GATT_SERVICES = {
         type: 'string',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDD',
         properties: ['R'],
         sloanApp: '',
         remarks: '6 chars for YYMMDD',
         generation: 'all',
         prefix: null,
         postfix: null,
-        displayInList: false,
+        displayInList: true,
+        valueType: 'Date',
+        dateFormat: 'YY-MM-DD',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c904': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
@@ -166,6 +169,7 @@ export const BLE_GATT_SERVICES = {
         type: 'string',
         range: null,
         initialValue: 'YYMMDD',
+        valueFormat: 'YYMMDD',
         properties: ['R'],
         sloanApp: '',
         remarks: '6 chars for YYMMDD',
@@ -173,6 +177,8 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         displayInList: false,
+        valueType: 'Date',
+        dateFormat: 'YY-MM-DD',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c909': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c909',
@@ -215,7 +221,7 @@ export const BLE_GATT_SERVICES = {
         properties: ['R', 'C'],
         sloanApp: '',
         remarks: '',
-        generation: '02',
+        generation: 'gen2',
         prefix: null,
         postfix: null,
       },
@@ -229,7 +235,7 @@ export const BLE_GATT_SERVICES = {
         properties: ['R'],
         sloanApp: '',
         remarks: '6 chars for YYMMDD',
-        generation: '02',
+        generation: 'gen2',
         prefix: null,
         postfix: null,
       },
@@ -243,7 +249,7 @@ export const BLE_GATT_SERVICES = {
         properties: ['R'],
         sloanApp: '',
         remarks: 'Revision Format: AAbb',
-        generation: '02',
+        generation: 'gen2',
         prefix: null,
         postfix: null,
       },
@@ -257,7 +263,7 @@ export const BLE_GATT_SERVICES = {
         properties: ['R'],
         sloanApp: '',
         remarks: 'Revision Format: AAbb',
-        generation: '02',
+        generation: 'gen2',
         prefix: null,
         postfix: null,
       },
@@ -271,7 +277,7 @@ export const BLE_GATT_SERVICES = {
         properties: ['R'],
         sloanApp: '',
         remarks: '',
-        generation: '02',
+        generation: 'gen2',
         prefix: null,
         postfix: null,
       },
@@ -283,8 +289,8 @@ export const BLE_GATT_SERVICES = {
     deviceID: '00:0B:57:6E:87:31',
     uuid: '0000180f-0000-1000-8000-00805f9b34fb',
     id: 31,
-    characteristics: [
-      {
+    characteristics: {
+      '00002a19-0000-1000-8000-00805f9b34fb': {
         uuid: '00002a19-0000-1000-8000-00805f9b34fb',
         name: 'Battery Level',
         size: '1 bytes',
@@ -298,7 +304,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-    ],
+    },
   },
   'd0aba888-fb10-4dc9-9b17-bdd8f490c910': {
     isPrimary: true,
@@ -306,8 +312,8 @@ export const BLE_GATT_SERVICES = {
     deviceID: '00:0B:57:6E:87:31',
     uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c910',
     id: 34,
-    characteristics: [
-      {
+    characteristics: {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c911': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
         name: 'Operating hours since install',
         size: '8 bytes',
@@ -321,7 +327,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c912': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c912',
         name: 'Activations since install',
         size: '8 bytes',
@@ -335,7 +341,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c913': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c913',
         name: 'Activations since last change',
         size: '8 bytes',
@@ -349,7 +355,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c914': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c914',
         name: 'Duration of all activations',
         size: '8 bytes',
@@ -363,7 +369,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c915': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c915',
         name: 'Duration of all flushes',
         size: '8 bytes',
@@ -377,7 +383,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c916': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c916',
         name: 'Number of flushes',
         size: '8 bytes',
@@ -391,7 +397,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c917': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c917',
         name: 'Number of setting changes since install',
         size: '4 bytes',
@@ -405,7 +411,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c918': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c918',
         name: 'Number of total BLE activations',
         size: '4 bytes',
@@ -419,7 +425,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c919': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c919',
         name: 'Number of intial BLE activations',
         size: '4 bytes',
@@ -433,7 +439,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c91A': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c91A',
         name: 'Number of BLE connections ',
         size: '4 bytes',
@@ -447,7 +453,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-    ],
+    },
   },
   'd0aba888-fb10-4dc9-9b17-bdd8f490c920': {
     isPrimary: true,
@@ -455,14 +461,15 @@ export const BLE_GATT_SERVICES = {
     deviceID: '00:0B:57:6E:87:31',
     uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
     id: 55,
-    characteristics: [
-      {
+    characteristics: {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c921': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c921',
         name: 'D/T of last factory reset',
         size: '10 bytes',
         type: 'Hexa String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks:
@@ -470,14 +477,17 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: null,
+        valueType: 'DateTime',
+        dateFormat: 'YY-MM-DD HH:MM',
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c922': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c922',
         name: 'D/T of last range change',
         size: '10 bytes',
         type: 'String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks:
@@ -485,92 +495,112 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: null,
+        valueType: 'DateTime',
+        dateFormat: 'YY-MM-DD HH:MM',
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c923': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c923',
         name: 'D/T of last OD or M change',
         size: '10 bytes',
         type: 'String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks: '10 chars for YYMMDDHHMM',
         generation: 'all',
         prefix: null,
         postfix: null,
+        valueType: 'DateTime',
+        dateFormat: 'YY-MM-DD HH:MM',
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c924': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c924',
         name: 'D/T of meter runtime change',
         size: '10 bytes',
         type: 'String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks: '10 chars for YYMMDDHHMM',
         generation: 'all',
         prefix: null,
         postfix: null,
+        valueType: 'DateTime',
+        dateFormat: 'YY-MM-DD HH:MM',
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c925': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c925',
         name: 'D/T of OD runtime change',
         size: '10 bytes',
         type: 'String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks: '10 chars for YYMMDDHHMM',
         generation: 'all',
         prefix: null,
         postfix: null,
+        valueType: 'DateTime',
+        dateFormat: 'YY-MM-DD HH:MM',
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c926': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c926',
         name: 'D/T of flush on/off change',
         size: '10 bytes',
         type: 'String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks: '10 chars for YYMMDDHHMM',
         generation: 'all',
         prefix: null,
         postfix: null,
+        valueType: 'DateTime',
+        dateFormat: 'YY-MM-DD HH:MM',
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c927': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c927',
         name: 'D/T of flush time change',
         size: '10 bytes',
         type: 'String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks: '10 chars for YYMMDDHHMM',
         generation: 'all',
         prefix: null,
         postfix: null,
+        valueType: 'DateTime',
+        dateFormat: 'YY-MM-DD HH:MM',
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c928': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c928',
         name: 'D/T of flush interval change',
         size: '10 bytes',
         type: 'String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks: '10 chars for YYMMDDHHMM',
         generation: 'all',
         prefix: null,
         postfix: null,
+        valueType: 'DateTime',
+        dateFormat: 'YY-MM-DD HH:MM',
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c929': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c929',
         name: 'Phone of last factory reset',
         size: '15 bytes',
@@ -584,7 +614,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c92A': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92A',
         name: 'Phone of last range change',
         size: '15 bytes',
@@ -599,7 +629,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c92B': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92B',
         name: 'Phone of last OD or M change',
         size: '15 bytes',
@@ -613,7 +643,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c92C': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92C',
         name: 'Phone of meter runtime change',
         size: '15 bytes',
@@ -627,7 +657,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c92D': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92D',
         name: 'Phone of OD runtime change',
         size: '15 bytes',
@@ -641,7 +671,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c92E': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92E',
         name: 'Phone of flush on/off change',
         size: '15 bytes',
@@ -655,7 +685,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c92F': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92F',
         name: 'Phone of flush time change',
         size: '15 bytes',
@@ -669,7 +699,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c930': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c930',
         name: 'Phone of flush interval change',
         size: '15 bytes',
@@ -683,7 +713,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c931': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c931',
         name: 'D/T of BD Note change',
         size: '10 bytes',
@@ -697,7 +727,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c932': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c932',
         name: 'Phone of BD Note change',
         size: '15 bytes',
@@ -711,7 +741,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-    ],
+    },
   },
   'd0aba888-fb10-4dc9-9b17-bdd8f490c940': {
     isPrimary: true,
@@ -747,6 +777,14 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: null,
+        dateSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c922',
+        },
+        phoneSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92A',
+        },
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c943': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c943',
@@ -766,6 +804,14 @@ export const BLE_GATT_SERVICES = {
           '0': 'd0aba888-fb10-4dc9-9b17-bdd8f490c945',
           '1': 'd0aba888-fb10-4dc9-9b17-bdd8f490c944',
         },
+        dateSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c923',
+        },
+        phoneSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92B',
+        },
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c944': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c944',
@@ -780,6 +826,14 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: ' Sec',
+        dateSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c924',
+        },
+        phoneSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92C',
+        },
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c945': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c945',
@@ -794,6 +848,14 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: ' Sec',
+        dateSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c925',
+        },
+        phoneSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92D',
+        },
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c946': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
@@ -819,6 +881,14 @@ export const BLE_GATT_SERVICES = {
             'd0aba888-fb10-4dc9-9b17-bdd8f490c948',
           ],
         },
+        dateSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c926',
+        },
+        phoneSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92E',
+        },
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c947': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c947',
@@ -833,6 +903,14 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: ' Sec',
+        dateSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c927',
+        },
+        phoneSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92F',
+        },
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c948': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c948',
@@ -847,6 +925,14 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: ' Hrs',
+        dateSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c928',
+        },
+        phoneSettingMappped: {
+          serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+          characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c930',
+        },
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c949': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
@@ -932,8 +1018,8 @@ export const BLE_GATT_SERVICES = {
     deviceID: '00:0B:57:6E:87:31',
     uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c950',
     id: 107,
-    characteristics: [
-      {
+    characteristics: {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c951': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c951',
         name: 'Timestamp',
         size: '6 bytes',
@@ -947,7 +1033,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c952': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c952',
         name: 'Unlock Key',
         size: '32 bytes',
@@ -961,7 +1047,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c953': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c953',
         name: 'Lock Status',
         size: '1 bytes',
@@ -975,7 +1061,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c954': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c954',
         name: 'Pass Code',
         size: '4 bytes',
@@ -989,7 +1075,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-    ],
+    },
   },
   'd0aba888-fb10-4dc9-9b17-bdd8f490c960': {
     isPrimary: true,
@@ -997,8 +1083,8 @@ export const BLE_GATT_SERVICES = {
     deviceID: '00:0B:57:6E:87:31',
     uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
     id: 110,
-    characteristics: [
-      {
+    characteristics: {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c961': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c961',
         name: 'Diagnostic Init',
         size: '1 bytes',
@@ -1012,7 +1098,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c962': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c962',
         name: 'Sensor result',
         size: '1 bytes',
@@ -1026,7 +1112,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c963': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c963',
         name: 'Valve result',
         size: '1 bytes',
@@ -1040,7 +1126,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c964': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c964',
         name: 'Turbine result',
         size: '1 bytes',
@@ -1054,7 +1140,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c965': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c965',
         name: 'Water result',
         size: '1 bytes',
@@ -1068,7 +1154,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c966': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c966',
         name: 'Battery Level at Diagnostic',
         size: '1 bytes',
@@ -1082,7 +1168,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c967': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c967',
         name: 'D/T of last diagnostic',
         size: '10 bytes',
@@ -1096,7 +1182,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c968': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c968',
         name: 'Solar status',
         size: '1 bytes',
@@ -1110,7 +1196,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c969': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c969',
         name: 'Communication status',
         size: '1 bytes',
@@ -1124,7 +1210,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-    ],
+    },
   },
   'd0aba888-fb10-4dc9-9b17-bdd8f490c970': {
     isPrimary: true,
@@ -1132,8 +1218,8 @@ export const BLE_GATT_SERVICES = {
     deviceID: '00:0B:57:6E:87:31',
     uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c970',
     id: 128,
-    characteristics: [
-      {
+    characteristics: {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c971': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c971',
         name: 'Production Enable',
         size: '1 bytes',
@@ -1147,7 +1233,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c972': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c972',
         name: 'Gain 1',
         size: '2 bytes',
@@ -1161,7 +1247,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c973': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c973',
         name: 'Gain 2',
         size: '2 bytes',
@@ -1175,7 +1261,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c974': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c974',
         name: 'Gain 3',
         size: '2 bytes',
@@ -1189,7 +1275,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c975': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c975',
         name: 'Gain 4',
         size: '2 bytes',
@@ -1203,7 +1289,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c976': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c976',
         name: 'Gain 5',
         size: '2 bytes',
@@ -1217,7 +1303,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c977': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c977',
         name: 'Sensitivity Adjustment',
         size: '2 bytes',
@@ -1231,7 +1317,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c978': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c978',
         name: 'Adaptive Sensing Enable',
         size: '1 bytes',
@@ -1245,7 +1331,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c979': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c979',
         name: 'Current Gain Value',
         size: '2 bytes',
@@ -1259,7 +1345,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c97A': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c97A',
         name: 'Adaptive Sensing Raw Gain Value',
         size: '2 bytes',
@@ -1273,7 +1359,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-    ],
+    },
   },
   '1d14d6ee-fd63-4fa1-bfa4-8f47b42119f0': {
     isPrimary: true,
@@ -1281,8 +1367,8 @@ export const BLE_GATT_SERVICES = {
     deviceID: '00:0B:57:6E:87:31',
     uuid: '1d14d6ee-fd63-4fa1-bfa4-8f47b42119f0',
     id: 149,
-    characteristics: [
-      {
+    characteristics: {
+      'f7bf3564-fb6d-4e53-88a4-5e37e0326063': {
         uuid: 'f7bf3564-fb6d-4e53-88a4-5e37e0326063',
         name: 'OTA Control',
         size: '1 bytes',
@@ -1296,7 +1382,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-      {
+      '984227f3-34fc-4045-a5d0-2c581f81a153': {
         uuid: '984227f3-34fc-4045-a5d0-2c581f81a153',
         name: 'OTA Data Transfer',
         size: '1 bytes',
@@ -1310,6 +1396,6 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
       },
-    ],
+    },
   },
 };

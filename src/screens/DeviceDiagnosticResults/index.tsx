@@ -11,7 +11,6 @@ import {
   mapValue,
 } from 'src/utils/Helpers/project';
 import {
-  base64EncodeDecode,
   consoleLog,
   getImgSource,
   getTimezone,
@@ -52,6 +51,7 @@ import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import DiagnosticResultsList from 'src/components/@ProjectComponent/DiagnosticResultsList';
 import GlobalStyle from 'src/utils/GlobalStyles';
 import InfoBox from 'src/components/InfoBox';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};

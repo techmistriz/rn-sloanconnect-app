@@ -4,9 +4,9 @@ import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  base64EncodeDecode,
   consoleLog,
   getImgSource,
+  parseDateTimeInFormat,
   showSimpleAlert,
   showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
@@ -22,6 +22,17 @@ import {getActivationModeType, getActivationModeValue} from './helper';
 import {BLEService} from 'src/services/BLEService/BLEService';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
+import {
+  getDeviceCharacteristic,
+  getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID,
+  getDeviceCharacteristicsByServiceUUID,
+  getDeviceService,
+  hasDateSetting,
+  hasPhoneSetting,
+} from 'src/utils/Helpers/project';
+import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 
 const Index = ({navigation, route}: any) => {
   const {
@@ -36,6 +47,7 @@ const Index = ({navigation, route}: any) => {
     onSettingChange,
   } = route?.params;
 
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
 
   const activationModeTypeOld = getActivationModeType(
@@ -52,14 +64,14 @@ const Index = ({navigation, route}: any) => {
 
   useEffect(() => {
     // consoleLog('ActivationMode==>', {
-    //   referrer,
+    //   // referrer,
     //   setting,
     //   deviceStaticDataMain,
-    //   characteristicMain,
-    //   deviceStaticDataRight,
-    //   characteristicRight,
-    //   deviceStaticDataRight2,
-    //   characteristicRight2,
+    //   // characteristicMain,
+    //   // deviceStaticDataRight,
+    //   // characteristicRight,
+    //   // deviceStaticDataRight2,
+    //   // characteristicRight2,
     // });
   }, []);
 
@@ -86,26 +98,6 @@ const Index = ({navigation, route}: any) => {
     var params = [];
     const checkValid = checkValidation();
     if (checkValid) {
-      const payload = {
-        activationModeType: activationModeType,
-        activationModeSec: activationModeSec,
-      };
-
-      // const writeCharacteristicWithResponseForDevice1 =
-      //   await BLEService.writeCharacteristicWithResponseForDevice(
-      //     characteristicMain?.serviceUUID,
-      //     characteristicMain?.uuid,
-      //     activationModeType,
-      //   );
-      // consoleLog(
-      //   'onDonePress writeCharacteristicWithResponseForDevice1==>',
-      //   JSON.stringify(writeCharacteristicWithResponseForDevice1),
-      // );
-      // consoleLog('activationModeTypeOld', {
-      //   activationModeTypeOld,
-      //   activationModeType,
-      // });
-
       if (
         activationModeTypeOld != activationModeType ||
         activationModeSecOld != activationModeSec
@@ -117,37 +109,30 @@ const Index = ({navigation, route}: any) => {
           newValue: base64EncodeDecode(activationModeType),
         });
 
-        // consoleLog('activationModeType params1==>', {
-        //   serviceUUID: characteristicMain?.serviceUUID,
-        //   characteristicUUID: characteristicMain?.uuid,
-        //   oldValue: activationModeTypeOld,
-        //   newValue: activationModeType,
-        // });
+        const dateSettingResponse = hasDateSetting(deviceStaticDataMain);
+        if (!isObjectEmpty(dateSettingResponse)) {
+          params.push({
+            ...dateSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
 
-        // consoleLog('activationModeType params2==>', {
-        //   serviceUUID: characteristicMain?.serviceUUID,
-        //   characteristicUUID: characteristicMain?.uuid,
-        //   oldValue: base64EncodeDecode(activationModeTypeOld),
-        //   newValue: base64EncodeDecode(activationModeType),
-        // });
+        const phoneSettingResponse = hasPhoneSetting(
+          deviceStaticDataMain,
+          user,
+        );
+        if (!isObjectEmpty(phoneSettingResponse)) {
+          params.push({
+            ...phoneSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
       }
 
       if (
         typeof deviceStaticDataMain?.UUIDMapped[activationModeType] !=
         'undefined'
       ) {
-        // const writeCharacteristicWithResponseForDevice2 =
-        //   await BLEService.writeCharacteristicWithResponseForDevice(
-        //     characteristicMain?.serviceUUID,
-        //     deviceStaticDataMain?.UUIDMapped[activationModeType],
-        //     activationModeSec,
-        //   );
-
-        // consoleLog(
-        //   'onDonePress deviceStaticDataMain==>',
-        //   JSON.stringify(deviceStaticDataMain),
-        // );
-
         if (
           activationModeSecOld != activationModeSec ||
           activationModeTypeOld != activationModeType
@@ -170,6 +155,25 @@ const Index = ({navigation, route}: any) => {
             newValue: base64EncodeDecode(activationModeSec),
           });
 
+          const dateSettingResponse = hasDateSetting(deviceStaticDataRight);
+          if (!isObjectEmpty(dateSettingResponse)) {
+            params.push({
+              ...dateSettingResponse,
+              allowedInPreviousSetting: false,
+            });
+          }
+
+          const phoneSettingResponse = hasPhoneSetting(
+            deviceStaticDataRight,
+            user,
+          );
+          if (!isObjectEmpty(phoneSettingResponse)) {
+            params.push({
+              ...phoneSettingResponse,
+              allowedInPreviousSetting: false,
+            });
+          }
+
           // consoleLog('activationModeSec params=======>', {
           //   serviceUUID: characteristicMain?.serviceUUID,
           //   characteristicUUID: __characteristicRight?.uuid,
@@ -179,15 +183,13 @@ const Index = ({navigation, route}: any) => {
         }
       }
 
-      // showToastMessage('Success', 'success', 'Settings changed successfully.');
-      // onSettingChange && onSettingChange({ActivationMode: params});
-      // consoleLog('params', params);
-      // consoleLog('activationModeSec params', params);
-      dispatch(
-        deviceSettingsSuccessAction({
-          data: {ActivationMode: params},
-        }),
-      );
+      if (params.length) {
+        dispatch(
+          deviceSettingsSuccessAction({
+            data: {ActivationMode: params},
+          }),
+        );
+      }
       // deviceSettingsData
       setTimeout(() => {
         NavigationService.goBack();

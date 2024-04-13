@@ -4,12 +4,12 @@ import Theme, {Layout} from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  base64EncodeDecode,
   consoleLog,
   getImgSource,
   showSimpleAlert,
   showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -19,14 +19,6 @@ import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
 import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import {
-  PERMISSIONS_RESULTS,
-  checkBluetoothPermissions,
-  requestBluetoothPermissions,
-  checkLocationPermissions,
-  requestLocationPermissions,
-} from 'src/utils/Permissions';
-import {_BleManager} from 'src/utils/BleService';
 import Loader from 'src/components/Loader';
 import Input from 'src/components/Input';
 import Toggle from 'src/components/Toggle';
@@ -41,12 +33,12 @@ import {BLEService} from 'src/services/BLEService/BLEService';
 import {SensorRangeProps} from './types';
 import {result} from 'lodash';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
+import {hasDateSetting, hasPhoneSetting} from 'src/utils/Helpers/project';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 
 const Index = ({navigation, route}: any) => {
   // const {referrer} = route?.params || {referrer: undefined};
-  // const {user, loading, token, message, media_storage, type} = useSelector(
-  //   (state: any) => state?.AuthReducer,
-  // );
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
 
   const {
@@ -97,34 +89,41 @@ const Index = ({navigation, route}: any) => {
     var params = [];
     const checkValid = checkValidation();
     if (checkValid) {
-      const payload = {
-        sensorRangeSec: sensorRangeSec,
-      };
+      if (sensorRangeSecOld != sensorRangeSec) {
+        params.push({
+          serviceUUID: characteristicMain?.serviceUUID,
+          characteristicUUID: characteristicMain?.uuid,
+          oldValue: base64EncodeDecode(sensorRangeSecOld),
+          newValue: base64EncodeDecode(sensorRangeSec),
+        });
+        const dateSettingResponse = hasDateSetting(deviceStaticDataMain);
+        if (!isObjectEmpty(dateSettingResponse)) {
+          params.push({
+            ...dateSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
 
-      // consoleLog("sensorRangeSec", sensorRangeSec);
-      // const writeCharacteristicWithResponseForDevice1 =
-      //   await BLEService.writeCharacteristicWithResponseForDevice(
-      //     characteristicMain?.serviceUUID,
-      //     characteristicMain?.uuid,
-      //     sensorRangeSec,
-      //   );
-      params.push({
-        serviceUUID: characteristicMain?.serviceUUID,
-        characteristicUUID: characteristicMain?.uuid,
-        oldValue: base64EncodeDecode(sensorRangeSecOld),
-        newValue: base64EncodeDecode(sensorRangeSec),
-      });
-      // consoleLog(
-      //   'onDonePress writeCharacteristicWithResponseForDevice1==>',
-      //   JSON.stringify(writeCharacteristicWithResponseForDevice1),
-      // );
+        const phoneSettingResponse = hasPhoneSetting(
+          deviceStaticDataMain,
+          user,
+        );
+        if (!isObjectEmpty(phoneSettingResponse)) {
+          params.push({
+            ...phoneSettingResponse,
+            allowedInPreviousSetting: false,
+          });
+        }
+      }
 
-      // showToastMessage('Success', 'success', 'Settings changed successfully.');
-      dispatch(
-        deviceSettingsSuccessAction({
-          data: {SensorRange: params},
-        }),
-      );
+      if (params.length) {
+        dispatch(
+          deviceSettingsSuccessAction({
+            data: {SensorRange: params},
+          }),
+        );
+      }
+
       NavigationService.goBack();
     }
   };

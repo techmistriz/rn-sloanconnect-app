@@ -2,21 +2,18 @@ import {Alert, Linking, Platform, Share, ToastAndroid} from 'react-native';
 import {constants} from '../../common';
 import moment from 'moment';
 import {
-  showMessage,
-  hideMessage,
-  MessageType,
-} from 'react-native-flash-message';
-import {useCallback} from 'react';
-import base64 from 'react-native-base64';
-import {
+  addSeparatorInString,
   base64EncodeDecode,
-  consoleLog,
+  base64ToDecimal,
+  base64ToText,
   hexEncodeDecode,
   hexToDecimal,
-} from './HelperFunction';
+} from './encryption';
 import {BLEService} from 'src/services';
 import {isObjectEmpty} from './array';
 import StorageService from 'src/services/StorageService/StorageService';
+import {consoleLog, parseDateTimeInFormat} from './HelperFunction';
+import {BLE_GATT_SERVICES} from '../StaticData/BLE_GATT_SERVICES';
 
 /**
  *
@@ -87,9 +84,10 @@ export function getBleDeviceGeneration(str: string | null | undefined = '') {
 }
 
 /**
- * // "localName": "FAUCET ADSKU02 T0224",
- * @param {*} str
- * function which convert First character into Capital letter of String
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
  */
 export function getBleDeviceVersion(
   str: string | null | undefined = '',
@@ -166,13 +164,17 @@ export function getDeviceModelData(
 
 /**
  *
- * @param {*} data
- * @returns radion from degree
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
  */
-export function getDeviceService(serviceUUID: string, BLE_GATT_SERVICES: any) {
+export function getDeviceService(
+  serviceUUID: string,
+  __BLE_GATT_SERVICES: any,
+) {
   var result = null;
-  if (typeof BLE_GATT_SERVICES[serviceUUID] != 'undefined') {
-    result = BLE_GATT_SERVICES[serviceUUID];
+  if (typeof __BLE_GATT_SERVICES[serviceUUID] != 'undefined') {
+    result = __BLE_GATT_SERVICES[serviceUUID];
   }
 
   return result;
@@ -180,16 +182,17 @@ export function getDeviceService(serviceUUID: string, BLE_GATT_SERVICES: any) {
 
 /**
  *
- * @param {*} data
- * @returns radion from degree
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
  */
 export function getDeviceCharacteristicsByServiceUUID(
   serviceUUID: string,
-  BLE_GATT_SERVICES: any,
+  __BLE_GATT_SERVICES: any,
 ) {
   var result = null;
-  if (typeof BLE_GATT_SERVICES[serviceUUID] != 'undefined') {
-    result = BLE_GATT_SERVICES[serviceUUID]?.characteristics ?? null;
+  if (typeof __BLE_GATT_SERVICES[serviceUUID] != 'undefined') {
+    result = __BLE_GATT_SERVICES[serviceUUID]?.characteristics ?? null;
   }
 
   return result;
@@ -197,8 +200,9 @@ export function getDeviceCharacteristicsByServiceUUID(
 
 /**
  *
- * @param {*} data
- * @returns radion from degree
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
  */
 export function getDeviceCharacteristic(
   services: any,
@@ -219,8 +223,9 @@ export function getDeviceCharacteristic(
 
 /**
  *
- * @param {*} data
- * @returns radion from degree
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
  */
 export function getDeviceCharacteristics(services: any) {
   var result = null;
@@ -237,11 +242,11 @@ export function getDeviceCharacteristics(services: any) {
 export function getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
   serviceUUID: string,
   characteristicUUID: string,
-  BLE_GATT_SERVICES: any,
+  __BLE_GATT_SERVICES: any,
 ) {
   var result = null;
   if (serviceUUID && characteristicUUID) {
-    const deviceService = getDeviceService(serviceUUID, BLE_GATT_SERVICES);
+    const deviceService = getDeviceService(serviceUUID, __BLE_GATT_SERVICES);
     // consoleLog("deviceService", deviceService);
     result = getDeviceCharacteristic(deviceService, characteristicUUID);
   }
@@ -251,8 +256,9 @@ export function getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
 
 /**
  *
- * @param {*} value
- * @returns radion from degree
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
  */
 export function mapValue(characteristic: any, deviceStaticData: any = null) {
   var result = '-';
@@ -284,12 +290,24 @@ export function mapValue(characteristic: any, deviceStaticData: any = null) {
   return `${prefix ?? ''}${result}${postfix ?? ''}`;
 }
 
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
 export const cleanCharacteristic = (characteristic: any) => {
   const __characteristic: any = {...characteristic};
   delete __characteristic._manager;
   return __characteristic;
 };
 
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
 export const getBatteryLevel = async (
   serviceUUID: string,
   characteristicUUID: string,
@@ -305,10 +323,11 @@ export const getBatteryLevel = async (
   // consoleLog('__batteryLevel __batteryLevel==>', JSON.stringify(__batteryLevel));
   //  ZA== => d => 64 => 100
   if (__batteryLevel?.value) {
-    const decodedValue = base64EncodeDecode(__batteryLevel?.value, 'decode');
-    const hexEncodeValue = hexToDecimal(
-      hexEncodeDecode(decodedValue, 'encode'),
-    );
+    const hexEncodeValue = base64ToDecimal(__batteryLevel?.value);
+    // const decodedValue = base64EncodeDecode(__batteryLevel?.value, 'decode');
+    // const hexEncodeValue = hexToDecimal(
+    //   hexEncodeDecode(decodedValue, 'encode'),
+    // );
 
     // consoleLog('__batteryLevel hexEncodeValue==>', hexEncodeValue);
     batteryLevel = Number(hexEncodeValue);
@@ -317,6 +336,12 @@ export const getBatteryLevel = async (
   return batteryLevel;
 };
 
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
 export const getTotalWaterUsase = async (
   serviceUUID: string,
   characteristicUUID: string,
@@ -328,13 +353,15 @@ export const getTotalWaterUsase = async (
     serviceUUID,
     characteristicUUID,
   );
-  // consoleLog('__flowRate==>', JSON.stringify(__flowRate));
+  // consoleLog('__flowRate==>', JSON.stringify(__flowRate?.value));
 
   if (__flowRate?.value) {
     const flowRateDecodedValue = base64EncodeDecode(
       __flowRate?.value,
       'decode',
     );
+
+    // consoleLog('flowRateDecodedValue', flowRateDecodedValue);
 
     if (flowRateDecodedValue) {
       const serviceUUID2 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c910';
@@ -348,12 +375,11 @@ export const getTotalWaterUsase = async (
 
       // consoleLog(
       //   '__activationsDuration __activationsDuration==>',
-      //   JSON.stringify(__activationsDuration),
+      //   JSON.stringify(__activationsDuration?.value),
       // );
       if (__activationsDuration?.value) {
-        const activationsDurationDecodedValue = base64EncodeDecode(
+        const activationsDurationDecodedValue = base64ToDecimal(
           __activationsDuration?.value,
-          'decode',
         );
 
         // consoleLog(
@@ -368,21 +394,11 @@ export const getTotalWaterUsase = async (
           __flowRateDecodedValue = Number(flowRateDecodedValue);
         }
 
-        // const activationsDurationHexEncodeValue = hexToDecimal(
-        //   hexEncodeDecode(activationsDurationDecodedValue, 'encode'),
-        //   32,
-        // );
-
         if (activationsDurationDecodedValue) {
           __activationsDurationHexEncodeValue = Number(
             activationsDurationDecodedValue,
           );
         }
-
-        // consoleLog('flowRateDecodedValue', {
-        //   flowRateDecodedValue,
-        //   activationsDurationDecodedValue,
-        // });
 
         if (__activationsDurationHexEncodeValue) {
           const __totalWaterUsage =
@@ -397,6 +413,12 @@ export const getTotalWaterUsase = async (
   return totalWaterUsage;
 };
 
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
 export const saveSettings = async (
   deviceSettingsData: any,
 ): Promise<boolean | void> => {
@@ -433,6 +455,9 @@ export const saveSettings = async (
     }
   }
 
+  const promise = await shortBurstsGen1();
+  promises.push(promise);
+
   // wait for all the promises in the promises array to resolve
   Promise.all(promises).then(results => {
     // all the fetch requests have completed, and the results are in the "results" array
@@ -440,10 +465,16 @@ export const saveSettings = async (
   });
 };
 
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
 export const updatePreviousSettings = async (
   connectedDevice: any,
   deviceSettingsData: any,
-  BLE_GATT_SERVICES: any,
+  __BLE_GATT_SERVICES: any,
 ) => {
   var DEVICE_PREVIOUS_SETTINGS_RAW = await StorageService.getItem(
     '@DEVICE_PREVIOUS_SETTINGS',
@@ -478,13 +509,14 @@ export const updatePreviousSettings = async (
         if (
           element?.serviceUUID &&
           element?.characteristicUUID &&
-          element?.newValue != ''
+          element?.newValue != '' &&
+          element?.allowedInPreviousSetting != false
         ) {
           const __deviceStaticDataMain =
             getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
               element?.serviceUUID,
               element?.characteristicUUID,
-              BLE_GATT_SERVICES,
+              __BLE_GATT_SERVICES,
             );
           if (!isObjectEmpty(__deviceStaticDataMain)) {
             // DEVICE_NEW_SETTINGS.push({
@@ -529,6 +561,12 @@ export const updatePreviousSettings = async (
   );
 };
 
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
 export const hasFlowRateSetting = (deviceSettingsData: any) => {
   return (
     typeof deviceSettingsData?.FlowRate !== 'undefined' &&
@@ -536,6 +574,12 @@ export const hasFlowRateSetting = (deviceSettingsData: any) => {
   );
 };
 
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
 export const hasSensorRangeSetting = (deviceSettingsData: any) => {
   return (
     typeof deviceSettingsData?.SensorRange !== 'undefined' &&
@@ -543,6 +587,12 @@ export const hasSensorRangeSetting = (deviceSettingsData: any) => {
   );
 };
 
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
 export const getSavedSettingsGen1 = async (connectedDevice: any) => {
   var deviceSettingsData = {};
   var result = '';
@@ -764,4 +814,131 @@ export const getSavedSettingsGen1 = async (connectedDevice: any) => {
     }
   }
   return {text: result, data: deviceSettingsData};
+};
+
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
+export const shortBurstsGen1 = async () => {
+  const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
+  const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c948';
+
+  const flushInterval = await BLEService.readCharacteristicForDevice(
+    serviceUUID,
+    characteristicUUID,
+  );
+
+  const flushIntervalText = base64ToText(flushInterval?.value);
+
+  const flushIntervalResponse =
+    await BLEService.writeCharacteristicWithResponseForDevice(
+      serviceUUID,
+      characteristicUUID,
+      flushIntervalText,
+    );
+};
+
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
+export const formatCharateristicValue = (
+  characteristicStaticProperties: any,
+  value: string,
+) => {
+  var result = value;
+  if (
+    characteristicStaticProperties?.valueType &&
+    characteristicStaticProperties?.valueFormat &&
+    characteristicStaticProperties?.dateFormat
+  ) {
+    const dateFormat = characteristicStaticProperties?.dateFormat;
+    var dateSeperator = '/';
+    if (dateFormat.includes('-')) {
+      dateSeperator = '-';
+    } else if (dateFormat.includes('/')) {
+      dateSeperator = '/';
+    }
+
+    if (
+      characteristicStaticProperties?.valueType == 'Date' &&
+      characteristicStaticProperties?.valueFormat == 'YYMMDD'
+    ) {
+      var formattedDate = addSeparatorInString(value, 2, dateSeperator);
+      result = `20${formattedDate}`;
+      // consoleLog('formattedDate', formattedDate);
+    } else if (
+      characteristicStaticProperties?.valueType == 'DateTime' &&
+      characteristicStaticProperties?.valueFormat == 'YYMMDDHHmm'
+    ) {
+      var datePart = value.substring(0, 6);
+      var timePart = value.substring(6);
+      var formattedDate = addSeparatorInString(datePart, 2, dateSeperator);
+      var formattedTime = addSeparatorInString(timePart, 2, ':');
+      result = `20${formattedDate} ${formattedTime}`;
+      // consoleLog('formattedDate', {formattedDate, formattedTime});
+    }
+  }
+  return result;
+};
+
+export const hasDateSetting = (__characteristicMain: any) => {
+  var data = {};
+  if (__characteristicMain?.dateSettingMappped) {
+    var __dateSettingMappped = __characteristicMain?.dateSettingMappped;
+    // consoleLog(
+    //   'hasDateSetting __dateSettingMappped==>',
+    //   __dateSettingMappped,
+    // );
+    const dateCharacteristic =
+      getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
+        __dateSettingMappped?.serviceUUID,
+        __dateSettingMappped?.characteristicUUID,
+        BLE_GATT_SERVICES,
+      );
+    // consoleLog('hasDateSetting dateCharacteristic==>', dateCharacteristic);
+
+    if (!isObjectEmpty(dateCharacteristic) && dateCharacteristic?.valueFormat) {
+      const dateFormat = dateCharacteristic?.valueFormat;
+      data = {
+        serviceUUID: __dateSettingMappped?.serviceUUID,
+        characteristicUUID: __dateSettingMappped?.characteristicUUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      };
+    }
+  }
+  // consoleLog('data', data);
+  return data;
+};
+
+export const hasPhoneSetting = (__characteristicMain: any, __user: any) => {
+  var data = {};
+
+  if (__characteristicMain?.phoneSettingMappped) {
+    var __phoneSettingMappped = __characteristicMain?.phoneSettingMappped;
+    const dateCharacteristic =
+      getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
+        __phoneSettingMappped?.serviceUUID,
+        __phoneSettingMappped?.characteristicUUID,
+        BLE_GATT_SERVICES,
+      );
+    // consoleLog('hasDateSetting dateCharacteristic==>', dateCharacteristic);
+
+    if (!isObjectEmpty(dateCharacteristic)) {
+      data = {
+        serviceUUID: __phoneSettingMappped?.serviceUUID,
+        characteristicUUID: __phoneSettingMappped?.characteristicUUID,
+        oldValue: null,
+        newValue: __user?.contact ?? '0123456789',
+      };
+    }
+  }
+  // consoleLog('data', data);
+  return data;
 };

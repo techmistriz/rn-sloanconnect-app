@@ -1,4 +1,4 @@
-import {base64EncodeDecode, consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import {SensorRangeProps} from './types';
 import {BLEDevice, BLEService, BLECharacteristic} from 'src/utils/GlobalTypes';
 

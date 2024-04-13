@@ -14,7 +14,7 @@ import {
 } from 'react-native-ble-plx';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
-import {base64EncodeDecode, consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import {
   getBatteryLevel,
   getBleDeviceGeneration,
@@ -25,6 +25,7 @@ import {
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
+import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 
 const deviceNotConnectedErrorText = 'Device is not connected';
 
@@ -273,6 +274,7 @@ class BLEServiceInstance {
         })
         .catch(error => {
           // this.onError(error);
+          consoleLog('readCharacteristicForDevice error==>', error);
           resolve(null);
         });
     });

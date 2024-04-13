@@ -4,12 +4,12 @@ import Theme, {Layout} from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  base64EncodeDecode,
   consoleLog,
   getImgSource,
   showSimpleAlert,
   showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
+import { base64EncodeDecode } from 'src/utils/Helpers/encryption';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -26,7 +26,6 @@ import {
   checkLocationPermissions,
   requestLocationPermissions,
 } from 'src/utils/Permissions';
-import {_BleManager} from 'src/utils/BleService';
 import Loader from 'src/components/Loader';
 import Input from 'src/components/Input';
 import Toggle from 'src/components/Toggle';
@@ -81,9 +80,6 @@ const Index = ({navigation, route}: any) => {
     var params = [];
     const checkValid = checkValidation();
     if (checkValid) {
-      const payload = {
-        notes: notes,
-      };
 
       // consoleLog("notes", notes);
       // const writeCharacteristicWithResponseForDevice1 =
