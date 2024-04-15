@@ -142,7 +142,7 @@ const Index = ({navigation, route}: any) => {
 
   /** component hooks method */
   useEffect(() => {
-    // initlizeAppGen2();
+    initlizeAppGen2();
   }, []);
 
   const initlizeAppGen2 = async () => {
@@ -151,17 +151,33 @@ const Index = ({navigation, route}: any) => {
       0x7d, 0xdb, 0x88, 0x7b, 0x55, 0x1d, 0x60, 0x64, 0x74, 0xff, 0x09, 0x22,
       0x95, 0xc3, 0x40, 0x80, 0xec, 0xb1, 0x64, 0x6c,
     ];
+    const SiteIDServiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
+    const SiteIDCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559CA';
 
     // consoleLog('initlizeAppGen2 server_key==>', server_key);
 
+    // const __siteIDTmp = '2AAD580558ED451D813532D71DEA7F24';
+    // const siteIDResultWriteResponse =
+    //   await BLEService.writeCharacteristicWithoutResponseForDevice(
+    //     SiteIDServiceUUID,
+    //     SiteIDCharUUID,
+    //     __siteIDTmp,
+    //   );
+
+    //   // MkFBRDU4MDU1OEVENDUxRDgxMzUzMkQ3MURFQTdGMjQ=
+    // consoleLog(
+    //   'initlizeAppGen2 siteIDResultWriteResponse==>',
+    //   JSON.stringify(siteIDResultWriteResponse),
+    // );
+
     // SiteID Key
-    const SiteIDServoiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
-    const SiteIDCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559CA';
     const siteIDResult = await BLEService.readCharacteristicForDevice(
-      SiteIDServoiceUUID,
+      SiteIDServiceUUID,
       SiteIDCharUUID,
     );
-    // consoleLog('initlizeAppGen2 SiteIDResult==>', siteIDResult?.value);
+
+    // initlizeAppGen2 SiteIDResult==> Kq1YBVjtRR2BNTLXHep/Iw==
+    consoleLog('initlizeAppGen2 SiteIDResult==>', siteIDResult?.value);
     var __siteID: any = '2AAD580558ED451D813532D71DEA7F23';
 
     if (siteIDResult?.value) {
@@ -234,9 +250,10 @@ const Index = ({navigation, route}: any) => {
         sessionKeyCharUUID,
         sessionKey,
       );
+      
     consoleLog(
-      'initialize sessionKeyResponse==>',
-      JSON.stringify(sessionKeyResponse),
+      'initlizeAppGen2 sessionKeyResponse==>',
+      JSON.stringify(sessionKeyResponse?.value),
     );
 
     // Authorization Key
@@ -248,7 +265,7 @@ const Index = ({navigation, route}: any) => {
     );
     consoleLog(
       'initlizeAppGen2 authorizationResponse==>',
-      authorizationResponse,
+      authorizationResponse?.value,
     );
   };
 
@@ -334,7 +351,7 @@ const Index = ({navigation, route}: any) => {
     for (let i = 0; i < 32; i++) {
       session_key[i + 4] = mappedtmpSHA[i];
     }
-    session_key.push('00');
+    session_key.push('01');
     console.log('generateSessionKey session_key==>', session_key);
     return session_key.join('');
   };
