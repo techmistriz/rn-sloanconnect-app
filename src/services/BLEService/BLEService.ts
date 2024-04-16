@@ -174,10 +174,22 @@ class BLEServiceInstance {
           deviceName?.toUpperCase()?.includes('FAUCET') ||
           deviceName?.toUpperCase()?.includes('SL')
         ) {
+          var __deviceNameArr = deviceName.split(' ');
+          // consoleLog('__deviceNameArr', __deviceNameArr);
           const deviceStaticData = getDeviceModelData(
             device,
             BLE_DEVICE_MODELS,
           );
+
+          if (
+            Array.isArray(__deviceNameArr) &&
+            __deviceNameArr.length > 0 &&
+            deviceStaticData?.fullNameAllModel
+          ) {
+            __deviceNameArr[1] = deviceStaticData?.fullNameAllModel;
+            device.localName = __deviceNameArr.join(' ');
+          }
+          // consoleLog('deviceStaticData', deviceStaticData);
           const __extendedDevice = {
             ...device,
             modelStaticData: deviceStaticData,

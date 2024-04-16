@@ -93,7 +93,7 @@ const Index = ({navigation, route}: any) => {
     }
 
     setFoundDevices([]);
-    consoleLog('connectedDevice?.name', connectedDevice?.name);
+    // consoleLog('connectedDevice?.name', connectedDevice?.name);
     if (connectedDevice?.name) {
       // NavigationService.navigate('DeviceDashboard');
     } else {

@@ -24,10 +24,10 @@ const BASE_DATE_TIME_FROM_FORMAT = 'YYYY-MM-DD HH:mm';
 
 const ANDROID_APP_LINK =
   'https://play.google.com/store/apps/details?id=app.appID&pli=1';
-const ANDROID_APP_VERSION = '1.0.1';
+const ANDROID_APP_VERSION = '1.0.2';
 const IOS_APP_LINK =
   'https://play.google.com/store/apps/details?id=app.appID&pli=1';
-const IOS_APP_VERSION = '1.0.1';
+const IOS_APP_VERSION = '1.0.2';
 const APP_VERSION = isAndroid ? ANDROID_APP_VERSION : IOS_APP_VERSION;
 const BASE_URL_LOCAL = 'http://192.168.42.225/';
 const BASE_URL_LIVE = 'https://console.radiobridge.com/api/visualization/';
