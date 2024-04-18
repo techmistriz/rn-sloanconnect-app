@@ -6,6 +6,15 @@ import {isObjectEmpty} from './array';
  * @param {*} str
  * function which convert First character into Capital letter of String
  */
+export function base64EncodeFromByteArray(byteArray: Uint8Array) {
+  return base64.encodeFromByteArray(byteArray);
+}
+
+/**
+ *
+ * @param {*} str
+ * function which convert First character into Capital letter of String
+ */
 export function base64EncodeDecode(
   str: string | null,
   type: 'encode' | 'decode' = 'encode',
@@ -84,23 +93,24 @@ export const base64ToText = (encodedString: string | any) => {
 export function hexEncodeDecode(
   str: string | null,
   type: 'encode' | 'decode' | 'decodeSpecial' = 'encode',
+  base = 16,
 ) {
   if (!str) return '';
   return type == 'encode'
     ? str
         .split('')
-        .map(c => c.charCodeAt(0).toString(16).padStart(2, '0'))
+        .map(c => c.charCodeAt(0).toString(base).padStart(2, '0'))
         .join('')
     : type == 'decodeSpecial'
     ? str
         .split(' ')
         .filter(p => !!p)
-        .map(c => parseInt(c, 16))
+        .map(c => parseInt(c, base))
         .join(' ')
     : str
         .split(/(\w\w)/g)
         .filter(p => !!p)
-        .map(c => String.fromCharCode(parseInt(c, 16)))
+        .map(c => String.fromCharCode(parseInt(c, base)))
         .join('');
 }
 

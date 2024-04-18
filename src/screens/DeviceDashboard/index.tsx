@@ -31,6 +31,7 @@ import {
 import {
   addSpaceIntoString,
   base64EncodeDecode,
+  base64EncodeFromByteArray,
   base64ToHex,
   base64ToText,
   decimalToHex,
@@ -142,7 +143,7 @@ const Index = ({navigation, route}: any) => {
 
   /** component hooks method */
   useEffect(() => {
-    initlizeAppGen2();
+    // initlizeAppGen2();
   }, []);
 
   const initlizeAppGen2 = async () => {
@@ -154,7 +155,7 @@ const Index = ({navigation, route}: any) => {
     const SiteIDServiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
     const SiteIDCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559CA';
 
-    // consoleLog('initlizeAppGen2 server_key==>', server_key);
+    consoleLog('initlizeAppGen2 server_key==>', server_key);
 
     // const __siteIDTmp = '2AAD580558ED451D813532D71DEA7F24';
     // const siteIDResultWriteResponse =
@@ -184,6 +185,7 @@ const Index = ({navigation, route}: any) => {
       __siteID = base64ToHex(siteIDResult?.value);
     }
 
+    console.log('initlizeAppGen2 __siteID==>', __siteID);
     var formattedSiteId = addSpaceIntoString(__siteID, 2);
     // console.log('initlizeAppGen2 formattedSiteId==>', formattedSiteId);
     // var decodedSiteId = hexEncodeDecode(formattedSiteId, 'decodeSpecial');
@@ -207,7 +209,7 @@ const Index = ({navigation, route}: any) => {
     // );
 
     const __masterKey = base64ToHex(readCharacteristicForDevice?.value);
-    // consoleLog('initlizeAppGen2 __masterKey==>', __masterKey);
+    consoleLog('initlizeAppGen2 __masterKey==>', __masterKey);
 
     var formattedMasterKey = addSpaceIntoString(__masterKey, 2);
     // consoleLog('initlizeAppGen2 formattedMasterKey==>', formattedMasterKey);
@@ -221,7 +223,7 @@ const Index = ({navigation, route}: any) => {
 
     // Timestamp
     var __timestamp = getTimestampInSeconds();
-    // consoleLog('initlizeAppGen2 __timestamp==>', __timestamp);
+    consoleLog('initlizeAppGen2 __timestamp==>', __timestamp);
 
     var hexTimestamp = decimalToHex(__timestamp);
     // consoleLog('initlizeAppGen2 hexTimestamp==>', hexTimestamp);
@@ -232,42 +234,94 @@ const Index = ({navigation, route}: any) => {
     var mappedTimestamp = formattedTimestamp.split(' ');
     // console.log('initlizeAppGen2 mappedTimestamp==>', mappedTimestamp);
 
-    const sessionKey = await generateSessionKey(
-      mappedTimestamp,
-      server_key,
-      mappedMasterKey,
-      mappedSiteId,
-    );
-    console.log('initlizeAppGen2 sessionKey==>', sessionKey);
+    // const sessionKey = await generateSessionKey(
+    //   mappedTimestamp,
+    //   server_key,
+    //   mappedMasterKey,
+    //   mappedSiteId,
+    // );
+    // console.log('initlizeAppGen2 sessionKey==>', sessionKey);
 
-    // Session Key
+    const __sessionKeyHexArrWrong = [
+      0x37, 0x80, 0x80, 0xaf, 0x90, 0x30, 0x4a, 0x15, 0x5a, 0xe2, 0xd7, 0x3e,
+      0x7d, 0xdb, 0x88, 0x7b, 0x55, 0x1d, 0x60, 0x64, 0x74, 0xff, 0x09, 0x22,
+      0x95, 0xc3, 0x40, 0x80, 0xec, 0xb1, 0x64, 0x6c, 0x80, 0xec, 0xb1, 0x64,
+      0x01,
+    ];
+
+    const __sessionKeyHexArr = [
+      0xa6, 0xdf, 0x1e, 0x66, 0x0a, 0x14, 0x4d, 0xe0, 0x20, 0xec, 0xcc, 0x04,
+      0x46, 0xd5, 0x94, 0x7e, 0xbc, 0xf4, 0xa7, 0x40, 0x31, 0x17, 0x84, 0x2e,
+      0xa1, 0x26, 0x7f, 0x29, 0xe6, 0x53, 0xf7, 0x02, 0x41, 0x7e, 0x4e, 0xb6,
+      0x01,
+    ];
+
+    // const __sessionKeyDecimalArr = [
+    //   55, 128, 128, 175, 144, 48, 74, 21, 90, 226, 215, 62, 125, 219, 136, 123,
+    //   85, 29, 96, 100, 116, 255, 9, 34, 149, 195, 64, 128, 236, 177, 100, 108,
+    //   128, 236, 177, 100, 1,
+    // ];
+
+    const __sessionKeyHexText =
+      'a6df1e660a144de020eccc0446d5947ebcf4a7403117842ea1267f29e653f702417e4eb601';
+
+    const __sessionKeyDecText =
+      '55 128 128 175 144 48 74 21 90 226 215 62 125 219 136 123 85 29 96 100 116 255 9 34 149 195 64 128 236 177 100 108 128 236 177 100 1';
+
+    const __sessionKeyHexArrUint8Array = new Uint8Array(__sessionKeyHexArr);
+
+    consoleLog('initlizeAppGen2 __sessionKeyHexArr==>', __sessionKeyHexArr);
+    consoleLog(
+      'initlizeAppGen2 __sessionKeyHexArrUint8Array==>',
+      __sessionKeyHexArrUint8Array,
+    );
+    // consoleLog(
+    //   'initlizeAppGen2 __sessionKeyDecimalArr==>',
+    //   __sessionKeyDecimalArr,
+    // );
+    consoleLog('initlizeAppGen2 __sessionKeyHexText==>', __sessionKeyHexText);
+    consoleLog('initlizeAppGen2 __sessionKeyDecText==>', __sessionKeyDecText);
+    consoleLog(
+      'initlizeAppGen2 base64EncodeFromByteArray==>',
+      base64EncodeFromByteArray(__sessionKeyHexArrUint8Array),
+    );
+
     const sessionKeyServoiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
     const sessionKeyCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559C5';
 
     const sessionKeyResponse =
-      await BLEService.writeCharacteristicWithoutResponseForDevice(
+      await BLEService.writeCharacteristicWithResponseForDevice2(
         sessionKeyServoiceUUID,
         sessionKeyCharUUID,
-        sessionKey,
+        __sessionKeyHexArrUint8Array,
       );
-      
+
     consoleLog(
       'initlizeAppGen2 sessionKeyResponse==>',
       JSON.stringify(sessionKeyResponse?.value),
     );
 
-    // Authorization Key
-    const authorizationServiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
-    const authorizationCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559C6';
-    const authorizationResponse = await BLEService.readCharacteristicForDevice(
-      authorizationServiceUUID,
-      authorizationCharUUID,
-    );
-    consoleLog(
-      'initlizeAppGen2 authorizationResponse==>',
-      authorizationResponse?.value,
-    );
+    setTimeout(async () => {
+      // Authorization Key
+      const authorizationServiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
+      const authorizationCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559C6';
+      const authorizationResponse =
+        await BLEService.readCharacteristicForDevice(
+          authorizationServiceUUID,
+          authorizationCharUUID,
+        );
+      consoleLog(
+        'initlizeAppGen2 authorizationResponse==>',
+        authorizationResponse?.value,
+      );
+    }, 3000);
   };
+
+  function toHexString(byteArray: any) {
+    return Array.from(byteArray, function (byte) {
+      return ('0' + (byte & 0xff).toString(16)).slice(-2);
+    }).join('');
+  }
 
   const generateSessionKey = async (
     unixTimestamp: any,
@@ -351,7 +405,7 @@ const Index = ({navigation, route}: any) => {
     for (let i = 0; i < 32; i++) {
       session_key[i + 4] = mappedtmpSHA[i];
     }
-    session_key.push('01');
+    session_key.push(0x01);
     console.log('generateSessionKey session_key==>', session_key);
     return session_key.join('');
   };
@@ -530,6 +584,15 @@ const Index = ({navigation, route}: any) => {
       }
     }, timeout + 3000);
     // consoleLog('status7');
+  };
+
+  const dispenseWater = () => {
+    // BLEService.dispenseWater(
+    //   'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
+    //   'd0aba888-fb10-4dc9-9b17-bdd8f490c965',
+    // );
+
+    initlizeAppGen2();
   };
 
   return (
@@ -798,10 +861,7 @@ const Index = ({navigation, route}: any) => {
                     type={'link'}
                     title="DISPENSE WATER"
                     onPress={() => {
-                      BLEService.dispenseWater(
-                        'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
-                        'd0aba888-fb10-4dc9-9b17-bdd8f490c965',
-                      );
+                      dispenseWater();
                     }}
                     leftItem={
                       <VectorIcon

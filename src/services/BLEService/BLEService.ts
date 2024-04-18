@@ -14,7 +14,10 @@ import {
 } from 'react-native-ble-plx';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
-import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
+import {
+  base64EncodeDecode,
+  base64EncodeFromByteArray,
+} from 'src/utils/Helpers/encryption';
 import {
   getBatteryLevel,
   getBleDeviceGeneration,
@@ -299,7 +302,7 @@ class BLEServiceInstance {
   writeCharacteristicWithResponseForDevice = async (
     serviceUUID: UUID,
     characteristicUUID: UUID,
-    time: Base64 | string,
+    value: Base64 | string,
   ) => {
     if (!this.device) {
       return this.showErrorToast(deviceNotConnectedErrorText);
@@ -310,7 +313,33 @@ class BLEServiceInstance {
         this.device.id,
         serviceUUID,
         characteristicUUID,
-        base64EncodeDecode(time),
+        base64EncodeDecode(value),
+      )
+      .catch(error => {
+        this.onError(error);
+      });
+  };
+
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
+  writeCharacteristicWithResponseForDevice2 = async (
+    serviceUUID: UUID,
+    characteristicUUID: UUID,
+    value: Uint8Array,
+  ) => {
+    if (!this.device) {
+      return this.showErrorToast(deviceNotConnectedErrorText);
+      // throw new Error(deviceNotConnectedErrorText);
+    }
+    return this.manager
+      .writeCharacteristicWithResponseForDevice(
+        this.device.id,
+        serviceUUID,
+        characteristicUUID,
+        base64EncodeFromByteArray(value),
       )
       .catch(error => {
         this.onError(error);
@@ -325,7 +354,7 @@ class BLEServiceInstance {
   writeCharacteristicWithoutResponseForDevice = async (
     serviceUUID: UUID,
     characteristicUUID: UUID,
-    time: Base64 | string,
+    value: Base64 | string,
   ) => {
     if (!this.device) {
       return this.showErrorToast(deviceNotConnectedErrorText);
@@ -336,7 +365,7 @@ class BLEServiceInstance {
         this.device.id,
         serviceUUID,
         characteristicUUID,
-        base64EncodeDecode(time),
+        base64EncodeDecode(value),
       )
       .catch(error => {
         this.onError(error);
