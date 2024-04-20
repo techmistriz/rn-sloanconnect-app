@@ -29,16 +29,17 @@ import {
   updatePreviousSettings,
 } from 'src/utils/Helpers/project';
 import {
-  addSeparatorInString,
+  addSpaceIntoString,
   base64EncodeDecode,
   base64EncodeFromByteArray,
   base64ToHex,
   base64ToText,
   decimalToHex,
-  fromHexStringUint8Array,
+  fromHexString,
   getTimestampInSeconds,
   hexEncodeDecode,
   hexToDecimal,
+  mapUint8Array,
 } from 'src/utils/Helpers/encryption';
 
 import {
@@ -86,7 +87,6 @@ import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import StorageService from 'src/services/StorageService/StorageService';
 import {sha256, sha256Bytes} from 'react-native-sha256';
 import {constants} from 'src/common';
-import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -147,232 +147,267 @@ const Index = ({navigation, route}: any) => {
   }, []);
 
   const initlizeAppGen2 = async () => {
-    const SERVER_KEY = BLE_CONSTANTS?.GEN2?.SERVER_KEY;
-    consoleLog('initlizeAppGen2 SERVER_KEY==>', SERVER_KEY);
-    const SITE_ID_SERVICE_UUID = BLE_CONSTANTS?.GEN2?.SITE_ID_SERVICE_UUID;
-    const SITE_ID_CHARACTERISTIC_UUID =
-      BLE_CONSTANTS?.GEN2?.SITE_ID_CHARACTERISTIC_UUID;
+    const server_key = [
+      0x37, 0x80, 0x80, 0xaf, 0x90, 0x30, 0x4a, 0x15, 0x5a, 0xe2, 0xd7, 0x3e,
+      0x7d, 0xdb, 0x88, 0x7b, 0x55, 0x1d, 0x60, 0x64, 0x74, 0xff, 0x09, 0x22,
+      0x95, 0xc3, 0x40, 0x80, 0xec, 0xb1, 0x64, 0x6c,
+    ];
+    const SiteIDServiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
+    const SiteIDCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559CA';
+
+    consoleLog('initlizeAppGen2 server_key==>', server_key);
+
+    // const __siteIDTmp = '2AAD580558ED451D813532D71DEA7F24';
+    // const siteIDResultWriteResponse =
+    //   await BLEService.writeCharacteristicWithoutResponseForDevice(
+    //     SiteIDServiceUUID,
+    //     SiteIDCharUUID,
+    //     __siteIDTmp,
+    //   );
+
+    //   // MkFBRDU4MDU1OEVENDUxRDgxMzUzMkQ3MURFQTdGMjQ=
+    // consoleLog(
+    //   'initlizeAppGen2 siteIDResultWriteResponse==>',
+    //   JSON.stringify(siteIDResultWriteResponse),
+    // );
 
     // SiteID Key
-    const SITE_ID_HEX_FAKE = '2AAD580558ED451D813532D71DEA7F23';
-    const siteIDResponse = await BLEService.readCharacteristicForDevice(
-      SITE_ID_SERVICE_UUID,
-      SITE_ID_CHARACTERISTIC_UUID,
+    const siteIDResult = await BLEService.readCharacteristicForDevice(
+      SiteIDServiceUUID,
+      SiteIDCharUUID,
     );
 
     // initlizeAppGen2 SiteIDResult==> Kq1YBVjtRR2BNTLXHep/Iw==
-    // consoleLog('initlizeAppGen2 SiteIDResult==>', siteIDResponse?.value);
-    var siteIdHex: string;
+    consoleLog('initlizeAppGen2 SiteIDResult==>', siteIDResult?.value);
+    var __siteID: any = '2AAD580558ED451D813532D71DEA7F23';
 
-    if (siteIDResponse?.value) {
-      siteIdHex = base64ToHex(siteIDResponse?.value);
-    } else {
-      siteIdHex = SITE_ID_HEX_FAKE;
+    if (siteIDResult?.value) {
+      __siteID = base64ToHex(siteIDResult?.value);
     }
 
-    // console.log('initlizeAppGen2 siteIdHex==>', siteIdHex);
-    var siteIdUint8Array = fromHexStringUint8Array(siteIdHex);
-    console.log('initlizeAppGen2 siteIdUint8Array==>', siteIdUint8Array);
+    console.log('initlizeAppGen2 __siteID==>', __siteID);
+    var formattedSiteId = addSpaceIntoString(__siteID, 2);
+    // console.log('initlizeAppGen2 formattedSiteId==>', formattedSiteId);
+    // var decodedSiteId = hexEncodeDecode(formattedSiteId, 'decodeSpecial');
+
+    // console.log('initlizeAppGen2 decodedSiteId==>', decodedSiteId);
+    // var mappedSiteId = mapUint8Array(decodedSiteId, 16);
+    var mappedSiteId = formattedSiteId.split(' ');
+    // console.log('initlizeAppGen2 mappedSiteId==>', mappedSiteId);
 
     // Master Key
-    const MASTER_KEY_SERVICE_UUID =
-      BLE_CONSTANTS?.GEN2?.MASTER_KEY_SERVICE_UUID;
-    const MASTER_KEY_CHARACTERISTIC_UUID =
-      BLE_CONSTANTS?.GEN2?.MASTER_KEY_CHARACTERISTIC_UUID;
-    const masetrKeyResponse = await BLEService.readCharacteristicForDevice(
-      MASTER_KEY_SERVICE_UUID,
-      MASTER_KEY_CHARACTERISTIC_UUID,
-    );
+    const masterKeyServoiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
+    const masterKeyCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559C2';
+    const readCharacteristicForDevice =
+      await BLEService.readCharacteristicForDevice(
+        masterKeyServoiceUUID,
+        masterKeyCharUUID,
+      );
     // consoleLog(
     //   'initlizeAppGen2 readCharacteristicForDevice==>',
     //   readCharacteristicForDevice?.value,
     // );
 
-    const masterKeyHex = base64ToHex(masetrKeyResponse?.value);
-    // consoleLog('initlizeAppGen2 masterKeyHex==>', masterKeyHex);
-    var masterKeyUint8Array = fromHexStringUint8Array(masterKeyHex);
-    console.log('initlizeAppGen2 masterKeyUint8Array==>', masterKeyUint8Array);
+    const __masterKey = base64ToHex(readCharacteristicForDevice?.value);
+    consoleLog('initlizeAppGen2 __masterKey==>', __masterKey);
+
+    var formattedMasterKey = addSpaceIntoString(__masterKey, 2);
+    // consoleLog('initlizeAppGen2 formattedMasterKey==>', formattedMasterKey);
+
+    // var decodedMasterKey = hexEncodeDecode(formattedMasterKey, 'decodeSpecial');
+    // consoleLog('initlizeAppGen2 decodedMasterKey==>', decodedMasterKey);
+
+    // var mappedMasterKey = mapUint8Array(decodedMasterKey, 32);
+    var mappedMasterKey = formattedMasterKey.split(' ');
+    // console.log('initlizeAppGen2 mappedMasterKey==>', mappedMasterKey);
 
     // Timestamp
-    var timestamp = getTimestampInSeconds();
-    // consoleLog('initlizeAppGen2 timestamp==>', timestamp);
+    var __timestamp = getTimestampInSeconds();
+    consoleLog('initlizeAppGen2 __timestamp==>', __timestamp);
 
-    var timestampHex = decimalToHex(timestamp);
-    // consoleLog('initlizeAppGen2 timestampHex==>', timestampHex);
+    var hexTimestamp = decimalToHex(__timestamp);
+    // consoleLog('initlizeAppGen2 hexTimestamp==>', hexTimestamp);
 
-    var timestampUint8Array = fromHexStringUint8Array(timestampHex);
-    console.log('initlizeAppGen2 timestampUint8Array==>', timestampUint8Array);
+    var formattedTimestamp = addSpaceIntoString(hexTimestamp.toString(), 2);
+    // consoleLog('initlizeAppGen2 formattedTimestamp==>', formattedTimestamp);
 
-    // const tmp_session = [
-    //   0x17, 0xa0, 0x8f, 0x02, 0x8f, 0x50, 0xfc, 0x1d, 0x34, 0x02, 0xac, 0x3e,
-    //   0x98, 0x2c, 0x35, 0xe0, 0x0a, 0x29, 0x17, 0x60, 0x6b, 0x48, 0xcd, 0x6a,
-    //   0xba, 0x47, 0x00, 0x48, 0x65, 0xa1, 0x9f, 0x40,
-    // ];
+    var mappedTimestamp = formattedTimestamp.split(' ');
+    // console.log('initlizeAppGen2 mappedTimestamp==>', mappedTimestamp);
 
-    // const tmpSHA = [
-    //   0x0a, 0x14, 0x4d, 0xe0, 0x20, 0xec, 0xcc, 0x04, 0x46, 0xd5, 0x94, 0x7e,
-    //   0xbc, 0xf4, 0xa7, 0x40, 0x31, 0x17, 0x84, 0x2e, 0xa1, 0x26, 0x7f, 0x29,
-    //   0xe6, 0x53, 0xf7, 0x02, 0x41, 0x7e, 0x4e, 0xb6,
-    // ];
-    // console.log('initlizeAppGen2 tmp_session==>', tmp_session);
-    // console.log('initlizeAppGen2 tmpSHA==>', tmpSHA);
-
-    // var sessionUintArrayTmpBytes = Array.from(tmp_session);
-    // var sessionUintArrayTmpBytesSHA = await sha256Bytes(
-    //   sessionUintArrayTmpBytes,
+    // const sessionKey = await generateSessionKey(
+    //   mappedTimestamp,
+    //   server_key,
+    //   mappedMasterKey,
+    //   mappedSiteId,
     // );
-    // var sessionUintArraySHA = fromHexStringUint8Array(
-    //   sessionUintArrayTmpBytesSHA,
-    // );
-    // console.log('initlizeAppGen2 sha256Bytes==>', sessionUintArraySHA);
+    // console.log('initlizeAppGen2 sessionKey==>', sessionKey);
 
-    const sessionKeyNew = await generateSessionKey(
-      timestampUint8Array,
-      SERVER_KEY,
-      masterKeyUint8Array,
-      siteIdUint8Array,
-      true,
-    );
-    console.log('initlizeAppGen2 sessionKeyNew==>', sessionKeyNew);
+    const __sessionKeyHexArrWrong = [
+      0x37, 0x80, 0x80, 0xaf, 0x90, 0x30, 0x4a, 0x15, 0x5a, 0xe2, 0xd7, 0x3e,
+      0x7d, 0xdb, 0x88, 0x7b, 0x55, 0x1d, 0x60, 0x64, 0x74, 0xff, 0x09, 0x22,
+      0x95, 0xc3, 0x40, 0x80, 0xec, 0xb1, 0x64, 0x6c, 0x80, 0xec, 0xb1, 0x64,
+      0x01,
+    ];
 
-    // const __sessionKeyDecArr1 = [
-    //   102, 35, 88, 156, 88, 156, 35, 102, 9, 154, 173, 239, 88, 95, 49, 202,
-    //   169, 255, 122, 187, 101, 87, 198, 146, 116, 140, 68, 2, 54, 228, 130, 31,
-    //   228, 163, 246, 198, 1,
+    const __sessionKeyHexArr = [
+      0xa6, 0xdf, 0x1e, 0x66, 0x0a, 0x14, 0x4d, 0xe0, 0x20, 0xec, 0xcc, 0x04,
+      0x46, 0xd5, 0x94, 0x7e, 0xbc, 0xf4, 0xa7, 0x40, 0x31, 0x17, 0x84, 0x2e,
+      0xa1, 0x26, 0x7f, 0x29, 0xe6, 0x53, 0xf7, 0x02, 0x41, 0x7e, 0x4e, 0xb6,
+      0x01,
+    ];
+
+    // const __sessionKeyDecimalArr = [
+    //   55, 128, 128, 175, 144, 48, 74, 21, 90, 226, 215, 62, 125, 219, 136, 123,
+    //   85, 29, 96, 100, 116, 255, 9, 34, 149, 195, 64, 128, 236, 177, 100, 108,
+    //   128, 236, 177, 100, 1,
     // ];
 
-    // const __sessionKeyDecArr = [
-    //   166, 223, 30, 102, 10, 20, 77, 224, 32, 236, 204, 4, 70, 213, 148, 126,
-    //   188, 244, 167, 64, 49, 23, 132, 46, 161, 38, 127, 41, 230, 83, 247, 2, 65,
-    //   126, 78, 182, 1,
-    // ];
+    const __sessionKeyHexText =
+      'a6df1e660a144de020eccc0446d5947ebcf4a7403117842ea1267f29e653f702417e4eb601';
 
-    // const __sessionKeyDecArrUint8Array = new Uint8Array(sessionKeyNew);
-    // consoleLog('initlizeAppGen2 __sessionKeyDecArr==>', __sessionKeyDecArr);
-    // consoleLog(
-    //   'initlizeAppGen2 __sessionKeyDecArrUint8Array==>',
-    //   __sessionKeyDecArrUint8Array,
-    // );
+    const __sessionKeyDecText =
+      '55 128 128 175 144 48 74 21 90 226 215 62 125 219 136 123 85 29 96 100 116 255 9 34 149 195 64 128 236 177 100 108 128 236 177 100 1';
 
-    const SESSION_KEY_SERVICE_UUID =
-      BLE_CONSTANTS?.GEN2?.SESSION_KEY_SERVICE_UUID;
-    const SESSION_KEY_CHARACTERISTIC_UUID =
-      BLE_CONSTANTS?.GEN2?.SESSION_KEY_CHARACTERISTIC_UUID;
+    const __sessionKeyHexArrUint8Array = new Uint8Array(__sessionKeyHexArr);
 
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      SESSION_KEY_SERVICE_UUID,
-      SESSION_KEY_CHARACTERISTIC_UUID,
-      sessionKeyNew,
-    );
-
-    // Authorization Key
-    const AUTHORIZATION_KEY_SERVICE_UUID =
-      BLE_CONSTANTS?.GEN2?.AUTHORIZATION_KEY_SERVICE_UUID;
-    const AUTHORIZATION_KEY_CHARACTERISTIC_UUID =
-      BLE_CONSTANTS?.GEN2?.AUTHORIZATION_KEY_CHARACTERISTIC_UUID;
-    const authorizationResponse = await BLEService.readCharacteristicForDevice(
-      AUTHORIZATION_KEY_SERVICE_UUID,
-      AUTHORIZATION_KEY_CHARACTERISTIC_UUID,
-    );
+    consoleLog('initlizeAppGen2 __sessionKeyHexArr==>', __sessionKeyHexArr);
     consoleLog(
-      'initlizeAppGen2 authorizationResponse==>',
-      base64ToHex(authorizationResponse?.value),
+      'initlizeAppGen2 __sessionKeyHexArrUint8Array==>',
+      __sessionKeyHexArrUint8Array,
     );
+    // consoleLog(
+    //   'initlizeAppGen2 __sessionKeyDecimalArr==>',
+    //   __sessionKeyDecimalArr,
+    // );
+    consoleLog('initlizeAppGen2 __sessionKeyHexText==>', __sessionKeyHexText);
+    // consoleLog('initlizeAppGen2 __sessionKeyDecText==>', __sessionKeyDecText);
+    consoleLog(
+      'initlizeAppGen2 base64EncodeFromByteArray==>',
+      base64EncodeFromByteArray(__sessionKeyHexArrUint8Array),
+    );
+
+    const sessionKeyServoiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
+    const sessionKeyCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559C5';
+
+    const sessionKeyResponse =
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        sessionKeyServoiceUUID,
+        sessionKeyCharUUID,
+        __sessionKeyHexArrUint8Array,
+      );
+
+    consoleLog(
+      'initlizeAppGen2 sessionKeyResponse==>',
+      JSON.stringify(sessionKeyResponse?.value),
+    );
+
+    setTimeout(async () => {
+      // Authorization Key
+      const authorizationServiceUUID = '438AF044-AF98-45F1-8B9F-5382B17559C0';
+      const authorizationCharUUID = '438AF044-AF98-45F1-8B9F-5382B17559C6';
+      const authorizationResponse =
+        await BLEService.readCharacteristicForDevice(
+          authorizationServiceUUID,
+          authorizationCharUUID,
+        );
+      consoleLog(
+        'initlizeAppGen2 authorizationResponse==>',
+        authorizationResponse?.value,
+      );
+    }, 3000);
   };
 
-  const generateSessionKey = async (
-    timestampUint8Array: any,
-    SERVER_KEY: any,
-    masterKeyUint8Array: any,
-    siteIdUint8Array: any,
-    isProvision: boolean,
-  ) => {
-    //session_time is an unixtime from the App, which could also be extracted from session key
-    var sessionTime = new Uint8Array(timestampUint8Array);
-    // consoleLog('generateSessionKey sessionTime==>', sessionTime);
-    // sessionTime[0] = timestampUint8Array[0];
-    // sessionTime[1] = timestampUint8Array[1];
-    // sessionTime[2] = timestampUint8Array[2];
-    // sessionTime[3] = timestampUint8Array[3];
+  function toHexString(byteArray: any) {
+    return Array.from(byteArray, function (byte) {
+      return ('0' + (byte & 0xff).toString(16)).slice(-2);
+    }).join('');
+  }
 
-    var __sessionUintArray = new Uint8Array(37);
+  const generateSessionKey = async (
+    unixTimestamp: any,
+    server_key: any,
+    master_key: any,
+    site_id: any,
+  ) => {
+    var session_time = [];
+    var session_key = [];
+
+    session_time[0] = unixTimestamp[0];
+    session_time[1] = unixTimestamp[1];
+    session_time[2] = unixTimestamp[2];
+    session_time[3] = unixTimestamp[3];
 
     // HOW TO GENERATE SESSION KEY
-    var sessionUintArrayTmp = new Uint8Array(32); // temporary session key
     const MASTER_KEY_LEN = 32;
+    const tmp_session_hex = []; // temporary session key
 
     // copy master_key to temporary session key
     for (let i = 0; i < 32; i++) {
-      sessionUintArrayTmp[i] = masterKeyUint8Array[i];
+      tmp_session_hex[i] = master_key[i];
     }
 
-    consoleLog(
-      'generateSessionKey sessionUintArrayTmp==>',
-      sessionUintArrayTmp,
-    );
+    const tmp_session = fromHexString(tmp_session_hex.join(''));
+    consoleLog('generateSessionKey tmp_session_hex==>', tmp_session_hex);
+    consoleLog('generateSessionKey tmp_session==>', tmp_session);
+
+    const session_time_uint = fromHexString(session_time.join(''));
+    consoleLog('generateSessionKey session_time_uint==>', session_time_uint);
 
     // formulas to generate temporary session key before SHA256
-
-    for (var i = 0; i < MASTER_KEY_LEN; i++) {
-      if (i % 2 > 0)
-        sessionUintArrayTmp[i] &=
-          (siteIdUint8Array[15 - i / 2] & (sessionTime[i % 3] << 1)) |
-          SERVER_KEY[i];
-      else
-        sessionUintArrayTmp[i] ^=
-          siteIdUint8Array[15 - i / 2] |
-          (sessionTime[i % 3] >> 1) |
-          SERVER_KEY[i];
+    for (let i = 0; i < MASTER_KEY_LEN; i++) {
+      if (i % 2 > 0) {
+        tmp_session[i] &=
+          (site_id[15 - i / 2] & (session_time_uint[i % 3] << 1)) |
+          server_key[i];
+      } else {
+        tmp_session[i] ^=
+          site_id[15 - i / 2] | (session_time_uint[i % 3] >> 1) | server_key[i];
+      }
     }
 
-    sessionUintArrayTmp[6] ^= sessionTime[2] >> 5;
-    sessionUintArrayTmp[30] ^= sessionTime[0] << 3;
-    sessionUintArrayTmp[26] &= sessionTime[1] >> 8;
-    sessionUintArrayTmp[17] |= sessionTime[2] >> 2;
-    sessionUintArrayTmp[15] &= sessionTime[3] << 4;
-    sessionUintArrayTmp[20] |= sessionTime[0] >> 5;
+    tmp_session[6] ^= session_time_uint[2] >> 5;
+    tmp_session[30] ^= session_time_uint[0] << 3;
+    tmp_session[26] &= session_time_uint[1] >> 8;
+    tmp_session[17] |= session_time_uint[2] >> 2;
+    tmp_session[15] &= session_time_uint[3] << 4;
+    tmp_session[20] |= session_time_uint[0] >> 5;
 
     // perform SHA256 on the temporary session key
-    console.log(
-      'generateSessionKey sessionUintArrayTmp after formulas==>',
-      sessionUintArrayTmp,
-    );
-    var sessionUintArrayTmpBytes = Array.from(sessionUintArrayTmp);
-    // console.log(
-    //   'generateSessionKey sessionUintArrayTmpBytes==>',
-    //   sessionUintArrayTmpBytes,
-    // );
+    // const tmpSHA = SHA256(tmp_session);
+    console.log('generateSessionKey tmp_session2==>', tmp_session);
+    const bytes = Array.from(tmp_session);
+    console.log('generateSessionKey bytes==>', bytes);
 
-    var sessionUintArrayTmpBytesSHA = await sha256Bytes(
-      sessionUintArrayTmpBytes,
-    );
-    // console.log(
-    //   'generateSessionKey sessionUintArrayTmpBytesSHA==>',
-    //   sessionUintArrayTmpBytesSHA,
-    // );
+    const tmpSHA = await sha256Bytes(bytes);
+    // sha256Bytes(bytes).then(hash => {
+    //   console.log('generateSessionKey hash==>', bytes);
+    // });
+    console.log('generateSessionKey tmpSHA==>', tmpSHA);
 
-    var sessionUintArraySHA = fromHexStringUint8Array(
-      sessionUintArrayTmpBytesSHA,
-    );
-    consoleLog(
-      'generateSessionKey sessionUintArraySHA==>',
-      sessionUintArraySHA,
-    );
+    var formattedtmpSHA = addSpaceIntoString(tmpSHA.toString(), 2);
+    consoleLog('generateSessionKey formattedtmpSHA==>', formattedtmpSHA);
+
+    // var decodedtmpSHA = hexEncodeDecode(formattedtmpSHA, 'decodeSpecial');
+    // consoleLog('generateSessionKey decodedtmpSHA==>', decodedtmpSHA);
+
+    // var mappedtmpSHA = mapUint8Array(decodedtmpSHA, 32);
+    var mappedtmpSHA = formattedtmpSHA.split(' ');
+    console.log('generateSessionKey mappedtmpSHA==>', mappedtmpSHA);
 
     // build session key
     // add unix time
-    __sessionUintArray[0] = sessionTime[2];
-    __sessionUintArray[1] = sessionTime[3];
-    __sessionUintArray[2] = sessionTime[1];
-    __sessionUintArray[3] = sessionTime[0];
+    session_key[0] = session_time[2];
+    session_key[1] = session_time[3];
+    session_key[2] = session_time[1];
+    session_key[3] = session_time[0];
 
     // add SHA session key
     for (let i = 0; i < 32; i++) {
-      __sessionUintArray[i + 4] = sessionUintArraySHA[i];
+      session_key[i + 4] = mappedtmpSHA[i];
     }
-    __sessionUintArray[36] = isProvision ? 1 : 0;
-    // console.log('generateSessionKey __sessionUintArray==>', __sessionUintArray);
-    return __sessionUintArray;
+    session_key.push(0x01);
+    console.log('generateSessionKey session_key==>', session_key);
+    return session_key.join('');
   };
 
   const initlizeApp = async () => {
