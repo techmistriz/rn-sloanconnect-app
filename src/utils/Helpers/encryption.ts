@@ -158,27 +158,11 @@ export function getTimestampInSeconds() {
 /**
  * Function to add space at every n chars
  * @param {string} str
- * @return {string}
- */
-export function addSpaceIntoString(str: string, n: number) {
-  if (!str) return str;
-  var a = [],
-    start = 0;
-  while (start < str.length) {
-    a.push(str.slice(start, start + n));
-    start += n;
-  }
-  return a.join(' ');
-}
-
-/**
- * Function to add space at every n chars
- * @param {string} str
  * @param {number} n
  * @param {string} separator
  * @return {string}
  */
-export function addSeparatorInString(str: string, n: number, separator = '') {
+export function addSeparatorInString(str: string, n: number, separator = ' ') {
   if (!str) return str;
   var a = [],
     start = 0;
@@ -195,23 +179,23 @@ export function addSeparatorInString(str: string, n: number, separator = '') {
  * @param {number} length
  * @return {string}
  */
-export function mapUint8Array(str: string, length: number) {
-  const result = new Uint8Array(length);
-  if (typeof str != 'undefined' && str) {
-    var array1 = str.split(' ');
-    if (
-      typeof array1 != 'undefined' &&
-      Array.isArray(array1) &&
-      array1.length >= length
-    ) {
-      for (let i = 0; i < length; i++) {
-        result[i] = parseInt(array1[i]);
-      }
-    }
-  }
+// export function mapUint8Array(str: string, length: number) {
+//   const result = new Uint8Array(length);
+//   if (typeof str != 'undefined' && str) {
+//     var array1 = str.split(' ');
+//     if (
+//       typeof array1 != 'undefined' &&
+//       Array.isArray(array1) &&
+//       array1.length >= length
+//     ) {
+//       for (let i = 0; i < length; i++) {
+//         result[i] = parseInt(array1[i]);
+//       }
+//     }
+//   }
 
-  return result;
-}
+//   return result;
+// }
 
 /**
  * Function to convert hex to string
@@ -219,8 +203,8 @@ export function mapUint8Array(str: string, length: number) {
  * @return {string}
  */
 
-export const fromHexString = (hexString: any) => {
+export const fromHexStringUint8Array = (hexString: any, base = 16) => {
   return Uint8Array.from(
-    hexString.match(/.{1,2}/g).map((byte: any) => parseInt(byte, 16)),
+    hexString.match(/.{1,2}/g).map((byte: any) => parseInt(byte, base)),
   );
 };
