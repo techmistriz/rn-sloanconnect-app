@@ -29,6 +29,7 @@ import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {DeviceExtendedProps} from 'src/screens/DeviceSearching/types';
 
 const deviceNotConnectedErrorText = 'Device is not connected';
 
@@ -36,6 +37,8 @@ class BLEServiceInstance {
   manager: BleManager;
 
   device: Device | null;
+
+  scannedDevices: Device[];
 
   batteryLevel: number;
 
@@ -49,6 +52,7 @@ class BLEServiceInstance {
 
   constructor() {
     this.device = null;
+    this.scannedDevices = [];
     this.batteryLevel = 0;
     this.totalWaterUsase = 0;
     this.connectedDeviceStaticData = null;
@@ -104,22 +108,27 @@ class BLEServiceInstance {
    * @param characteristicUUID
    */
   disconnectDevice = (showToast: boolean = true) => {
-    if (!this.device) {
-      return this.showErrorToast(deviceNotConnectedErrorText);
-      // throw new Error(deviceNotConnectedErrorText);
-    }
-    return this.manager
-      .cancelDeviceConnection(this.device.id)
-      .then(() => {
-        this.device = null;
-        showToast && this.showSuccessToast('Device disconnected');
-        // NavigationService.resetAllAction('DeviceSearching');
-      })
-      .catch(error => {
-        if (error?.code !== BleErrorCode.DeviceDisconnected) {
-          this.onError(error);
-        }
-      });
+    new Promise<boolean>((resolve, reject) => {
+      if (!this.device?.id) {
+        this.showErrorToast(deviceNotConnectedErrorText);
+        return resolve(true);
+        // throw new Error(deviceNotConnectedErrorText);
+      }
+      this.manager
+        .cancelDeviceConnection(this.device.id)
+        .then(() => {
+          this.device = null;
+          showToast && this.showSuccessToast('Device disconnected');
+          resolve(true);
+          // NavigationService.resetAllAction('DeviceSearching');
+        })
+        .catch(error => {
+          if (error?.code !== BleErrorCode.DeviceDisconnected) {
+            this.onError(error);
+          }
+          resolve(true);
+        });
+    });
   };
 
   /**
@@ -128,14 +137,20 @@ class BLEServiceInstance {
    * @param characteristicUUID
    */
   disconnectDeviceById = (id: DeviceId) =>
-    this.manager
-      .cancelDeviceConnection(id)
-      .then(() => this.showSuccessToast('Device disconnected'))
-      .catch(error => {
-        if (error?.code !== BleErrorCode.DeviceDisconnected) {
-          this.onError(error);
-        }
-      });
+    new Promise<boolean>((resolve, reject) => {
+      this.manager
+        .cancelDeviceConnection(id)
+        .then(() => {
+          this.showSuccessToast('Device disconnected');
+          resolve(true);
+        })
+        .catch(error => {
+          if (error?.code !== BleErrorCode.DeviceDisconnected) {
+            this.onError(error);
+          }
+          resolve(true);
+        });
+    });
 
   /**
    * project level function for BLE devices
@@ -161,7 +176,7 @@ class BLEServiceInstance {
    * @param characteristicUUID
    */
   scanDevices = async (
-    onDeviceFound: (device: Device & {modelStaticData: any}) => void,
+    onDeviceFound: (device: DeviceExtendedProps) => void,
     UUIDs: UUID[] | null = null,
     legacyScan?: boolean,
   ) => {
@@ -171,35 +186,9 @@ class BLEServiceInstance {
         this.manager.stopDeviceScan();
         return;
       }
-      const deviceName = device?.localName ?? device?.name;
-      if (!isObjectEmpty(device) && deviceName) {
-        if (
-          deviceName?.toUpperCase()?.includes('FAUCET') ||
-          deviceName?.toUpperCase()?.includes('SL')
-        ) {
-          var __deviceNameArr = deviceName.split(' ');
-          // consoleLog('__deviceNameArr', __deviceNameArr);
-          const deviceStaticData = getDeviceModelData(
-            device,
-            BLE_DEVICE_MODELS,
-          );
 
-          if (
-            Array.isArray(__deviceNameArr) &&
-            __deviceNameArr.length > 0 &&
-            deviceStaticData?.fullNameAllModel
-          ) {
-            __deviceNameArr[1] = deviceStaticData?.fullNameAllModel;
-            device.localName = __deviceNameArr.join(' ');
-          }
-          // consoleLog('deviceStaticData', deviceStaticData);
-          const __extendedDevice = {
-            ...device,
-            modelStaticData: deviceStaticData,
-          };
-          // consoleLog('__extendedDevice', JSON.stringify(__extendedDevice));
-          onDeviceFound(__extendedDevice);
-        }
+      if (device) {
+        onDeviceFound(device);
       }
     });
   };
@@ -244,7 +233,7 @@ class BLEServiceInstance {
     new Promise<Device>((resolve, reject) => {
       if (!this.device) {
         this.showErrorToast(deviceNotConnectedErrorText);
-        reject(new Error(deviceNotConnectedErrorText));
+        // reject(new Error(deviceNotConnectedErrorText));
         return;
       }
       this.manager
@@ -275,7 +264,7 @@ class BLEServiceInstance {
     new Promise<Characteristic | null>((resolve, reject) => {
       if (!this.device) {
         this.showErrorToast(deviceNotConnectedErrorText);
-        reject(new Error(deviceNotConnectedErrorText));
+        // reject(new Error(deviceNotConnectedErrorText));
         return;
       }
       this.manager
@@ -556,21 +545,18 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-  isDeviceConnected = () => {
-    if (!this.device) {
-      return this.showErrorToast(deviceNotConnectedErrorText);
-      // throw new Error(deviceNotConnectedErrorText);
-    }
-    return this.manager.isDeviceConnected(this.device.id);
+  isDeviceConnected = (id: DeviceId) => {
+    return new Promise<boolean>((resolve, reject) => {
+      this.manager
+        .isDeviceConnected(id)
+        .then(status => {
+          resolve(status);
+        })
+        .catch(error => {
+          resolve(false);
+        });
+    });
   };
-
-  /**
-   * project level function for BLE devices
-   * @param serviceUUID
-   * @param characteristicUUID
-   */
-  isDeviceWithIdConnected = (id: DeviceId) =>
-    this.manager.isDeviceConnected(id).catch(console.error);
 
   /**
    * project level function for BLE devices

@@ -1,5 +1,8 @@
 const COMMON = {};
-const GEN1 = {};
+const GEN1 = {
+  WATER_DISPENCE_SERVICE_UUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
+  WATER_DISPENCE_CHARACTERISTIC_UUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c965',
+};
 
 const GEN2 = {
   SERVER_KEY: [

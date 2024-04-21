@@ -38,6 +38,8 @@ import {
   Device,
 } from 'react-native-ble-plx';
 import {cloneDeep} from 'src/services/BLEService/cloneDeep';
+import {DeviceExtendedProps} from '../DeviceSearching/types';
+import {filterBLEDevices} from '../DeviceSearching/helper';
 
 type DeviceExtendedByUpdateTime = Device & {updateTimestamp: number};
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
@@ -53,16 +55,18 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   useEffect(() => {
-    consoleLog('useEffect manageRequirePermissions==>');
+    // consoleLog('useEffect manageRequirePermissions==>');
     manageRequirePermissions();
   }, []);
 
   /** Function comments */
   useEffect(() => {
-    consoleLog('useEffect setTimeout==>');
+    // consoleLog('useEffect setTimeout==>', requirePermissionAllowed);
     if (requirePermissionAllowed) {
+      // consoleLog('useEffect setTimeout requirePermissionAllowed in==>');
+
       timeoutId = setTimeout(() => {
-        // consoleLog('setTimeout==>', timeoutId);
+        consoleLog('setTimeout==>', timeoutId);
         clearTimeout(timeoutId);
         BLEService.manager.stopDeviceScan();
         NavigationService.navigate('NoDeviceFound');
@@ -103,18 +107,27 @@ const Index = ({navigation, route}: any) => {
     // consoleLog('__scanDevices==>');
     if (connectedDevice?.id) {
       try {
-        await BLEService.disconnectDeviceById(connectedDevice?.id);
+        const isDeviceConnected = await BLEService.isDeviceConnected(
+          connectedDevice?.id,
+        );
+        if (isDeviceConnected) {
+          await BLEService.disconnectDeviceById(connectedDevice?.id);
+        }
       } catch (error) {
-        consoleLog('error', error);
+        consoleLog('__scanDevices error', error);
       }
     }
     // setFoundDevices([]);
     BLEService.initializeBLE().then(() =>
       BLEService.scanDevices(
         (device: Device) => {
-          clearTimeout(timeoutId);
-          BLEService.manager.stopDeviceScan();
-          NavigationService.navigate('DeviceSearching');
+          const filterDevice: DeviceExtendedProps = filterBLEDevices(device);
+          consoleLog('device?.localName==>', filterDevice?.localName);
+          if (filterDevice) {
+            clearTimeout(timeoutId);
+            BLEService.manager.stopDeviceScan();
+            NavigationService.navigate('DeviceSearching');
+          }
         },
         null,
         false,

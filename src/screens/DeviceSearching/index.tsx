@@ -39,8 +39,9 @@ import {
   Device,
 } from 'react-native-ble-plx';
 import {loginResetDataAction} from 'src/redux/actions';
+import {filterBLEDevices} from './helper';
+import {DeviceExtendedProps} from './types';
 
-type DeviceExtendedByUpdateTime = Device & {updateTimestamp: number};
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 
 const Index = ({navigation, route}: any) => {
@@ -49,10 +50,12 @@ const Index = ({navigation, route}: any) => {
   const [displayText, setDisplaText] = useState<any>('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [isSearching, setSearching] = useState(true);
-  const [foundDevices, setFoundDevices] = useState<
-    DeviceExtendedByUpdateTime[]
-  >([]);
+  const [foundDevices, setFoundDevices] = useState<DeviceExtendedProps[]>([]);
   const connectedDevice: any = BLEService.getDevice();
+  var timeoutID: any = null;
+  var intervalID: any = null;
+  const WAITING_TIMEOUT = 20000;
+  const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
 
   /** component hooks method */
   useEffect(() => {
@@ -83,12 +86,71 @@ const Index = ({navigation, route}: any) => {
     return unsubscribe;
   }, [navigation]);
 
+  /** Function comments */
+  useEffect(() => {
+    consoleLog('useEffect setTimeout==>');
+    timeoutID = setTimeout(() => {
+      // consoleLog('setTimeout==>', timeoutID);
+      clearTimeout(timeoutID);
+      BLEService.manager.stopDeviceScan();
+      NavigationService.replace('NoDeviceFound');
+    }, WAITING_TIMEOUT);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, []);
+
+  /** Function comments */
+  useEffect(() => {
+    // consoleLog('useEffect foundDevices init==>');
+    intervalID = setInterval(() => {
+      // setFoundDevices([]);
+      refreshFoundDevices();
+    }, WAITING_TIMEOUT_FOR_REFRESH_LIST);
+
+    return () => {
+      consoleLog('Unmounting clearInterval');
+      clearInterval(intervalID);
+    };
+  }, []);
+
+  const refreshFoundDevices = () => {
+    // consoleLog('refreshFoundDevices init==>');
+    setFoundDevices(prevState => {
+      var nextState = prevState;
+      // consoleLog('refreshFoundDevices prevState==>', prevState);
+
+      const findStatus = prevState.find(device => {
+        return device?.updateTimestamp < Date.now();
+      });
+      consoleLog('findStatus', findStatus);
+
+      if (findStatus) {
+        nextState = prevState.filter(device => {
+          // consoleLog('filter', {
+          //   updateTimestamp: device?.updateTimestamp,
+          //   current: Date.now(),
+          // });
+          return device?.updateTimestamp > Date.now();
+        });
+        // consoleLog('nextState==>', nextState);
+      }
+      return nextState;
+    });
+  };
+
   const initlizeApp = async () => {
     if (connectedDevice?.id) {
       try {
-        await BLEService.disconnectDeviceById(connectedDevice?.id);
+        const isDeviceConnected = await BLEService.isDeviceConnected(
+          connectedDevice?.id,
+        );
+        if (isDeviceConnected) {
+          await BLEService.disconnectDeviceById(connectedDevice?.id);
+        }
       } catch (error) {
-        consoleLog('error', error);
+        consoleLog('__scanDevices error', error);
       }
     }
 
@@ -98,39 +160,54 @@ const Index = ({navigation, route}: any) => {
       // NavigationService.navigate('DeviceDashboard');
     } else {
       setSearching(true);
-
       BLEService.initializeBLE().then(() =>
         BLEService.scanDevices(addFoundDevice, null, false),
       );
     }
   };
 
-  const addFoundDevice = (device: Device) => {
-    consoleLog('device', device);
+  const addFoundDevice = (__device: DeviceExtendedProps) => {
+    // consoleLog('device', device?.localName);
+    const device: DeviceExtendedProps = filterBLEDevices(__device);
+    consoleLog('device?.localName==>', device?.localName);
+    if (!device) {
+      // refreshFoundDevices(foundDevices);
+      return false;
+    }
     setFoundDevices(prevState => {
-      if (!isFoundDeviceUpdateNecessary(prevState, device)) {
+      const __isFoundDeviceUpdateNecessary = isFoundDeviceUpdateNecessary(
+        prevState,
+        device,
+      );
+      // consoleLog(
+      //   '__isFoundDeviceUpdateNecessary',
+      //   __isFoundDeviceUpdateNecessary,
+      // );
+      if (!__isFoundDeviceUpdateNecessary) {
         return prevState;
       }
       // deep clone
       const nextState = cloneDeep(prevState);
-      const extendedDevice: DeviceExtendedByUpdateTime = {
+      const extendedDevice: DeviceExtendedProps = {
         ...device,
         updateTimestamp: Date.now() + MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS,
-      } as DeviceExtendedByUpdateTime;
+      } as DeviceExtendedProps;
 
       const indexToReplace = nextState.findIndex(
         currentDevice => currentDevice.id === device.id,
       );
+      // consoleLog('indexToReplace', indexToReplace);
       if (indexToReplace === -1) {
         return nextState.concat(extendedDevice);
       }
       nextState[indexToReplace] = extendedDevice;
+
       return nextState;
     });
   };
 
   const isFoundDeviceUpdateNecessary = (
-    currentDevices: DeviceExtendedByUpdateTime[],
+    currentDevices: DeviceExtendedProps[],
     updatedDevice: Device,
   ) => {
     const currentDevice = currentDevices.find(
@@ -139,7 +216,7 @@ const Index = ({navigation, route}: any) => {
     if (!currentDevice) {
       return true;
     }
-    return currentDevice.updateTimestamp < Date.now();
+    return currentDevice?.updateTimestamp < Date.now();
   };
 
   const onDeviceConnectingPress = (item: any) => {

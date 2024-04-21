@@ -5,8 +5,9 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
+import {Device} from 'react-native-ble-plx';
 
-export interface ContainerProps {
-  style?: ViewStyle;
-  children?: JSX.Element | JSX.Element[] | ReactFragment | null;
-}
+export type DeviceExtendedProps = Device & {
+  updateTimestamp?: number;
+  modelStaticData?: any;
+};
