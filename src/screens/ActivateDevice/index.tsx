@@ -66,7 +66,7 @@ const Index = ({navigation, route}: any) => {
       // consoleLog('useEffect setTimeout requirePermissionAllowed in==>');
 
       timeoutId = setTimeout(() => {
-        consoleLog('setTimeout==>', timeoutId);
+        // consoleLog('setTimeout==>', timeoutId);
         clearTimeout(timeoutId);
         BLEService.manager.stopDeviceScan();
         NavigationService.navigate('NoDeviceFound');

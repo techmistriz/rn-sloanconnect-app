@@ -3,6 +3,7 @@ import {
   decimalToHex,
   fromHexStringUint8Array,
   getTimestampInSeconds,
+  hexEncodeDecode,
 } from 'src/utils/Helpers/encryption';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {BLEService} from 'src/services';
@@ -11,7 +12,7 @@ import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 export const intiGen2SecurityKey = async () => {
   const SERVER_KEY = BLE_CONSTANTS?.GEN2?.SERVER_KEY;
-  consoleLog('intiGen2SecurityKey SERVER_KEY==>', SERVER_KEY);
+  consoleLog('intiGen2SecurityKey SERVER_KEY==>', toHexString(SERVER_KEY));
   const SITE_ID_SERVICE_UUID = BLE_CONSTANTS?.GEN2?.SITE_ID_SERVICE_UUID;
   const SITE_ID_CHARACTERISTIC_UUID =
     BLE_CONSTANTS?.GEN2?.SITE_ID_CHARACTERISTIC_UUID;
@@ -33,9 +34,18 @@ export const intiGen2SecurityKey = async () => {
     siteIdHex = SITE_ID_HEX_FAKE;
   }
 
+  // var siteIdUint8ArrayMock = [
+  //   0x2a, 0xad, 0x58, 0x05, 0x58, 0xed, 0x45, 0x1d, 0x81, 0x35, 0x32, 0xd7,
+  //   0x1d, 0xea, 0x7f, 0x23,
+  // ];
+  // var siteIdUint8Array = new Uint8Array(siteIdUint8ArrayMock);
+
   // console.log('intiGen2SecurityKey siteIdHex==>', siteIdHex);
   var siteIdUint8Array = fromHexStringUint8Array(siteIdHex);
-  console.log('intiGen2SecurityKey siteIdUint8Array==>', siteIdUint8Array);
+  console.log(
+    'intiGen2SecurityKey siteIdUint8Array==>',
+    toHexString(siteIdUint8Array),
+  );
 
   // Master Key
   const MASTER_KEY_SERVICE_UUID = BLE_CONSTANTS?.GEN2?.MASTER_KEY_SERVICE_UUID;
@@ -53,9 +63,17 @@ export const intiGen2SecurityKey = async () => {
   const masterKeyHex = base64ToHex(masetrKeyResponse?.value);
   // consoleLog('intiGen2SecurityKey masterKeyHex==>', masterKeyHex);
   var masterKeyUint8Array = fromHexStringUint8Array(masterKeyHex);
+
+  // var masterKeyHexMock = [
+  //   0x20, 0xe1, 0x70, 0x12, 0x70, 0x54, 0x86, 0xff, 0xeb, 0x13, 0x53, 0x3e,
+  //   0xe7, 0x2c, 0xee, 0xe0, 0x55, 0x48, 0x60, 0x61, 0x95, 0x48, 0x92, 0x6e,
+  //   0x0d, 0x5f, 0xda, 0x6f, 0x8a, 0xa3, 0xd0, 0xd2,
+  // ];
+  // var masterKeyUint8Array = new Uint8Array(masterKeyHexMock);
+
   console.log(
     'intiGen2SecurityKey masterKeyUint8Array==>',
-    masterKeyUint8Array,
+    toHexString(masterKeyUint8Array),
   );
 
   // Timestamp
@@ -66,9 +84,13 @@ export const intiGen2SecurityKey = async () => {
   // consoleLog('intiGen2SecurityKey timestampHex==>', timestampHex);
 
   var timestampUint8Array = fromHexStringUint8Array(timestampHex);
+
+  // var timestampHexMock = [0x66, 0x1e, 0xa6, 0xdf];
+  // var timestampUint8Array = new Uint8Array(timestampHexMock);
+
   console.log(
     'intiGen2SecurityKey timestampUint8Array==>',
-    timestampUint8Array,
+    toHexString(timestampUint8Array),
   );
 
   // const tmp_session = [
@@ -156,7 +178,7 @@ const generateSessionKey = async (
   isProvision: boolean,
 ) => {
   //session_time is an unixtime from the App, which could also be extracted from session key
-  var sessionTime = new Uint8Array(timestampUint8Array);
+  var sessionTime = timestampUint8Array;
   // consoleLog('generateSessionKey sessionTime==>', sessionTime);
   // sessionTime[0] = timestampUint8Array[0];
   // sessionTime[1] = timestampUint8Array[1];
@@ -174,21 +196,30 @@ const generateSessionKey = async (
     sessionUintArrayTmp[i] = masterKeyUint8Array[i];
   }
 
-  consoleLog('generateSessionKey sessionUintArrayTmp==>', sessionUintArrayTmp);
+  consoleLog(
+    'generateSessionKey sessionUintArrayTmp==>',
+    toHexString(sessionUintArrayTmp),
+  );
 
   // formulas to generate temporary session key before SHA256
 
-  for (var i = 0; i < MASTER_KEY_LEN; i++) {
-    if (i % 2 > 0)
+  for (let i = 0; i < MASTER_KEY_LEN; i++) {
+    if (i % 2 > 0) {
       sessionUintArrayTmp[i] &=
-        (siteIdUint8Array[15 - i / 2] & (sessionTime[i % 3] << 1)) |
+        (siteIdUint8Array[15 - Math.floor(i / 2)] & (sessionTime[i % 3] << 1)) |
         SERVER_KEY[i];
-    else
+    } else {
       sessionUintArrayTmp[i] ^=
-        siteIdUint8Array[15 - i / 2] |
+        siteIdUint8Array[15 - Math.floor(i / 2)] |
         (sessionTime[i % 3] >> 1) |
         SERVER_KEY[i];
+    }
   }
+
+  // console.log(
+  //   'generateSessionKey sessionUintArrayTmp after formulas==>',
+  //   toHexString(sessionUintArrayTmp),
+  // );
 
   sessionUintArrayTmp[6] ^= sessionTime[2] >> 5;
   sessionUintArrayTmp[30] ^= sessionTime[0] << 3;
@@ -200,8 +231,9 @@ const generateSessionKey = async (
   // perform SHA256 on the temporary session key
   console.log(
     'generateSessionKey sessionUintArrayTmp after formulas==>',
-    sessionUintArrayTmp,
+    toHexString(sessionUintArrayTmp),
   );
+
   var sessionUintArrayTmpBytes = Array.from(sessionUintArrayTmp);
   // console.log(
   //   'generateSessionKey sessionUintArrayTmpBytes==>',
@@ -217,7 +249,10 @@ const generateSessionKey = async (
   var sessionUintArraySHA = fromHexStringUint8Array(
     sessionUintArrayTmpBytesSHA,
   );
-  consoleLog('generateSessionKey sessionUintArraySHA==>', sessionUintArraySHA);
+  consoleLog(
+    'generateSessionKey sessionUintArraySHA==>',
+    toHexString(sessionUintArraySHA),
+  );
 
   // build session key
   // add unix time
@@ -234,3 +269,9 @@ const generateSessionKey = async (
   // console.log('generateSessionKey __sessionUintArray==>', __sessionUintArray);
   return __sessionUintArray;
 };
+
+function toHexString(byteArray) {
+  return Array.from(byteArray, function (byte) {
+    return ('0' + (byte & 0xff).toString(16)).slice(-2);
+  }).join(' ');
+}

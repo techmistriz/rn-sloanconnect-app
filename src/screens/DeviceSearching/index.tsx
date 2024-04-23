@@ -40,41 +40,43 @@ import {
 } from 'react-native-ble-plx';
 import {loginResetDataAction} from 'src/redux/actions';
 import {filterBLEDevices} from './helper';
-import {DeviceExtendedProps} from './types';
+import {DeviceExtendedProps, ScanningProps} from './types';
+import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
+import {
+  checkBluetoothPermissions,
+  PERMISSIONS_RESULTS,
+  requestBluetoothPermissions,
+  checkLocationPermissions,
+  requestLocationPermissions,
+} from 'src/utils/Permissions';
 
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
+const WAITING_TIMEOUT_FOR_NO_DEVICE_CHECK = 20000;
+const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
   const {user, token} = useSelector((state: any) => state?.AuthReducer);
-  const [displayText, setDisplaText] = useState<any>('');
   const [isConnecting, setIsConnecting] = useState(false);
-  const [isSearching, setSearching] = useState(true);
+  const [isScanning, setScanning] = useState<ScanningProps>(
+    ScanningProps.Pending,
+  );
+  const [requirePermissionAllowed, setRequirePermissionAllowed] =
+    useState(false);
   const [foundDevices, setFoundDevices] = useState<DeviceExtendedProps[]>([]);
   const connectedDevice: any = BLEService.getDevice();
   var timeoutID: any = null;
   var intervalID: any = null;
-  const WAITING_TIMEOUT = 20000;
-  const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
 
-  /** component hooks method */
+  /** Function comments */
   useEffect(() => {
-    const backAction = () => {
-      if (navigation.isFocused()) {
-        BLEService.manager.stopDeviceScan();
-        NavigationService.replace('ActivateDevice');
-        return true;
-      }
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-    return () => backHandler.remove();
+    consoleLog('useEffect manageRequirePermissions==>');
+    manageRequirePermissions();
   }, []);
 
   /** component hooks method */
   useEffect(() => {
+    consoleLog('useEffect initlizeApp==>');
     const unsubscribe = navigation.addListener('focus', () => {
       // The screen is focused
       // Call any action
@@ -88,13 +90,16 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   useEffect(() => {
-    consoleLog('useEffect setTimeout==>');
+    consoleLog('useEffect setTimeout NoDevice==>');
     timeoutID = setTimeout(() => {
-      // consoleLog('setTimeout==>', timeoutID);
-      clearTimeout(timeoutID);
-      BLEService.manager.stopDeviceScan();
-      NavigationService.replace('NoDeviceFound');
-    }, WAITING_TIMEOUT);
+      if (foundDevices.length == 0) {
+        // consoleLog('setTimeout==>', timeoutID);
+        clearTimeout(timeoutID);
+        BLEService.manager.stopDeviceScan();
+        // NavigationService.replace('NoDeviceFound');
+        setScanning(ScanningProps.NoDevice);
+      }
+    }, WAITING_TIMEOUT_FOR_NO_DEVICE_CHECK);
 
     return () => {
       clearTimeout(timeoutID);
@@ -103,9 +108,8 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   useEffect(() => {
-    // consoleLog('useEffect foundDevices init==>');
+    consoleLog('useEffect setInterval refreshFoundDevices==>');
     intervalID = setInterval(() => {
-      // setFoundDevices([]);
       refreshFoundDevices();
     }, WAITING_TIMEOUT_FOR_REFRESH_LIST);
 
@@ -115,32 +119,9 @@ const Index = ({navigation, route}: any) => {
     };
   }, []);
 
-  const refreshFoundDevices = () => {
-    // consoleLog('refreshFoundDevices init==>');
-    setFoundDevices(prevState => {
-      var nextState = prevState;
-      // consoleLog('refreshFoundDevices prevState==>', prevState);
-
-      const findStatus = prevState.find(device => {
-        return device?.updateTimestamp < Date.now();
-      });
-      consoleLog('findStatus', findStatus);
-
-      if (findStatus) {
-        nextState = prevState.filter(device => {
-          // consoleLog('filter', {
-          //   updateTimestamp: device?.updateTimestamp,
-          //   current: Date.now(),
-          // });
-          return device?.updateTimestamp > Date.now();
-        });
-        // consoleLog('nextState==>', nextState);
-      }
-      return nextState;
-    });
-  };
-
+  /** Function comments */
   const initlizeApp = async () => {
+    consoleLog('initlizeApp ');
     if (connectedDevice?.id) {
       try {
         const isDeviceConnected = await BLEService.isDeviceConnected(
@@ -150,39 +131,32 @@ const Index = ({navigation, route}: any) => {
           await BLEService.disconnectDeviceById(connectedDevice?.id);
         }
       } catch (error) {
-        consoleLog('__scanDevices error', error);
+        consoleLog('initlizeApp isDeviceConnected error', error);
       }
     }
 
     setFoundDevices([]);
-    // consoleLog('connectedDevice?.name', connectedDevice?.name);
-    if (connectedDevice?.name) {
-      // NavigationService.navigate('DeviceDashboard');
-    } else {
-      setSearching(true);
-      BLEService.initializeBLE().then(() =>
-        BLEService.scanDevices(addFoundDevice, null, false),
-      );
-    }
+    setScanning(ScanningProps.Scanning);
+    BLEService.initializeBLE().then(() =>
+      BLEService.scanDevices(addFoundDevice, null, false),
+    );
   };
 
+  /** Function comments */
   const addFoundDevice = (__device: DeviceExtendedProps) => {
-    // consoleLog('device', device?.localName);
-    const device: DeviceExtendedProps = filterBLEDevices(__device);
-    consoleLog('device?.localName==>', device?.localName);
+    const device = filterBLEDevices(__device);
+    consoleLog('device data==>', device);
     if (!device) {
       // refreshFoundDevices(foundDevices);
       return false;
     }
+    setScanning(ScanningProps.DeviceFound);
     setFoundDevices(prevState => {
       const __isFoundDeviceUpdateNecessary = isFoundDeviceUpdateNecessary(
         prevState,
         device,
       );
-      // consoleLog(
-      //   '__isFoundDeviceUpdateNecessary',
-      //   __isFoundDeviceUpdateNecessary,
-      // );
+
       if (!__isFoundDeviceUpdateNecessary) {
         return prevState;
       }
@@ -206,6 +180,7 @@ const Index = ({navigation, route}: any) => {
     });
   };
 
+  /** Function comments */
   const isFoundDeviceUpdateNecessary = (
     currentDevices: DeviceExtendedProps[],
     updatedDevice: Device,
@@ -219,13 +194,41 @@ const Index = ({navigation, route}: any) => {
     return currentDevice?.updateTimestamp < Date.now();
   };
 
+  /** Function comments */
+  const refreshFoundDevices = () => {
+    // consoleLog('refreshFoundDevices init==>');
+    setFoundDevices(prevState => {
+      var nextState = prevState;
+      // consoleLog('refreshFoundDevices prevState==>', prevState);
+
+      const findStatus = prevState.find(device => {
+        return device?.updateTimestamp < Date.now();
+      });
+      // consoleLog('findStatus', findStatus);
+
+      if (findStatus) {
+        nextState = prevState.filter(device => {
+          // consoleLog('filter', {
+          //   updateTimestamp: device?.updateTimestamp,
+          //   current: Date.now(),
+          // });
+          return device?.updateTimestamp > Date.now();
+        });
+        // consoleLog('nextState==>', nextState);
+      }
+      return nextState;
+    });
+  };
+
+  /** Function comments */
   const onDeviceConnectingPress = (item: any) => {
-    setIsConnecting(true);
+    setScanning(ScanningProps.Connecting);
     BLEService.connectToDevice(item?.id, item)
       .then(onConnectSuccess)
       .catch(onConnectFail);
   };
 
+  /** Function comments */
   const onConnectSuccess = async () => {
     consoleLog('onConnectSuccess');
     await BLEService.discoverAllServicesAndCharacteristicsForDevice();
@@ -234,6 +237,7 @@ const Index = ({navigation, route}: any) => {
     setIsConnecting(false);
   };
 
+  /** Function comments */
   const onConnectFail = (error: any) => {
     consoleLog('onConnectFail error==>', error);
     // NavigationService.navigate('BottomTabNavigator');
@@ -325,11 +329,72 @@ const Index = ({navigation, route}: any) => {
     );
   };
 
-  if (isConnecting) {
+  /** Function comments */
+  const onLogout = async () => {
+    const result = await showConfirmAlert('Are you sure?');
+    if (result) {
+      dispatch(loginResetDataAction());
+      // dispatch(settingsResetDataAction());
+      NavigationService.resetAllAction('Login');
+    }
+  };
+
+  /** Function for manage permissions using in this screen */
+  const manageRequirePermissions = async () => {
+    consoleLog('manageRequirePermissions called==>');
+    let status = 0;
+    const __checkBluetoothPermissions = await checkBluetoothPermissions();
+    // consoleLog('__checkBluetoothPermissions', __checkBluetoothPermissions);
+
+    if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.DENIED) {
+      const __requestBluetoothPermissions = await requestBluetoothPermissions();
+      if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED) {
+        // permissionDeniedBlockedAlert(
+        //   `We need camera permission for chat.\n You have previously denied these permissions, so you have to manually allow these permissions.`,
+        // );
+        status++;
+      }
+      // consoleLog('__requestBluetoothPermissions', __requestBluetoothPermissions);
+    } else if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED) {
+      // permissionDeniedBlockedAlert(
+      //   `We need camera permission for chat.\n You have previously denied these permissions, so you have to manually allow these permissions.`,
+      // );
+      status++;
+    }
+
+    const __checkLocationPermissions = await checkLocationPermissions();
+    // consoleLog('__checkLocationPermissions', __checkLocationPermissions);
+
+    if (__checkLocationPermissions == PERMISSIONS_RESULTS.DENIED) {
+      const __checkLocationPermissions = await requestLocationPermissions();
+      if (__checkLocationPermissions == PERMISSIONS_RESULTS.BLOCKED) {
+        // permissionDeniedBlockedAlert(
+        //   `We need camera permission for chat.\n You have previously denied these permissions, so you have to manually allow these permissions.`,
+        // );
+        status++;
+      }
+      // consoleLog('__checkLocationPermissions', __checkLocationPermissions);
+    } else if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED) {
+      // permissionDeniedBlockedAlert(
+      //   `We need camera permission for chat.\n You have previously denied these permissions, so you have to manually allow these permissions.`,
+      // );
+      status++;
+    }
+
+    if (status == 0) {
+      setRequirePermissionAllowed(true);
+    }
+  };
+
+  if (isScanning == ScanningProps.Connecting) {
     return <DeviceConnecting />;
-  } else if (!isSearching) {
-    return <NoDeviceFound onSearchAgainPress={() => setSearching(true)} />;
-  } else {
+  } else if (isScanning == ScanningProps.NoDevice) {
+    return (
+      <NoDeviceFound
+        onSearchAgainPress={() => setScanning(ScanningProps.Scanning)}
+      />
+    );
+  } else if (isScanning == ScanningProps.DeviceFound) {
     return (
       <AppContainer
         scroll={false}
@@ -423,6 +488,8 @@ const Index = ({navigation, route}: any) => {
         </Wrap>
       </AppContainer>
     );
+  } else {
+    return <ActivateDevice onLogout={onLogout} />;
   }
 };
 

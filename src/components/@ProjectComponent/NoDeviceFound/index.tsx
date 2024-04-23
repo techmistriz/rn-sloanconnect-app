@@ -1,30 +1,11 @@
-import React, {Component, Fragment, useEffect} from 'react';
-import {View, StyleSheet, Image, StatusBar} from 'react-native';
+import React, {} from 'react';
 import Theme from 'src/theme';
-import {Images} from 'src/assets';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  consoleLog,
-  getImgSource,
-  showToastMessage,
-} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {Wrap, Row} from 'src/components/Common';
+import {Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import AppInfo from 'src/components/@ProjectComponent/AppInfo';
-import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
-import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import {
-  PERMISSIONS_RESULTS,
-  checkBluetoothPermissions,
-  requestBluetoothPermissions,
-  checkLocationPermissions,
-  requestLocationPermissions,
-} from 'src/utils/Permissions';
-import {BLEService} from 'src/services/BLEService/BLEService';
 
 const Index = ({onSearchAgainPress}: any) => {
   return (

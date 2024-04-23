@@ -240,10 +240,10 @@ class BLEServiceInstance {
         .discoverAllServicesAndCharacteristicsForDevice(this.device.id)
         .then(device => {
           resolve(device);
-          consoleLog(
-            'discoverAllServicesAndCharacteristicsForDevice device==>',
-            JSON.stringify(device),
-          );
+          // consoleLog(
+          //   'discoverAllServicesAndCharacteristicsForDevice device==>',
+          //   JSON.stringify(device),
+          // );
           this.device = device;
         })
         .catch(error => {

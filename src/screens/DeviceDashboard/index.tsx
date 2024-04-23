@@ -221,6 +221,44 @@ const Index = ({navigation, route}: any) => {
     // );
   };
 
+  const getDeviceData = async () => {
+    await BLEService.discoverAllServicesAndCharacteristicsForDevice();
+
+    // Authorization Key
+    const AUTHORIZATION_KEY_SERVICE_UUID =
+      BLE_CONSTANTS?.GEN2?.AUTHORIZATION_KEY_SERVICE_UUID;
+    const AUTHORIZATION_KEY_CHARACTERISTIC_UUID =
+      BLE_CONSTANTS?.GEN2?.AUTHORIZATION_KEY_CHARACTERISTIC_UUID;
+    const authorizationResponse = await BLEService.readCharacteristicForDevice(
+      AUTHORIZATION_KEY_SERVICE_UUID,
+      AUTHORIZATION_KEY_CHARACTERISTIC_UUID,
+    );
+    consoleLog(
+      'getDeviceData authorizationResponse==>',
+      base64ToHex(authorizationResponse?.value),
+    );
+
+    // const deviceDataServiceUUID = '8de47721-5496-4233-ae45-e4b306fe1180';
+    // const deviceDataCharacteristicUUID = '8de47721-5496-4233-ae45-e4b306fe1181';
+
+    // const deviceDataResponse = await BLEService.getCharacteristicsForDevice(
+    //   deviceDataServiceUUID,
+    // );
+    // consoleLog(
+    //   'initialize deviceDataResponse==>',
+    //   JSON.stringify(deviceDataResponse),
+    // );
+
+    // const deviceDataResponse = await BLEService.readCharacteristicForDevice(
+    //   deviceDataServiceUUID,
+    //   deviceDataCharacteristicUUID,
+    // );
+    // consoleLog(
+    //   'initialize deviceDataResponse==>',
+    //   JSON.stringify(deviceDataResponse),
+    // );
+  };
+
   const __getBatteryLevel = async () => {
     const serviceUUID = '0000180f-0000-1000-8000-00805f9b34fb';
     const characteristicUUID = '00002a19-0000-1000-8000-00805f9b34fb';
@@ -553,6 +591,9 @@ const Index = ({navigation, route}: any) => {
                       name={'water'}
                       size={20}
                       color={Theme.colors.primaryColor}
+                      onPress={() => {
+                        getDeviceData();
+                      }}
                     />
                     <Typography
                       size={22}

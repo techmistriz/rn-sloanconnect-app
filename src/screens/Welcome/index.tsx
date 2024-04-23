@@ -29,7 +29,7 @@ const SplashScreen = ({navigation, route}: any) => {
   useEffect(() => {
     if (referrer == 'Login') {
       setTimeout(() => {
-        NavigationService.navigate('ActivateDevice');
+        NavigationService.replace('DeviceSearching');
       }, 2000);
     }
   }, [referrer]);

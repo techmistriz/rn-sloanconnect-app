@@ -1,34 +1,13 @@
-import React, {Component, Fragment, useEffect} from 'react';
-import {View, StyleSheet, Image, StatusBar} from 'react-native';
+import React, {} from 'react';
 import Theme from 'src/theme';
-import {Images} from 'src/assets';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  consoleLog,
-  getImgSource,
-  showToastMessage,
-} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {Wrap, Row} from 'src/components/Common';
-import {Button} from 'src/components/Button';
-import NavigationService from 'src/services/NavigationService/NavigationService';
+import {Wrap} from 'src/components/Common';
 import AppInfo from 'src/components/@ProjectComponent/AppInfo';
-import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
-import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
 import Loader from 'src/components/Loader';
 
 const Index = ({navigation, route}: any) => {
-  // const {referrer} = route?.params || {referrer: undefined};
-  // const {user, loading, token, message, media_storage, type} = useSelector(
-  //   (state: any) => state?.AuthReducer,
-  // );
-
-  // useEffect(() => {
-
-  // }, []);
-
   return (
     <AppContainer scroll={false} scrollViewStyle={{}} backgroundType="gradient">
       <Wrap autoMargin={false} style={styles.container}>
