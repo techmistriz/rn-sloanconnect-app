@@ -10,10 +10,11 @@ import {
   hexToDecimal,
 } from './encryption';
 import {BLEService} from 'src/services';
-import {isObjectEmpty} from './array';
+import {findObject, isObjectEmpty} from './array';
 import StorageService from 'src/services/StorageService/StorageService';
 import {consoleLog, parseDateTimeInFormat} from './HelperFunction';
 import {BLE_GATT_SERVICES} from '../StaticData/BLE_GATT_SERVICES';
+import BLE_CONSTANTS from '../StaticData/BLE_CONSTANTS';
 
 /**
  *
@@ -455,8 +456,8 @@ export const saveSettings = async (
     }
   }
 
-  const promise = await shortBurstsGen1();
-  promises.push(promise);
+  // const promise = await shortBurstsGen1();
+  // promises.push(promise);
 
   // wait for all the promises in the promises array to resolve
   Promise.all(promises).then(results => {
@@ -584,6 +585,19 @@ export const hasSensorRangeSetting = (deviceSettingsData: any) => {
   return (
     typeof deviceSettingsData?.SensorRange !== 'undefined' &&
     deviceSettingsData?.SensorRange
+  );
+};
+
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
+export const hasLineFlushSetting = (deviceSettingsData: any) => {
+  return (
+    typeof deviceSettingsData?.LineFlush !== 'undefined' &&
+    deviceSettingsData?.LineFlush
   );
 };
 
@@ -822,9 +836,28 @@ export const getSavedSettingsGen1 = async (connectedDevice: any) => {
  * @param {*} param2
  * @returns result
  */
-export const shortBurstsGen1 = async () => {
-  const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
-  const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c948';
+export const shortBurstsGen1 = async (__deviceSettingsData: any) => {
+  const __hasLineFlushSetting = hasLineFlushSetting(__deviceSettingsData);
+
+  if (__hasLineFlushSetting) {
+    const __LineFlush = __deviceSettingsData?.LineFlush;
+
+    const hasFlushInterval = findObject(
+      BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_CHARACTERISTIC_UUID,
+      __LineFlush,
+      {
+        searchKey: 'characteristicUUID',
+      },
+    );
+
+    if (!isObjectEmpty(hasFlushInterval)) {
+      return false;
+    }
+  }
+
+  const serviceUUID = BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_SERVICE_UUID;
+  const characteristicUUID =
+    BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_CHARACTERISTIC_UUID;
 
   const flushInterval = await BLEService.readCharacteristicForDevice(
     serviceUUID,
@@ -839,6 +872,8 @@ export const shortBurstsGen1 = async () => {
       characteristicUUID,
       flushIntervalText,
     );
+
+  return flushIntervalResponse;
 };
 
 /**
@@ -909,7 +944,9 @@ export const hasDateSetting = (__characteristicMain: any) => {
         serviceUUID: __dateSettingMappped?.serviceUUID,
         characteristicUUID: __dateSettingMappped?.characteristicUUID,
         oldValue: null,
-        newValue: base64EncodeDecode(parseDateTimeInFormat(new Date(), dateFormat)),
+        newValue: base64EncodeDecode(
+          parseDateTimeInFormat(new Date(), dateFormat),
+        ),
       };
     }
   }

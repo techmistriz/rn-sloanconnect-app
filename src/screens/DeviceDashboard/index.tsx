@@ -1,45 +1,19 @@
-import React, {Component, Fragment, useEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  StatusBar,
-  FlatList,
-  Text,
-  BackHandler,
-  Alert,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, BackHandler} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  cleanCharacteristic,
   getBatteryLevel,
-  getBleDeviceGeneration,
-  getBleDeviceVersion,
-  getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID,
   getDeviceModelData,
-  getDeviceService,
   getSavedSettingsGen1,
   getTotalWaterUsase,
-  hasFlowRateSetting,
+  hasLineFlushSetting,
   hasSensorRangeSetting,
-  mapValue,
   saveSettings,
+  shortBurstsGen1,
   updatePreviousSettings,
 } from 'src/utils/Helpers/project';
-import {
-  addSeparatorInString,
-  base64EncodeDecode,
-  base64EncodeFromByteArray,
-  base64ToHex,
-  base64ToText,
-  decimalToHex,
-  fromHexStringUint8Array,
-  getTimestampInSeconds,
-  hexEncodeDecode,
-  hexToDecimal,
-} from 'src/utils/Helpers/encryption';
 
 import {
   consoleLog,
@@ -48,46 +22,28 @@ import {
 } from 'src/utils/Helpers/HelperFunction';
 
 import Typography from 'src/components/Typography';
-import {Wrap, Row, TochableWrap} from 'src/components/Common';
-import TouchableItem from 'src/components/TouchableItem';
+import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import AppInfo from 'src/components/@ProjectComponent/AppInfo';
 import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
-import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import EmptyComponent from 'src/components/EmptyState';
-import Loader from 'src/components/Loader';
 import Divider from 'src/components/Divider';
 import {BLEService} from 'src/services';
-import {
-  connectedDeviceRequestAction,
-  connectedDeviceSuccessAction,
-  connectedDeviceFailureAction,
-  deviceSettingsResetDataAction,
-} from 'src/redux/actions';
-import DeviceSettingList from 'src/components/@ProjectComponent/DeviceSettingList';
-import DeviceBottomTab from 'src/components/@ProjectComponent/DeviceBottomTab';
+import {deviceSettingsResetDataAction} from 'src/redux/actions';
 import AlertBox from 'src/components/AlertBox';
-import {SETTINGS, TABS} from 'src/utils/StaticData/StaticData';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import Swiper from 'react-native-swiper';
 import ActivationModeList from 'src/components/@ProjectComponent/DeviceSettingsList/ActivationModeList';
-import {isObjectEmpty} from 'src/utils/Helpers/array';
+import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import FlowRateList from 'src/components/@ProjectComponent/DeviceSettingsList/FlowRateList';
 import SensorRangeList from 'src/components/@ProjectComponent/DeviceSettingsList/SensorRangeList';
 import LineFlushList from 'src/components/@ProjectComponent/DeviceSettingsList/LineFlushList';
-import NotesList from 'src/components/@ProjectComponent/DeviceSettingsList/NotesList';
-import LoaderOverlay from 'src/components/LoaderOverlay';
 import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
-import StorageService from 'src/services/StorageService/StorageService';
-import {sha256, sha256Bytes} from 'react-native-sha256';
-import {constants} from 'src/common';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {intiGen2SecurityKey} from './helper';
+import {SearchBar} from 'react-native-screens';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -221,7 +177,7 @@ const Index = ({navigation, route}: any) => {
     // );
   };
 
-  const getDeviceData = async () => {
+  const getDeviceDataGen2 = async () => {
     await BLEService.discoverAllServicesAndCharacteristicsForDevice();
 
     // Authorization Key
@@ -320,6 +276,7 @@ const Index = ({navigation, route}: any) => {
       );
       timeout = 10000;
     }
+
     const status = await saveSettings(__deviceSettingsData);
     // consoleLog('status', status);
 
@@ -331,12 +288,15 @@ const Index = ({navigation, route}: any) => {
       );
     }
 
-    setTimeout(() => {
+    setTimeout(async () => {
       // consoleLog('status2', status2);
       setApplying(false);
       // consoleLog('status3');
       setApplied(true);
       // consoleLog('status4');
+
+      const shortBurstsGen1Status = await shortBurstsGen1(__deviceSettingsData);
+      // consoleLog('shortBurstsGen1Status', shortBurstsGen1Status);
     }, timeout);
 
     setTimeout(() => {

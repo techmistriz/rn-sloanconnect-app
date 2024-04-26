@@ -1,11 +1,42 @@
-{
-  "Properties": ["R", "W"],
-  "initialValue": "0",
-  "name": "Mode Selection",
-  "range": "0-1",
-  "remarks": "0: On-demand / 1: Meter",
-  "size": "1 bytes",
-  "sloanApp": "On-demand / meter",
-  "type": "String",
-  "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c943"
-}
+[
+  {
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+    "newValue": "MQ==",
+    "oldValue": "MQ==",
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+  },
+  {
+    "allowedInPreviousSetting": false,
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c926",
+    "newValue": "MjQwNDI2MjMwNA==",
+    "oldValue": null,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+  },
+  {
+    "allowedInPreviousSetting": false,
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c92E",
+    "newValue": "MDEyMzQ1Njc4OQ==",
+    "oldValue": null,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+  },
+  {
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c948",
+    "newValue": "NQ==",
+    "oldValue": "MjA=",
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+  },
+  {
+    "allowedInPreviousSetting": false,
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c928",
+    "newValue": "MjQwNDI2MjMwNA==",
+    "oldValue": null,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+  },
+  {
+    "allowedInPreviousSetting": false,
+    "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c930",
+    "newValue": "MDEyMzQ1Njc4OQ==",
+    "oldValue": null,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+  }
+]

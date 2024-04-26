@@ -51,22 +51,23 @@ import {
 } from 'src/utils/Permissions';
 
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
-const WAITING_TIMEOUT_FOR_NO_DEVICE_CHECK = 20000;
+const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 10000;
 const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
 
 const Index = ({navigation, route}: any) => {
+  var timeoutID: any = null;
+  var intervalID: any = null;
   const dispatch = useDispatch();
   const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isScanning, setScanning] = useState<ScanningProps>(
     ScanningProps.Pending,
   );
-  const [requirePermissionAllowed, setRequirePermissionAllowed] =
-    useState(false);
+
   const [foundDevices, setFoundDevices] = useState<DeviceExtendedProps[]>([]);
   const connectedDevice: any = BLEService.getDevice();
-  var timeoutID: any = null;
-  var intervalID: any = null;
+  const [requirePermissionAllowed, setRequirePermissionAllowed] =
+    useState(false);
 
   /** Function comments */
   useEffect(() => {
@@ -99,9 +100,10 @@ const Index = ({navigation, route}: any) => {
         // NavigationService.replace('NoDeviceFound');
         setScanning(ScanningProps.NoDevice);
       }
-    }, WAITING_TIMEOUT_FOR_NO_DEVICE_CHECK);
+    }, WAITING_TIMEOUT_FOR_CHECKING_DEVICE);
 
     return () => {
+      consoleLog('Unmounting clearTimeout');
       clearTimeout(timeoutID);
     };
   }, []);
@@ -145,7 +147,7 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const addFoundDevice = (__device: DeviceExtendedProps) => {
     const device = filterBLEDevices(__device);
-    consoleLog('device data==>', device);
+    consoleLog('device localName==>', device?.localName);
     if (!device) {
       // refreshFoundDevices(foundDevices);
       return false;
@@ -391,7 +393,10 @@ const Index = ({navigation, route}: any) => {
   } else if (isScanning == ScanningProps.NoDevice) {
     return (
       <NoDeviceFound
-        onSearchAgainPress={() => setScanning(ScanningProps.Scanning)}
+        onSearchAgainPress={() => {
+          setScanning(ScanningProps.Scanning);
+          initlizeApp();
+        }}
       />
     );
   } else if (isScanning == ScanningProps.DeviceFound) {
