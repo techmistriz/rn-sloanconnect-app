@@ -159,8 +159,8 @@ const Index = ({navigation, route}: any) => {
     // consoleLog('initialize AllServicesChar==>', JSON.stringify(AllServicesChar));
     // MA== (0) default
     // MQ== (1)
-    const serviceuuid = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
-    const charuuid = 'd0aba888-fb10-4dc9-9b17-bdd8f490c949';
+    const serviceuuid = 'd0aba888-fb10-4dc9-9b17-bdd8f490c920';
+    const charuuid = 'd0aba888-fb10-4dc9-9b17-bdd8f490c921';
 
     // Battery
     // const serviceuuid = '0000180f-0000-1000-8000-00805f9b34fb';
@@ -229,13 +229,15 @@ const Index = ({navigation, route}: any) => {
       BLE_CONSTANTS?.GEN2?.AUTHORIZATION_KEY_SERVICE_UUID;
     const AUTHORIZATION_KEY_CHARACTERISTIC_UUID =
       BLE_CONSTANTS?.GEN2?.AUTHORIZATION_KEY_CHARACTERISTIC_UUID;
-    const authorizationResponse = await BLEService.readCharacteristicForDevice(
+    BLEService.setupMonitor2(
       AUTHORIZATION_KEY_SERVICE_UUID,
       AUTHORIZATION_KEY_CHARACTERISTIC_UUID,
-    );
-    consoleLog(
-      'getDeviceData authorizationResponse==>',
-      base64ToHex(authorizationResponse?.value),
+      characteristic => {
+        consoleLog('setupMonitor characteristic==>', characteristic);
+      },
+      error => {
+        consoleLog('setupMonitor error==>', error);
+      },
     );
 
     // const deviceDataServiceUUID = '8de47721-5496-4233-ae45-e4b306fe1180';
@@ -357,11 +359,11 @@ const Index = ({navigation, route}: any) => {
   };
 
   const dispenseWater = () => {
-    // BLEService.dispenseWater(
-    //   BLE_CONSTANTS.GEN1.WATER_DISPENCE_SERVICE_UUID,
-    //   BLE_CONSTANTS.GEN1.WATER_DISPENCE_CHARACTERISTIC_UUID,
-    // );
-    intiGen2SecurityKey();
+    BLEService.dispenseWater(
+      BLE_CONSTANTS.GEN1.WATER_DISPENCE_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1.WATER_DISPENCE_CHARACTERISTIC_UUID,
+    );
+    // intiGen2SecurityKey();
   };
 
   return (
@@ -591,9 +593,9 @@ const Index = ({navigation, route}: any) => {
                       name={'water'}
                       size={20}
                       color={Theme.colors.primaryColor}
-                      onPress={() => {
-                        getDeviceData();
-                      }}
+                      // onPress={() => {
+                      //   getDeviceData();
+                      // }}
                     />
                     <Typography
                       size={22}

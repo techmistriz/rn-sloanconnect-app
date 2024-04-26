@@ -6,6 +6,7 @@ import {
   StatusBar,
   Keyboard,
   FlatList,
+  DeviceEventEmitter,
 } from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
@@ -34,11 +35,13 @@ import {
   getFlowRateValue,
   getFlowRateRange,
   getCalculatedValue,
+  getFlowRateRangeGen1,
 } from './helper';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
-import {isObjectEmpty} from 'src/utils/Helpers/array';
+import {findInArray, findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import {hasDateSetting, hasPhoneSetting} from 'src/utils/Helpers/project';
+import {SearchBar} from 'react-native-screens';
 
 const Index = ({navigation, route}: any) => {
   const {user, token} = useSelector((state: any) => state?.AuthReducer);
@@ -55,14 +58,16 @@ const Index = ({navigation, route}: any) => {
     characteristicRight2,
   } = route?.params;
 
-  const FLOW_RATES = getFlowRateRange(deviceStaticDataMain);
+  const FLOW_RATES = getFlowRateRangeGen1(deviceStaticDataMain);
   const flowRateOld = getFlowRateValue(characteristicMain);
 
   const [flowRateTypeDivider, setFlowRateTypeDivider] = useState(10);
   const [flowRateType, setFlowRateType] = useState('1');
   const [flowRate, setFlowRate] = useState(flowRateOld);
+  const [other, setOther] = useState('');
 
   useEffect(() => {
+    // consoleLog('useEffect flowRate==>', {flowRate, FLOW_RATES});
     // consoleLog('LineFlush==>', {
     //   referrer,
     //   setting,
@@ -73,7 +78,49 @@ const Index = ({navigation, route}: any) => {
     //   deviceStaticDataRight2,
     //   characteristicRight2,
     // });
+    
   }, []);
+
+  useEffect(() => {
+    checkForOtherInitialValue();
+    DeviceEventEmitter.addListener('FlowRateInputEvent', eventData =>
+      flowRateInputEventCallback(eventData),
+    );
+    return () => {
+      DeviceEventEmitter.removeAllListeners('FlowRateInputEvent');
+    };
+  }, []);
+
+  const checkForOtherInitialValue = () => {
+    const isPrefixedValue = findObject(flowRateOld, FLOW_RATES, {
+      searchKey: 'name',
+    });
+    if (isObjectEmpty(isPrefixedValue)) {
+      setOther(flowRateOld);
+    }
+  };
+
+  const flowRateInputEventCallback = (eventData: any) => {
+    if (eventData?.flowRateInput) {
+      const val = (eventData?.flowRateInput * 10)?.toString();
+      setOther(val);
+      setFlowRate(val);
+    }
+  };
+
+  const __setFlowRate = (val: string) => {
+    if (parseInt(val) == 0) {
+      NavigationService.navigate('FlowRateInput', {
+        title: `Set flow rate to between 1.3 and 9.99\n liters per minute`,
+        subTitle: 'LPM',
+        minValue: 1.3,
+        maxValue: 9.99,
+      });
+    } else {
+      setOther('');
+      setFlowRate(val);
+    }
+  };
 
   const onDonePress = async () => {
     Keyboard.dismiss();
@@ -112,6 +159,50 @@ const Index = ({navigation, route}: any) => {
       }
     }
     NavigationService.goBack();
+  };
+
+  /**Child flatlist render method */
+  const renderItem = ({item}: any) => {
+    return (
+      <Wrap
+        autoMargin={false}
+        style={{
+          paddingVertical: 20,
+          paddingHorizontal: 15,
+          // borderWidth: 1,
+        }}>
+        <Button
+          type={'link'}
+          title={getCalculatedValue(
+            item?.value,
+            flowRateTypeDivider,
+            flowRateType,
+            other,
+          )}
+          onPress={() => {
+            __setFlowRate(item?.value);
+          }}
+          textStyle={{
+            fontSize: 20,
+            fontFamily: Theme.fonts.ThemeFontLight,
+            color:
+              flowRate == item?.value
+                ? Theme.colors.primaryColor
+                : Theme.colors.primaryColor3,
+          }}
+          style={{
+            borderColor: Theme.colors.primaryColor3,
+            backgroundColor:
+              flowRate == item?.value || (parseInt(item?.value) == 0 && other)
+                ? Theme.colors.white
+                : Theme.colors.primaryColor2,
+            height: 60,
+            width: 60,
+            borderRadius: 60 / 2,
+          }}
+        />
+      </Wrap>
+    );
   };
 
   return (
@@ -160,45 +251,7 @@ const Index = ({navigation, route}: any) => {
                 showsVerticalScrollIndicator={false}
                 numColumns={2}
                 data={FLOW_RATES}
-                renderItem={({item}: any) => (
-                  <Wrap
-                    autoMargin={false}
-                    style={{
-                      paddingVertical: 20,
-                      paddingHorizontal: 15,
-                      // borderWidth: 1,
-                    }}>
-                    <Button
-                      type={'link'}
-                      title={getCalculatedValue(
-                        item?.value,
-                        flowRateTypeDivider,
-                        flowRateType,
-                      )}
-                      onPress={() => {
-                        setFlowRate(item?.value);
-                      }}
-                      textStyle={{
-                        fontSize: 20,
-                        fontFamily: Theme.fonts.ThemeFontLight,
-                        color:
-                          flowRate == item?.value
-                            ? Theme.colors.primaryColor
-                            : Theme.colors.primaryColor3,
-                      }}
-                      style={{
-                        borderColor: Theme.colors.primaryColor3,
-                        backgroundColor:
-                          flowRate == item?.value
-                            ? Theme.colors.white
-                            : Theme.colors.primaryColor2,
-                        height: 60,
-                        width: 60,
-                        borderRadius: 60 / 2,
-                      }}
-                    />
-                  </Wrap>
-                )}
+                renderItem={renderItem}
                 keyExtractor={(item, index) => index?.toString()}
                 onEndReachedThreshold={0.01}
               />

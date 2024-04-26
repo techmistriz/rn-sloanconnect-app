@@ -48,7 +48,6 @@ import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {
   addSeparatorInString,
-  addSpaceIntoString,
   base64EncodeDecode,
   hexToDecimal,
 } from 'src/utils/Helpers/encryption';
@@ -162,7 +161,7 @@ const Index = ({navigation, route}: any) => {
             );
 
             var decodeValue = 'N/A';
-            if (!isObjectEmpty(characteristic)) {
+            if (!isObjectEmpty(characteristic) && characteristic?.value) {
               decodeValue = base64EncodeDecode(characteristic?.value, 'decode');
             }
 
@@ -264,7 +263,7 @@ const Index = ({navigation, route}: any) => {
               );
 
               var decodeValue = 'N/A';
-              if (!isObjectEmpty(characteristic)) {
+              if (!isObjectEmpty(characteristic) && characteristic?.value) {
                 decodeValue = base64EncodeDecode(
                   characteristic?.value,
                   'decode',
@@ -274,8 +273,8 @@ const Index = ({navigation, route}: any) => {
               data.push({
                 name: value?.name,
                 uuid: value?.uuid,
-                // value: formatCharateristicValue(value, decodeValue),
-                value: decodeValue,
+                value: formatCharateristicValue(value, decodeValue),
+                // value: decodeValue,
               });
             }
           } catch (error) {

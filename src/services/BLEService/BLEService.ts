@@ -411,6 +411,50 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
+  setupMonitor2 = (
+    serviceUUID: UUID,
+    characteristicUUID: UUID,
+    onCharacteristicReceived: (characteristic: Characteristic) => void,
+    onError: (error: Error) => void,
+    transactionId?: TransactionId,
+    hideErrorDisplay?: boolean,
+  ) => {
+    if (!this.device) {
+      return this.showErrorToast(deviceNotConnectedErrorText);
+      // throw new Error(deviceNotConnectedErrorText);
+    }
+    this.characteristicMonitor = this.device.monitorCharacteristicForService(
+      serviceUUID,
+      characteristicUUID,
+      (error, characteristic) => {
+        if (error) {
+          if (
+            error.errorCode === 2 &&
+            this.isCharacteristicMonitorDisconnectExpected
+          ) {
+            this.isCharacteristicMonitorDisconnectExpected = false;
+            return;
+          }
+          onError(error);
+          if (!hideErrorDisplay) {
+            this.onError(error);
+            this.characteristicMonitor?.remove();
+          }
+          return;
+        }
+        if (characteristic) {
+          onCharacteristicReceived(characteristic);
+        }
+      },
+      transactionId,
+    );
+  };
+
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
   setupCustomMonitor: BleManager['monitorCharacteristicForDevice'] = (
     ...args
   ) => this.manager.monitorCharacteristicForDevice(...args);

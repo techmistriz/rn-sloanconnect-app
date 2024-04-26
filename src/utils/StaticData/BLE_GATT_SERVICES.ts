@@ -947,7 +947,7 @@ export const BLE_GATT_SERVICES = {
           'stored as lpm (liters per minute), devided by 10 to get actual flow rate (1.9 to 8.3)',
         generation: 'all',
         prefix: null,
-        postfix: ' gpm',
+        postfix: ' lpm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c94A': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c94A',

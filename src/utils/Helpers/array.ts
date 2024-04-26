@@ -74,6 +74,33 @@ export function findObject(
   return result;
 }
 
+/**
+ *
+ * @param {*} value
+ * @param {Array<Object>} data
+ * @param {any} options
+ * @returns find object
+ */
+export function findInArray(
+  value: any,
+  data: Array<string | number>, //object[],
+) {
+  var result: any = undefined;
+  if (value && data && Array.isArray(data) && data?.length) {
+    result = data.find((item: any) => {
+      return item == value;
+    });
+  }
+  return result;
+}
+
+/**
+ *
+ * @param {*} value
+ * @param {Array<Object>} data
+ * @param {any} options
+ * @returns find object
+ */
 export const arrayRange = (start: number, stop: number, step: number) =>
   Array.from(
     {length: (stop - start) / step + 1},

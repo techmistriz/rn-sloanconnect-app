@@ -37,6 +37,7 @@ import DeviceDisconnect from 'src/screens/DeviceDisconnect';
 import ActivationMode from 'src/screens/DeviceSettings/ActivationMode';
 import LineFlush from 'src/screens/DeviceSettings/LineFlush';
 import FlowRate from 'src/screens/DeviceSettings/FlowRate';
+import FlowRateInput from 'src/screens/DeviceSettings/FlowRate/FlowRateInput';
 import SensorRange from 'src/screens/DeviceSettings/SensorRange';
 import Notes from 'src/screens/DeviceSettings/Notes';
 import DeviceInfo from 'src/screens/DeviceInfo';
@@ -273,6 +274,13 @@ const MainNavigator = () => {
         <Stack.Screen
           name="FlowRate"
           component={FlowRate}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FlowRateInput"
+          component={FlowRateInput}
           options={{
             headerShown: false,
           }}

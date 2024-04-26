@@ -909,7 +909,7 @@ export const hasDateSetting = (__characteristicMain: any) => {
         serviceUUID: __dateSettingMappped?.serviceUUID,
         characteristicUUID: __dateSettingMappped?.characteristicUUID,
         oldValue: null,
-        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        newValue: base64EncodeDecode(parseDateTimeInFormat(new Date(), dateFormat)),
       };
     }
   }
@@ -935,7 +935,7 @@ export const hasPhoneSetting = (__characteristicMain: any, __user: any) => {
         serviceUUID: __phoneSettingMappped?.serviceUUID,
         characteristicUUID: __phoneSettingMappped?.characteristicUUID,
         oldValue: null,
-        newValue: __user?.contact ?? '0123456789',
+        newValue: base64EncodeDecode(__user?.contact ?? '0123456789'),
       };
     }
   }

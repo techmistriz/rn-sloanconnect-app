@@ -42,6 +42,12 @@ export const getFlowRateValue = (characteristicRight: BLECharacteristic) => {
   return value?.toString();
 };
 
+export const getFlowRateRangeGen1 = (
+  deviceStaticDataMain: DeviceStaticData,
+) => {
+  return createNameValueArray(['13', '19', '38', '57', '83', '0']);
+};
+
 export const getFlowRateRange = (deviceStaticDataMain: DeviceStaticData) => {
   var flowRange: FlowRateRangeProps = {min: 20, max: 80};
   var rangeStr = deviceStaticDataMain?.range;
@@ -75,7 +81,15 @@ export const getCalculatedValue = (
   value: string,
   __flowRateTypeDivider: number = 10,
   flowRateType: string,
+  other: string,
 ) => {
+  if (parseInt(value) == 0) {
+    if (other) {
+      value = other;
+    } else {
+      return 'Other';
+    }
+  }
   var result: number = 0;
   const GMPFormula = 3.78541;
   const valueInNumber = Number(value);
@@ -84,5 +98,5 @@ export const getCalculatedValue = (
   if (flowRateType == '0') {
     result = result / GMPFormula;
   }
-  return result?.toFixed(2)?.toString();
+  return result?.toFixed(1);
 };
