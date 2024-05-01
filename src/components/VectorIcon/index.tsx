@@ -1,5 +1,6 @@
 import React from 'react';
 import {Platform, ViewStyle} from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -67,6 +68,9 @@ const VectorIcon = ({
 export default VectorIcon;
 
 const GetIconPack = ({iconPack, ...rest}: any) => {
+  if (iconPack === 'Entypo') {
+    return <Entypo {...rest} />;
+  }
   if (iconPack === 'Ionicons') {
     return <Ionicons {...rest} />;
   }

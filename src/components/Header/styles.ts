@@ -19,5 +19,6 @@ export const styles = StyleSheet.create({
   __headerCenterStyle: {
     flex: 1,
     justifyContent: 'center',
+    // borderWidth:1
   },
 });

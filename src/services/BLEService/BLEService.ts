@@ -383,6 +383,7 @@ class BLEServiceInstance {
       serviceUUID,
       characteristicUUID,
       (error, characteristic) => {
+        // consoleLog('setupMonitor characteristic==>', characteristic);
         if (error) {
           if (
             error.errorCode === 2 &&

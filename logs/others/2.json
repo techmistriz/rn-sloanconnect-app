@@ -8,7 +8,7 @@
   {
     "allowedInPreviousSetting": false,
     "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c926",
-    "newValue": "MjQwNDI2MjMwNA==",
+    "newValue": "MjQwNTAxMjMzNA==",
     "oldValue": null,
     "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
   },
@@ -21,14 +21,14 @@
   },
   {
     "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c948",
-    "newValue": "NQ==",
-    "oldValue": "MjA=",
+    "newValue": "MjQ=",
+    "oldValue": "MjU=",
     "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
   },
   {
     "allowedInPreviousSetting": false,
     "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c928",
-    "newValue": "MjQwNDI2MjMwNA==",
+    "newValue": "MjQwNTAxMjMzNA==",
     "oldValue": null,
     "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
   },

@@ -30,7 +30,9 @@ export const Button = ({
     <View
       style={[
         styles.touchableWrapper,
-        style?.borderRadius && {borderRadius: style?.borderRadius},
+        (style?.borderRadius >= 0 || style?.[0]?.borderRadius >= 0) && {
+          borderRadius: style?.borderRadius,
+        },
       ]}>
       <TouchableItem
         onPress={onPress}

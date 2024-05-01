@@ -1,22 +1,64 @@
 {
+  "LineFlush": [
+    {
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+      "newValue": "MQ==",
+      "oldValue": "MQ==",
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+    },
+    {
+      "allowedInPreviousSetting": false,
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c926",
+      "newValue": "MjQwNTAxMjMzNA==",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    },
+    {
+      "allowedInPreviousSetting": false,
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c92E",
+      "newValue": "MDEyMzQ1Njc4OQ==",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    },
+    {
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c948",
+      "newValue": "MjQ=",
+      "oldValue": "MjU=",
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+    },
+    {
+      "allowedInPreviousSetting": false,
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c928",
+      "newValue": "MjQwNTAxMjMzNA==",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    },
+    {
+      "allowedInPreviousSetting": false,
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c930",
+      "newValue": "MDEyMzQ1Njc4OQ==",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    }
+  ],
   "SensorRange": [
     {
       "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c942",
-      "newValue": "NA==",
-      "oldValue": "NQ==",
+      "newValue": "NQ==",
+      "oldValue": "NA==",
       "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
     },
     {
       "allowedInPreviousSetting": false,
       "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c922",
-      "newValue": "2404261917",
+      "newValue": "MjQwNTAxMjMzNA==",
       "oldValue": null,
       "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
     },
     {
       "allowedInPreviousSetting": false,
       "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c92A",
-      "newValue": "0123456789",
+      "newValue": "MDEyMzQ1Njc4OQ==",
       "oldValue": null,
       "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
     }

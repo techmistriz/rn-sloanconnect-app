@@ -1,5 +1,6 @@
 import base64 from 'react-native-base64';
 import {isObjectEmpty} from './array';
+import {consoleLog} from './HelperFunction';
 
 /**
  *
@@ -61,15 +62,17 @@ export function __base64ToHex(encodedString: string | any) {
 export const base64ToDecimal = (encodedString: any) => {
   // Convert base 64 encoded string to text
   var text = base64ToText(encodedString);
-  var decimalArray = [];
+  // consoleLog('base64ToDecimal text==>', text);
+  return hexToDecimal(text);
+  // var decimalArray = [];
 
   // Run a loop on all characters of the text and convert each character to decimal
-  for (var i = 0; i < text.length; i++) {
-    decimalArray.push(text.charAt(i).charCodeAt(0));
-  }
+  // for (var i = 0; i < text.length; i++) {
+  //   decimalArray.push(text.charAt(i).charCodeAt(0));
+  // }
 
   // Join all decimals to get the final decimal for the entire string
-  return parseInt(decimalArray.join(''));
+  // return parseInt(decimalArray.join(''));
 };
 
 /**

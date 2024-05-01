@@ -108,14 +108,24 @@ const Header = ({
         )}
       </Wrap>
       <Wrap autoMargin={false} style={styles.__headerCenterStyle}>
-        <Image
-          // @ts-ignore
-          source={getImgSource(Images?.appLogoWhite)}
-          style={{
-            width: '90%',
-          }}
-          resizeMode="contain"
-        />
+        {title ? (
+          <Typography
+            size={16}
+            text={title}
+            style={{textAlign: 'center', marginTop: 10}}
+            color={Theme.colors.white}
+            ff={Theme.fonts.ThemeFontMedium}
+          />
+        ) : (
+          <Image
+            // @ts-ignore
+            source={getImgSource(Images?.appLogoWhite)}
+            style={{
+              width: '90%',
+            }}
+            resizeMode="contain"
+          />
+        )}
       </Wrap>
       <Wrap
         autoMargin={false}

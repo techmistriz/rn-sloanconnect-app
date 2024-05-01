@@ -354,7 +354,10 @@ export const getTotalWaterUsase = async (
     serviceUUID,
     characteristicUUID,
   );
-  // consoleLog('__flowRate==>', JSON.stringify(__flowRate?.value));
+  // consoleLog(
+  //   'getTotalWaterUsase __flowRate==>',
+  //   JSON.stringify(__flowRate?.value),
+  // );
 
   if (__flowRate?.value) {
     const flowRateDecodedValue = base64EncodeDecode(
@@ -362,7 +365,10 @@ export const getTotalWaterUsase = async (
       'decode',
     );
 
-    // consoleLog('flowRateDecodedValue', flowRateDecodedValue);
+    // consoleLog(
+    //   'getTotalWaterUsase flowRateDecodedValue==>',
+    //   flowRateDecodedValue,
+    // );
 
     if (flowRateDecodedValue) {
       const serviceUUID2 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c910';
@@ -375,7 +381,7 @@ export const getTotalWaterUsase = async (
         );
 
       // consoleLog(
-      //   '__activationsDuration __activationsDuration==>',
+      //   'getTotalWaterUsase __activationsDuration==>',
       //   JSON.stringify(__activationsDuration?.value),
       // );
       if (__activationsDuration?.value) {
@@ -384,7 +390,7 @@ export const getTotalWaterUsase = async (
         );
 
         // consoleLog(
-        //   'activationsDurationDecodedValue',
+        //   'getTotalWaterUsase activationsDurationDecodedValue==>',
         //   activationsDurationDecodedValue,
         // );
 
@@ -851,9 +857,14 @@ export const shortBurstsGen1 = async (__deviceSettingsData: any) => {
     );
 
     if (!isObjectEmpty(hasFlushInterval)) {
+      consoleLog('hasFlushInterval if==>', hasFlushInterval);
       return false;
+    } else {
+      consoleLog('hasFlushInterval else');
     }
   }
+
+  consoleLog('hasFlushInterval ready to change');
 
   const serviceUUID = BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_SERVICE_UUID;
   const characteristicUUID =
@@ -893,6 +904,12 @@ export const formatCharateristicValue = (
     characteristicStaticProperties?.dateFormat
   ) {
     const dateFormat = characteristicStaticProperties?.dateFormat;
+    const __dateFormat = dateFormat.replace(/[^A-Z]/g, '');
+
+    if (__dateFormat?.length != value?.length) {
+      return 'N/A';
+    }
+
     var dateSeperator = '/';
     if (dateFormat.includes('-')) {
       dateSeperator = '-';

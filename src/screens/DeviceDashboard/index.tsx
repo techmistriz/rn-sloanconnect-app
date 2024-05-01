@@ -44,6 +44,7 @@ import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {SearchBar} from 'react-native-screens';
+import {intiGen2SecurityKey} from './helper';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -178,16 +179,17 @@ const Index = ({navigation, route}: any) => {
   };
 
   const getDeviceDataGen2 = async () => {
-    await BLEService.discoverAllServicesAndCharacteristicsForDevice();
+    consoleLog('getDeviceDataGen2 called');
+    // await BLEService.discoverAllServicesAndCharacteristicsForDevice();
 
-    // Authorization Key
-    const AUTHORIZATION_KEY_SERVICE_UUID =
-      BLE_CONSTANTS?.GEN2?.AUTHORIZATION_KEY_SERVICE_UUID;
-    const AUTHORIZATION_KEY_CHARACTERISTIC_UUID =
-      BLE_CONSTANTS?.GEN2?.AUTHORIZATION_KEY_CHARACTERISTIC_UUID;
-    BLEService.setupMonitor2(
-      AUTHORIZATION_KEY_SERVICE_UUID,
-      AUTHORIZATION_KEY_CHARACTERISTIC_UUID,
+    // Device data integer
+    const DEVICE_DATA_INTEGER_SERVICE_UUID =
+      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_SERVICE_UUID;
+    const DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID =
+      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID;
+    BLEService.setupMonitor(
+      DEVICE_DATA_INTEGER_SERVICE_UUID,
+      DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
       characteristic => {
         consoleLog('setupMonitor characteristic==>', characteristic);
       },
@@ -199,8 +201,9 @@ const Index = ({navigation, route}: any) => {
     // const deviceDataServiceUUID = '8de47721-5496-4233-ae45-e4b306fe1180';
     // const deviceDataCharacteristicUUID = '8de47721-5496-4233-ae45-e4b306fe1181';
 
-    // const deviceDataResponse = await BLEService.getCharacteristicsForDevice(
+    // const deviceDataResponse = await BLEService.getDescriptorsForDevice(
     //   deviceDataServiceUUID,
+    //   deviceDataCharacteristicUUID
     // );
     // consoleLog(
     //   'initialize deviceDataResponse==>',
@@ -266,6 +269,11 @@ const Index = ({navigation, route}: any) => {
     shouldUpdatePreviosSettings: boolean = true,
     shouldShowToast: boolean = false,
   ) => {
+    var __LineFlush: any = {};
+    const __deviceSettingsDataTmp = {...__deviceSettingsData};
+    // consoleLog("__deviceSettingsDataTmp", __deviceSettingsDataTmp);
+    // return;
+
     var timeout = 2000;
     setApplying(true);
     const __hasSensorRangeSetting = hasSensorRangeSetting(__deviceSettingsData);
@@ -277,7 +285,18 @@ const Index = ({navigation, route}: any) => {
       timeout = 10000;
     }
 
-    const status = await saveSettings(__deviceSettingsData);
+    const __hasLineFlushSetting = hasLineFlushSetting(__deviceSettingsData);
+
+    if (__hasLineFlushSetting && __hasSensorRangeSetting) {
+      __LineFlush.LineFlush = __deviceSettingsDataTmp?.LineFlush;
+      delete __deviceSettingsDataTmp?.LineFlush;
+      // consoleLog('__deviceSettingsDataTmp', __deviceSettingsDataTmp);
+      // consoleLog('__LineFlush', __LineFlush);
+    }
+
+    // return false;
+
+    const status = await saveSettings(__deviceSettingsDataTmp);
     // consoleLog('status', status);
 
     if (shouldUpdatePreviosSettings) {
@@ -294,6 +313,11 @@ const Index = ({navigation, route}: any) => {
       // consoleLog('status3');
       setApplied(true);
       // consoleLog('status4');
+
+      if (!isObjectEmpty(__LineFlush)) {
+        const status1 = await saveSettings(__LineFlush);
+        // consoleLog('status1', status1);
+      }
 
       const shortBurstsGen1Status = await shortBurstsGen1(__deviceSettingsData);
       // consoleLog('shortBurstsGen1Status', shortBurstsGen1Status);
@@ -554,7 +578,7 @@ const Index = ({navigation, route}: any) => {
                       size={20}
                       color={Theme.colors.primaryColor}
                       // onPress={() => {
-                      //   getDeviceData();
+                      //   getDeviceDataGen2();
                       // }}
                     />
                     <Typography

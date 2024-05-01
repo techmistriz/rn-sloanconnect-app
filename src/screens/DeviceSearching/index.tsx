@@ -51,7 +51,7 @@ import {
 } from 'src/utils/Permissions';
 
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
-const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 10000;
+const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
 const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
 
 const Index = ({navigation, route}: any) => {
