@@ -106,3 +106,15 @@ export const arrayRange = (start: number, stop: number, step: number) =>
     {length: (stop - start) / step + 1},
     (value, index) => start + index * step,
   );
+
+/**
+ *
+ * @param {*} value
+ * @param {Array<Object>} data
+ * @param {any} options
+ * @returns find object
+ */
+export const chunk = (arr: any[], size: number) =>
+  Array.from({length: Math.ceil(arr.length / size)}, (v, i) =>
+    arr.slice(i * size, i * size + size),
+  );

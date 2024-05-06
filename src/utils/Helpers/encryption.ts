@@ -211,3 +211,9 @@ export const fromHexStringUint8Array = (hexString: any, base = 16) => {
     hexString.match(/.{1,2}/g).map((byte: any) => parseInt(byte, base)),
   );
 };
+
+export function toHexString(byteArray: any) {
+  return Array.from(byteArray, function (byte) {
+    return ('0' + (byte & 0xff).toString(16)).slice(-2);
+  }).join(' ');
+}

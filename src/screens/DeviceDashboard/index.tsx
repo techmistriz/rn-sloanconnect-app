@@ -10,6 +10,7 @@ import {
   getTotalWaterUsase,
   hasLineFlushSetting,
   hasSensorRangeSetting,
+  intiGen2SecurityKey,
   saveSettings,
   shortBurstsGen1,
   updatePreviousSettings,
@@ -44,7 +45,9 @@ import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {SearchBar} from 'react-native-screens';
-import {intiGen2SecurityKey} from './helper';
+import {base64ToHex} from 'src/utils/Helpers/encryption';
+import {mappingDeviceDataIntegersGen2} from './helper';
+import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -104,10 +107,76 @@ const Index = ({navigation, route}: any) => {
       setDeviceData(BLEService.connectedDeviceStaticData);
     }
 
+    if (BLEService.deviceGeneration == 'gen1') {
+      initlizeAppGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      initlizeAppGen2();
+    } else if (BLEService.deviceGeneration == 'gen3') {
+      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'gen4') {
+      // Code need to be implemented
+    }
+  };
+
+  const initlizeAppGen1 = async () => {
     __getBatteryLevel();
     __getTotalWaterUsase();
     __getSavedSettingsGen1();
+  };
 
+  const initlizeAppGen2 = async () => {
+    consoleLog('getDeviceDataGen2 called');
+    var __characteristicMonitorDeviceDataIntegers: string[] = [];
+
+    // Device data integer
+    BLEService.setupMonitor(
+      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+      characteristic => {
+        // consoleLog('setupMonitor characteristic==>', characteristic);
+        if (characteristic?.value) {
+          var deviceDataIntegerHex = base64ToHex(characteristic?.value);
+          // consoleLog(
+          //   'setupMonitor deviceDataIntegerHex==>',
+          //   deviceDataIntegerHex,
+          // );
+          if (deviceDataIntegerHex == '71ff04') {
+            BLEService.characteristicMonitorDeviceDataIntegers =
+              __characteristicMonitorDeviceDataIntegers;
+            __mappingDeviceDataIntegersGen2();
+          } else {
+            __characteristicMonitorDeviceDataIntegers.push(
+              deviceDataIntegerHex,
+            );
+          }
+        }
+      },
+      error => {
+        consoleLog('setupMonitor error==>', error);
+      },
+    );
+  };
+
+  /** Function comments */
+  const __mappingDeviceDataIntegersGen2 = async () => {
+    const mappingDeviceDataIntegersGen2Response =
+      await mappingDeviceDataIntegersGen2(
+        BLE_GEN2_GATT_SERVICES,
+        BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        BLEService.characteristicMonitorDeviceDataIntegers,
+      );
+
+    consoleLog(
+      '__mappingDeviceDataIntegersGen2 mappingDeviceDataIntegersGen2Response==>',
+      mappingDeviceDataIntegersGen2Response,
+    );
+
+    BLEService.characteristicMonitorDeviceDataIntegersMapped =
+      mappingDeviceDataIntegersGen2Response;
+  };
+
+  const experimental = () => {
     // Experimental areas
     // await BLEService.discoverAllServicesAndCharacteristicsForDevice();
 
@@ -174,48 +243,6 @@ const Index = ({navigation, route}: any) => {
     // consoleLog(
     //   'initialize readDescriptorForDevice==>',
     //   JSON.stringify(readDescriptorForDevice),
-    // );
-  };
-
-  const getDeviceDataGen2 = async () => {
-    consoleLog('getDeviceDataGen2 called');
-    // await BLEService.discoverAllServicesAndCharacteristicsForDevice();
-
-    // Device data integer
-    const DEVICE_DATA_INTEGER_SERVICE_UUID =
-      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_SERVICE_UUID;
-    const DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID =
-      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID;
-    BLEService.setupMonitor(
-      DEVICE_DATA_INTEGER_SERVICE_UUID,
-      DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-      characteristic => {
-        consoleLog('setupMonitor characteristic==>', characteristic);
-      },
-      error => {
-        consoleLog('setupMonitor error==>', error);
-      },
-    );
-
-    // const deviceDataServiceUUID = '8de47721-5496-4233-ae45-e4b306fe1180';
-    // const deviceDataCharacteristicUUID = '8de47721-5496-4233-ae45-e4b306fe1181';
-
-    // const deviceDataResponse = await BLEService.getDescriptorsForDevice(
-    //   deviceDataServiceUUID,
-    //   deviceDataCharacteristicUUID
-    // );
-    // consoleLog(
-    //   'initialize deviceDataResponse==>',
-    //   JSON.stringify(deviceDataResponse),
-    // );
-
-    // const deviceDataResponse = await BLEService.readCharacteristicForDevice(
-    //   deviceDataServiceUUID,
-    //   deviceDataCharacteristicUUID,
-    // );
-    // consoleLog(
-    //   'initialize deviceDataResponse==>',
-    //   JSON.stringify(deviceDataResponse),
     // );
   };
 
@@ -324,10 +351,7 @@ const Index = ({navigation, route}: any) => {
   };
 
   const dispenseWater = () => {
-    BLEService.dispenseWater(
-      BLE_CONSTANTS.GEN1.WATER_DISPENCE_SERVICE_UUID,
-      BLE_CONSTANTS.GEN1.WATER_DISPENCE_CHARACTERISTIC_UUID,
-    );
+    BLEService.dispenseWater();
     // intiGen2SecurityKey();
   };
 

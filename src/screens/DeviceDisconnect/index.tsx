@@ -32,7 +32,10 @@ const Index = ({navigation, route}: any) => {
   }, []);
 
   const initlizeApp = async () => {
-    BLEService.finishMonitor();
+    if (BLEService.deviceGeneration == 'gen2') {
+      BLEService.finishMonitor();
+    }
+
     BLEService.disconnectDevice(false);
     setTimeout(() => {
       dispatch(deviceSettingsResetDataAction());

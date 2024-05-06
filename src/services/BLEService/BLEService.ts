@@ -24,6 +24,7 @@ import {
   getBleDeviceVersion,
   getDeviceModelData,
   getTotalWaterUsase,
+  intiGen2SecurityKey,
 } from 'src/utils/Helpers/project';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
@@ -49,7 +50,21 @@ class BLEServiceInstance {
 
   connectedDeviceStaticData: any;
 
+  characteristicMonitorDeviceDataIntegers: string[];
+
+  characteristicMonitorDeviceDataIntegersMapped: string[];
+
+  characteristicMonitorDeviceDataString: string[];
+
+  characteristicMonitorDataCollectionInteger: string[];
+
   characteristicMonitor: Subscription | null;
+
+  characteristicMonitorDeviceDataIntegersSubscriprion: Subscription | null;
+
+  characteristicMonitorDeviceDataStringSubscriprion: Subscription | null;
+
+  characteristicMonitorDataCollectionIntegerSubscriprion: Subscription | null;
 
   isCharacteristicMonitorDisconnectExpected = false;
 
@@ -60,7 +75,14 @@ class BLEServiceInstance {
     this.batteryLevel = 0;
     this.totalWaterUsase = 0;
     this.connectedDeviceStaticData = null;
+    this.characteristicMonitorDeviceDataIntegers = [];
+    this.characteristicMonitorDeviceDataIntegersMapped = [];
+    this.characteristicMonitorDeviceDataString = [];
+    this.characteristicMonitorDataCollectionInteger = [];
     this.characteristicMonitor = null;
+    this.characteristicMonitorDeviceDataIntegersSubscriprion = null;
+    this.characteristicMonitorDeviceDataStringSubscriprion = null;
+    this.characteristicMonitorDataCollectionIntegerSubscriprion = null;
     this.manager = new BleManager();
     this.manager.setLogLevel(LogLevel.Verbose);
   }
@@ -975,6 +997,7 @@ class BLEServiceInstance {
   };
 
   initDeviceDataGen2 = async () => {
+    await intiGen2SecurityKey();
     await this.setDeviceModelData();
   };
   initDeviceDataGen3 = async () => {};

@@ -1,4 +1,4 @@
-export const BLE_GATT_SERVICES = {
+export const BLE_GEN2_GATT_SERVICES = {
   '8de47721-5496-4233-ae45-e4b306fe1180': {
     isPrimary: true,
     name: 'Device Information',
