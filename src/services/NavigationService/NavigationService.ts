@@ -26,13 +26,6 @@ function setTopLevelNavigator(navigatorRef: any) {
  */
 function navigate(routeName: string, params?: any) {
   if (
-    routeName == 'TherapistProgressReport' ||
-    // routeName == 'TherapistSession' || // Release 1
-    // routeName == 'Chat' || // Release 1
-    // routeName == 'TherapistCalendar' || // Release 1
-    // routeName == 'ParentCalendar' || // Release 1
-    // routeName == 'ParentSession' || // Release 1
-    routeName == 'ParentSessionDetails' ||
     routeName == ''
   ) {
     // return false;

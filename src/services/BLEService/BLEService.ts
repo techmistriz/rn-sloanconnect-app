@@ -30,6 +30,7 @@ import NavigationService from 'src/services/NavigationService/NavigationService'
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {DeviceExtendedProps} from 'src/screens/DeviceSearching/types';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const deviceNotConnectedErrorText = 'Device is not connected';
 
@@ -39,6 +40,8 @@ class BLEServiceInstance {
   device: Device | null;
 
   scannedDevices: Device[];
+
+  deviceGeneration: string;
 
   batteryLevel: number;
 
@@ -53,6 +56,7 @@ class BLEServiceInstance {
   constructor() {
     this.device = null;
     this.scannedDevices = [];
+    this.deviceGeneration = '';
     this.batteryLevel = 0;
     this.totalWaterUsase = 0;
     this.connectedDeviceStaticData = null;
@@ -209,6 +213,8 @@ class BLEServiceInstance {
           var __deviceLocalName = __device?.localName ?? __device?.name;
           device.localName = __deviceLocalName;
           this.device = device;
+          const deviceGen = getBleDeviceGeneration(__deviceLocalName);
+          this.deviceGeneration = deviceGen;
           resolve(device);
         })
         .catch(error => {
@@ -851,11 +857,31 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-  dispenseWater = async (serviceUUID: string, characteristicUUID: string) => {
+  dispenseWater = async (
+    serviceUUID: string = '',
+    characteristicUUID: string = '',
+  ) => {
+    if (BLEService.deviceGeneration == 'gen1') {
+      this.dispenseWaterGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'gen3') {
+      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'gen4') {
+      // Code need to be implemented
+    }
+  };
+
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
+  dispenseWaterGen1 = async () => {
     const writeCharacteristicWithResponseForDevice =
       await BLEService.writeCharacteristicWithResponseForDevice(
-        serviceUUID,
-        characteristicUUID,
+        BLE_CONSTANTS.GEN1.WATER_DISPENCE_SERVICE_UUID,
+        BLE_CONSTANTS.GEN1.WATER_DISPENCE_CHARACTERISTIC_UUID,
         '1',
       );
     showMessage({
@@ -874,31 +900,17 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-
   initProjectLevelFunctions = async () => {};
-  /**
-   * project level function for BLE devices
-   * @param serviceUUID
-   * @param characteristicUUID
-   */
-  setBatteryLevel = async () => {
-    const serviceUUID = '0000180f-0000-1000-8000-00805f9b34fb';
-    const characteristicUUID = '00002a19-0000-1000-8000-00805f9b34fb';
-    this.batteryLevel = await getBatteryLevel(serviceUUID, characteristicUUID);
-  };
 
   /**
    * project level function for BLE devices
    * @param serviceUUID
    * @param characteristicUUID
    */
-  setTotalWaterUsase = async () => {
-    const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
-    const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c949';
-
-    this.totalWaterUsase = await getTotalWaterUsase(
-      serviceUUID,
-      characteristicUUID,
+  getSetBatteryLevel = async () => {
+    this.batteryLevel = await getBatteryLevel(
+      BLE_CONSTANTS.GEN1.BATTERY_LEVEL_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1.BATTERY_LEVEL_CHARACTERISTIC_UUID,
     );
   };
 
@@ -907,21 +919,33 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-  setDeviceModelData(connectedDevice: any, BLE_DEVICE_MODELS: any) {
+  getSetTotalWaterUsase = async () => {
+    this.totalWaterUsase = await getTotalWaterUsase(
+      BLE_CONSTANTS.GEN1.FLOW_RATE_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1.FLOW_RATE_CHARACTERISTIC_UUID,
+    );
+  };
+
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
+  async setDeviceModelData() {
     var deviceStaticData = null;
 
     // localName have more relevant name indentification
-    var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
+    var __deviceName = this.device?.localName ?? this.device?.name;
     if (__deviceName) {
-      const deviceGen = getBleDeviceGeneration(__deviceName);
-      // consoleLog('deviceGen', deviceGen);
+      const deviceGen = this.deviceGeneration;
+      consoleLog('setDeviceModelData deviceGen==>', deviceGen);
 
       if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] != 'undefined') {
         const deviceVersion = getBleDeviceVersion(__deviceName, deviceGen);
-        // consoleLog('deviceVersion', deviceVersion);
+        consoleLog('setDeviceModelData deviceVersion==>', deviceVersion);
 
         const deviceModel = BLE_DEVICE_MODELS[deviceGen];
-        // consoleLog('deviceModel', deviceModel);
+        consoleLog('setDeviceModelData deviceModel==>', deviceModel);
 
         if (deviceModel && typeof deviceModel[deviceVersion] != 'undefined') {
           deviceStaticData = deviceModel[deviceVersion];
@@ -931,6 +955,30 @@ class BLEServiceInstance {
 
     this.connectedDeviceStaticData = deviceStaticData;
   }
+
+  initDeviceData = async () => {
+    if (BLEService.deviceGeneration == 'gen1') {
+      await this.initDeviceDataGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      await this.initDeviceDataGen2();
+    } else if (BLEService.deviceGeneration == 'gen3') {
+      this.initDeviceDataGen3();
+    } else if (BLEService.deviceGeneration == 'gen4') {
+      await this.initDeviceDataGen4();
+    }
+  };
+
+  initDeviceDataGen1 = async () => {
+    await this.getSetBatteryLevel();
+    await this.getSetTotalWaterUsase();
+    await this.setDeviceModelData();
+  };
+
+  initDeviceDataGen2 = async () => {
+    await this.setDeviceModelData();
+  };
+  initDeviceDataGen3 = async () => {};
+  initDeviceDataGen4 = async () => {};
 }
 
 export const BLEService = new BLEServiceInstance();

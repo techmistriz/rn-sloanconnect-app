@@ -49,6 +49,8 @@ import {
   checkLocationPermissions,
   requestLocationPermissions,
 } from 'src/utils/Permissions';
+import {getBatteryLevel, getTotalWaterUsase} from 'src/utils/Helpers/project';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
@@ -234,9 +236,12 @@ const Index = ({navigation, route}: any) => {
   const onConnectSuccess = async () => {
     consoleLog('onConnectSuccess');
     await BLEService.discoverAllServicesAndCharacteristicsForDevice();
+    await BLEService.initDeviceData();
     // NavigationService.navigate('DeviceDashboard');
-    NavigationService.resetAllAction('BottomTabNavigator');
-    setIsConnecting(false);
+    setTimeout(() => {
+      NavigationService.resetAllAction('BottomTabNavigator');
+      setIsConnecting(false);
+    }, 2000);
   };
 
   /** Function comments */

@@ -305,8 +305,8 @@ export const cleanCharacteristic = (characteristic: any) => {
 
 /**
  *
- * @param {*} param1
- * @param {*} param2
+ * @param {*} serviceUUID
+ * @param {*} characteristicUUID
  * @returns result
  */
 export const getBatteryLevel = async (
@@ -317,21 +317,25 @@ export const getBatteryLevel = async (
   // const serviceUUID = '0000180f-0000-1000-8000-00805f9b34fb';
   // const characteristicUUID = '00002a19-0000-1000-8000-00805f9b34fb';
 
-  const __batteryLevel = await BLEService.readCharacteristicForDevice(
+  const __batteryLevelResponse = await BLEService.readCharacteristicForDevice(
     serviceUUID,
     characteristicUUID,
   );
-  // consoleLog('__batteryLevel __batteryLevel==>', JSON.stringify(__batteryLevel));
+  // consoleLog('__batteryLevelResponse __batteryLevelResponse==>', JSON.stringify(__batteryLevelResponse));
   //  ZA== => d => 64 => 100
-  if (__batteryLevel?.value) {
-    const hexEncodeValue = base64ToDecimal(__batteryLevel?.value);
-    // const decodedValue = base64EncodeDecode(__batteryLevel?.value, 'decode');
+  if (__batteryLevelResponse?.value) {
+    const hexEncodeValue = base64ToDecimal(__batteryLevelResponse?.value);
+    // const decodedValue = base64EncodeDecode(__batteryLevelResponse?.value, 'decode');
     // const hexEncodeValue = hexToDecimal(
     //   hexEncodeDecode(decodedValue, 'encode'),
     // );
 
-    // consoleLog('__batteryLevel hexEncodeValue==>', hexEncodeValue);
-    batteryLevel = Number(hexEncodeValue);
+    // consoleLog('__batteryLevelResponse hexEncodeValue==>', hexEncodeValue);
+    const __batteryLevel = Number(hexEncodeValue);
+
+    if (__batteryLevel > 0 && __batteryLevel < 101) {
+      batteryLevel = __batteryLevel;
+    }
   }
 
   return batteryLevel;
@@ -371,13 +375,11 @@ export const getTotalWaterUsase = async (
     // );
 
     if (flowRateDecodedValue) {
-      const serviceUUID2 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c910';
-      const characteristicUUID2 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c914';
 
       const __activationsDuration =
         await BLEService.readCharacteristicForDevice(
-          serviceUUID2,
-          characteristicUUID2,
+          BLE_CONSTANTS.GEN1.ACTIVATION_DURATION_SERVICE_UUID,
+          BLE_CONSTANTS.GEN1.ACTIVATION_DURATION_CHARACTERISTIC_UUID,
         );
 
       // consoleLog(

@@ -81,7 +81,7 @@ const Header = ({
           <TouchableItem
             borderless={true}
             onPress={() => {
-              NavigationService.goBack();
+              NavigationService.goBack &&  NavigationService.goBack();
             }}
             style={{}}>
             <VectorIcon

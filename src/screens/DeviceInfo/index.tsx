@@ -51,6 +51,8 @@ import {
   base64EncodeDecode,
   hexToDecimal,
 } from 'src/utils/Helpers/encryption';
+import {getDeviceInfoNormal, getDeviceInfoAdvance} from './helperGen1';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -66,23 +68,40 @@ const Index = ({navigation, route}: any) => {
   const [deviceDetails, setDeviceDetails] = useState<any>();
 
   useEffect(() => {
-    // consoleLog('user', user);
-    if (viewAdvanceDetails) {
-      initializeAdvance();
-    } else {
-      initialize();
+    // consoleLog('deviceGen', deviceGen);
+    if (BLEService.deviceGeneration == 'gen1') {
+      initializeGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      initializeGen2();
+    } else if (BLEService.deviceGeneration == 'gen3') {
+      // code need to be implemented
+    } else if (BLEService.deviceGeneration == 'gen4') {
+      // code need to be implemented
     }
   }, [viewAdvanceDetails]);
 
-  const initialize = async () => {
+  const initializeGen1 = () => {
+    if (!viewAdvanceDetails) {
+      initializeNormal();
+    } else {
+      initializeAdvance();
+    }
+  };
+
+  const initializeGen2 = () => {
+    if (!viewAdvanceDetails) {
+      initializeNormal();
+    } else {
+      initializeAdvance();
+    }
+  };
+
+  const initializeNormal = async () => {
     setLoading(true);
-    const deviceStaticData = getDeviceModelData(
-      connectedDevice,
-      BLE_DEVICE_MODELS,
-    );
+    const deviceStaticData = BLEService.connectedDeviceStaticData;
+    consoleLog('initializeNormal deviceStaticData==>', deviceStaticData);
     // setDeviceData(deviceStaticData);
-    var ADBDInformationARR = await getBDInformationData();
-    const battery = await __getBatteryLevel();
+    const deviceInfoNormal = await getDeviceInfoNormal();
     // consoleLog('ADBDInformationARR', ADBDInformationARR);
 
     var sloanModel: any = [];
@@ -99,191 +118,27 @@ const Index = ({navigation, route}: any) => {
     const batteryStatus = [
       {
         name: 'Battery Status',
-        value: `${battery}%`,
+        value: `${BLEService.batteryLevel}%`,
         uuid: '0000000',
       },
     ];
 
-    setDeviceDetails([...sloanModel, ...ADBDInformationARR, ...batteryStatus]);
+    setDeviceDetails([...sloanModel, ...deviceInfoNormal, ...batteryStatus]);
     setLoading(false);
   };
 
   const initializeAdvance = async () => {
     try {
       setLoading(true);
-      var StatisticsInformationArr = await getStatisticsInformationData();
-      var SettingLogs = await getSettingLogsData();
-      var UserData = await getUserData();
+      var deviceInfoAdvance = await getDeviceInfoAdvance();
+      var userData = await getUserData();
       // consoleLog('StatisticsInformationArr', StatisticsInformationArr);
-      setDeviceDetails([
-        ...StatisticsInformationArr,
-        ...SettingLogs,
-        ...UserData,
-      ]);
+      setDeviceDetails([...deviceInfoAdvance, ...userData]);
     } catch (error) {
       //
     } finally {
     }
     setLoading(false);
-  };
-
-  const getBDInformationData = () => {
-    // var deviceVersion = '01';
-    var deviceGen = 'gen1';
-    var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
-    if (__deviceName) {
-      deviceGen = getBleDeviceGeneration(__deviceName);
-      // deviceVersion = getBleDeviceVersion(__deviceName, deviceGen);
-    }
-
-    return new Promise<any>(async resolve => {
-      const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c900';
-      const allServices = getDeviceCharacteristicsByServiceUUID(
-        serviceUUID,
-        BLE_GATT_SERVICES,
-      );
-
-      var data = [];
-
-      // consoleLog('allServices', allServices);
-      if (typeof allServices != 'undefined' && Object.entries(allServices)) {
-        for (const [key, value] of Object.entries(allServices)) {
-          // console.log(`Key: ${key}, Value: ${JSON.stringify(value)}`);
-
-          if (
-            typeof value?.uuid != 'undefined' &&
-            value?.displayInList !== false &&
-            (value?.generation == 'all' || value?.generation == deviceGen)
-          ) {
-            var characteristic = await BLEService.readCharacteristicForDevice(
-              serviceUUID,
-              value?.uuid,
-            );
-
-            var decodeValue = 'N/A';
-            if (!isObjectEmpty(characteristic) && characteristic?.value) {
-              decodeValue = base64EncodeDecode(characteristic?.value, 'decode');
-            }
-
-            data.push({
-              name: value?.name,
-              uuid: value?.uuid,
-              value: formatCharateristicValue(value, decodeValue),
-            });
-          }
-        }
-      }
-      resolve(data);
-    });
-  };
-
-  const getStatisticsInformationData = () => {
-    var deviceVersion = '01';
-    var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
-    if (__deviceName) {
-      const deviceGen = getBleDeviceGeneration(__deviceName);
-      deviceVersion = getBleDeviceVersion(__deviceName, deviceGen);
-    }
-
-    return new Promise<any>(async resolve => {
-      const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c910';
-      const allServices = getDeviceCharacteristicsByServiceUUID(
-        serviceUUID,
-        BLE_GATT_SERVICES,
-      );
-
-      var data = [];
-
-      // consoleLog('allServices', allServices);
-      if (typeof allServices != 'undefined' && Object.entries(allServices)) {
-        for (const [key, value] of Object.entries(allServices)) {
-          // console.log(`Key: ${key}, Value: ${JSON.stringify(value)}`);
-
-          if (
-            typeof value?.uuid != 'undefined' &&
-            value?.displayInList !== false &&
-            (value?.generation == 'all' || value?.generation == deviceVersion)
-          ) {
-            var characteristic = await BLEService.readCharacteristicForDevice(
-              serviceUUID,
-              value?.uuid,
-            );
-
-            if (typeof characteristic != 'undefined') {
-              data.push({
-                name: value?.name,
-                uuid: value?.uuid,
-                value: hexToDecimal(
-                  base64EncodeDecode(characteristic?.value, 'decode'),
-                ),
-              });
-            }
-            // consoleLog(
-            //   'DeviceInfo initialize characteristic==>',
-            //   JSON.stringify(characteristic),
-            // );
-          }
-        }
-      }
-
-      resolve(data);
-    });
-  };
-
-  const getSettingLogsData = () => {
-    var deviceGen = 'gen1';
-    var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
-    if (__deviceName) {
-      deviceGen = getBleDeviceGeneration(__deviceName);
-      // deviceVersion = getBleDeviceVersion(__deviceName, deviceGen);
-    }
-
-    return new Promise<any>(async resolve => {
-      const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c920';
-      const allServices = getDeviceCharacteristicsByServiceUUID(
-        serviceUUID,
-        BLE_GATT_SERVICES,
-      );
-
-      var data = [];
-      // consoleLog('allServices', allServices);
-      if (typeof allServices != 'undefined' && Object.entries(allServices)) {
-        for (const [key, value] of Object.entries(allServices)) {
-          // consoleLog(`Key: ${key}, Value: ${JSON.stringify(value)}`);
-
-          try {
-            if (
-              typeof value?.uuid != 'undefined' &&
-              value?.displayInList !== false &&
-              (value?.generation == 'all' || value?.generation == deviceGen)
-            ) {
-              var characteristic = await BLEService.readCharacteristicForDevice(
-                serviceUUID,
-                value?.uuid,
-              );
-
-              var decodeValue = 'N/A';
-              if (!isObjectEmpty(characteristic) && characteristic?.value) {
-                decodeValue = base64EncodeDecode(
-                  characteristic?.value,
-                  'decode',
-                );
-              }
-
-              data.push({
-                name: value?.name,
-                uuid: value?.uuid,
-                value: formatCharateristicValue(value, decodeValue),
-                // value: decodeValue,
-              });
-            }
-          } catch (error) {
-            consoleLog('getSettingLogsData error==>', error);
-          }
-        }
-      }
-      resolve(data);
-    });
   };
 
   const getUserData = () => {
@@ -320,23 +175,6 @@ const Index = ({navigation, route}: any) => {
     });
   };
 
-  const __getBatteryLevel = async () => {
-    var batteryLevel = 0;
-    const serviceUUID = '0000180f-0000-1000-8000-00805f9b34fb';
-    const characteristicUUID = '00002a19-0000-1000-8000-00805f9b34fb';
-
-    const __batteryLevel = await getBatteryLevel(
-      serviceUUID,
-      characteristicUUID,
-    );
-
-    if (__batteryLevel > 0 && __batteryLevel < 101) {
-      batteryLevel = __batteryLevel;
-    }
-
-    return batteryLevel;
-  };
-
   return (
     <>
       <AppContainer
@@ -346,16 +184,8 @@ const Index = ({navigation, route}: any) => {
         haslogOutButton={false}
         hasBackButton={true}
         loading={loading}
-        // scrollViewContentContainerStyle={{
-        //   borderWidth: 1,
-        //   borderColor: 'green',
-        //   marginBottom: 120,
-        // }}
         headerContainerStyle={{
           backgroundColor: Theme.colors.primaryColor,
-          // flex:1,
-          // borderWidth: 1,
-          // borderColor: 'green',
         }}>
         <Wrap autoMargin={false} style={styles.container}>
           <Wrap autoMargin={false} style={styles.sectionContainer}>

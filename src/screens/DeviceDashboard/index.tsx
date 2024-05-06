@@ -100,11 +100,10 @@ const Index = ({navigation, route}: any) => {
   }, [navigation]);
 
   const initlizeApp = async () => {
-    const deviceStaticData = getDeviceModelData(
-      connectedDevice,
-      BLE_DEVICE_MODELS,
-    );
-    setDeviceData(deviceStaticData);
+    if (BLEService.connectedDeviceStaticData) {
+      setDeviceData(BLEService.connectedDeviceStaticData);
+    }
+
     __getBatteryLevel();
     __getTotalWaterUsase();
     __getSavedSettingsGen1();
@@ -221,30 +220,12 @@ const Index = ({navigation, route}: any) => {
   };
 
   const __getBatteryLevel = async () => {
-    const serviceUUID = '0000180f-0000-1000-8000-00805f9b34fb';
-    const characteristicUUID = '00002a19-0000-1000-8000-00805f9b34fb';
-
-    const __batteryLevel = await getBatteryLevel(
-      serviceUUID,
-      characteristicUUID,
-    );
-
-    if (__batteryLevel > 0 && __batteryLevel < 101) {
-      setBatteryLevel(__batteryLevel);
-    }
+    setBatteryLevel(BLEService.batteryLevel);
   };
 
   const __getTotalWaterUsase = async () => {
-    const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
-    const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c949';
-
-    const totalWaterUsase = await getTotalWaterUsase(
-      serviceUUID,
-      characteristicUUID,
-    );
-    // consoleLog('TotalWaterUsase==>', JSON.stringify(TotalWaterUsase));
-    if (totalWaterUsase) {
-      setTotalWaterUsage(totalWaterUsase);
+    if (BLEService.totalWaterUsase) {
+      setTotalWaterUsage(BLEService.totalWaterUsase);
     }
   };
 
