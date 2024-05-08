@@ -22,7 +22,7 @@ import {
   getTimezone,
   parseDateHumanFormat,
 } from 'src/utils/Helpers/HelperFunction';
-import { base64EncodeDecode } from 'src/utils/Helpers/encryption';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
@@ -30,7 +30,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 // DeviceSettingList
 const DeviceSettingList = ({
-  setting,
+  settings,
+  settingsData,
   borderTop,
   borderBottom,
   style,
@@ -42,207 +43,28 @@ DeviceSettingListProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
   );
-
-  const [characteristicMain, setCharacteristicMain] = useState<any>();
-  // const [characteristicMainDecodeValue, setCharacteristicMainDecodeValue] =
-  // useState<string>('');
-  const [deviceStaticDataMain, setDeviceStaticDataMain] = useState<any>();
-  const [characteristicRight, setCharacteristicRight] = useState<any>();
-  const [deviceStaticDataRight, setDeviceStaticDataRight] = useState<any>();
-  const [characteristicRight2, setCharacteristicRight2] = useState<any>();
-  const [deviceStaticDataRight2, setDeviceStaticDataRight2] = useState<any>();
+  const [flowRate, setFlowRate] = useState('');
   const [flowRateTypeDivider, setFlowRateTypeDivider] = useState(10);
-  // const [settingChangeData, setSettingChangeData] = useState<any>();
-
-  /** component hooks method */
-  // useEffect(() => {
-  //   // consoleLog(
-  //   //   'DeviceSettingList component (settingChangeData)',
-  //   //   settingChangeData,
-  //   // );
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     // The screen is focused
-  //     // consoleLog('DeviceSettingsList ActivationModeList component focused');
-  //     initlizeApp();
-  //   });
-
-  //   // Return the function to unsubscribe from the event so it gets removed on unmount
-  //   return unsubscribe;
-  // }, [navigation]);
 
   /** component hooks method */
   useEffect(() => {
     initlizeApp();
-  }, [applied]);
+  }, [applied, settingsData]);
 
   const initlizeApp = async () => {
-    const __deviceStaticDataMain =
-      getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
-        setting?.serviceUUID,
-        setting?.characteristicUUID,
-        BLE_GATT_SERVICES,
-      );
-    // consoleLog('__deviceStaticDataMain', __deviceStaticDataMain);
-    setDeviceStaticDataMain(__deviceStaticDataMain);
+    let __flowRate = settingsData?.flowRate?.value ?? '';
 
-    const __characteristicMain = await BLEService.readCharacteristicForDevice(
-      setting?.serviceUUID,
-      setting?.characteristicUUID,
-    );
+    // Handle unsaved value which were changed
+    const resultObj = findObject('flowRate', deviceSettingsData?.FlowRate, {
+      searchKey: 'name',
+    });
+    consoleLog('__flowRate resultObj==>', resultObj);
 
-    // consoleLog(
-    //   'initialize __characteristicMain==>',
-    //   JSON.stringify(__characteristicMain),
-    // );
-
-    setCharacteristicMain(cleanCharacteristic(__characteristicMain));
-
-    // For UUIDMapped
-    if (
-      __deviceStaticDataMain &&
-      __deviceStaticDataMain?.UUIDMapped &&
-      __characteristicMain?.value
-    ) {
-      var decodedValue = base64EncodeDecode(
-        __characteristicMain?.value,
-        'decode',
-      );
-
-      // setCharacteristicMainDecodeValue(decodedValue);
-
-      if (
-        decodedValue &&
-        typeof __deviceStaticDataMain?.UUIDMapped != 'undefined' &&
-        typeof __deviceStaticDataMain?.UUIDMapped[decodedValue] !=
-          'undefined' &&
-        __deviceStaticDataMain?.UUIDMapped[decodedValue]
-      ) {
-        var uuid1 = __deviceStaticDataMain?.UUIDMapped[decodedValue];
-
-        if (uuid1) {
-          const __deviceStaticDataRight =
-            getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
-              setting?.serviceUUID,
-              uuid1,
-              BLE_GATT_SERVICES,
-            );
-          // consoleLog('__deviceStaticDataRight', __deviceStaticDataRight);
-          setDeviceStaticDataRight(__deviceStaticDataRight);
-
-          const __characteristicRight =
-            await BLEService.readCharacteristicForDevice(
-              setting?.serviceUUID,
-              uuid1,
-            );
-
-          // consoleLog(
-          //   'initialize __characteristicRight==>',
-          //   JSON.stringify(__characteristicRight),
-          // );
-          setCharacteristicRight(cleanCharacteristic(__characteristicRight));
-        }
-      }
-    }
-  };
-
-  /**
-   * map setting value
-   * @param {any} characteristic
-   * @param {any} deviceStaticData
-   * @returns value
-   */
-  const __mapValue = (characteristic: any, deviceStaticData: any = null) => {
-    // Check for new value if any changed occured
-    const newValue = hasSettingChangedValueAvailable(
-      characteristic,
-      deviceStaticData,
-      deviceSettingsData?.[setting?.name],
-    );
-
-    // consoleLog("characteristic", characteristic);
-
-    if (newValue && newValue != '0') {
-      return newValue;
+    if (!isObjectEmpty(resultObj)) {
+      __flowRate = resultObj?.newValue;
     }
 
-    // Check for old value if any changed did not occured
-    return mapValue(characteristic, deviceStaticData);
-  };
-
-  const hasSettingChangedValueAvailable = (
-    characteristic: any,
-    deviceStaticData: any,
-    __deviceSettingsData: any,
-  ) => {
-    var result = '';
-    var prefix = '';
-    var postfix = '';
-
-    if (typeof __deviceSettingsData != 'undefined') {
-      const obj = findObject(characteristic?.uuid, __deviceSettingsData, {
-        searchKey: 'characteristicUUID',
-      });
-
-      // consoleLog('obj', obj);
-
-      if (!isObjectEmpty(obj)) {
-        var decodedValue = base64EncodeDecode(obj?.newValue, 'decode');
-        if (typeof deviceStaticData?.prefix != 'undefined') {
-          prefix = deviceStaticData?.prefix;
-        }
-
-        if (typeof deviceStaticData?.postfix != 'undefined') {
-          postfix = deviceStaticData?.postfix;
-        }
-        if (
-          deviceStaticData &&
-          decodedValue &&
-          typeof deviceStaticData?.valueMapped != 'undefined' &&
-          typeof deviceStaticData?.valueMapped[decodedValue] != 'undefined'
-        ) {
-          result = deviceStaticData?.valueMapped[decodedValue];
-        } else {
-          result = decodedValue;
-        }
-      }
-    }
-
-    return `${prefix ?? ''}${getCalculatedValue(result, flowRateTypeDivider)}${
-      postfix ?? ''
-    }`;
-  };
-
-  const mapValue = (characteristic: any, deviceStaticData: any = null) => {
-    var result = '-';
-    var prefix = '';
-    var postfix = '';
-
-    if (characteristic?.value) {
-      var decodedValue = base64EncodeDecode(characteristic?.value, 'decode');
-
-      if (typeof deviceStaticData?.prefix != 'undefined') {
-        prefix = deviceStaticData?.prefix;
-      }
-
-      if (typeof deviceStaticData?.postfix != 'undefined') {
-        postfix = deviceStaticData?.postfix;
-      }
-
-      if (
-        deviceStaticData &&
-        decodedValue &&
-        typeof deviceStaticData?.valueMapped != 'undefined' &&
-        typeof deviceStaticData?.valueMapped[decodedValue] != 'undefined'
-      ) {
-        result = deviceStaticData?.valueMapped[decodedValue];
-      } else {
-        result = decodedValue;
-      }
-    }
-    // consoleLog('result', result);
-    return `${prefix ?? ''}${getCalculatedValue(result, flowRateTypeDivider)}${
-      postfix ?? ''
-    }`;
+    setFlowRate(getCalculatedValue(__flowRate));
   };
 
   const getCalculatedValue = (value: string, divider: number = 10) => {
@@ -257,16 +79,17 @@ DeviceSettingListProps) => {
     <TouchableItem
       style={styles.wrapper}
       onPress={() => {
-        setting?.route &&
-          NavigationService.navigate(setting?.route, {
-            referrer: setting?.title,
-            setting: setting,
-            deviceStaticDataMain: deviceStaticDataMain,
-            characteristicMain: characteristicMain,
-            deviceStaticDataRight: deviceStaticDataRight,
-            characteristicRight: characteristicRight,
-            deviceStaticDataRight2: deviceStaticDataRight2,
-            characteristicRight2: characteristicRight2,
+        settings?.route &&
+          NavigationService.navigate(settings?.route, {
+            referrer: settings?.title,
+            settings: settings,
+            settingsData: settingsData,
+            // deviceStaticDataMain: deviceStaticDataMain,
+            // characteristicMain: characteristicMain,
+            // deviceStaticDataRight: deviceStaticDataRight,
+            // characteristicRight: characteristicRight,
+            // deviceStaticDataRight2: deviceStaticDataRight2,
+            // characteristicRight2: characteristicRight2,
             // onSettingChange: __onSettingChange,
           });
       }}>
@@ -276,7 +99,7 @@ DeviceSettingListProps) => {
           <Wrap autoMargin={false} style={styles.leftStyle}>
             <Typography
               size={14}
-              text={setting?.title}
+              text={settings?.title}
               style={{
                 textAlign: 'left',
               }}
@@ -285,7 +108,7 @@ DeviceSettingListProps) => {
             />
             <Typography
               size={10}
-              text={setting?.subTitle}
+              text={settings?.subTitle}
               style={{
                 textAlign: 'left',
               }}
@@ -298,7 +121,7 @@ DeviceSettingListProps) => {
             <Row autoMargin={false} style={styles.innerRow}>
               <Typography
                 size={16}
-                text={__mapValue(characteristicMain, deviceStaticDataMain)}
+                text={`${flowRate} lpm`}
                 style={{
                   textAlign: 'right',
                 }}
@@ -306,7 +129,7 @@ DeviceSettingListProps) => {
                 ff={Theme.fonts.ThemeFontLight}
               />
 
-              {!isObjectEmpty(deviceSettingsData?.[setting?.name]) ? (
+              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) ? (
                 <>
                   {applied ? (
                     <VectorIcon

@@ -1,243 +1,168 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {styles} from './styles';
 import {FlowRateProps} from './types';
 import Theme from 'src/theme';
 import Typography from 'src/components/Typography';
-import {Wrap, Row, TochableWrap} from 'src/components/Common';
+import {Wrap, Row} from 'src/components/Common';
 import TouchableItem from 'src/components/TouchableItem';
 import VectorIcon from 'src/components/VectorIcon';
-import Divider from 'src/components/Divider';
-import NavigationService from 'src/services/NavigationService/NavigationService';
-import {BLEService} from 'src/services';
-import {
-  cleanCharacteristic,
-  getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID,
-  getDeviceModelData,
-  getDeviceService,
-  mapValue,
-} from 'src/utils/Helpers/project';
-import {
-  consoleLog,
-  getImgSource,
-  getTimezone,
-  parseDateHumanFormat,
-} from 'src/utils/Helpers/HelperFunction';
-import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
-import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
+import {mapValue} from 'src/utils/Helpers/project';
+import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
-import {useDispatch, useSelector} from 'react-redux';
 import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
+import {useSelector} from 'react-redux';
+import NavigationService from 'src/services/NavigationService/NavigationService';
 
-// DeviceSettingList
 const DeviceSettingList = ({
-  setting,
+  settings,
+  settingsData,
   borderTop,
   borderBottom,
   style,
   navigation,
   applied = false,
-}: // onSettingChange,
-// onSettingSaved,
-FlowRateProps) => {
+}: FlowRateProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
   );
-
-  const [characteristicMain, setCharacteristicMain] = useState<any>();
-  // const [characteristicMainDecodeValue, setCharacteristicMainDecodeValue] =
-  // useState<string>('');
-  const [deviceStaticDataMain, setDeviceStaticDataMain] = useState<any>();
-  const [characteristicRight, setCharacteristicRight] = useState<any>();
-  const [deviceStaticDataRight, setDeviceStaticDataRight] = useState<any>();
-  const [characteristicRight2, setCharacteristicRight2] = useState<any>();
-  const [deviceStaticDataRight2, setDeviceStaticDataRight2] = useState<any>();
-  // const [settingChangeData, setSettingChangeData] = useState<any>();
+  const [modeSelection, setModeSelection] = useState<any>('');
+  const [metered, setMetered] = useState<any>('');
+  const [onDemand, setOnDemand] = useState<any>('');
 
   /** component hooks method */
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      // The screen is focused
-      // consoleLog('DeviceSettingsList ActivationModeList component focused');
       initlizeApp();
     });
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
 
   /** component hooks method */
   useEffect(() => {
-    // consoleLog('DeviceSettingsList ActivationModeList component re-render');
+    // consoleLog('DeviceSettingsList deviceSettingsData', deviceSettingsData);
     initlizeApp();
-  }, [applied]);
+  }, [applied, settingsData]);
 
+  /**
+   * initlizeApp
+   * @returns value
+   */
   const initlizeApp = async () => {
-    const __deviceStaticDataMain =
-      getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
-        setting?.serviceUUID,
-        setting?.characteristicUUID,
-        BLE_GATT_SERVICES,
-      );
-    // consoleLog('__deviceStaticDataMain', __deviceStaticDataMain);
-    setDeviceStaticDataMain(__deviceStaticDataMain);
+    let __modeSelection = settingsData?.modeSelection?.value ?? '';
+    let __onDemand = settingsData?.onDemand?.value ?? '';
+    let __metered = settingsData?.metered?.value ?? '';
 
-    const __characteristicMain = await BLEService.readCharacteristicForDevice(
-      setting?.serviceUUID,
-      setting?.characteristicUUID,
+    // Handle unsaved value which were changed
+    const resultObj = findObject(
+      'modeSelection',
+      deviceSettingsData?.ActivationMode,
+      {
+        searchKey: 'name',
+      },
     );
+    // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
 
-    // consoleLog(
-    //   'initialize __characteristicMain==>',
-    //   JSON.stringify(__characteristicMain),
-    // );
+    if (!isObjectEmpty(resultObj)) {
+      __modeSelection = resultObj?.newValue;
+    }
 
-    setCharacteristicMain(cleanCharacteristic(__characteristicMain));
-
-    // For UUIDMapped
-    if (
-      __deviceStaticDataMain &&
-      __deviceStaticDataMain?.UUIDMapped &&
-      __characteristicMain?.value
-    ) {
-      var decodedValue = base64EncodeDecode(
-        __characteristicMain?.value,
-        'decode',
-      );
-
-      // consoleLog('decodedValue', decodedValue);
-      // setCharacteristicMainDecodeValue(decodedValue);
-      // MQ== 1
-      // MA== 0
-      const obj = findObject(
-        __characteristicMain?.uuid,
-        deviceSettingsData?.[setting?.name],
+    if (__modeSelection == '0') {
+      const resultObj2 = findObject(
+        'onDemand',
+        deviceSettingsData?.ActivationMode,
         {
-          searchKey: 'characteristicUUID',
+          searchKey: 'name',
         },
       );
-
-      consoleLog('deviceSettingsData==>', deviceSettingsData);
-
-      if (!isObjectEmpty(obj)) {
-        decodedValue = base64EncodeDecode(obj?.newValue, 'decode');
-        // consoleLog('obj decodedValue', decodedValue);
+      if (!isObjectEmpty(resultObj)) {
+        __onDemand = resultObj2?.newValue;
       }
-
-      if (
-        decodedValue &&
-        typeof __deviceStaticDataMain?.UUIDMapped != 'undefined' &&
-        typeof __deviceStaticDataMain?.UUIDMapped?.[decodedValue] !=
-          'undefined' &&
-        __deviceStaticDataMain?.UUIDMapped?.[decodedValue]
-      ) {
-        var uuid1 = __deviceStaticDataMain?.UUIDMapped?.[decodedValue];
-
-        if (uuid1) {
-          const __deviceStaticDataRight =
-            getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
-              setting?.serviceUUID,
-              uuid1,
-              BLE_GATT_SERVICES,
-            );
-          // consoleLog('__deviceStaticDataRight', __deviceStaticDataRight);
-          setDeviceStaticDataRight(__deviceStaticDataRight);
-
-          const __characteristicRight =
-            await BLEService.readCharacteristicForDevice(
-              setting?.serviceUUID,
-              uuid1,
-            );
-
-          // consoleLog(
-          //   'initialize __characteristicRight==>',
-          //   JSON.stringify(__characteristicRight),
-          // );
-          setCharacteristicRight(cleanCharacteristic(__characteristicRight));
-        }
+    } else if (__modeSelection == '1') {
+      const resultObj2 = findObject(
+        'metered',
+        deviceSettingsData?.ActivationMode,
+        {
+          searchKey: 'name',
+        },
+      );
+      if (!isObjectEmpty(resultObj)) {
+        __metered = resultObj2?.newValue;
       }
     }
+
+    setModeSelection(__modeSelection);
+    setOnDemand(__onDemand);
+    setMetered(__metered);
   };
 
   /**
-   * map setting value
-   * @param {any} characteristic
-   * @param {any} deviceStaticData
+   * Not in use
+   * modeSelectionTmp
    * @returns value
    */
-  const __mapValue = (characteristic: any, deviceStaticData: any = null) => {
+  const mapModeSelectionValue = () => {
+    var modeSelectionTmp = modeSelection;
     // Check for new value if any changed occured
-    const newValue = hasSettingChangedValueAvailable(
-      characteristic,
-      deviceStaticData,
-      deviceSettingsData?.[setting?.name],
+    const resultObj = findObject(
+      'modeSelection',
+      deviceSettingsData?.ActivationMode,
+      {
+        searchKey: 'name',
+      },
     );
+    // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
 
-    // consoleLog('newValue', newValue);
-
-    if (newValue) {
-      return newValue;
+    if (!isObjectEmpty(resultObj)) {
+      modeSelectionTmp = resultObj?.newValue;
     }
 
-    // Check for old value if any changed did not occured
-    return mapValue(characteristic, deviceStaticData);
+    return modeSelectionTmp == '0'
+      ? 'On Demand'
+      : modeSelectionTmp == '1'
+      ? 'Metered'
+      : '';
   };
 
-  const hasSettingChangedValueAvailable = (
-    characteristic: any,
-    deviceStaticData: any,
-    __deviceSettingsData: any,
-  ) => {
-    var result = '';
-    var prefix = '';
-    var postfix = '';
+  /**
+   * Not in use
+   * modeSelectionTmp
+   * @returns value
+   */
+  const mapMeteredOnDemandValue = () => {
+    // Check for new value if any changed occured
+    var value = '0';
+    var type = '';
 
-    if (typeof __deviceSettingsData != 'undefined') {
-      const obj = findObject(characteristic?.uuid, __deviceSettingsData, {
-        searchKey: 'characteristicUUID',
-      });
-      // consoleLog('obj', obj);
-
-      if (!isObjectEmpty(obj)) {
-        var decodedValue = base64EncodeDecode(obj?.newValue, 'decode');
-        if (typeof deviceStaticData?.prefix != 'undefined') {
-          prefix = deviceStaticData?.prefix;
-        }
-
-        if (typeof deviceStaticData?.postfix != 'undefined') {
-          postfix = deviceStaticData?.postfix;
-        }
-        if (
-          deviceStaticData &&
-          decodedValue &&
-          typeof deviceStaticData?.valueMapped != 'undefined' &&
-          typeof deviceStaticData?.valueMapped[decodedValue] != 'undefined'
-        ) {
-          result = deviceStaticData?.valueMapped[decodedValue];
-        } else {
-          result = decodedValue;
-        }
-      }
+    if (modeSelection == '0') {
+      value = onDemand;
+      type = 'onDemand';
+    } else if (modeSelection == '1') {
+      value = metered;
+      type = 'metered';
     }
 
-    return `${prefix ?? ''}${result}${postfix ?? ''}`;
+    const resultObj = findObject(type, deviceSettingsData?.ActivationMode, {
+      searchKey: 'name',
+    });
+    consoleLog('mapMeteredOnDemandValue resultobj==>', {resultObj, type});
+
+    if (!isObjectEmpty(resultObj)) {
+      value = resultObj?.newValue;
+    }
+
+    return value;
   };
 
   return (
     <TouchableItem
       style={styles.wrapper}
       onPress={() => {
-        setting?.route &&
-          NavigationService.navigate(setting?.route, {
-            referrer: setting?.title,
-            setting: setting,
-            deviceStaticDataMain: deviceStaticDataMain,
-            characteristicMain: characteristicMain,
-            deviceStaticDataRight: deviceStaticDataRight,
-            characteristicRight: characteristicRight,
-            deviceStaticDataRight2: deviceStaticDataRight2,
-            characteristicRight2: characteristicRight2,
-            // onSettingChange: __onSettingChange,
+        settings?.route &&
+          NavigationService.navigate(settings?.route, {
+            referrer: settings?.title,
+            settings: settings,
+            settingsData: settingsData,
           });
       }}>
       <>
@@ -246,7 +171,7 @@ FlowRateProps) => {
           <Wrap autoMargin={false} style={styles.leftStyle}>
             <Typography
               size={14}
-              text={setting?.title}
+              text={settings?.title}
               style={{
                 textAlign: 'left',
               }}
@@ -255,7 +180,14 @@ FlowRateProps) => {
             />
             <Typography
               size={10}
-              text={__mapValue(characteristicMain, deviceStaticDataMain)}
+              // text={mapModeSelectionValue()}
+              text={
+                modeSelection == '0'
+                  ? 'On Demand'
+                  : modeSelection == '1'
+                  ? 'Metered'
+                  : ''
+              }
               style={{
                 textAlign: 'left',
               }}
@@ -268,7 +200,14 @@ FlowRateProps) => {
             <Row autoMargin={false} style={styles.innerRow}>
               <Typography
                 size={16}
-                text={__mapValue(characteristicRight, deviceStaticDataRight)}
+                // text={`${mapMeteredOnDemandValue()} Sec`}
+                text={`${
+                  modeSelection == '0'
+                    ? onDemand
+                    : modeSelection == '1'
+                    ? metered
+                    : ''
+                } Sec`}
                 style={{
                   textAlign: 'right',
                 }}
@@ -276,7 +215,7 @@ FlowRateProps) => {
                 ff={Theme.fonts.ThemeFontLight}
               />
 
-              {!isObjectEmpty(deviceSettingsData?.[setting?.name]) ? (
+              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) ? (
                 <>
                   {applied ? (
                     <VectorIcon

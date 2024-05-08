@@ -42,9 +42,7 @@ export const getFlowRateValue = (characteristicRight: BLECharacteristic) => {
   return value?.toString();
 };
 
-export const getFlowRateRangeGen1 = (
-  deviceStaticDataMain: DeviceStaticData,
-) => {
+export const getFlowRateRangeGen1 = () => {
   return createNameValueArray(['13', '19', '38', '57', '83', '0']);
 };
 

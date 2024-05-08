@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {styles} from './styles';
-import {DeviceSettingListProps} from './types';
+import {FlowRateProps} from './types';
 import Theme from 'src/theme';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import TouchableItem from 'src/components/TouchableItem';
 import VectorIcon from 'src/components/VectorIcon';
-import NavigationService from 'src/services/NavigationService/NavigationService';
-import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
-import {useSelector} from 'react-redux';
+import {mapValue} from 'src/utils/Helpers/project';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
+import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
+import {useSelector} from 'react-redux';
+import NavigationService from 'src/services/NavigationService/NavigationService';
 
-// DeviceSettingList
 const DeviceSettingList = ({
   settings,
   settingsData,
@@ -20,14 +21,13 @@ const DeviceSettingList = ({
   style,
   navigation,
   applied = false,
-}: DeviceSettingListProps) => {
+}: FlowRateProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
   );
-
-  const [flush, setFlush] = useState<any>('');
-  const [flushTime, setFlushTime] = useState<any>('');
-  const [flushInterval, setFlushInterval] = useState<any>('');
+  const [modeSelection, setModeSelection] = useState<any>('');
+  const [metered, setMetered] = useState<any>('');
+  const [onDemand, setOnDemand] = useState<any>('');
 
   /** component hooks method */
   useEffect(() => {
@@ -49,47 +49,106 @@ const DeviceSettingList = ({
    * @returns value
    */
   const initlizeApp = async () => {
-    let __flush = settingsData?.flush?.value ?? '';
-    let __flushTime = settingsData?.flushTime?.value ?? '';
-    let __flushInterval = settingsData?.flushInterval?.value ?? '';
+    // Check for new value if any changed occured
 
-    consoleLog('initlizeApp==>', {
-      __flush,
-      __flushTime,
-      __flushInterval,
-    });
+    // Check for old value if any changed did not occured
+    let __modeSelection = settingsData?.modeSelection?.value ?? '';
+    let __onDemand = settingsData?.onDemand?.value ?? '';
+    let __metered = settingsData?.metered?.value ?? '';
+    let type = '';
+
     // Handle unsaved value which were changed
-    const resultObj = findObject('flush', deviceSettingsData?.LineFlush, {
-      searchKey: 'name',
-    });
-    // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
-
-    if (!isObjectEmpty(resultObj)) {
-      __flush = resultObj?.newValue;
-    }
-
-    const resultObj2 = findObject('flushTime', deviceSettingsData?.LineFlush, {
-      searchKey: 'name',
-    });
-
-    if (!isObjectEmpty(resultObj2)) {
-      __flushTime = resultObj2?.newValue;
-    }
-    const resultObj3 = findObject(
-      'flushInterval',
-      deviceSettingsData?.LineFlush,
+    const resultObj = findObject(
+      'modeSelection',
+      deviceSettingsData?.ActivationMode,
       {
         searchKey: 'name',
       },
     );
+    // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
 
-    if (!isObjectEmpty(resultObj3)) {
-      __flushInterval = resultObj3?.newValue;
+    if (!isObjectEmpty(resultObj)) {
+      __modeSelection = resultObj?.newValue;
     }
 
-    setFlush(__flush);
-    setFlushTime(__flushTime);
-    setFlushInterval(__flushInterval);
+    if (__modeSelection == '0') {
+      type = 'onDemand';
+    } else if (__modeSelection == '1') {
+      type = 'metered';
+    }
+
+    const resultObj2 = findObject(type, deviceSettingsData?.ActivationMode, {
+      searchKey: 'name',
+    });
+    consoleLog('mapMeteredOnDemandValue resultobj==>', {resultObj, type});
+
+    if (!isObjectEmpty(resultObj)) {
+      if (__modeSelection == '0') {
+        __onDemand = resultObj2?.newValue;
+      } else if (__modeSelection == '1') {
+        __metered = resultObj2?.newValue;
+      }
+    }
+
+    setModeSelection(__modeSelection);
+    setOnDemand(__onDemand);
+    setMetered(__metered);
+  };
+
+  /**
+   * modeSelectionTmp
+   * @returns value
+   */
+  const mapModeSelectionValue = () => {
+    var modeSelectionTmp = modeSelection;
+    // Check for new value if any changed occured
+    const resultObj = findObject(
+      'modeSelection',
+      deviceSettingsData?.ActivationMode,
+      {
+        searchKey: 'name',
+      },
+    );
+    // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
+
+    if (!isObjectEmpty(resultObj)) {
+      modeSelectionTmp = resultObj?.newValue;
+    }
+
+    return modeSelectionTmp == '0'
+      ? 'On Demand'
+      : modeSelectionTmp == '1'
+      ? 'Metered'
+      : '';
+  };
+
+  /**
+   * modeSelectionTmp
+   * @returns value
+   */
+  const mapMeteredOnDemandValue = () => {
+    // Check for new value if any changed occured
+    var value = '0';
+    var type = '';
+
+    if (modeSelection == '0') {
+      value = onDemand;
+      type = 'onDemand';
+    } else if (modeSelection == '1') {
+      value = metered;
+      type = 'metered';
+    }
+
+    const resultObj = findObject(type, deviceSettingsData?.ActivationMode, {
+      searchKey: 'name',
+    });
+    consoleLog('mapMeteredOnDemandValue resultobj==>', {resultObj, type});
+
+    if (!isObjectEmpty(resultObj)) {
+      value = resultObj?.newValue;
+    }
+
+    return value;
   };
 
   return (
@@ -118,7 +177,7 @@ const DeviceSettingList = ({
             />
             <Typography
               size={10}
-              text={flush == '1' ? 'On' : flush == '0' ? 'Off' : ''}
+              text={mapModeSelectionValue()}
               style={{
                 textAlign: 'left',
               }}
@@ -129,38 +188,15 @@ const DeviceSettingList = ({
 
           <Wrap autoMargin={false} style={styles.rightStyle}>
             <Row autoMargin={false} style={styles.innerRow}>
-              {flush == '1' ? (
-                <>
-                  <Typography
-                    size={16}
-                    text={`${flushTime} Sec`}
-                    style={{
-                      textAlign: 'right',
-                    }}
-                    color={Theme.colors.primaryColor}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                  <Typography
-                    size={16}
-                    text={` - ${flushInterval} Hrs`}
-                    style={{
-                      textAlign: 'right',
-                    }}
-                    color={Theme.colors.primaryColor}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </>
-              ) : (
-                <Typography
-                  size={16}
-                  text={`-`}
-                  style={{
-                    textAlign: 'right',
-                  }}
-                  color={Theme.colors.primaryColor}
-                  ff={Theme.fonts.ThemeFontLight}
-                />
-              )}
+              <Typography
+                size={16}
+                text={`${mapMeteredOnDemandValue()} Sec`}
+                style={{
+                  textAlign: 'right',
+                }}
+                color={Theme.colors.primaryColor}
+                ff={Theme.fonts.ThemeFontLight}
+              />
 
               {!isObjectEmpty(deviceSettingsData?.[settings?.name]) ? (
                 <>

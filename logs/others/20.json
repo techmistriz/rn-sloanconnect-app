@@ -1,0 +1,48 @@
+{
+  "ActivationMode": [
+    {
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c942",
+      "name": "sensorRange",
+      "newValue": "3",
+      "oldValue": "2",
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+    },
+    {
+      "characteristicUUID": "",
+      "name": "sensorRangeDate",
+      "newValue": "2405081543",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    },
+    {
+      "characteristicUUID": "",
+      "name": "sensorRangePhone",
+      "newValue": "0123456789",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    }
+  ],
+  "FlowRate": [
+    {
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c949",
+      "name": "flowRate",
+      "newValue": "25",
+      "oldValue": "13",
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+    },
+    {
+      "characteristicUUID": "",
+      "name": "sensorRangeDate",
+      "newValue": "2405081542",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    },
+    {
+      "characteristicUUID": "",
+      "name": "sensorRangePhone",
+      "newValue": "0123456789",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    }
+  ]
+}

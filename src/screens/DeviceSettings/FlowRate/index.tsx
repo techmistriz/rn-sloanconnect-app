@@ -1,85 +1,58 @@
-import React, {Component, Fragment, useEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  StatusBar,
-  Keyboard,
-  FlatList,
-  DeviceEventEmitter,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Keyboard, FlatList, DeviceEventEmitter} from 'react-native';
 import Theme from 'src/theme';
-import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  consoleLog,
-  getImgSource,
-  showSimpleAlert,
-  showToastMessage,
-} from 'src/utils/Helpers/HelperFunction';
+import {parseDateTimeInFormat} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {Wrap, Row} from 'src/components/Common';
+import {Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import AppInfo from 'src/components/@ProjectComponent/AppInfo';
-import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
-import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import Loader from 'src/components/Loader';
-import Input from 'src/components/Input';
 import Toggle from 'src/components/Toggle';
 import {BLEService} from 'src/services/BLEService/BLEService';
-import {
-  getFlowRateType,
-  getFlowRateValue,
-  getFlowRateRange,
-  getCalculatedValue,
-  getFlowRateRangeGen1,
-} from './helper';
+import {getCalculatedValue, getFlowRateRangeGen1} from './helper';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
-import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
-import {findInArray, findObject, isObjectEmpty} from 'src/utils/Helpers/array';
-import {hasDateSetting, hasPhoneSetting} from 'src/utils/Helpers/project';
-import {SearchBar} from 'react-native-screens';
+import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const Index = ({navigation, route}: any) => {
-  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
+  const {deviceSettingsData} = useSelector(
+    (state: any) => state?.DeviceSettingsReducer,
+  );
+  const {referrer, settings, settingsData} = route?.params;
 
-  const {
-    referrer,
-    setting,
-    deviceStaticDataMain,
-    characteristicMain,
-    deviceStaticDataRight,
-    characteristicRight,
-    deviceStaticDataRight2,
-    characteristicRight2,
-  } = route?.params;
-
-  const FLOW_RATES = getFlowRateRangeGen1(deviceStaticDataMain);
-  const flowRateOld = getFlowRateValue(characteristicMain);
-
+  const FLOW_RATES = getFlowRateRangeGen1();
   const [flowRateTypeDivider, setFlowRateTypeDivider] = useState(10);
   const [flowRateType, setFlowRateType] = useState('1');
-  const [flowRate, setFlowRate] = useState(flowRateOld);
+  const [flowRate, setFlowRate] = useState('');
+  const [flowRateOld, setFlowRateOld] = useState('');
   const [other, setOther] = useState('');
 
   useEffect(() => {
-    // consoleLog('useEffect flowRate==>', {flowRate, FLOW_RATES});
-    // consoleLog('LineFlush==>', {
+    // consoleLog('SensorRange==>', {
     //   referrer,
-    //   setting,
-    //   deviceStaticDataMain,
-    //   characteristicMain,
-    //   deviceStaticDataRight,
-    //   characteristicRight,
-    //   deviceStaticDataRight2,
-    //   characteristicRight2,
+    //   settings,
+    //   settingsData,
     // });
-    
+    initlizeApp();
   }, []);
+
+  const initlizeApp = async () => {
+    let __flowRate = settingsData?.flowRate?.value ?? '';
+
+    // Handle unsaved value which were changed
+    const resultObj = findObject('flowRate', deviceSettingsData?.FlowRate, {
+      searchKey: 'name',
+    });
+
+    if (!isObjectEmpty(resultObj)) {
+      __flowRate = resultObj?.newValue;
+    }
+    setFlowRate(__flowRate);
+  };
 
   useEffect(() => {
     checkForOtherInitialValue();
@@ -122,17 +95,47 @@ const Index = ({navigation, route}: any) => {
     }
   };
 
-  const onDonePress = async () => {
+  const onDonePress = () => {
     Keyboard.dismiss();
-    var params = [];
+    if (BLEService.deviceGeneration == 'gen1') {
+      onDonePressGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      onDonePressGen2();
+    } else if (BLEService.deviceGeneration == 'gen3') {
+      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'gen4') {
+      // Code need to be implemented
+    }
+  };
 
-    if (flowRateOld != flowRate) {
+  const onDonePressGen1 = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.flowRate?.value != flowRate) {
       params.push({
-        serviceUUID: characteristicMain?.serviceUUID,
-        characteristicUUID: characteristicMain?.uuid,
-        oldValue: base64EncodeDecode(flowRateOld),
-        newValue: base64EncodeDecode(flowRate),
+        name: 'flowRate',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLOW_RATE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.GEN1.FLOW_RATE_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flowRate?.value,
+        newValue: flowRate,
       });
+
+      // params.push({
+      //   name: 'sensorRangeDate',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.FLOW_RATE_DATE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN1.FLOW_RATE_DATE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      // });
+      // params.push({
+      //   name: 'sensorRangePhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.FLOW_RATE_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN1.FLOW_RATE_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.contact ?? '0123456789',
+      // });
     }
 
     if (params.length) {
@@ -141,24 +144,17 @@ const Index = ({navigation, route}: any) => {
           data: {FlowRate: params},
         }),
       );
-
-      const dateSettingResponse = hasDateSetting(deviceStaticDataMain);
-      if (!isObjectEmpty(dateSettingResponse)) {
-        params.push({
-          ...dateSettingResponse,
-          allowedInPreviousSetting: false,
-        });
-      }
-
-      const phoneSettingResponse = hasPhoneSetting(deviceStaticDataMain, user);
-      if (!isObjectEmpty(phoneSettingResponse)) {
-        params.push({
-          ...phoneSettingResponse,
-          allowedInPreviousSetting: false,
-        });
-      }
     }
-    NavigationService.goBack();
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressGen2 = () => {
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
   };
 
   /**Child flatlist render method */
@@ -230,8 +226,8 @@ const Index = ({navigation, route}: any) => {
                     {id: '0', name: 'GPM', value: '0'},
                     {id: '1', name: 'LPM', value: '1'},
                   ]}
-                  onSelect={(val: any) => {
-                    setFlowRateType(val);
+                  onSelect={(resonse: any) => {
+                    setFlowRateType(resonse?.value);
                   }}
                 />
               </Wrap>

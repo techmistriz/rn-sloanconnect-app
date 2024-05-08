@@ -12,12 +12,15 @@ import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 const Toggle = ({style = {}, selected, onSelect, options}: ToggleProps) => {
   const [selectedState, setSelectedState] = useState(selected);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // consoleLog('useEffect selected', selected);
+    setSelectedState(selected);
+  }, [selected]);
 
   const __onSelect = (item: any) => {
     // consoleLog('__onSelect', item);
     setSelectedState(item?.value);
-    onSelect && onSelect(item?.value);
+    onSelect && onSelect(item);
   };
 
   return (

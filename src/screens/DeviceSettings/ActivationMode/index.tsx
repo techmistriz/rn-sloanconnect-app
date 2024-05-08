@@ -32,175 +32,239 @@ import {
   hasPhoneSetting,
 } from 'src/utils/Helpers/project';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
-import {isObjectEmpty} from 'src/utils/Helpers/array';
+import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const Index = ({navigation, route}: any) => {
-  const {
-    referrer,
-    setting,
-    deviceStaticDataMain,
-    characteristicMain,
-    deviceStaticDataRight,
-    characteristicRight,
-    deviceStaticDataRight2,
-    characteristicRight2,
-    onSettingChange,
-  } = route?.params;
-
-  const {user, token} = useSelector((state: any) => state?.AuthReducer);
+  const {referrer, settings, settingsData} = route?.params;
+  const {deviceSettingsData} = useSelector(
+    (state: any) => state?.DeviceSettingsReducer,
+  );
+  const {user} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
 
-  const activationModeTypeOld = getActivationModeType(
-    characteristicMain,
-    deviceStaticDataMain,
-  );
-  const [activationModeType, setActivationModeType] = useState(
-    activationModeTypeOld,
-  );
-
-  var activationModeSecOld = getActivationModeValue(characteristicRight);
-  const [activationModeSec, setActivationModeSec] =
-    useState(activationModeSecOld);
+  const [modeSelection, setModeSelection] = useState<any>('');
+  const [metered, setMetered] = useState<any>('');
+  const [onDemand, setOnDemand] = useState<any>('');
+  const [activationModeSec, setActivationModeSec] = useState('');
+  const [activationModeSecOld, setActivationModeSecOld] = useState('');
 
   useEffect(() => {
     // consoleLog('ActivationMode==>', {
-    //   // referrer,
-    //   setting,
-    //   deviceStaticDataMain,
-    //   // characteristicMain,
-    //   // deviceStaticDataRight,
-    //   // characteristicRight,
-    //   // deviceStaticDataRight2,
-    //   // characteristicRight2,
+    //   referrer,
+    //   settings,
+    //   settingsData,
     // });
+    consoleLog('useEffect data==>', {modeSelection, onDemand, metered});
+    initlizeApp();
   }, []);
 
-  const __setActivationModeType = async (val: string) => {
-    setActivationModeType(val);
-    if (typeof deviceStaticDataMain?.UUIDMapped?.[val] != 'undefined') {
-      const __characteristicRight =
-        await BLEService.readCharacteristicForDevice(
-          characteristicMain?.serviceUUID,
-          deviceStaticDataMain?.UUIDMapped[val],
-        );
-      // consoleLog(
-      //   '__setActivationModeType __characteristicRight==>',
-      //   JSON.stringify(__characteristicRight),
-      // );
-      const __activationModeSec = getActivationModeValue(__characteristicRight);
-      setActivationModeSec(__activationModeSec);
-      // activationModeSecOld = __activationModeSec;
+  const initlizeApp = async () => {
+    let __modeSelection = settingsData?.modeSelection?.value ?? '';
+    let __onDemand = settingsData?.onDemand?.value ?? '';
+    let __metered = settingsData?.metered?.value ?? '';
+
+    // Handle unsaved value which were changed
+    const resultObj = findObject(
+      'modeSelection',
+      deviceSettingsData?.ActivationMode,
+      {
+        searchKey: 'name',
+      },
+    );
+
+    if (!isObjectEmpty(resultObj)) {
+      __modeSelection = resultObj?.newValue;
+    }
+
+    if (__modeSelection == '0') {
+      const resultObj2 = findObject(
+        'onDemand',
+        deviceSettingsData?.ActivationMode,
+        {
+          searchKey: 'name',
+        },
+      );
+
+      if (!isObjectEmpty(resultObj)) {
+        __onDemand = resultObj2?.newValue;
+      }
+
+      setActivationModeSecOld(__onDemand);
+      setActivationModeSec(__onDemand);
+    } else if (__modeSelection == '1') {
+      const resultObj2 = findObject(
+        'metered',
+        deviceSettingsData?.ActivationMode,
+        {
+          searchKey: 'name',
+        },
+      );
+      // consoleLog('mapMeteredOnDemandValue resultobj==>', {resultObj, type});
+
+      if (!isObjectEmpty(resultObj)) {
+        __metered = resultObj2?.newValue;
+      }
+
+      setActivationModeSecOld(__metered);
+      setActivationModeSec(__metered);
+    }
+
+    setModeSelection(__modeSelection);
+    setOnDemand(__onDemand);
+    setMetered(__metered);
+  };
+
+  const handleActivationModeType = async (val: string) => {
+    if (val == '0') {
+      setActivationModeSec(onDemand);
+    } else if (val == '1') {
+      setActivationModeSec(metered);
+    }
+    setModeSelection(val);
+  };
+
+  const onDonePress = () => {
+    Keyboard.dismiss();
+    const checkValid = checkValidation();
+    if (checkValid) {
+      if (BLEService.deviceGeneration == 'gen1') {
+        onDonePressGen1();
+      } else if (BLEService.deviceGeneration == 'gen2') {
+        onDonePressGen2();
+      } else if (BLEService.deviceGeneration == 'gen3') {
+        // Code need to be implemented
+      } else if (BLEService.deviceGeneration == 'gen4') {
+        // Code need to be implemented
+      }
     }
   };
 
-  const onDonePress = async () => {
-    Keyboard.dismiss();
+  const onDonePressGen1 = async () => {
     var params = [];
-    const checkValid = checkValidation();
-    if (checkValid) {
-      if (
-        activationModeTypeOld != activationModeType ||
-        activationModeSecOld != activationModeSec
-      ) {
+    const dateFormat = 'YYMMDDHHmm';
+
+    // consoleLog('onDonePressGen1', {
+    //   old: settingsData?.modeSelection?.value,
+    //   modeSelection,
+    //   activationModeSecOld,
+    //   activationModeSec,
+    // });
+    // return false;
+
+    if (
+      settingsData?.modeSelection?.value != modeSelection ||
+      activationModeSecOld != activationModeSec
+    ) {
+      params.push({
+        name: 'modeSelection',
+        serviceUUID: BLE_CONSTANTS.GEN1.MODE_SELECTION_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.MODE_SELECTION_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.modeSelection?.value,
+        newValue: modeSelection,
+      });
+
+      params.push({
+        name: 'modeSelectionDate',
+        serviceUUID: BLE_CONSTANTS.GEN1.MODE_SELECTION_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.MODE_SELECTION_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      });
+      params.push({
+        name: 'modeSelectionPhone',
+        serviceUUID: BLE_CONSTANTS.GEN1.MODE_SELECTION_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.MODE_SELECTION_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.contact ?? '0123456789',
+      });
+    }
+
+    if (
+      settingsData?.modeSelection?.value != modeSelection ||
+      activationModeSecOld != activationModeSec
+    ) {
+      if (modeSelection == '0') {
         params.push({
-          serviceUUID: characteristicMain?.serviceUUID,
-          characteristicUUID: characteristicMain?.uuid,
-          oldValue: base64EncodeDecode(activationModeTypeOld),
-          newValue: base64EncodeDecode(activationModeType),
+          name: 'onDemand',
+          serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_CHARACTERISTIC_UUID,
+          oldValue: settingsData?.modeSelection?.value,
+          newValue: activationModeSec,
         });
 
-        const dateSettingResponse = hasDateSetting(deviceStaticDataMain);
-        if (!isObjectEmpty(dateSettingResponse)) {
-          params.push({
-            ...dateSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
+        params.push({
+          name: 'onDemandDate',
+          serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_DATE_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_DATE_CHARACTERISTIC_UUID,
+          oldValue: null,
+          newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        });
+        params.push({
+          name: 'onDemandPhone',
+          serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_CHARACTERISTIC_UUID,
+          oldValue: null,
+          newValue: user?.contact ?? '0123456789',
+        });
+      } else if (modeSelection == '1') {
+        params.push({
+          name: 'metered',
+          serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN1.METERED_RUNTIME_CHARACTERISTIC_UUID,
+          oldValue: settingsData?.modeSelection?.value,
+          newValue: activationModeSec,
+        });
 
-        const phoneSettingResponse = hasPhoneSetting(
-          deviceStaticDataMain,
-          user,
-        );
-        if (!isObjectEmpty(phoneSettingResponse)) {
-          params.push({
-            ...phoneSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
+        params.push({
+          name: 'meteredDate',
+          serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_DATE_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN1.METERED_RUNTIME_DATE_CHARACTERISTIC_UUID,
+          oldValue: null,
+          newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        });
+        params.push({
+          name: 'meteredPhone',
+          serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_CHARACTERISTIC_UUID,
+          oldValue: null,
+          newValue: user?.contact ?? '0123456789',
+        });
       }
-
-      if (
-        typeof deviceStaticDataMain?.UUIDMapped[activationModeType] !=
-        'undefined'
-      ) {
-        if (
-          activationModeSecOld != activationModeSec ||
-          activationModeTypeOld != activationModeType
-        ) {
-          const __characteristicRight =
-            await BLEService.readCharacteristicForDevice(
-              characteristicMain?.serviceUUID,
-              deviceStaticDataMain?.UUIDMapped[activationModeType],
-            );
-
-          // consoleLog(
-          //   'onDonePress __characteristicRight==>',
-          //   JSON.stringify(__characteristicRight),
-          // );
-
-          params.push({
-            serviceUUID: characteristicMain?.serviceUUID,
-            characteristicUUID: __characteristicRight?.uuid,
-            oldValue: base64EncodeDecode(activationModeSecOld),
-            newValue: base64EncodeDecode(activationModeSec),
-          });
-
-          const dateSettingResponse = hasDateSetting(deviceStaticDataRight);
-          if (!isObjectEmpty(dateSettingResponse)) {
-            params.push({
-              ...dateSettingResponse,
-              allowedInPreviousSetting: false,
-            });
-          }
-
-          const phoneSettingResponse = hasPhoneSetting(
-            deviceStaticDataRight,
-            user,
-          );
-          if (!isObjectEmpty(phoneSettingResponse)) {
-            params.push({
-              ...phoneSettingResponse,
-              allowedInPreviousSetting: false,
-            });
-          }
-
-          // consoleLog('activationModeSec params=======>', {
-          //   serviceUUID: characteristicMain?.serviceUUID,
-          //   characteristicUUID: __characteristicRight?.uuid,
-          //   oldValue: activationModeSecOld,
-          //   newValue: activationModeSec,
-          // });
-        }
-      }
-
-      if (params.length) {
-        dispatch(
-          deviceSettingsSuccessAction({
-            data: {ActivationMode: params},
-          }),
-        );
-      }
-      // deviceSettingsData
-      setTimeout(() => {
-        NavigationService.goBack();
-      }, 100);
     }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {ActivationMode: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressGen2 = () => {
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
   };
 
   /**validation checking for email */
   const checkValidation = () => {
     const min = 3;
-    const max = activationModeType == '1' ? 120 : 1200;
+    const max = modeSelection == '1' ? 120 : 1200;
     if (activationModeSec.trim() === '') {
       showSimpleAlert('Please enter timeout in seconds');
       return false;
@@ -235,13 +299,13 @@ const Index = ({navigation, route}: any) => {
                 autoMargin={false}
                 style={[styles.col, {width: 200, alignSelf: 'center'}]}>
                 <Toggle
-                  selected={activationModeType}
+                  selected={modeSelection}
                   options={[
                     {name: 'On Demand', value: '0'},
                     {name: 'Metered', value: '1'},
                   ]}
-                  onSelect={(val: string) => {
-                    __setActivationModeType(val);
+                  onSelect={(response: any) => {
+                    handleActivationModeType(response?.value);
                   }}
                 />
               </Wrap>
@@ -251,7 +315,7 @@ const Index = ({navigation, route}: any) => {
               <Typography
                 size={12}
                 text={`${
-                  activationModeType == '0'
+                  modeSelection == '0'
                     ? `Set on demand timeout between\n3 and 1200 seconds`
                     : `Set meter timeout between\n3 and 120 seconds`
                 }`}

@@ -1,72 +1,58 @@
-import React, {Component, Fragment, useEffect, useState} from 'react';
-import {View, StyleSheet, Image, StatusBar, Keyboard} from 'react-native';
-import Theme, {Layout} from 'src/theme';
-import {Images} from 'src/assets';
+import React, {useEffect, useState} from 'react';
+import {Keyboard} from 'react-native';
+import Theme from 'src/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  consoleLog,
-  getImgSource,
+  parseDateTimeInFormat,
   showSimpleAlert,
-  showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
-import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import AppInfo from 'src/components/@ProjectComponent/AppInfo';
-import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
-import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import Loader from 'src/components/Loader';
 import Input from 'src/components/Input';
-import Toggle from 'src/components/Toggle';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import {constants} from 'src/common';
-import {
-  getSensorRange,
-  getSensorRangeRangeArr,
-  getSensorRangeSec,
-} from './helper';
 import {BLEService} from 'src/services/BLEService/BLEService';
 import {SensorRangeProps} from './types';
-import {result} from 'lodash';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
-import {hasDateSetting, hasPhoneSetting} from 'src/utils/Helpers/project';
-import {isObjectEmpty} from 'src/utils/Helpers/array';
+import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+
+const defaultSensorRangeConfig = {min: 1, max: 5, step: 1};
 
 const Index = ({navigation, route}: any) => {
-  // const {referrer} = route?.params || {referrer: undefined};
-  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
-
+  const {user} = useSelector((state: any) => state?.AuthReducer);
+  const {deviceSettingsData} = useSelector(
+    (state: any) => state?.DeviceSettingsReducer,
+  );
   const {
     referrer,
-    setting,
-    deviceStaticDataMain,
-    characteristicMain,
-    deviceStaticDataRight,
-    characteristicRight,
-    deviceStaticDataRight2,
-    characteristicRight2,
+    settings,
+    settingsData,
+    // deviceStaticDataMain,
+    // characteristicMain,
+    // deviceStaticDataRight,
+    // characteristicRight,
+    // deviceStaticDataRight2,
+    // characteristicRight2,
   } = route?.params;
 
-  const sensorRangeSecOld = getSensorRangeSec(characteristicMain);
-  const [sensorRangeSec, setSensorRangeSec] = useState(sensorRangeSecOld);
-
-  const [sensorRange, setSensorRange] = useState<SensorRangeProps>(
-    getSensorRange(deviceStaticDataMain),
+  const [sensorRange, setSensorRange] = useState('');
+  const [sensorRangeOld, setSensorRangeOld] = useState('');
+  const [sensorRangeConfig, setSensorRangeConfig] = useState<SensorRangeProps>(
+    settingsData?.sensorRangeConfig ?? defaultSensorRangeConfig,
   );
-  const [sliderOneValue, setSliderOneValue] = React.useState(
-    getSensorRangeRangeArr(characteristicMain),
-  );
+  const [sliderOneValue, setSliderOneValue] = React.useState([1]);
 
   // const sliderOneValuesChangeStart = () => setSliderOneChanging(true);
   const sliderOneValuesChange = (values: any) => {
     setSliderOneValue(values);
-    if (Array.isArray(values) && values.length > 0) {
-      setSensorRangeSec(values[0]?.toString());
+    if (Array.isArray(values) && values?.length > 0) {
+      setSensorRange(values?.[0]?.toString());
     }
   };
   // const sliderOneValuesChangeFinish = () => setSliderOneChanging(false);
@@ -74,69 +60,104 @@ const Index = ({navigation, route}: any) => {
   useEffect(() => {
     // consoleLog('SensorRange==>', {
     //   referrer,
-    //   setting,
-    //   deviceStaticDataMain,
-    //   characteristicMain,
-    //   deviceStaticDataRight,
-    //   characteristicRight,
-    //   deviceStaticDataRight2,
-    //   characteristicRight2,
+    //   settings,
+    //   settingsData,
     // });
+    initlizeApp();
   }, []);
 
-  const onDonePress = async () => {
+  const initlizeApp = async () => {
+    let __sensorRange = settingsData?.sensorRange?.value ?? '';
+
+    // Handle unsaved value which were changed
+    const resultObj = findObject(
+      'sensorRange',
+      deviceSettingsData?.ActivationMode,
+      {
+        searchKey: 'name',
+      },
+    );
+
+    if (!isObjectEmpty(resultObj)) {
+      __sensorRange = resultObj?.newValue;
+    }
+    // setSensorRangeOld(__sensorRange);
+    setSensorRange(__sensorRange);
+    setSliderOneValue([Number(__sensorRange)]);
+  };
+
+  const onDonePress = () => {
     Keyboard.dismiss();
-    var params = [];
     const checkValid = checkValidation();
     if (checkValid) {
-      if (sensorRangeSecOld != sensorRangeSec) {
-        params.push({
-          serviceUUID: characteristicMain?.serviceUUID,
-          characteristicUUID: characteristicMain?.uuid,
-          oldValue: base64EncodeDecode(sensorRangeSecOld),
-          newValue: base64EncodeDecode(sensorRangeSec),
-        });
-        const dateSettingResponse = hasDateSetting(deviceStaticDataMain);
-        if (!isObjectEmpty(dateSettingResponse)) {
-          params.push({
-            ...dateSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
-
-        const phoneSettingResponse = hasPhoneSetting(
-          deviceStaticDataMain,
-          user,
-        );
-        if (!isObjectEmpty(phoneSettingResponse)) {
-          params.push({
-            ...phoneSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
+      if (BLEService.deviceGeneration == 'gen1') {
+        onDonePressGen1();
+      } else if (BLEService.deviceGeneration == 'gen2') {
+        onDonePressGen2();
+      } else if (BLEService.deviceGeneration == 'gen3') {
+        // Code need to be implemented
+      } else if (BLEService.deviceGeneration == 'gen4') {
+        // Code need to be implemented
       }
-
-      if (params.length) {
-        dispatch(
-          deviceSettingsSuccessAction({
-            data: {SensorRange: params},
-          }),
-        );
-      }
-
-      NavigationService.goBack();
     }
+  };
+
+  const onDonePressGen1 = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.sensorRange?.value != sensorRange) {
+      params.push({
+        name: 'sensorRange',
+        serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.sensorRange?.value,
+        newValue: sensorRange,
+      });
+
+      // params.push({
+      //   name: 'sensorRangeDate',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_SERVICE_UUID,
+      //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      // });
+      // params.push({
+      //   name: 'sensorRangePhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_SERVICE_UUID,
+      //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.contact ?? '0123456789',
+      // });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {SensorRange: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressGen2 = () => {
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
   };
 
   /**validation checking for email */
   const checkValidation = () => {
-    if (sensorRangeSec.trim() === '') {
+    if (sensorRange.trim() === '') {
       showSimpleAlert('Please select sensor range');
       return false;
-    } else if (Number(sensorRangeSec) < 1) {
+    } else if (Number(sensorRange) < 1) {
       showSimpleAlert('Sensor range seconds can`t be less than 1');
       return false;
-    } else if (Number(sensorRangeSec) > 5) {
+    } else if (Number(sensorRange) > 5) {
       showSimpleAlert('Sensor range seconds can`t be greater than 5');
       return false;
     } else {
@@ -171,9 +192,9 @@ const Index = ({navigation, route}: any) => {
               <Input
                 onRef={input => {
                   // @ts-ignore
-                  sensorRangeSecTextInputRef = input;
+                  sensorRangeTextInputRef = input;
                 }}
-                onChangeText={text => setSensorRangeSec(text)}
+                onChangeText={text => setSensorRange(text)}
                 onSubmitEditing={() => {
                   // @ts-ignore
                   Keyboard.dismiss();
@@ -182,7 +203,7 @@ const Index = ({navigation, route}: any) => {
                 blurOnSubmit={false}
                 keyboardType="numeric"
                 placeholder=""
-                value={sensorRangeSec}
+                value={sensorRange}
                 editable={false}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.textInput}
@@ -195,9 +216,9 @@ const Index = ({navigation, route}: any) => {
               <MultiSlider
                 values={sliderOneValue}
                 snapped={true}
-                min={sensorRange.min}
-                max={sensorRange.max}
-                step={sensorRange.step}
+                min={sensorRangeConfig?.min}
+                max={sensorRangeConfig?.max}
+                step={sensorRangeConfig?.step}
                 // enableLabel={true}
                 sliderLength={constants.screenWidth - 120}
                 // onValuesChangeStart={sliderOneValuesChangeStart}

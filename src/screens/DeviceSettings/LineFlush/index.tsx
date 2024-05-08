@@ -3,10 +3,9 @@ import {Keyboard} from 'react-native';
 import Theme from 'src/theme';
 import {
   consoleLog,
+  parseDateTimeInFormat,
   showSimpleAlert,
-  showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
-import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -16,193 +15,230 @@ import AppContainer from 'src/components/AppContainer';
 import Input from 'src/components/Input';
 import Toggle from 'src/components/Toggle';
 import {BLEService} from 'src/services/BLEService/BLEService';
-import {getFlushTypeType, getFlushTypeValue} from './helper';
 import {useDispatch, useSelector} from 'react-redux';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
-import {isObjectEmpty} from 'src/utils/Helpers/array';
-import {hasDateSetting, hasPhoneSetting} from 'src/utils/Helpers/project';
+import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const Index = ({navigation, route}: any) => {
-  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
-  const {
-    referrer,
-    setting,
-    deviceStaticDataMain,
-    characteristicMain,
-    deviceStaticDataRight,
-    characteristicRight,
-    deviceStaticDataRight2,
-    characteristicRight2,
-  } = route?.params;
-
-  const lineFlushTypeOld = getFlushTypeType(
-    characteristicMain,
-    deviceStaticDataMain,
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
+  const {deviceSettingsData} = useSelector(
+    (state: any) => state?.DeviceSettingsReducer,
   );
-  const lineFlushTimeOld = getFlushTypeValue(characteristicRight);
-  const lineFlushIntervalOld = getFlushTypeValue(characteristicRight2);
 
-  const [lineFlushType, setFlushTypeType] = useState(lineFlushTypeOld);
-  const [lineFlushTime, setFlushSecTime] = useState(lineFlushTimeOld);
-  const [lineFlushInterval, setFlushInterval] = useState(lineFlushIntervalOld);
+  const {referrer, settings, settingsData} = route?.params;
 
+  const [flush, setFlush] = useState<any>('');
+  const [flushTime, setFlushTime] = useState<any>('');
+  const [flushInterval, setFlushInterval] = useState<any>('');
+
+  /** component hooks method */
   useEffect(() => {
-    // consoleLog('LineFlush==>', {
-    //   referrer,
-    //   setting,
-    //   deviceStaticDataMain,
-    //   characteristicMain,
-    //   deviceStaticDataRight,
-    //   characteristicRight,
-    //   deviceStaticDataRight2,
-    //   characteristicRight2,
-    // });
+    // consoleLog('DeviceSettingsList deviceSettingsData', deviceSettingsData);
+    initlizeApp();
   }, []);
 
-  const onDonePress = async () => {
+  /**
+   * initlizeApp
+   * @returns value
+   */
+  const initlizeApp = async () => {
+    let __flush = settingsData?.flush?.value ?? '';
+    let __flushTime = settingsData?.flushTime?.value ?? '';
+    let __flushInterval = settingsData?.flushInterval?.value ?? '';
+
+    consoleLog('initlizeApp==>', {
+      __flush,
+      __flushTime,
+      __flushInterval,
+    });
+    // Handle unsaved value which were changed
+    const resultObj = findObject('flush', deviceSettingsData?.LineFlush, {
+      searchKey: 'name',
+    });
+    // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
+
+    if (!isObjectEmpty(resultObj)) {
+      __flush = resultObj?.newValue;
+    }
+
+    const resultObj2 = findObject('flushTime', deviceSettingsData?.LineFlush, {
+      searchKey: 'name',
+    });
+    if (!isObjectEmpty(resultObj)) {
+      __flushTime = resultObj2?.newValue;
+    }
+    const resultObj3 = findObject(
+      'flushInterval',
+      deviceSettingsData?.LineFlush,
+      {
+        searchKey: 'name',
+      },
+    );
+    if (!isObjectEmpty(resultObj3)) {
+      __flushInterval = resultObj3?.newValue;
+    }
+
+    setFlush(__flush);
+    setFlushTime(__flushTime);
+    setFlushInterval(__flushInterval);
+  };
+
+  const onDonePress = () => {
     Keyboard.dismiss();
-    var params = [];
     const checkValid = checkValidation();
     if (checkValid) {
-      // consoleLog('LineFlush onDonePress==>', {
-      //   lineFlushTypeOld,
-      //   lineFlushType,
-      //   lineFlushTimeOld,
-      //   lineFlushTime,
-      //   lineFlushIntervalOld,
-      //   lineFlushInterval,
-      // });
-      if (
-        lineFlushTypeOld != lineFlushType ||
-        lineFlushTimeOld != lineFlushTime ||
-        lineFlushIntervalOld != lineFlushInterval
-      ) {
-        params.push({
-          serviceUUID: characteristicMain?.serviceUUID,
-          characteristicUUID: characteristicMain?.uuid,
-          oldValue: base64EncodeDecode(lineFlushTypeOld),
-          newValue: base64EncodeDecode(lineFlushType),
-        });
-
-        const dateSettingResponse = hasDateSetting(deviceStaticDataMain);
-        if (!isObjectEmpty(dateSettingResponse)) {
-          params.push({
-            ...dateSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
-
-        const phoneSettingResponse = hasPhoneSetting(
-          deviceStaticDataMain,
-          user,
-        );
-        if (!isObjectEmpty(phoneSettingResponse)) {
-          params.push({
-            ...phoneSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
+      if (BLEService.deviceGeneration == 'gen1') {
+        onDonePressGen1();
+      } else if (BLEService.deviceGeneration == 'gen2') {
+        onDonePressGen2();
+      } else if (BLEService.deviceGeneration == 'gen3') {
+        // Code need to be implemented
+      } else if (BLEService.deviceGeneration == 'gen4') {
+        // Code need to be implemented
       }
-
-      if (
-        lineFlushType == '1' &&
-        typeof deviceStaticDataMain?.UUIDMapped != 'undefined' &&
-        typeof deviceStaticDataMain?.UUIDMapped[lineFlushType] != 'undefined' &&
-        lineFlushTimeOld != lineFlushTime
-      ) {
-        params.push({
-          serviceUUID: characteristicMain?.serviceUUID,
-          characteristicUUID: characteristicRight?.uuid,
-          oldValue: base64EncodeDecode(lineFlushTimeOld),
-          newValue: base64EncodeDecode(lineFlushTime),
-        });
-
-        const dateSettingResponse = hasDateSetting(deviceStaticDataRight);
-        if (!isObjectEmpty(dateSettingResponse)) {
-          params.push({
-            ...dateSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
-
-        const phoneSettingResponse = hasPhoneSetting(
-          deviceStaticDataRight,
-          user,
-        );
-        if (!isObjectEmpty(phoneSettingResponse)) {
-          params.push({
-            ...phoneSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
-      }
-
-      if (
-        lineFlushType == '1' &&
-        typeof deviceStaticDataMain?.UUIDMapped != 'undefined' &&
-        typeof deviceStaticDataMain?.UUIDMapped[lineFlushType] != 'undefined' &&
-        lineFlushIntervalOld != lineFlushInterval
-      ) {
-        params.push({
-          serviceUUID: characteristicMain?.serviceUUID,
-          characteristicUUID: characteristicRight2?.uuid,
-          oldValue: base64EncodeDecode(lineFlushIntervalOld),
-          newValue: base64EncodeDecode(lineFlushInterval),
-        });
-
-        const dateSettingResponse = hasDateSetting(deviceStaticDataRight2);
-        if (!isObjectEmpty(dateSettingResponse)) {
-          params.push({
-            ...dateSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
-
-        const phoneSettingResponse = hasPhoneSetting(
-          deviceStaticDataRight2,
-          user,
-        );
-        if (!isObjectEmpty(phoneSettingResponse)) {
-          params.push({
-            ...phoneSettingResponse,
-            allowedInPreviousSetting: false,
-          });
-        }
-      }
-
-      if (params.length) {
-        dispatch(
-          deviceSettingsSuccessAction({
-            data: {LineFlush: params},
-          }),
-        );
-      }
-      NavigationService.goBack();
     }
+  };
+
+  const onDonePressGen1 = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+
+    // consoleLog('onDonePressGen1', {
+    //   old: settingsData?.flush?.value,
+    //   flush,
+    //   activationModeSecOld,
+    //   activationModeSec,
+    // });
+    // return false;
+
+    if (settingsData?.flush?.value != flush) {
+      params.push({
+        name: 'flush',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flush?.value,
+        newValue: flush,
+      });
+
+      params.push({
+        name: 'flushDate',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_DATE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      });
+      params.push({
+        name: 'flushPhone',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.contact ?? '0123456789',
+      });
+    }
+
+    if (
+      settingsData?.flush?.value != flush ||
+      settingsData?.flushTime?.value != flushTime
+    ) {
+      params.push({
+        name: 'flushTime',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_TIME_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_TIME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flushTime?.value,
+        newValue: flushTime,
+      });
+
+      params.push({
+        name: 'flushTimeDate',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_TIME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.FLUSH_TIME_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      });
+      params.push({
+        name: 'flushTimePhone',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_TIME_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.FLUSH_TIME_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.contact ?? '0123456789',
+      });
+    }
+
+    if (
+      settingsData?.flush?.value != flush ||
+      settingsData?.flushInterval?.value != flushInterval
+    ) {
+      params.push({
+        name: 'flushInterval',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flushInterval?.value,
+        newValue: flushInterval,
+      });
+
+      params.push({
+        name: 'flushIntervalDate',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      });
+      params.push({
+        name: 'flushIntervalPhone',
+        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.contact ?? '0123456789',
+      });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {LineFlush: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressGen2 = () => {
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
   };
 
   /**validation checking for email */
   const checkValidation = () => {
-    if (lineFlushType == '0') {
+    if (flush == '0') {
       return true;
     }
-    if (lineFlushTime.trim() === '') {
+    if (flushTime.trim() === '') {
       showSimpleAlert('Please enter timeout in seconds');
       return false;
-    } else if (Number(lineFlushTime) < 3) {
+    } else if (Number(flushTime) < 3) {
       showSimpleAlert('Timeout seconds can`t be less than 3');
       return false;
-    } else if (Number(lineFlushTime) > 1200) {
+    } else if (Number(flushTime) > 1200) {
       showSimpleAlert('Timeout seconds can`t be greater than 1200');
       return false;
-    } else if (lineFlushInterval.trim() === '') {
+    } else if (flushInterval.trim() === '') {
       showSimpleAlert('Please enter timeout in hours');
       return false;
-    } else if (Number(lineFlushInterval) < 0) {
+    } else if (Number(flushInterval) < 0) {
       showSimpleAlert('Interval hours can`t be less than 0');
       return false;
-    } else if (Number(lineFlushInterval) > 72) {
+    } else if (Number(flushInterval) > 72) {
       showSimpleAlert('Interval hours can`t be greater than 72');
       return false;
     } else {
@@ -230,19 +266,19 @@ const Index = ({navigation, route}: any) => {
                 autoMargin={false}
                 style={[styles.col, {width: 200, alignSelf: 'center'}]}>
                 <Toggle
-                  selected={lineFlushType}
+                  selected={flush}
                   options={[
                     {value: '0', name: 'OFF'},
                     {value: '1', name: 'ON'},
                   ]}
-                  onSelect={(val: any) => {
-                    setFlushTypeType(val);
+                  onSelect={(response: any) => {
+                    setFlush(response?.value);
                   }}
                 />
               </Wrap>
             </Wrap>
 
-            {lineFlushType == '1' && (
+            {flush == '1' && (
               <Wrap autoMargin={true} style={[styles.row, {marginTop: 40}]}>
                 <Typography
                   size={12}
@@ -259,7 +295,7 @@ const Index = ({navigation, route}: any) => {
                         // @ts-ignore
                         lineFlushTimeTextInputRef = input;
                       }}
-                      onChangeText={text => setFlushSecTime(text)}
+                      onChangeText={text => setFlushTime(text)}
                       onSubmitEditing={() => {
                         // @ts-ignore
                         lineFlushIntervalTextInputRef.focus();
@@ -268,7 +304,7 @@ const Index = ({navigation, route}: any) => {
                       blurOnSubmit={false}
                       keyboardType="numeric"
                       placeholder=""
-                      value={lineFlushTime}
+                      value={flushTime}
                       inputContainerStyle={styles.inputContainer}
                       inputStyle={styles.textInput}
                     />
@@ -305,7 +341,7 @@ const Index = ({navigation, route}: any) => {
                       blurOnSubmit={false}
                       keyboardType="numeric"
                       placeholder=""
-                      value={lineFlushInterval}
+                      value={flushInterval}
                       inputContainerStyle={styles.inputContainer}
                       inputStyle={styles.textInput}
                     />

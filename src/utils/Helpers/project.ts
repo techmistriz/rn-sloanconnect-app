@@ -20,7 +20,7 @@ import StorageService from 'src/services/StorageService/StorageService';
 import {consoleLog, parseDateTimeInFormat} from './HelperFunction';
 import {BLE_GATT_SERVICES} from '../StaticData/BLE_GATT_SERVICES';
 import BLE_CONSTANTS from '../StaticData/BLE_CONSTANTS';
-import { sha256Bytes } from 'react-native-sha256';
+import {sha256Bytes} from 'react-native-sha256';
 
 /**
  *
@@ -381,7 +381,6 @@ export const getTotalWaterUsase = async (
     // );
 
     if (flowRateDecodedValue) {
-
       const __activationsDuration =
         await BLEService.readCharacteristicForDevice(
           BLE_CONSTANTS.GEN1.ACTIVATION_DURATION_SERVICE_UUID,
@@ -430,8 +429,7 @@ export const getTotalWaterUsase = async (
 
 /**
  *
- * @param {*} param1
- * @param {*} param2
+ * @param {*} deviceSettingsData
  * @returns result
  */
 export const saveSettings = async (
@@ -460,7 +458,7 @@ export const saveSettings = async (
               await BLEService.writeCharacteristicWithResponseForDevice(
                 element?.serviceUUID,
                 element?.characteristicUUID,
-                base64EncodeDecode(element?.newValue, 'decode'),
+                element?.newValue,
               );
 
             promises.push(promise);

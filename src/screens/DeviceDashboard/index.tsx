@@ -44,10 +44,15 @@ import LineFlushList from 'src/components/@ProjectComponent/DeviceSettingsList/L
 import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {SearchBar} from 'react-native-screens';
 import {base64ToHex} from 'src/utils/Helpers/encryption';
-import {mappingDeviceDataIntegersGen2} from './helper';
+import {mappingDeviceDataIntegersGen2} from './helperGen2';
 import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
+import {
+  getActivitationModeSettings,
+  getFlowSettings,
+  getFlushSettings,
+  getSensorSettings,
+} from './helperGen1';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -73,6 +78,12 @@ const Index = ({navigation, route}: any) => {
   const [batteryLevel, setBatteryLevel] = useState<number>(0);
   const [totalWaterUsage, setTotalWaterUsage] = useState<number>(0);
   const [savedSettingsGen1, setSavedSettingsGen1] = useState<any>(0);
+
+  // New method
+  const [activationModeSettings, setActivationModeSettings] = useState<any>();
+  const [flushSettings, setFlushSettings] = useState<any>();
+  const [flowRateSettings, setFlowRateSettings] = useState<any>();
+  const [sensorSettings, setSensorSettings] = useState<any>();
 
   /** component hooks method */
   useEffect(() => {
@@ -122,6 +133,45 @@ const Index = ({navigation, route}: any) => {
     __getBatteryLevel();
     __getTotalWaterUsase();
     __getSavedSettingsGen1();
+    getActivitationModeSettings(deviceSettingsData)
+      .then(response => {
+        consoleLog(
+          'initlizeAppGen1 getActivitationModeSettings response==>',
+          response,
+        );
+        setActivationModeSettings(response);
+      })
+      .catch(error => {
+        consoleLog(
+          'initlizeAppGen1 getActivitationModeSettings error==>',
+          error,
+        );
+      });
+
+    getFlushSettings(deviceSettingsData)
+      .then(response => {
+        consoleLog('initlizeAppGen1 getFlushSettings response==>', response);
+        setFlushSettings(response);
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getFlushSettings error==>', error);
+      });
+    getSensorSettings(deviceSettingsData)
+      .then(response => {
+        consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
+        setSensorSettings(response);
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
+      });
+    getFlowSettings(deviceSettingsData)
+      .then(response => {
+        consoleLog('initlizeAppGen1 getFlowSettings response==>', response);
+        setFlowRateSettings(response);
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getFlowSettings error==>', error);
+      });
   };
 
   const initlizeAppGen2 = async () => {
@@ -174,76 +224,6 @@ const Index = ({navigation, route}: any) => {
 
     BLEService.characteristicMonitorDeviceDataIntegersMapped =
       mappingDeviceDataIntegersGen2Response;
-  };
-
-  const experimental = () => {
-    // Experimental areas
-    // await BLEService.discoverAllServicesAndCharacteristicsForDevice();
-
-    // BLEService.disconnectDeviceById('00:0B:57:6E:87:31');
-    // consoleLog('initialize AllServicesChar==>', JSON.stringify(AllServicesChar));
-    // MA== (0) default
-    // MQ== (1)
-    const serviceuuid = 'd0aba888-fb10-4dc9-9b17-bdd8f490c920';
-    const charuuid = 'd0aba888-fb10-4dc9-9b17-bdd8f490c921';
-
-    // Battery
-    // const serviceuuid = '0000180f-0000-1000-8000-00805f9b34fb';
-    // const charuuid = '00002a19-0000-1000-8000-00805f9b34fb';
-
-    // const AllServicesChar =
-    //   await BLEService.discoverAllServicesAndCharacteristicsForDevice();
-    // consoleLog('initialize AllServicesChar==>', JSON.stringify(AllServicesChar));
-
-    // const AllServices = await BLEService.getServicesForDevice();
-    // consoleLog('initialize AllServices2==>', JSON.stringify(AllServices));
-
-    // const getCharacteristicsForDevice =
-    //   await BLEService.getCharacteristicsForDevice(serviceuuid);
-    // consoleLog(
-    //   'initialize getCharacteristicsForDevice==>',
-    //   JSON.stringify(getCharacteristicsForDevice),
-    // );
-
-    // const readCharacteristicForDevice =
-    //   await BLEService.readCharacteristicForDevice(serviceuuid, charuuid);
-    // consoleLog(
-    //   'initialize readCharacteristicForDevice2==>',
-    //   JSON.stringify(readCharacteristicForDevice),
-    // );
-
-    // const writeCharacteristicWithResponseForDevice =
-    //   await BLEService.writeCharacteristicWithResponseForDevice(
-    //     serviceuuid,
-    //     charuuid,
-    //     '0',
-    //   );
-    // consoleLog(
-    //   'initialize writeCharacteristicWithResponseForDevice==>',
-    //   JSON.stringify(writeCharacteristicWithResponseForDevice),
-    // );
-
-    const serviceuui1 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
-    const charuuid1 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c943';
-    const descptr1 = '00002901-0000-1000-8000-00805f9b34fb';
-
-    // const getDescriptorsForDevice = await BLEService.getDescriptorsForDevice(
-    //   serviceuui1,
-    //   charuuid1,
-    // );
-    // consoleLog(
-    //   'initialize getDescriptorsForDevice==>',
-    //   JSON.stringify(getDescriptorsForDevice),
-    // );
-    // const readDescriptorForDevice = await BLEService.readDescriptorForDevice(
-    //   serviceuui1,
-    //   charuuid1,
-    //   descptr1,
-    // );
-    // consoleLog(
-    //   'initialize readDescriptorForDevice==>',
-    //   JSON.stringify(readDescriptorForDevice),
-    // );
   };
 
   const __getBatteryLevel = async () => {
@@ -739,58 +719,55 @@ const Index = ({navigation, route}: any) => {
 
             <Wrap autoMargin={false}>
               <ActivationModeList
-                setting={{
-                  id: 1,
+                settings={{
                   title: 'Activation Mode',
                   route: 'ActivationMode',
-                  serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c943',
                   name: 'ActivationMode',
                 }}
+                settingsData={activationModeSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
               />
 
               <LineFlushList
-                setting={{
-                  id: 2,
+                settings={{
                   title: 'Line Flush',
                   route: 'LineFlush',
+                  name: 'LineFlush',
                   serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
                   characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
-                  name: 'LineFlush',
                 }}
+                settingsData={flushSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
               />
 
               <FlowRateList
-                setting={{
-                  id: 3,
+                settings={{
                   title: 'Confirm Flow Rate',
-                  // subTitle: 'Galons Per Minute',
                   route: 'FlowRate',
-                  serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
                   name: 'FlowRate',
+                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
                 }}
+                settingsData={flowRateSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
               />
 
               <SensorRangeList
-                setting={{
-                  id: 4,
+                settings={{
                   title: 'Sensor Range',
-                  subTitle: 'Units',
-                  route: 'SensorRange',
-                  serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c942',
                   name: 'SensorRange',
+                  route: 'SensorRange',
+                  sensorRangeConfig: {min: 1, max: 5, step: 1},
+                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c942',
                 }}
+                settingsData={sensorSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
