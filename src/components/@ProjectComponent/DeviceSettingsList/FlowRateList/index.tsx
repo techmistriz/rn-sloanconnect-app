@@ -58,7 +58,7 @@ DeviceSettingListProps) => {
     const resultObj = findObject('flowRate', deviceSettingsData?.FlowRate, {
       searchKey: 'name',
     });
-    consoleLog('__flowRate resultObj==>', resultObj);
+    // consoleLog('__flowRate resultObj==>', resultObj);
 
     if (!isObjectEmpty(resultObj)) {
       __flowRate = resultObj?.newValue;

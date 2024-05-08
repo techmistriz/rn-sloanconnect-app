@@ -1,46 +1,44 @@
 {
-  "ActivationMode": [
-    {
-      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
-      "name": "modeSelection",
-      "newValue": "1",
-      "oldValue": "1",
-      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
-    },
-    {
-      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c923",
-      "name": "modeSelectionDate",
-      "newValue": "2405081647",
-      "oldValue": null,
-      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
-    },
-    {
-      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c92B",
-      "name": "modeSelectionPhone",
-      "newValue": "0123456789",
-      "oldValue": null,
-      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
-    },
-    {
-      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c944",
-      "name": "metered",
-      "newValue": "100",
-      "oldValue": "1",
-      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
-    },
-    {
-      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c924",
-      "name": "meteredDate",
-      "newValue": "MjQwNTA4MTY0Nw==",
-      "oldValue": null,
-      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
-    },
-    {
-      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c92C",
-      "name": "meteredPhone",
-      "newValue": "MDEyMzQ1Njc4OQ==",
-      "oldValue": null,
-      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
-    }
-  ]
+  "metered": {
+    "deviceID": "00:0B:57:6E:87:31",
+    "id": 95,
+    "isIndicatable": false,
+    "isNotifiable": false,
+    "isNotifying": false,
+    "isReadable": true,
+    "isWritableWithResponse": true,
+    "isWritableWithoutResponse": false,
+    "serviceID": 88,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c944",
+    "value": "105"
+  },
+  "modeSelection": {
+    "deviceID": "00:0B:57:6E:87:31",
+    "id": 93,
+    "isIndicatable": false,
+    "isNotifiable": false,
+    "isNotifying": false,
+    "isReadable": true,
+    "isWritableWithResponse": true,
+    "isWritableWithoutResponse": false,
+    "serviceID": 88,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
+    "value": "1"
+  },
+  "onDemand": {
+    "deviceID": "00:0B:57:6E:87:31",
+    "id": 97,
+    "isIndicatable": false,
+    "isNotifiable": false,
+    "isNotifying": false,
+    "isReadable": true,
+    "isWritableWithResponse": true,
+    "isWritableWithoutResponse": false,
+    "serviceID": 88,
+    "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c945",
+    "value": "900"
+  }
 }

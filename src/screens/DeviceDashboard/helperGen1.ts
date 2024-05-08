@@ -6,7 +6,7 @@ import {cleanCharacteristic} from 'src/utils/Helpers/project';
 import {base64EncodeDecode, base64ToText} from 'src/utils/Helpers/encryption';
 
 /** Function comments */
-export const getActivitationModeSettings = async (
+export const getActivationModeSettings = async (
   unsavedDeviceSettingsData: any,
 ) => {
   const results = {
@@ -21,7 +21,7 @@ export const getActivitationModeSettings = async (
   );
 
   // consoleLog(
-  //   'getActivitationModeSettings modeSelectionResponse==>',
+  //   'getActivationModeSettings modeSelectionResponse==>',
   //   JSON.stringify(modeSelectionResponse),
   // );
 
@@ -36,7 +36,7 @@ export const getActivitationModeSettings = async (
   );
 
   // consoleLog(
-  //   'getActivitationModeSettings meteredResponse==>',
+  //   'getActivationModeSettings meteredResponse==>',
   //   JSON.stringify(meteredResponse),
   // );
 
@@ -46,12 +46,12 @@ export const getActivitationModeSettings = async (
   }
 
   const onDemandResponse = await BLEService.readCharacteristicForDevice(
-    BLE_CONSTANTS.GEN1.METERED_RUNTIME_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.METERED_RUNTIME_CHARACTERISTIC_UUID,
+    BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_SERVICE_UUID,
+    BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
-  //   'getActivitationModeSettings onDemandResponse==>',
+  //   'getActivationModeSettings onDemandResponse==>',
   //   JSON.stringify(onDemandResponse),
   // );
 
@@ -77,7 +77,7 @@ export const getFlushSettings = async (unsavedDeviceSettingsData: any) => {
   );
 
   // consoleLog(
-  //   'getActivitationModeSettings flushResponse==>',
+  //   'getFlushSettings flushResponse==>',
   //   JSON.stringify(flushResponse),
   // );
 
@@ -92,7 +92,7 @@ export const getFlushSettings = async (unsavedDeviceSettingsData: any) => {
   );
 
   // consoleLog(
-  //   'getActivitationModeSettings flushTimeResponse==>',
+  //   'getFlushSettings flushTimeResponse==>',
   //   JSON.stringify(flushTimeResponse),
   // );
 
@@ -107,7 +107,7 @@ export const getFlushSettings = async (unsavedDeviceSettingsData: any) => {
   );
 
   // consoleLog(
-  //   'getActivitationModeSettings flushIntervalResponse==>',
+  //   'getFlushSettings flushIntervalResponse==>',
   //   JSON.stringify(flushIntervalResponse),
   // );
 
@@ -131,7 +131,7 @@ export const getFlowSettings = async (unsavedDeviceSettingsData: any) => {
   );
 
   // consoleLog(
-  //   'getSensorSettings flowRateResponse==>',
+  //   'getFlowSettings flowRateResponse==>',
   //   JSON.stringify(flowRateResponse),
   // );
 

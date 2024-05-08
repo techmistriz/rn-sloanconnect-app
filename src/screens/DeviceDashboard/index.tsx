@@ -48,7 +48,7 @@ import {base64ToHex} from 'src/utils/Helpers/encryption';
 import {mappingDeviceDataIntegersGen2} from './helperGen2';
 import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
 import {
-  getActivitationModeSettings,
+  getActivationModeSettings,
   getFlowSettings,
   getFlushSettings,
   getSensorSettings,
@@ -133,24 +133,24 @@ const Index = ({navigation, route}: any) => {
     __getBatteryLevel();
     __getTotalWaterUsase();
     __getSavedSettingsGen1();
-    getActivitationModeSettings(deviceSettingsData)
+    getActivationModeSettings(deviceSettingsData)
       .then(response => {
-        consoleLog(
-          'initlizeAppGen1 getActivitationModeSettings response==>',
-          response,
-        );
+        // consoleLog(
+        //   'initlizeAppGen1 getActivationModeSettings response==>',
+        //   response,
+        // );
+
+        // if (JSON.stringify(activationModeSettings) != JSON.stringify(response)) {
         setActivationModeSettings(response);
+        // }
       })
       .catch(error => {
-        consoleLog(
-          'initlizeAppGen1 getActivitationModeSettings error==>',
-          error,
-        );
+        consoleLog('initlizeAppGen1 getActivationModeSettings error==>', error);
       });
 
     getFlushSettings(deviceSettingsData)
       .then(response => {
-        consoleLog('initlizeAppGen1 getFlushSettings response==>', response);
+        // consoleLog('initlizeAppGen1 getFlushSettings response==>', response);
         setFlushSettings(response);
       })
       .catch(error => {
@@ -158,7 +158,7 @@ const Index = ({navigation, route}: any) => {
       });
     getSensorSettings(deviceSettingsData)
       .then(response => {
-        consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
+        // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
         setSensorSettings(response);
       })
       .catch(error => {
@@ -166,7 +166,7 @@ const Index = ({navigation, route}: any) => {
       });
     getFlowSettings(deviceSettingsData)
       .then(response => {
-        consoleLog('initlizeAppGen1 getFlowSettings response==>', response);
+        // consoleLog('initlizeAppGen1 getFlowSettings response==>', response);
         setFlowRateSettings(response);
       })
       .catch(error => {

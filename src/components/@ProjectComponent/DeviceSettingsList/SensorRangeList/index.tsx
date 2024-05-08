@@ -61,7 +61,7 @@ const DeviceSettingList = ({
         searchKey: 'name',
       },
     );
-    consoleLog('__sensorRange resultObj==>', deviceSettingsData);
+    // consoleLog('__sensorRange resultObj==>', deviceSettingsData);
 
     if (!isObjectEmpty(resultObj)) {
       __sensorRange = resultObj?.newValue;

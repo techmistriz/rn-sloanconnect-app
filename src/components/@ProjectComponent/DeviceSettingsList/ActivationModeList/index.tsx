@@ -30,13 +30,13 @@ const DeviceSettingList = ({
   const [onDemand, setOnDemand] = useState<any>('');
 
   /** component hooks method */
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      initlizeApp();
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     // initlizeApp();
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
   /** component hooks method */
   useEffect(() => {

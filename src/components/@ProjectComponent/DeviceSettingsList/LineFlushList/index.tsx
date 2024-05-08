@@ -30,13 +30,13 @@ const DeviceSettingList = ({
   const [flushInterval, setFlushInterval] = useState<any>('');
 
   /** component hooks method */
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      initlizeApp();
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     // initlizeApp();
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
   /** component hooks method */
   useEffect(() => {
@@ -53,11 +53,11 @@ const DeviceSettingList = ({
     let __flushTime = settingsData?.flushTime?.value ?? '';
     let __flushInterval = settingsData?.flushInterval?.value ?? '';
 
-    consoleLog('initlizeApp==>', {
-      __flush,
-      __flushTime,
-      __flushInterval,
-    });
+    // consoleLog('initlizeApp==>', {
+    //   __flush,
+    //   __flushTime,
+    //   __flushInterval,
+    // });
     // Handle unsaved value which were changed
     const resultObj = findObject('flush', deviceSettingsData?.LineFlush, {
       searchKey: 'name',

@@ -55,7 +55,7 @@ const Index = ({navigation, route}: any) => {
     //   settings,
     //   settingsData,
     // });
-    consoleLog('useEffect data==>', {modeSelection, onDemand, metered});
+    // consoleLog('useEffect data==>', {modeSelection, onDemand, metered});
     initlizeApp();
   }, []);
 
@@ -115,13 +115,15 @@ const Index = ({navigation, route}: any) => {
     setMetered(__metered);
   };
 
-  const handleActivationModeType = async (val: string) => {
+  const handleModeSelection = async (val: string) => {
+    // consoleLog('handleModeSelection val==>', {val, onDemand, metered});
+    setModeSelection(val);
+
     if (val == '0') {
       setActivationModeSec(onDemand);
     } else if (val == '1') {
       setActivationModeSec(metered);
     }
-    setModeSelection(val);
   };
 
   const onDonePress = () => {
@@ -305,7 +307,7 @@ const Index = ({navigation, route}: any) => {
                     {name: 'Metered', value: '1'},
                   ]}
                   onSelect={(response: any) => {
-                    handleActivationModeType(response?.value);
+                    handleModeSelection(response?.value);
                   }}
                 />
               </Wrap>
