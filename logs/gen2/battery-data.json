@@ -1,0 +1,228 @@
+{
+  "uuid": "8de47721-5496-4233-ae45-e4b306fe1184",
+  "name": "Real Time Data",
+  "size": "15 bytes",
+  "type": "string",
+  "range": null,
+  "initialValue": null,
+  "properties": ["R"],
+  "sloanApp": "",
+  "remarks": "",
+  "generation": "gen2",
+  "prefix": null,
+  "postfix": null,
+  "chunks": [
+    {
+      "meta": [
+        {
+          "name": "0x75",
+          "size": 1,
+          "position": 0,
+          "description": "Byte Position 0: Start Flag, Ox72 signals the start of Integers write payload."
+        },
+        {
+          "name": "LEN",
+          "size": 1,
+          "position": 2,
+          "description": "Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag)."
+        }
+      ],
+      "uuidData": [
+        {
+          "size": 5,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "Alert Flags", "size": 1, "type": "uint32_t"},
+          "value": {
+            "size": 1,
+            "dataFormat": "one alert per bit",
+            "type": "uint32_t",
+            "range": "0-256",
+            "initialValue": "0",
+            "properties": ["R"],
+            "whenToUpdate": "Reserved",
+            "remarks": "Alert 8-15",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 2
+          }
+        },
+        {
+          "size": 5,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "Alert Flags", "size": 1, "type": "uint32_t"},
+          "value": {
+            "size": 1,
+            "dataFormat": "one alert per bit",
+            "type": "uint32_t",
+            "range": "0-256",
+            "initialValue": "0",
+            "properties": ["R"],
+            "whenToUpdate": "Reserved",
+            "remarks": "Alert 8-15",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 0
+          }
+        },
+        {
+          "size": 5,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "Temperature", "size": 1, "type": "uint32_t"},
+          "value": {
+            "size": 1,
+            "dataFormat": "Number",
+            "type": "uint32_t",
+            "range": "0-0xFF",
+            "initialValue": "Latest Read",
+            "properties": ["R"],
+            "whenToUpdate": "every measurement",
+            "remarks": "measured 5s after each water activation, or every hour if no water activation",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 27
+          }
+        },
+        {
+          "size": 5,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "Battery Level %", "size": 1, "type": "uint32_t"},
+          "value": {
+            "size": 1,
+            "dataFormat": "Number",
+            "type": "uint32_t",
+            "range": "0-0x64",
+            "initialValue": "Latest Read",
+            "properties": ["R"],
+            "whenToUpdate": "Reserved",
+            "remarks": "measured every second",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 95
+          }
+        },
+        {
+          "size": 4,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "Water Usage", "size": 0, "type": "uint32_t"},
+          "value": {
+            "size": 4,
+            "dataFormat": "Number",
+            "type": "uint32_t",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R"],
+            "whenToUpdate": "",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 0
+          }
+        },
+        {
+          "size": 1,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "0xFF", "size": 0, "type": "uint32_t"},
+          "value": {
+            "size": 1,
+            "dataFormat": "Number",
+            "type": "uint32_t",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R"],
+            "whenToUpdate": "",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 0
+          }
+        },
+        {
+          "size": 1,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "0xFF", "size": 0, "type": "uint32_t"},
+          "value": {
+            "size": 1,
+            "dataFormat": "Number",
+            "type": "uint32_t",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R"],
+            "whenToUpdate": "",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 30
+          }
+        },
+        {
+          "size": 1,
+          "displayInList": true,
+          "position": 0,
+          "name": {
+            "name": "External Power Status",
+            "size": 0,
+            "type": "uint32_t"
+          },
+          "value": {
+            "size": 1,
+            "dataFormat": "Number",
+            "type": "uint32_t",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R"],
+            "whenToUpdate": "",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 72
+          }
+        },
+        {
+          "size": 1,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "Range Change", "size": 0, "type": "uint32_t"},
+          "value": {
+            "size": 1,
+            "dataFormat": "Number",
+            "type": "uint32_t",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R"],
+            "whenToUpdate": "",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 255
+          }
+        },
+        {
+          "size": 1,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "EF", "size": 0, "type": "uint32_t"},
+          "value": {
+            "size": 1,
+            "dataFormat": "Number",
+            "type": "uint32_t",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R"],
+            "whenToUpdate": "",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": 255
+          }
+        }
+      ]
+    }
+  ]
+}

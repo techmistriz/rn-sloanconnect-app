@@ -56,7 +56,15 @@ class BLEServiceInstance {
 
   characteristicMonitorDeviceDataString: any;
 
-  characteristicMonitorDataCollectionInteger: any;
+  characteristicMonitorDeviceDataStringMapped: any;
+
+  characteristicMonitorDataCollection: any;
+
+  characteristicMonitorDataCollectionMapped: any;
+
+  characteristicMonitorRealTimeData: any;
+
+  characteristicMonitorRealTimeDataMapped: any;
 
   characteristicMonitor: Subscription | null;
 
@@ -65,6 +73,8 @@ class BLEServiceInstance {
   characteristicMonitorDeviceDataStringSubscriprion: Subscription | null;
 
   characteristicMonitorDataCollectionIntegerSubscriprion: Subscription | null;
+
+  characteristicMonitorRealTimeDataSubscriprion: Subscription | null;
 
   isCharacteristicMonitorDisconnectExpected = false;
 
@@ -78,11 +88,16 @@ class BLEServiceInstance {
     this.characteristicMonitorDeviceDataIntegers = [];
     this.characteristicMonitorDeviceDataIntegersMapped = [];
     this.characteristicMonitorDeviceDataString = [];
-    this.characteristicMonitorDataCollectionInteger = [];
+    this.characteristicMonitorDeviceDataStringMapped = [];
+    this.characteristicMonitorDataCollection = [];
+    this.characteristicMonitorDataCollectionMapped = [];
+    this.characteristicMonitorRealTimeData = [];
+    this.characteristicMonitorRealTimeDataMapped = [];
     this.characteristicMonitor = null;
     this.characteristicMonitorDeviceDataIntegersSubscriprion = null;
     this.characteristicMonitorDeviceDataStringSubscriprion = null;
     this.characteristicMonitorDataCollectionIntegerSubscriprion = null;
+    this.characteristicMonitorRealTimeDataSubscriprion = null;
     this.manager = new BleManager();
     this.manager.setLogLevel(LogLevel.Verbose);
   }

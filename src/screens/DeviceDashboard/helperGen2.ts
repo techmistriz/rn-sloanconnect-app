@@ -1,6 +1,3 @@
-import {BLEService} from 'src/services';
-import {sha256Bytes} from 'react-native-sha256';
-import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty, chunk} from 'src/utils/Helpers/array';
 import {hexToDecimal, addSeparatorInString} from 'src/utils/Helpers/encryption';
@@ -8,8 +5,8 @@ import {hexToDecimal, addSeparatorInString} from 'src/utils/Helpers/encryption';
 /** Function comments */
 export const mappingDeviceDataIntegersGen2 = async (
   __BLE_GATT_SERVICES: any,
-  __DEVICE_DATA_INTEGER_SERVICE_UUID: string,
-  __DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID: string,
+  __SERVICE_UUID: string,
+  __CHARACTERISTIC_UUID: string,
   __allPack: string[],
 ) => {
   var result: any = [];
@@ -19,8 +16,7 @@ export const mappingDeviceDataIntegersGen2 = async (
   );
   consoleLog('mappingDeviceDataIntegersGen2 __allPack==>', __allPack);
 
-  const __BLE_GATT_SERVICES_TMP =
-    __BLE_GATT_SERVICES?.[__DEVICE_DATA_INTEGER_SERVICE_UUID];
+  const __BLE_GATT_SERVICES_TMP = __BLE_GATT_SERVICES?.[__SERVICE_UUID];
   consoleLog(
     'mappingDeviceDataIntegersGen2 __BLE_GATT_SERVICES_TMP==>',
     __BLE_GATT_SERVICES_TMP,
@@ -30,9 +26,7 @@ export const mappingDeviceDataIntegersGen2 = async (
   }
 
   const __BLE_GATT_SERVICES_TMP2 =
-    __BLE_GATT_SERVICES_TMP?.characteristics?.[
-      __DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID
-    ];
+    __BLE_GATT_SERVICES_TMP?.characteristics?.[__CHARACTERISTIC_UUID];
   consoleLog(
     'mappingDeviceDataIntegersGen2 __BLE_GATT_SERVICES_TMP2==>',
     __BLE_GATT_SERVICES_TMP2,
@@ -134,5 +128,131 @@ export const mappingDeviceDataIntegersGen2 = async (
 
   result = __BLE_GATT_SERVICES_TMP2;
   consoleLog('mappingDeviceDataIntegersGen2 result==>', result);
+  return result;
+};
+
+/** Function comments */
+export const mappingRealTimeDataGen2 = async (
+  __BLE_GATT_SERVICES: any,
+  __SERVICE_UUID: string,
+  __CHARACTERISTIC_UUID: string,
+  __allPack: string[],
+) => {
+  var result: any = [];
+  consoleLog(
+    'mappingRealTimeDataGen2 __BLE_GATT_SERVICES==>',
+    __BLE_GATT_SERVICES,
+  );
+  consoleLog('mappingRealTimeDataGen2 __allPack==>', __allPack);
+
+  const __BLE_GATT_SERVICES_TMP = __BLE_GATT_SERVICES?.[__SERVICE_UUID];
+  consoleLog(
+    'mappingRealTimeDataGen2 __BLE_GATT_SERVICES_TMP==>',
+    __BLE_GATT_SERVICES_TMP,
+  );
+  if (isObjectEmpty(__BLE_GATT_SERVICES_TMP)) {
+    return result;
+  }
+
+  const __BLE_GATT_SERVICES_TMP2 =
+    __BLE_GATT_SERVICES_TMP?.characteristics?.[__CHARACTERISTIC_UUID];
+  consoleLog(
+    'mappingRealTimeDataGen2 __BLE_GATT_SERVICES_TMP2==>',
+    __BLE_GATT_SERVICES_TMP2,
+  );
+  if (isObjectEmpty(__BLE_GATT_SERVICES_TMP2)) {
+    return result;
+  }
+
+  // 0x72 LEN # of IDs 32
+  // 1 byte 1 byte 1 byte 1 byte
+  // ­Byte Position 0: Start Flag, Ox72 signals the start of Integers write payload.
+  // Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag).
+  // Byte Position 2: Integer value indicating how many Setting IDs to follow in Package.
+  // Byte Position 3: Integer value 32 indicates the Setting Value Size 32 = 32-bit size.
+
+  __allPack.forEach((element, index) => {
+    if (element != '71ff04') {
+      consoleLog('mappingRealTimeDataGen2 index==>', index);
+      consoleLog('mappingRealTimeDataGen2 element==>', element);
+      const __element = addSeparatorInString(element, 2, ' ');
+      consoleLog('mappingRealTimeDataGen2 __element==>', __element);
+      const __elementArr = __element.split(' ');
+
+      if (Array.isArray(__elementArr) && __elementArr?.[0] == '75') {
+        consoleLog('mappingRealTimeDataGen2 __elementArr==>', __elementArr);
+        const lengthHex = __elementArr[2];
+        const lengthDec = hexToDecimal(lengthHex);
+
+        consoleLog('mappingRealTimeDataGen2 hexToDecimal==>', lengthDec);
+
+        const __elementArrTmp = [...__elementArr];
+        __elementArrTmp.splice(0, 2);
+        consoleLog(
+          'mappingRealTimeDataGen2 __elementArrTmp==>',
+          __elementArrTmp,
+        );
+
+        const __elementArrTmpChunk = chunk(__elementArrTmp, 1);
+        // __elementArrTmpChunk.splice(-1);
+        consoleLog(
+          'mappingRealTimeDataGen2 __elementArrTmpChunk==>',
+          __elementArrTmpChunk,
+        );
+
+        const __uuidData = __BLE_GATT_SERVICES_TMP2?.chunks[index]?.uuidData;
+        consoleLog('mappingRealTimeDataGen2 __uuidData==>', __uuidData);
+
+        if (isObjectEmpty(__uuidData)) {
+          return false;
+        }
+
+        consoleLog(
+          'mappingRealTimeDataGen2 __elementArrTmpChunk.length==>',
+          __elementArrTmpChunk.length,
+        );
+        consoleLog(
+          'mappingRealTimeDataGen2 __uuidData.length==>',
+          __uuidData.length,
+        );
+
+        if (__elementArrTmpChunk.length < __uuidData.length) {
+          return false;
+        }
+
+        __elementArrTmpChunk.forEach((characteristic, __index) => {
+          consoleLog(
+            'mappingRealTimeDataGen2 characteristic==>',
+            characteristic,
+          );
+          const __characteristic = characteristic?.[0];
+          // __characteristic.splice(0, 1);
+          consoleLog(
+            'mappingRealTimeDataGen2 __characteristic==>',
+            __characteristic,
+          );
+          const __characteristicHex = __characteristic;
+          consoleLog(
+            'mappingRealTimeDataGen2 __characteristicHex==>',
+            __characteristicHex,
+          );
+          const __characteristicDec = hexToDecimal(__characteristicHex);
+          consoleLog(
+            'mappingRealTimeDataGen2 __characteristicDec==>',
+            __characteristicDec,
+          );
+
+          if (__uuidData?.[__index]?.value) {
+            __uuidData[__index].value.currentValue = __characteristicDec;
+          }
+        });
+
+        __BLE_GATT_SERVICES_TMP2.chunks[index].uuidData = __uuidData;
+      }
+    }
+  });
+
+  result = __BLE_GATT_SERVICES_TMP2;
+  // consoleLog('mappingRealTimeDataGen2 result==>', JSON.stringify(result));
   return result;
 };
