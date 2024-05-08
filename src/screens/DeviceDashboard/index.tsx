@@ -125,6 +125,7 @@ const Index = ({navigation, route}: any) => {
       initlizeAppGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       initlizeAppGen2();
+      // settingsMappingGen2();
     } else if (BLEService.deviceGeneration == 'gen3') {
       // Code need to be implemented
     } else if (BLEService.deviceGeneration == 'gen4') {
@@ -220,13 +221,126 @@ const Index = ({navigation, route}: any) => {
         BLEService.characteristicMonitorDeviceDataIntegers,
       );
 
-    consoleLog(
-      '__mappingDeviceDataIntegersGen2 mappingDeviceDataIntegersGen2Response==>',
-      mappingDeviceDataIntegersGen2Response,
-    );
+    // consoleLog(
+    //   '__mappingDeviceDataIntegersGen2 mappingDeviceDataIntegersGen2Response==>',
+    //   JSON.stringify(mappingDeviceDataIntegersGen2Response),
+    // );
 
     BLEService.characteristicMonitorDeviceDataIntegersMapped =
       mappingDeviceDataIntegersGen2Response;
+    __mappingSettingsData();
+  };
+
+  const __mappingSettingsData = () => {
+    const mappingDeviceDataIntegersGen2Response =
+      BLEService.characteristicMonitorDeviceDataIntegersMapped;
+
+    if (!isObjectEmpty(mappingDeviceDataIntegersGen2Response)) {
+      
+      // For Activation mode
+      var __activationModeSettings = {
+        modeSelection: {},
+        metered: {},
+        onDemand: {},
+      };
+
+      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[21]) {
+        __activationModeSettings.modeSelection = {
+          value:
+            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[21]?.value?.currentValue?.toString(),
+        };
+      }
+
+      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[22]) {
+        __activationModeSettings.metered = {
+          value:
+            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[22]?.value?.currentValue?.toString(),
+        };
+      }
+
+      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[23]) {
+        __activationModeSettings.onDemand = {
+          value:
+            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[23]?.value?.currentValue?.toString(),
+        };
+      }
+      // consoleLog(
+      //   'settingsMappingGen2 __activationModeSettings==>',
+      //   __activationModeSettings,
+      // );
+      if (__activationModeSettings) {
+        setActivationModeSettings(__activationModeSettings);
+      }
+
+      // For Line flush
+      var __flushSettings = {
+        flush: {},
+        flushTime: {},
+        flushInterval: {},
+      };
+
+      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[24]) {
+        __flushSettings.flush = {
+          value:
+            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[24]?.value?.currentValue?.toString(),
+        };
+      }
+
+      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[28]) {
+        __flushSettings.flushTime = {
+          value:
+            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[28]?.value?.currentValue?.toString(),
+        };
+      }
+
+      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[31]) {
+        __flushSettings.flushInterval = {
+          value:
+            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[31]?.value?.currentValue?.toString(),
+        };
+      }
+      // consoleLog('settingsMappingGen2 __flushSettings==>', __flushSettings);
+      if (__flushSettings) {
+        setFlushSettings(__flushSettings);
+      }
+
+      // For flowRateSettings
+      var __flowRateSettings = {
+        flowRate: {},
+      };
+
+      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[19]) {
+        __flowRateSettings.flowRate = {
+          value:
+            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[19]?.value?.currentValue?.toString(),
+        };
+      }
+
+      // consoleLog(
+      //   'settingsMappingGen2 __flowRateSettings==>',
+      //   __flowRateSettings,
+      // );
+      if (__flowRateSettings) {
+        setFlowRateSettings(__flowRateSettings);
+      }
+
+      // For sensorSettings
+      var __sensorSettings = {
+        sensorRange: {},
+      };
+
+      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[20]) {
+        __sensorSettings.sensorRange = {
+          value:
+            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[20]?.value?.currentValue?.toString(),
+        };
+      }
+
+      // consoleLog('settingsMappingGen2 __sensorSettings==>', __sensorSettings);
+      if (__sensorSettings) {
+        setSensorSettings(__sensorSettings);
+      }
+    }
   };
 
   const __getBatteryLevel = async () => {

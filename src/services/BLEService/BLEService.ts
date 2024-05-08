@@ -50,13 +50,13 @@ class BLEServiceInstance {
 
   connectedDeviceStaticData: any;
 
-  characteristicMonitorDeviceDataIntegers: string[];
+  characteristicMonitorDeviceDataIntegers: any[];
 
-  characteristicMonitorDeviceDataIntegersMapped: string[];
+  characteristicMonitorDeviceDataIntegersMapped: any;
 
-  characteristicMonitorDeviceDataString: string[];
+  characteristicMonitorDeviceDataString: any;
 
-  characteristicMonitorDataCollectionInteger: string[];
+  characteristicMonitorDataCollectionInteger: any;
 
   characteristicMonitor: Subscription | null;
 
