@@ -53,6 +53,7 @@ import {
   getFlushSettings,
   getSensorSettings,
 } from './helperGen1';
+import StorageService from 'src/services/StorageService/StorageService';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -114,6 +115,8 @@ const Index = ({navigation, route}: any) => {
   }, [navigation]);
 
   const initlizeApp = async () => {
+    // await StorageService.removeItem('@DEVICE_PREVIOUS_SETTINGS');
+
     if (BLEService.connectedDeviceStaticData) {
       setDeviceData(BLEService.connectedDeviceStaticData);
     }
@@ -238,7 +241,10 @@ const Index = ({navigation, route}: any) => {
 
   const __getSavedSettingsGen1 = async () => {
     const __savedSettingsGen1 = await getSavedSettingsGen1(connectedDevice);
-    // consoleLog('__savedSettingsGen1', JSON.stringify(__savedSettingsGen1));
+    // consoleLog(
+    //   '__getSavedSettingsGen1 __savedSettingsGen1==>',
+    //   JSON.stringify(__savedSettingsGen1),
+    // );
     if (__savedSettingsGen1) {
       setSavedSettingsGen1(__savedSettingsGen1);
     }
@@ -797,7 +803,7 @@ const Index = ({navigation, route}: any) => {
         message={
           savedSettingsGen1?.text
             ? savedSettingsGen1?.text
-            : 'No Previous saved settings found'
+            : 'No previous saved settings found'
         }
         okayText={'CONFIRM'}
         onCancelPress={() => {

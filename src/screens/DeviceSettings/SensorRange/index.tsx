@@ -120,6 +120,8 @@ const Index = ({navigation, route}: any) => {
       //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_CHARACTERISTIC_UUID,
       //   oldValue: null,
       //   newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      //   allowedInPreviousSettings: false,
+
       // });
       // params.push({
       //   name: 'sensorRangePhone',
@@ -127,6 +129,7 @@ const Index = ({navigation, route}: any) => {
       //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_CHARACTERISTIC_UUID,
       //   oldValue: null,
       //   newValue: user?.contact ?? '0123456789',
+      //   allowedInPreviousSettings: false,
       // });
     }
 

@@ -128,6 +128,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
       });
       params.push({
         name: 'flushPhone',
@@ -135,6 +136,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: user?.contact ?? '0123456789',
+        allowedInPreviousSettings: false,
       });
     }
 
@@ -157,6 +159,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.GEN1.FLUSH_TIME_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
       });
       params.push({
         name: 'flushTimePhone',
@@ -165,6 +168,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.GEN1.FLUSH_TIME_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: user?.contact ?? '0123456789',
+        allowedInPreviousSettings: false,
       });
     }
 
@@ -188,6 +192,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
       });
       params.push({
         name: 'flushIntervalPhone',
@@ -196,6 +201,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: user?.contact ?? '0123456789',
+        allowedInPreviousSettings: false,
       });
     }
 

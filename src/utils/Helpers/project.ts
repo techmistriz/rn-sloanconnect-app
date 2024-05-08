@@ -503,7 +503,7 @@ export const updatePreviousSettings = async (
   //   JSON.stringify(DEVICE_PREVIOUS_SETTINGS),
   // );
 
-  const deviceGen = getBleDeviceGeneration(connectedDevice?.name);
+  const deviceGen = BLEService.deviceGeneration;
   const deviceVersion = getBleDeviceVersion(connectedDevice?.name, deviceGen);
 
   var DEVICE_NEW_SETTINGS =
@@ -542,10 +542,11 @@ export const updatePreviousSettings = async (
             DEVICE_NEW_SETTINGS = {
               ...DEVICE_NEW_SETTINGS,
               [element?.characteristicUUID]: {
+                name: element?.name,
                 serviceUUID: element?.serviceUUID,
                 characteristicUUID: element?.characteristicUUID,
                 ...__deviceStaticDataMain,
-                value: base64EncodeDecode(element?.newValue, 'decode'),
+                value: element?.newValue,
               },
             };
           }
@@ -667,6 +668,7 @@ export const getSavedSettingsGen1 = async (connectedDevice: any) => {
             result += ` ${characteristicMainText}`;
 
             settingsArr.push({
+              name: characteristic?.name,
               serviceUUID: characteristic?.serviceUUID,
               characteristicUUID: characteristic?.uuid,
               oldValue: null,
@@ -685,6 +687,7 @@ export const getSavedSettingsGen1 = async (connectedDevice: any) => {
               // consoleLog('result1===>', result);
 
               settingsArr.push({
+                name: characteristic2?.name,
                 serviceUUID: characteristic2?.serviceUUID,
                 characteristicUUID: characteristic2?.uuid,
                 oldValue: null,
@@ -718,6 +721,7 @@ export const getSavedSettingsGen1 = async (connectedDevice: any) => {
             result += ` ${characteristicMainText}`;
 
             settingsArr.push({
+              name: characteristic?.name,
               serviceUUID: characteristic?.serviceUUID,
               characteristicUUID: characteristic?.uuid,
               oldValue: null,
@@ -742,6 +746,7 @@ export const getSavedSettingsGen1 = async (connectedDevice: any) => {
                 result += ` /${characteristic2?.postfix}`;
 
                 settingsArr.push({
+                  name: characteristic2?.name,
                   serviceUUID: characteristic2?.serviceUUID,
                   characteristicUUID: characteristic2?.uuid,
                   oldValue: null,
@@ -757,6 +762,7 @@ export const getSavedSettingsGen1 = async (connectedDevice: any) => {
                 result += ` /${characteristic3?.postfix}\n`;
 
                 settingsArr.push({
+                  name: characteristic3?.serviceUUID,
                   serviceUUID: characteristic3?.serviceUUID,
                   characteristicUUID: characteristic3?.uuid,
                   oldValue: null,

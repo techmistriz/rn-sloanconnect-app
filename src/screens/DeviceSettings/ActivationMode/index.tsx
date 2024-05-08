@@ -174,6 +174,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.GEN1.MODE_SELECTION_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
       });
       params.push({
         name: 'modeSelectionPhone',
@@ -182,6 +183,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.GEN1.MODE_SELECTION_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: user?.contact ?? '0123456789',
+        allowedInPreviousSettings: false,
       });
     }
 
@@ -206,6 +208,7 @@ const Index = ({navigation, route}: any) => {
             BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_DATE_CHARACTERISTIC_UUID,
           oldValue: null,
           newValue: parseDateTimeInFormat(new Date(), dateFormat),
+          allowedInPreviousSettings: false,
         });
         params.push({
           name: 'onDemandPhone',
@@ -214,6 +217,7 @@ const Index = ({navigation, route}: any) => {
             BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_CHARACTERISTIC_UUID,
           oldValue: null,
           newValue: user?.contact ?? '0123456789',
+          allowedInPreviousSettings: false,
         });
       } else if (modeSelection == '1') {
         params.push({
@@ -232,6 +236,7 @@ const Index = ({navigation, route}: any) => {
             BLE_CONSTANTS.GEN1.METERED_RUNTIME_DATE_CHARACTERISTIC_UUID,
           oldValue: null,
           newValue: parseDateTimeInFormat(new Date(), dateFormat),
+          allowedInPreviousSettings: false,
         });
         params.push({
           name: 'meteredPhone',
@@ -240,6 +245,7 @@ const Index = ({navigation, route}: any) => {
             BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_CHARACTERISTIC_UUID,
           oldValue: null,
           newValue: user?.contact ?? '0123456789',
+          allowedInPreviousSettings: false,
         });
       }
     }

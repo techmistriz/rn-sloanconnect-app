@@ -1,0 +1,21 @@
+{
+  "text": "Activation Mode: Metered 102 / Sec\n",
+  "data": {
+    "ActivationMode": [
+      {
+        "name": "Activation Mode",
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
+        "oldValue": null,
+        "newValue": "1"
+      },
+      {
+        "name": "Metered Run-time",
+        "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+        "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c944",
+        "oldValue": null,
+        "newValue": "102"
+      }
+    ]
+  }
+}
