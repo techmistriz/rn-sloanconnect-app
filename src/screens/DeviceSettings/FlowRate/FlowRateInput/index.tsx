@@ -11,6 +11,7 @@ import AppContainer from 'src/components/AppContainer';
 import Input from 'src/components/Input';
 import {useDispatch, useSelector} from 'react-redux';
 import VectorIcon from 'src/components/VectorIcon';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const NUMBER_PAD = [
   {
@@ -104,7 +105,7 @@ const NUMBER_PAD = [
 const Index = ({navigation, route}: any) => {
   const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const dispatch = useDispatch();
-  const {title, subTitle, minValue, maxValue} = route?.params;
+  const {title, subTitle, minValue, maxValue, flowRateType} = route?.params;
 
   const [flowRateInput, setFlowRateInput] = useState('');
 
@@ -115,7 +116,10 @@ const Index = ({navigation, route}: any) => {
     const checkValid = checkValidation();
     if (checkValid) {
       DeviceEventEmitter.emit('FlowRateInputEvent', {
-        flowRateInput: flowRateInput,
+        flowRateInput:
+          flowRateType == '0'
+            ? Number(flowRateInput) * BLE_CONSTANTS.COMMON.GMP_FORMULA
+            : Number(flowRateInput),
       });
       NavigationService.goBack();
     }
@@ -151,7 +155,7 @@ const Index = ({navigation, route}: any) => {
 
   return (
     <AppContainer
-      scroll={true}
+      scroll={false}
       scrollViewStyle={{}}
       backgroundType="gradient"
       // title="Confirm Flow Rate"

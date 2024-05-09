@@ -2,7 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {Keyboard, FlatList, DeviceEventEmitter} from 'react-native';
 import Theme from 'src/theme';
 import {useDispatch, useSelector} from 'react-redux';
-import {parseDateTimeInFormat} from 'src/utils/Helpers/HelperFunction';
+import {
+  consoleLog,
+  parseDateTimeInFormat,
+} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -75,7 +78,7 @@ const Index = ({navigation, route}: any) => {
 
   const flowRateInputEventCallback = (eventData: any) => {
     if (eventData?.flowRateInput) {
-      const val = (eventData?.flowRateInput * 10)?.toString();
+      const val: string | number = (eventData?.flowRateInput * 10)?.toString();
       setOther(val);
       setFlowRate(val);
     }
@@ -83,12 +86,23 @@ const Index = ({navigation, route}: any) => {
 
   const __setFlowRate = (val: string) => {
     if (parseInt(val) == 0) {
-      NavigationService.navigate('FlowRateInput', {
-        title: `Set flow rate to between 1.3 and 9.99\n liters per minute`,
-        subTitle: 'LPM',
-        minValue: 1.3,
-        maxValue: 9.99,
-      });
+      if (flowRateType == '1') {
+        NavigationService.navigate('FlowRateInput', {
+          title: `Set flow rate to between 1.3 and 9.99\n liters per minute`,
+          subTitle: 'LPM',
+          minValue: 1.3,
+          maxValue: 9.99,
+          flowRateType: flowRateType,
+        });
+      } else {
+        NavigationService.navigate('FlowRateInput', {
+          title: `Set flow rate to between 0.3 and 2.6\n gallons per minute`,
+          subTitle: 'GMP',
+          minValue: 0.3,
+          maxValue: 2.6,
+          flowRateType: flowRateType,
+        });
+      }
     } else {
       setOther('');
       setFlowRate(val);

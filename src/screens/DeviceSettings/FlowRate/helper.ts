@@ -11,6 +11,7 @@ import {
   createNameValueArray,
   mapAsString,
 } from 'src/utils/Helpers/array';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 export const getFlowRateType = (
   characteristicMain: BLECharacteristic,
@@ -89,7 +90,7 @@ export const getCalculatedValue = (
     }
   }
   var result: number = 0;
-  const GMPFormula = 3.78541;
+  const GMPFormula = BLE_CONSTANTS.COMMON.GMP_FORMULA;
   const valueInNumber = Number(value);
   result = valueInNumber / __flowRateTypeDivider;
 

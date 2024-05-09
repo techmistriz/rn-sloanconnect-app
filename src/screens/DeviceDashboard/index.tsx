@@ -788,7 +788,13 @@ const Index = ({navigation, route}: any) => {
                     />
                     <Typography
                       size={22}
-                      text={`${totalWaterUsage} Gal`}
+                      text={`${
+                        totalWaterUsage
+                          ? (
+                              totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA
+                            ).toFixed(2)
+                          : 0
+                      } Gal`}
                       style={{
                         textAlign: 'left',
                         marginLeft: 5,
