@@ -4,9 +4,7 @@ import {useSelector} from 'react-redux';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {
   isObjectEmpty,
-  chunk,
   findObject,
-  findIndexObject,
 } from 'src/utils/Helpers/array';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
@@ -20,14 +18,11 @@ import DeviceBottomTab from 'src/components/@ProjectComponent/DeviceBottomTab';
 import {TABS} from 'src/utils/StaticData/StaticData';
 import {getDeviceInfoNormal, getDeviceInfoAdvance} from './helperGen1';
 import {
-  getDeviceInfoNormalGen2,
   mappingDeviceDataStringGen2,
 } from './helperGen2';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
 import {
-  hexToDecimal,
-  addSeparatorInString,
   base64ToHex,
 } from 'src/utils/Helpers/encryption';
 import moment from 'moment';

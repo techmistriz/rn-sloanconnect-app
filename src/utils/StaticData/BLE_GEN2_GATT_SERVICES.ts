@@ -1744,39 +1744,6 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
             ],
           },
-          {
-            meta: [
-              {
-                name: '0x72',
-                size: 1,
-                position: 0,
-                description:
-                  'Byte Position 0: Start Flag, Ox72 signals the start of Integers write payload.',
-              },
-              {
-                name: 'LEN',
-                size: 1,
-                position: 2,
-                description:
-                  'Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag).',
-              },
-              {
-                name: '# of IDs',
-                size: 1,
-                position: 3,
-                description:
-                  'Byte Position 2: Integer value indicating how many Setting IDs to follow in Package.',
-              },
-              {
-                name: '32',
-                size: 1,
-                position: 4,
-                description:
-                  'Byte Position 3: Integer value 32 indicates the Setting Value Size 32 = 32-bit size.',
-              },
-            ],
-            uuidData: [],
-          },
         ],
       },
       '8de47721-5496-4233-ae45-e4b306fe1184': {

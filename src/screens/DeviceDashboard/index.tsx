@@ -46,6 +46,7 @@ import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {base64ToHex} from 'src/utils/Helpers/encryption';
 import {
+  mappingDataCollectionGen2,
   mappingDeviceDataIntegersGen2,
   mappingRealTimeDataGen2,
 } from './helperGen2';
@@ -58,7 +59,7 @@ import {
 } from './helperGen1';
 import StorageService from 'src/services/StorageService/StorageService';
 
-const Index = ({navigation, route}: any) => {
+const Index = ({navigation}: any) => {
   const dispatch = useDispatch();
   // const {referrer} = route?.params || {referrer: undefined};
   // const {device, status} = useSelector(
@@ -211,7 +212,8 @@ const Index = ({navigation, route}: any) => {
             BLEService.characteristicMonitorDeviceDataIntegers =
               __characteristicMonitorDeviceDataIntegers;
             BLEService.finishMonitor();
-            __mappingRealTimeDataGen2SetupMonitor();
+            __mappingDataCollectionGen2SetupMonitor();
+            // __mappingRealTimeDataGen2SetupMonitor();
             __mappingDeviceDataIntegersGen2();
           } else {
             __characteristicMonitorDeviceDataIntegers.push(
@@ -359,8 +361,111 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** Function comments */
+  const __mappingDataCollectionGen2SetupMonitor = async () => {
+    consoleLog('__mappingDataCollectionGen2SetupMonitor called');
+    var __characteristicMonitorDataCollection: string[] = [];
+
+    // Device data integer
+    BLEService.setupMonitor(
+      BLE_CONSTANTS?.GEN2?.DATA_COLLECTION_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.DATA_COLLECTION_CHARACTERISTIC_UUID,
+      characteristic => {
+        // consoleLog(
+        //   '__mappingDataCollectionGen2SetupMonitor characteristic==>',
+        //   characteristic,
+        // );
+        if (characteristic?.value) {
+          var deviceDataIntegerHex = base64ToHex(characteristic?.value);
+          consoleLog(
+            '__mappingDataCollectionGen2SetupMonitor deviceDataIntegerHex==>',
+            deviceDataIntegerHex,
+          );
+
+          __characteristicMonitorDataCollection.push(deviceDataIntegerHex);
+          BLEService.characteristicMonitorDataCollection =
+            __characteristicMonitorDataCollection;
+          BLEService.finishMonitor();
+          setTimeout(() => {
+            // __mappingRealTimeDataGen2SetupMonitor();
+            __mappingDataCollectionGen2();
+          }, 1000);
+        }
+      },
+      error => {
+        consoleLog('__mappingDataCollectionGen2SetupMonitor error==>', error);
+      },
+    );
+  };
+
+  /** Function comments */
+  const __mappingDataCollectionGen2 = async () => {
+    const mappingDataCollectionGen2Response = await mappingDataCollectionGen2(
+      BLE_GEN2_GATT_SERVICES,
+      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_CHARACTERISTIC_UUID,
+      BLEService.characteristicMonitorDataCollection,
+    );
+
+    // consoleLog(
+    //   '__mappingDataCollectionGen2 mappingDataCollectionGen2Response==>',
+    //   JSON.stringify(mappingDataCollectionGen2Response),
+    // );
+
+    BLEService.characteristicMonitorDataCollectionMapped =
+      mappingDataCollectionGen2Response;
+    __mappingDataCollectionGen2Data();
+  };
+
+  /** Function comments */
+  const __mappingDataCollectionGen2Data = () => {
+    consoleLog('__mappingDataCollectionGen2Data called');
+    const characteristicMonitorDeviceDataIntegersMappedResponse =
+      BLEService.characteristicMonitorDeviceDataIntegersMapped;
+    var flowRate = 0;
+    var activationsDuration = 0;
+    var totalWaterUsage = 0;
+    if (!isObjectEmpty(characteristicMonitorDeviceDataIntegersMappedResponse)) {
+      // For flowRate
+      // consoleLog("flowRate==>", characteristicMonitorDeviceDataIntegersMappedResponse?.chunks?.[0]
+      // ?.uuidData?.[19]);
+      if (
+        characteristicMonitorDeviceDataIntegersMappedResponse?.chunks?.[0]
+          ?.uuidData?.[19]
+      ) {
+        flowRate =
+          characteristicMonitorDeviceDataIntegersMappedResponse?.chunks?.[0]
+            ?.uuidData?.[19]?.value?.currentValue;
+        flowRate = Number(flowRate);
+      }
+    }
+
+    const characteristicMonitorDataCollectionMappedResponse =
+      BLEService.characteristicMonitorDataCollectionMapped;
+
+    if (!isObjectEmpty(characteristicMonitorDataCollectionMappedResponse)) {
+      // For activationsDuration
+      // consoleLog("activationsDuration==>", characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
+      // ?.uuidData?.[8]);
+      if (
+        characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
+          ?.uuidData?.[8]
+      ) {
+        activationsDuration =
+          characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
+            ?.uuidData?.[8]?.value?.currentValue;
+
+        activationsDuration = Number(activationsDuration);
+      }
+    }
+
+    const __totalWaterUsage = (flowRate / 10 / 60) * activationsDuration;
+    totalWaterUsage = Number(__totalWaterUsage.toFixed(2));
+    setTotalWaterUsage(totalWaterUsage);
+  };
+
+  /** Function comments */
   const __mappingRealTimeDataGen2SetupMonitor = async () => {
-    consoleLog('__mappingRealTimeDataGen2SetupMonitor called');
+    consoleLog('__mappingRealTimeGen2SetupMonitor called');
     var __characteristicMonitorRealTimeData: string[] = [];
 
     // Device data integer
@@ -369,25 +474,25 @@ const Index = ({navigation, route}: any) => {
       BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_CHARACTERISTIC_UUID,
       characteristic => {
         // consoleLog(
-        //   '__mappingRealTimeDataGen2SetupMonitor characteristic==>',
+        //   '__mappingRealTimeGen2SetupMonitor characteristic==>',
         //   characteristic,
         // );
-        if (characteristic?.value) {
-          var deviceDataIntegerHex = base64ToHex(characteristic?.value);
-          consoleLog(
-            '__mappingRealTimeDataGen2SetupMonitor deviceDataIntegerHex==>',
-            deviceDataIntegerHex,
-          );
+        // if (characteristic?.value) {
+        var deviceDataIntegerHex = base64ToHex(characteristic?.value);
+        consoleLog(
+          '__mappingRealTimeGen2SetupMonitor deviceDataIntegerHex==>',
+          deviceDataIntegerHex,
+        );
 
-          __characteristicMonitorRealTimeData.push(deviceDataIntegerHex);
-          BLEService.characteristicMonitorRealTimeData =
-            __characteristicMonitorRealTimeData;
-          BLEService.finishMonitor();
-          __mappingRealTimeDataGen2();
-        }
+        __characteristicMonitorRealTimeData.push(deviceDataIntegerHex);
+        BLEService.characteristicMonitorRealTimeData =
+          __characteristicMonitorRealTimeData;
+        BLEService.finishMonitor();
+        __mappingRealTimeDataGen2();
+        // }
       },
       error => {
-        consoleLog('__mappingRealTimeDataGen2SetupMonitor error==>', error);
+        consoleLog('__mappingRealTimeGen2SetupMonitor error==>', error);
       },
     );
   };
@@ -504,15 +609,9 @@ const Index = ({navigation, route}: any) => {
 
     // return false;
 
-    const status = await saveSettings(__deviceSettingsDataTmp);
     // consoleLog('status', status);
 
     if (shouldUpdatePreviosSettings) {
-      const status2 = await updatePreviousSettings(
-        connectedDevice,
-        __deviceSettingsData,
-        BLE_GATT_SERVICES,
-      );
     }
 
     setTimeout(async () => {
@@ -523,11 +622,9 @@ const Index = ({navigation, route}: any) => {
       // consoleLog('status4');
 
       if (!isObjectEmpty(__LineFlush)) {
-        const status1 = await saveSettings(__LineFlush);
         // consoleLog('status1', status1);
       }
 
-      const shortBurstsGen1Status = await shortBurstsGen1(__deviceSettingsData);
       // consoleLog('shortBurstsGen1Status', shortBurstsGen1Status);
     }, timeout);
 
