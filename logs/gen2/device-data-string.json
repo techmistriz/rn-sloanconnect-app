@@ -1,0 +1,61 @@
+LOG initializeNormalGen2 deviceDataIntegerHex==> 
+
+73
+09
+
+02 -> Start Flag
+00 -> ID
+0a -> Str Length
+42303730303031383237 -> Value
+02 -> Start Flag
+01 -> ID
+0a -> Str Length
+54303431383130303336 -> Value
+02 -> Start Flag
+02 -> ID
+06 -> Str Length
+313930373236 -> Value
+02 -> Start Flag
+03 -> ID
+06 -> Str Length
+323331323037 -> Value
+02 -> Start Flag
+04 -> ID
+04 -> Str Length
+30333036 -> Value
+02 -> Start Flag
+05 -> ID
+04 -> Str Length
+30323134 -> Value
+02 -> Start Flag
+06 -> ID
+04 -> Str Length
+30343037 -> Value
+02 -> Start Flag
+07 -> ID
+04 -> Str Length
+30313038 -> Value
+02 -> Start Flag
+08 -> ID
+0c -> Str Length
+30303932 -> Value
+346132306261383403
+
+LOG  initializeNormalGen2 deviceDataIntegerHex==> 
+73
+03
+
+02 -> Start Flag
+0a -> ID
+1e -> Str Length
+543034313831303033360000000000000000000000000000000000000000 -> Value
+02 -> Start Flag
+0b -> ID
+06-> Str Length
+4244534b5534 -> Value
+02 -> Start Flag
+0c -> ID
+78 -> Str Length
+4e4f54452020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020 -> Value
+
+03

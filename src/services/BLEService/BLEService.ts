@@ -50,7 +50,7 @@ class BLEServiceInstance {
 
   connectedDeviceStaticData: any;
 
-  characteristicMonitorDeviceDataIntegers: any[];
+  characteristicMonitorDeviceDataIntegers: any;
 
   characteristicMonitorDeviceDataIntegersMapped: any;
 

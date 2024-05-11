@@ -186,8 +186,8 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const initlizeAppGen2 = async () => {
     consoleLog('getDeviceDataGen2 called');
-    // __mappingDeviceDataIntegersGen2SetupMonitor();
-    __mappingRealTimeDataGen2SetupMonitor();
+    __mappingDeviceDataIntegersGen2SetupMonitor();
+    // __mappingRealTimeDataGen2SetupMonitor();
   };
 
   /** Function comments */
@@ -211,6 +211,7 @@ const Index = ({navigation, route}: any) => {
             BLEService.characteristicMonitorDeviceDataIntegers =
               __characteristicMonitorDeviceDataIntegers;
             BLEService.finishMonitor();
+            __mappingRealTimeDataGen2SetupMonitor();
             __mappingDeviceDataIntegersGen2();
           } else {
             __characteristicMonitorDeviceDataIntegers.push(

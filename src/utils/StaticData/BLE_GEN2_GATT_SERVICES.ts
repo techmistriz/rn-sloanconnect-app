@@ -1097,7 +1097,7 @@ export const BLE_GEN2_GATT_SERVICES = {
           {
             meta: [
               {
-                name: '0x72',
+                name: '0x73',
                 size: 1,
                 position: 0,
                 description:
@@ -1110,29 +1110,15 @@ export const BLE_GEN2_GATT_SERVICES = {
                 description:
                   'Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag).',
               },
-              {
-                name: '# of IDs',
-                size: 1,
-                position: 3,
-                description:
-                  'Byte Position 2: Integer value indicating how many Setting IDs to follow in Package.',
-              },
-              {
-                name: '32',
-                size: 1,
-                position: 4,
-                description:
-                  'Byte Position 3: Integer value 32 indicates the Setting Value Size 32 = 32-bit size.',
-              },
             ],
             uuidData: [
               {
-                size: 5,
+                size: 13,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'AD Serial Number',
-                  size: 1,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1149,12 +1135,12 @@ export const BLE_GEN2_GATT_SERVICES = {
                 },
               },
               {
-                size: 5,
+                size: 13,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'BD Serial Number',
-                  size: 1,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1171,12 +1157,12 @@ export const BLE_GEN2_GATT_SERVICES = {
                 },
               },
               {
-                size: 5,
+                size: 9,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'AD Manufacturing Date',
-                  size: 1,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1190,15 +1176,18 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDD',
+                  valueType: 'Date',
+                  dateFormat: 'YY/MM/DD',
                 },
               },
               {
-                size: 5,
+                size: 9,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'BD Manufacturing Date',
-                  size: 1,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1212,15 +1201,18 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDD',
+                  valueType: 'Date',
+                  dateFormat: 'YY/MM/DD',
                 },
               },
               {
-                size: 5,
+                size: 7,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'AD Hardware Version',
-                  size: 4,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1237,12 +1229,12 @@ export const BLE_GEN2_GATT_SERVICES = {
                 },
               },
               {
-                size: 5,
+                size: 7,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'AD Firmware Version',
-                  size: 4,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1259,12 +1251,12 @@ export const BLE_GEN2_GATT_SERVICES = {
                 },
               },
               {
-                size: 5,
+                size: 7,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'BD Hardware Version',
-                  size: 4,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1281,12 +1273,12 @@ export const BLE_GEN2_GATT_SERVICES = {
                 },
               },
               {
-                size: 5,
+                size: 7,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'BD Firmware Version',
-                  size: 4,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1302,13 +1294,33 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                 },
               },
+            ],
+          },
+          {
+            meta: [
               {
-                size: 5,
+                name: '0x73',
+                size: 1,
+                position: 0,
+                description:
+                  'Byte Position 0: Start Flag, Ox72 signals the start of Integers write payload.',
+              },
+              {
+                name: 'LEN',
+                size: 1,
+                position: 2,
+                description:
+                  'Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag).',
+              },
+            ],
+            uuidData: [
+              {
+                size: 33,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'Full Name',
-                  size: 4,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1325,12 +1337,12 @@ export const BLE_GEN2_GATT_SERVICES = {
                 },
               },
               {
-                size: 5,
+                size: 9,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'Nick Name',
-                  size: 4,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1347,12 +1359,12 @@ export const BLE_GEN2_GATT_SERVICES = {
                 },
               },
               {
-                size: 5,
+                size: 123,
                 displayInList: true,
                 position: 0,
                 name: {
                   name: 'BD Note',
-                  size: 4,
+                  size: 3,
                   type: 'String',
                 },
                 value: {
@@ -1365,62 +1377,6 @@ export const BLE_GEN2_GATT_SERVICES = {
                   whenToUpdate: 'every BD Note change',
                   remarks:
                     'BD Note 1 (40 bytes), BD Note 2 (40 bytes), BD Note 3 (40 bytes)',
-                  prefix: null,
-                  postfix: null,
-                },
-              },
-            ],
-          },
-          {
-            meta: [
-              {
-                name: '0x72',
-                size: 1,
-                position: 0,
-                description:
-                  'Byte Position 0: Start Flag, Ox72 signals the start of Integers write payload.',
-              },
-              {
-                name: 'LEN',
-                size: 1,
-                position: 2,
-                description:
-                  'Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag).',
-              },
-              {
-                name: '# of IDs',
-                size: 1,
-                position: 3,
-                description:
-                  'Byte Position 2: Integer value indicating how many Setting IDs to follow in Package.',
-              },
-              {
-                name: '32',
-                size: 1,
-                position: 4,
-                description:
-                  'Byte Position 3: Integer value 32 indicates the Setting Value Size 32 = 32-bit size.',
-              },
-            ],
-            uuidData: [
-              {
-                size: 5,
-                displayInList: true,
-                position: 0,
-                name: {
-                  name: 'Alert 0 Config',
-                  size: 1,
-                  type: 'uint32_t',
-                },
-                value: {
-                  size: 4,
-                  dataFormat: 'Number',
-                  type: 'uint32_t',
-                  range: '0-255',
-                  initialValue: 0,
-                  properties: ['R', 'W'],
-                  whenToUpdate: '',
-                  remarks: '',
                   prefix: null,
                   postfix: null,
                 },

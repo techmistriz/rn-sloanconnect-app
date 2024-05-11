@@ -19,11 +19,19 @@ import DeviceInfoList from 'src/components/@ProjectComponent/DeviceInfoList';
 import DeviceBottomTab from 'src/components/@ProjectComponent/DeviceBottomTab';
 import {TABS} from 'src/utils/StaticData/StaticData';
 import {getDeviceInfoNormal, getDeviceInfoAdvance} from './helperGen1';
-import {getDeviceInfoNormalGen2} from './helperGen2';
+import {
+  getDeviceInfoNormalGen2,
+  mappingDeviceDataStringGen2,
+} from './helperGen2';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
-import {hexToDecimal, addSeparatorInString} from 'src/utils/Helpers/encryption';
+import {
+  hexToDecimal,
+  addSeparatorInString,
+  base64ToHex,
+} from 'src/utils/Helpers/encryption';
 import moment from 'moment';
+import {formatCharateristicValue} from 'src/utils/Helpers/project';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -61,11 +69,11 @@ const Index = ({navigation, route}: any) => {
     if (!viewAdvanceDetails) {
       initializeNormalGen2();
     } else {
-      // initializeAdvanceGen2();
+      initializeAdvanceGen2();
     }
   };
 
-  /** Function comments */
+  /** This is for gen1 */
   const initializeNormal = async () => {
     setLoading(true);
     const deviceStaticData = BLEService.connectedDeviceStaticData;
@@ -97,7 +105,7 @@ const Index = ({navigation, route}: any) => {
     setLoading(false);
   };
 
-  /** Function comments */
+  /** This is for gen1 */
   const initializeAdvance = async () => {
     try {
       setLoading(true);
@@ -155,24 +163,111 @@ const Index = ({navigation, route}: any) => {
     setLoading(false);
   };
 
-  /** Function comments */
+  /** This is for gen2 */
   const initializeNormalGen2 = async () => {
     setLoading(true);
+    consoleLog('initializeNormalGen2 called');
+    var __characteristicMonitorDeviceDataString: string[] = [];
+
+    // Device data string
+    BLEService.setupMonitor(
+      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+      characteristic => {
+        // consoleLog('initializeNormalGen2 characteristic==>', characteristic);
+        if (characteristic?.value) {
+          var deviceDataStringHex = base64ToHex(characteristic?.value);
+          consoleLog(
+            'initializeNormalGen2 deviceDataStringHex==>',
+            deviceDataStringHex,
+          );
+          if (deviceDataStringHex == '71ff04') {
+            BLEService.characteristicMonitorDeviceDataString =
+              __characteristicMonitorDeviceDataString;
+            BLEService.finishMonitor();
+            __mappingDeviceDataStringGen2();
+          } else {
+            __characteristicMonitorDeviceDataString.push(deviceDataStringHex);
+          }
+        }
+      },
+      error => {
+        consoleLog('setupMonitor error==>', error);
+      },
+    );
+  };
+
+  /** This is for gen2 */
+  const initializeAdvanceGen2 = async () => {
+    __mappingDeviceDataIntegersGen2();
+    // consoleLog('initializeAdvanceGen2 called');
+    // var __characteristicMonitorDeviceDataIntegers: string[] = [];
+
+    // // Device data string
+    // BLEService.setupMonitor(
+    //   BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_SERVICE_UUID,
+    //   BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+    //   characteristic => {
+    //     // consoleLog('initializeNormalGen2 characteristic==>', characteristic);
+    //     if (characteristic?.value) {
+    //       var deviceDataStringHex = base64ToHex(characteristic?.value);
+    //       consoleLog(
+    //         'initializeNormalGen2 deviceDataStringHex==>',
+    //         deviceDataStringHex,
+    //       );
+    //       if (deviceDataStringHex == '71ff04') {
+    //         BLEService.characteristicMonitorDeviceDataIntegers =
+    //           __characteristicMonitorDeviceDataIntegers;
+    //         BLEService.finishMonitor();
+    //         __mappingDeviceDataIntegersGen2();
+    //       } else {
+    //         __characteristicMonitorDeviceDataIntegers.push(deviceDataStringHex);
+    //       }
+    //     }
+    //   },
+    //   error => {
+    //     consoleLog('setupMonitor error==>', error);
+    //   },
+    // );
+  };
+
+  /** Function comments */
+  const __mappingDeviceDataStringGen2 = async () => {
+    const mappingDeviceDataStringGen2Response =
+      await mappingDeviceDataStringGen2(
+        BLE_GEN2_GATT_SERVICES,
+        BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
+        BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+        BLEService.characteristicMonitorDeviceDataString,
+      );
+
+    consoleLog(
+      '__mappingDeviceDataStringGen2 mappingDeviceDataStringGen2Response==>',
+      JSON.stringify(mappingDeviceDataStringGen2Response),
+    );
+
+    BLEService.characteristicMonitorDeviceDataStringMapped =
+      mappingDeviceDataStringGen2Response;
+    __mappingDeviceDataStringGen2Data();
+  };
+
+  /** Function comments */
+  const __mappingDeviceDataStringGen2Data = async () => {
     const deviceStaticData = BLEService.connectedDeviceStaticData;
     consoleLog(
-      'initializeNormalGen2 called',
-      BLEService.characteristicMonitorDeviceDataIntegers,
+      '__mappingDeviceDataStringGen2Data called',
+      BLEService.characteristicMonitorDeviceDataString,
     );
 
     const __mappingDeviceDataIntegersGen2 =
-      BLEService.characteristicMonitorDeviceDataIntegersMapped;
+      BLEService.characteristicMonitorDeviceDataStringMapped;
 
     consoleLog(
-      'initializeGen2 __mappingDeviceDataIntegersGen2==>',
+      '__mappingDeviceDataStringGen2Data __mappingDeviceDataIntegersGen2==>',
       __mappingDeviceDataIntegersGen2,
     );
 
-    var normalDataGen2: any = [];
+    var allData: any = [];
     if (
       __mappingDeviceDataIntegersGen2?.chunks &&
       Array.isArray(__mappingDeviceDataIntegersGen2?.chunks)
@@ -181,9 +276,13 @@ const Index = ({navigation, route}: any) => {
         if (element?.uuidData && Array.isArray(element?.uuidData)) {
           element?.uuidData.forEach((element2, index2) => {
             if (element2) {
-              normalDataGen2.push({
+              allData.push({
                 name: element2?.name?.name,
-                value: element2?.value?.currentValue ?? 'N/A',
+                // value: element2?.value?.currentValue ?? 'N/A',
+                value: formatCharateristicValue(
+                  element2?.value,
+                  element2?.value?.currentValue,
+                ),
                 uuid: `${index}-${index2}`,
               });
             }
@@ -211,7 +310,90 @@ const Index = ({navigation, route}: any) => {
       },
     ];
 
-    setDeviceDetails([...sloanModel, ...normalDataGen2, ...batteryStatus]);
+    setDeviceDetails([...sloanModel, ...allData, ...batteryStatus]);
+    setLoading(false);
+  };
+
+  /** Function comments */
+  const __mappingDeviceDataIntegersGen2 = async () => {
+    // const mappingDeviceDataIntegersGen2Response =
+    //   await mappingDeviceDataIntegersGen2(
+    //     BLE_GEN2_GATT_SERVICES,
+    //     BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
+    //     BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+    //     BLEService.characteristicMonitorDeviceDataIntegers,
+    //   );
+
+    // consoleLog(
+    //   '__mappingDeviceDataIntegersGen2 mappingDeviceDataIntegersGen2Response==>',
+    //   JSON.stringify(mappingDeviceDataIntegersGen2Response),
+    // );
+
+    // BLEService.characteristicMonitorDeviceDataIntegersMapped =
+    //   mappingDeviceDataIntegersGen2Response;
+    __mappingDeviceDataIntegersGen2Data();
+  };
+
+  /** Function comments */
+  const __mappingDeviceDataIntegersGen2Data = async () => {
+    const deviceStaticData = BLEService.connectedDeviceStaticData;
+    consoleLog(
+      '__mappingDeviceDataIntegersGen2Data called',
+      BLEService.characteristicMonitorDeviceDataIntegers,
+    );
+
+    const __mappingDeviceDataIntegersGen2 =
+      BLEService.characteristicMonitorDeviceDataIntegersMapped;
+
+    consoleLog(
+      '__mappingDeviceDataIntegersGen2Data __mappingDeviceDataIntegersGen2==>',
+      __mappingDeviceDataIntegersGen2,
+    );
+
+    var allData: any = [];
+    if (
+      __mappingDeviceDataIntegersGen2?.chunks &&
+      Array.isArray(__mappingDeviceDataIntegersGen2?.chunks)
+    ) {
+      __mappingDeviceDataIntegersGen2?.chunks.forEach((element, index) => {
+        if (element?.uuidData && Array.isArray(element?.uuidData)) {
+          element?.uuidData.forEach((element2, index2) => {
+            if (element2) {
+              allData.push({
+                name: element2?.name?.name,
+                // value: element2?.value?.currentValue ?? 'N/A',
+                value: formatCharateristicValue(
+                  element2?.value,
+                  element2?.value?.currentValue,
+                ),
+                uuid: `${index}-${index2}`,
+              });
+            }
+          });
+        }
+      });
+    }
+
+    var sloanModel: any = [];
+    if (deviceStaticData) {
+      sloanModel = [
+        {
+          name: 'SLOAN MODEL',
+          value: deviceStaticData?.fullNameAllModel,
+          uuid: '111111',
+        },
+      ];
+    }
+
+    const batteryStatus = [
+      {
+        name: 'Battery Status',
+        value: `${BLEService.batteryLevel}%`,
+        uuid: '0000000',
+      },
+    ];
+
+    setDeviceDetails([...sloanModel, ...allData, ...batteryStatus]);
     setLoading(false);
   };
 

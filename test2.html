@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Js Test</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+
+
+<!-- 
+72af222000000000000100000000020000000003000000000400000000050000000006000000000700000000080000000009000000000a000000000bbc3a72650cbc3a72650d000000000e000000000f000000001400000000150000000016000000001700000013180000000319000000001a0000001e1b0000001e1c000000001d000000001e000000181f0000002e200000001e210000005a220000001e230000000824000000182500000018cf
+
+72641320280000000029000000002a000000002b000000002c000000002d000000002e000000002f0000000030000000003100000000320000000033000000003400000000350000000036000000003700000000380000000039000000053a00000000cf
+
+72 af 22 20 
+00 00 00 00 00 01 00 00 00 00 02 00 00 00 00 03 00 00 00 00 04 00 00 00 00 05 00 00 00 00 06 00 00 00 00 07 00 00 00 00 08 00 00 00 00 09 00 00 00 00 0a 00 00 00 00 0b bc 3a 72 65 0c bc 3a 72 65 0d 00 00 00 00 0e 00 00 00 00 0f 00 00 00 00 14 00 00 00 00 15 00 00 00 00 16 00 00 00 00 17 00 00 00 13 18 00 00 00 03 19 00 00 00 00 1a 00 00 00 1e 1b 00 00 00 1e 1c 00 00 00 00 1d 00 00 00 00 1e 00 00 00 18 1f 00 00 00 2e 20 00 00 00 1e 21 00 00 00 5a 22 00 00 00 1e 23 00 00 00 08 24 00 00 00 18 25 00 00 00 18 cf
+
+72 64 13 20 28 00 00 00 00 29 00 00 00 00 2a 00 00 00 00 2b 00 00 00 00 2c 00 00 00 00 2d 00 00 00 00 2e 00 00 00 00 2f 00 00 00 00 30 00 00 00 00 31 00 00 00 00 32 00 00 00 00 33 00 00 00 00 34 00 00 00 00 35 00 00 00 00 36 00 00 00 00 37 00 00 00 00 38 00 00 00 00 39 00 00 00 05 3a 00 00 00 00 cf 
+
+71 ff 04
+-->
+
+
+<script type="text/javascript" src="test.js"></script>
+<script type="text/javascript">
+    const DEVICE_DATA_STRING_SERVICE_UUID = '8de47721-5496-4233-ae45-e4b306fe1180';
+    const DEVICE_DATA_STRING_CHARACTERISTIC_UUID = '8de47721-5496-4233-ae45-e4b306fe1182';
+    const pack1 = '730902000a4230373030303138323702010a543034313831303033360202063139303732360203063233313230370204043033303602050430323134020604303430370207043031303802080c30303932346132306261383403';
+    const pack2 = '7303020a1e543034313831303033360000000000000000000000000000000000000000020b064244534b5534020c784e4f5445202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202003';
+    const pack3 = '71ff04';
+
+    const allPack = [pack1, pack2, pack3];
+
+    mappingDeviceDataStringGen2(BLE_GEN2_GATT_SERVICES, DEVICE_DATA_STRING_SERVICE_UUID, DEVICE_DATA_STRING_CHARACTERISTIC_UUID, allPack);
+
+    function mappingDeviceDataStringGen2(__BLE_GEN2_GATT_SERVICES, __DEVICE_DATA_STRING_SERVICE_UUID, __DEVICE_DATA_STRING_CHARACTERISTIC_UUID, __allPack) {
+
+        var result = [];
+        console.log("mappingDeviceDataStringGen2 __BLE_GEN2_GATT_SERVICES==>", __BLE_GEN2_GATT_SERVICES);
+        console.log("mappingDeviceDataStringGen2 allPack==>", allPack);
+
+        const __BLE_GEN2_GATT_SERVICES_TMP = __BLE_GEN2_GATT_SERVICES?.[__DEVICE_DATA_STRING_SERVICE_UUID];
+        console.log("mappingDeviceDataStringGen2 __BLE_GEN2_GATT_SERVICES_TMP==>", __BLE_GEN2_GATT_SERVICES_TMP);
+        if (isObjectEmpty(__BLE_GEN2_GATT_SERVICES_TMP)) {
+            return result;
+        }
+
+        const __BLE_GEN2_GATT_SERVICES_TMP2 = __BLE_GEN2_GATT_SERVICES_TMP?.characteristics?.[DEVICE_DATA_STRING_CHARACTERISTIC_UUID];
+        console.log("mappingDeviceDataStringGen2 __BLE_GEN2_GATT_SERVICES_TMP2==>", __BLE_GEN2_GATT_SERVICES_TMP2);
+        if (isObjectEmpty(__BLE_GEN2_GATT_SERVICES_TMP2)) {
+            return result;
+        }
+
+        // 0x72 LEN # of IDs 32
+        // 1 byte 1 byte 1 byte 1 byte
+        // ­Byte Position 0: Start Flag, Ox72 signals the start of Integers write payload.
+        // Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag).
+        // Byte Position 2: Integer value indicating how many Setting IDs to follow in Package.
+        // Byte Position 3: Integer value 32 indicates the Setting Value Size 32 = 32-bit size.
+
+        var finalArr = [];
+        allPack.forEach((element, index) => {
+
+            if (element != '71ff04') {
+
+                if (index > 0) {
+                    // return;
+                }
+
+                console.log("mappingDeviceDataStringGen2 index==>", index);
+                console.log("mappingDeviceDataStringGen2 element==>", element);
+                const __element = addSeparatorInString(element, 2, ' ');
+                console.log("mappingDeviceDataStringGen2 __element==>", __element);
+                const __elementArr = __element.split(" ");
+
+                if (__elementArr?.[0] == 73) {
+                    console.log("mappingDeviceDataStringGen2 __elementArr==>", __elementArr);
+                    const lengthHex = __elementArr[2];
+                    const lengthDec = hexToDecimal(lengthHex);
+
+                    console.log("mappingDeviceDataStringGen2 hexToDecimal==>", lengthDec);
+
+                    const __uuidData = __BLE_GEN2_GATT_SERVICES_TMP2?.chunks[index]?.uuidData;
+                    console.log("mappingDeviceDataStringGen2 __uuidData==>", __uuidData);
+
+                    if (isObjectEmpty(__uuidData)) {
+                        return false;
+                    }
+
+                    // Removing start flags
+                    const __elementArrTmp = [...__elementArr];
+                    const startFlags = __elementArrTmp.splice(0, 2);
+                    console.log("mappingDeviceDataStringGen2 __elementArrTmp==>", __elementArrTmp);
+                    console.log("mappingDeviceDataStringGen2 startFlags==>", startFlags);
+
+                    // const __elementArrTmpChunk = chunk(__elementArrTmp, 5);
+                    // __elementArrTmpChunk.splice(-1);
+                    // console.log("mappingDeviceDataStringGen2 __elementArrTmpChunk==>", __elementArrTmpChunk);
+
+
+                    // console.log("mappingDeviceDataStringGen2 __elementArrTmpChunk.length==>", __elementArrTmpChunk.length);
+                    // console.log("mappingDeviceDataStringGen2 __uuidData.length==>", __uuidData.length);
+
+                    // if (__elementArrTmpChunk.length < __uuidData.length) {
+                    //     return false;
+                    // }
+
+                    __uuidData.forEach((characteristic, __index) => {
+
+                        // 
+                        const __characteristicTmp = {...characteristic};
+                        const __keyValueArr = __elementArrTmp.splice(0, characteristic?.size);
+                        console.log("mappingDeviceDataStringGen2 __characteristicTmp==>", __characteristicTmp);
+                        console.log("mappingDeviceDataStringGen2 removedArr==>", __keyValueArr);
+
+                        // 
+                        const __keyValueArrTmp = [...__keyValueArr];
+                        const keyArr = __keyValueArrTmp.splice(0, characteristic?.name?.size);
+                        console.log("mappingDeviceDataStringGen2 __keyValueArrTmp==>", __keyValueArrTmp);
+                        console.log("mappingDeviceDataStringGen2 keyArr==>", keyArr);
+
+                        // console.log("mappingDeviceDataStringGen2 characteristic==>", characteristic);
+                        // const __characteristic = [...characteristic];
+                        // __characteristic.splice(0, 1);
+                        // console.log("mappingDeviceDataStringGen2 __characteristic==>", __characteristic);
+                        const __characteristicHex = __keyValueArrTmp.join("");
+                        console.log("mappingDeviceDataStringGen2 __characteristicHex==>", __characteristicHex);
+                        const __characteristicValueInText = hexEncodeDecode(__characteristicHex, 'decode');
+                        console.log("mappingDeviceDataStringGen2 __characteristicValueInText==>", __characteristicValueInText);
+
+                        if (__uuidData?.[__index]?.value) {
+                            __uuidData[__index].value.currentValue = __characteristicValueInText?.trim();
+                        }
+                    });
+
+                    __BLE_GEN2_GATT_SERVICES_TMP2.chunks[index].uuidData = __uuidData;
+                }
+            }
+        });
+
+        finalArr = __BLE_GEN2_GATT_SERVICES_TMP2;
+        console.log("mappingDeviceDataStringGen2 finalArr==>", finalArr);
+    }
+</script>

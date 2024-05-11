@@ -118,6 +118,20 @@ export function hexEncodeDecode(
 }
 
 /**
+ * Function to convert a hex string to text ASCII
+ *
+ * @param {string} hexx hex string
+ * @return {string} Decode (in decimal) string
+ */
+export function hexToString(hexx: any) {
+  var hex = hexx.toString(); //force conversion
+  var str = '';
+  for (var i = 0; i < hex.length; i += 2)
+    str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  return str;
+}
+
+/**
  * Function to convert a hex string to decimal
  *
  * @param {string} encodedString Base 64 encoded string
