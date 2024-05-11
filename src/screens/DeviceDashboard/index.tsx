@@ -57,7 +57,6 @@ import {
   getFlushSettings,
   getSensorSettings,
 } from './helperGen1';
-import StorageService from 'src/services/StorageService/StorageService';
 
 const Index = ({navigation}: any) => {
   const dispatch = useDispatch();
@@ -188,7 +187,6 @@ const Index = ({navigation}: any) => {
   const initlizeAppGen2 = async () => {
     consoleLog('getDeviceDataGen2 called');
     __mappingDeviceDataIntegersGen2SetupMonitor();
-    // __mappingRealTimeDataGen2SetupMonitor();
   };
 
   /** Function comments */
@@ -212,9 +210,11 @@ const Index = ({navigation}: any) => {
             BLEService.characteristicMonitorDeviceDataIntegers =
               __characteristicMonitorDeviceDataIntegers;
             BLEService.finishMonitor();
-            __mappingDataCollectionGen2SetupMonitor();
-            // __mappingRealTimeDataGen2SetupMonitor();
             __mappingDeviceDataIntegersGen2();
+
+            setTimeout(() => {
+              __mappingDataCollectionGen2SetupMonitor();
+            }, 250);
           } else {
             __characteristicMonitorDeviceDataIntegers.push(
               deviceDataIntegerHex,
@@ -385,10 +385,10 @@ const Index = ({navigation}: any) => {
           BLEService.characteristicMonitorDataCollection =
             __characteristicMonitorDataCollection;
           BLEService.finishMonitor();
+          __mappingDataCollectionGen2();
           setTimeout(() => {
-            // __mappingRealTimeDataGen2SetupMonitor();
-            __mappingDataCollectionGen2();
-          }, 1000);
+            __mappingRealTimeDataGen2SetupMonitor();
+          }, 250);
         }
       },
       error => {
@@ -465,7 +465,7 @@ const Index = ({navigation}: any) => {
 
   /** Function comments */
   const __mappingRealTimeDataGen2SetupMonitor = async () => {
-    consoleLog('__mappingRealTimeGen2SetupMonitor called');
+    consoleLog('__mappingRealTimeDataGen2SetupMonitor called');
     var __characteristicMonitorRealTimeData: string[] = [];
 
     // Device data integer
@@ -474,13 +474,13 @@ const Index = ({navigation}: any) => {
       BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_CHARACTERISTIC_UUID,
       characteristic => {
         // consoleLog(
-        //   '__mappingRealTimeGen2SetupMonitor characteristic==>',
+        //   '__mappingRealTimeDataGen2SetupMonitor characteristic==>',
         //   characteristic,
         // );
         // if (characteristic?.value) {
         var deviceDataIntegerHex = base64ToHex(characteristic?.value);
         consoleLog(
-          '__mappingRealTimeGen2SetupMonitor deviceDataIntegerHex==>',
+          '__mappingRealTimeDataGen2SetupMonitor deviceDataIntegerHex==>',
           deviceDataIntegerHex,
         );
 
@@ -492,7 +492,7 @@ const Index = ({navigation}: any) => {
         // }
       },
       error => {
-        consoleLog('__mappingRealTimeGen2SetupMonitor error==>', error);
+        consoleLog('__mappingRealTimeDataGen2SetupMonitor error==>', error);
       },
     );
   };
