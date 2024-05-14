@@ -1,6 +1,10 @@
 import {Device} from 'react-native-ble-plx';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
-import {getDeviceModelData} from 'src/utils/Helpers/project';
+import {
+  getBleDeviceGeneration,
+  getBleDeviceSerialNumber,
+  getDeviceModelData,
+} from 'src/utils/Helpers/project';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {DeviceExtendedProps} from './types';
 
@@ -9,19 +13,30 @@ export const filterBLEDevices = (device: DeviceExtendedProps): any => {
   const deviceName = device?.localName ?? device?.name;
   if (device && !isObjectEmpty(device) && deviceName) {
     if (
-      deviceName?.toUpperCase()?.includes('FAUCET') ||
-      deviceName?.toUpperCase()?.includes('SL')
+      true
+      // deviceName?.toUpperCase()?.includes('FAUCET') ||
+      // deviceName?.toUpperCase()?.includes('SL')
     ) {
       var __deviceNameArr = deviceName.split(' ');
       // consoleLog('__deviceNameArr', __deviceNameArr);
-      const deviceStaticData = getDeviceModelData(device, BLE_DEVICE_MODELS);
+      const deviceGen = getBleDeviceGeneration(deviceName);
+      const deviceStaticData = getDeviceModelData(
+        device,
+        BLE_DEVICE_MODELS,
+        deviceGen,
+      );
+      const deviceSerialNumber = getBleDeviceSerialNumber(device, deviceGen);
 
       if (
         Array.isArray(__deviceNameArr) &&
         __deviceNameArr.length > 0 &&
         deviceStaticData?.fullNameAllModel
       ) {
+        if (__deviceNameArr[0] == 'SL') {
+          __deviceNameArr[0] = 'FAUCET';
+        }
         __deviceNameArr[1] = deviceStaticData?.fullNameAllModel;
+        __deviceNameArr.push(deviceSerialNumber?.toUpperCase());
         device.localName = __deviceNameArr.join(' ');
       }
       // consoleLog('deviceStaticData', deviceStaticData);

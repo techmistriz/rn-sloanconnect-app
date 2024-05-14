@@ -17,6 +17,7 @@ import {showMessage} from 'react-native-flash-message';
 import {
   base64EncodeDecode,
   base64EncodeFromByteArray,
+  fromHexStringUint8Array,
 } from 'src/utils/Helpers/encryption';
 import {
   getBatteryLevel,
@@ -40,9 +41,13 @@ class BLEServiceInstance {
 
   device: Device | null;
 
+  deviceRaw: Device | null;
+
   scannedDevices: Device[];
 
   deviceGeneration: string;
+
+  deviceVersion: string;
 
   batteryLevel: number;
 
@@ -80,8 +85,10 @@ class BLEServiceInstance {
 
   constructor() {
     this.device = null;
+    this.deviceRaw = null;
     this.scannedDevices = [];
     this.deviceGeneration = '';
+    this.deviceVersion = 'gen1';
     this.batteryLevel = 0;
     this.totalWaterUsase = 0;
     this.connectedDeviceStaticData = null;
@@ -250,8 +257,11 @@ class BLEServiceInstance {
           var __deviceLocalName = __device?.localName ?? __device?.name;
           device.localName = __deviceLocalName;
           this.device = device;
+          this.deviceRaw = __device;
           const deviceGen = getBleDeviceGeneration(__deviceLocalName);
+          const deviceVer = getBleDeviceVersion(__device, deviceGen);
           this.deviceGeneration = deviceGen;
+          this.deviceVersion = deviceVer;
           resolve(device);
         })
         .catch(error => {
@@ -894,14 +904,11 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-  dispenseWater = async (
-    serviceUUID: string = '',
-    characteristicUUID: string = '',
-  ) => {
+  dispenseWater = async (characteristicHex: string = '') => {
     if (BLEService.deviceGeneration == 'gen1') {
       this.dispenseWaterGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
-      // Code need to be implemented
+      this.dispenseWaterGen2(characteristicHex);
     } else if (BLEService.deviceGeneration == 'gen3') {
       // Code need to be implemented
     } else if (BLEService.deviceGeneration == 'gen4') {
@@ -930,6 +937,32 @@ class BLEServiceInstance {
       'dispenseWater writeCharacteristicWithResponseForDevice==>',
       JSON.stringify(writeCharacteristicWithResponseForDevice),
     );
+  };
+
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
+  dispenseWaterGen2 = async (characteristicHex: string = '720a01321a01CF') => {
+    const writableData = fromHexStringUint8Array(characteristicHex);
+    const writeDataResponse =
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        writableData,
+      );
+
+    consoleLog(
+      'initlizeAppGen2 writeDataResponse==>',
+      JSON.stringify(writeDataResponse),
+    );
+
+    showMessage({
+      type: 'success',
+      message: 'Success',
+      description: 'Water dispensed successfully',
+    });
   };
 
   /**
@@ -975,17 +1008,19 @@ class BLEServiceInstance {
     var __deviceName = this.device?.localName ?? this.device?.name;
     if (__deviceName) {
       const deviceGen = this.deviceGeneration;
+      const deviceVer = this.deviceVersion;
       consoleLog('setDeviceModelData deviceGen==>', deviceGen);
+      // // consoleLog('setDeviceModelData deviceVer==>', deviceVer);
 
       if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] != 'undefined') {
-        const deviceVersion = getBleDeviceVersion(__deviceName, deviceGen);
-        consoleLog('setDeviceModelData deviceVersion==>', deviceVersion);
+        // const deviceVer = getBleDeviceVersion(this.device, deviceGen);
+        // consoleLog('setDeviceModelData deviceVer==>', deviceVer);
 
         const deviceModel = BLE_DEVICE_MODELS[deviceGen];
         consoleLog('setDeviceModelData deviceModel==>', deviceModel);
 
-        if (deviceModel && typeof deviceModel[deviceVersion] != 'undefined') {
-          deviceStaticData = deviceModel[deviceVersion];
+        if (deviceModel && typeof deviceModel[deviceVer] != 'undefined') {
+          deviceStaticData = deviceModel[deviceVer];
         }
       }
     }

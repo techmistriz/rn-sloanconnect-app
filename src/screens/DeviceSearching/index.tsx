@@ -97,10 +97,10 @@ const Index = ({navigation, route}: any) => {
     timeoutID = setTimeout(() => {
       if (foundDevices.length == 0) {
         // consoleLog('setTimeout==>', timeoutID);
-        clearTimeout(timeoutID);
-        BLEService.manager.stopDeviceScan();
         // NavigationService.replace('NoDeviceFound');
-        setScanning(ScanningProps.NoDevice);
+        // clearTimeout(timeoutID);
+        // BLEService.manager.stopDeviceScan();
+        // setScanning(ScanningProps.NoDevice);
       }
     }, WAITING_TIMEOUT_FOR_CHECKING_DEVICE);
 
@@ -149,11 +149,12 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const addFoundDevice = (__device: DeviceExtendedProps) => {
     const device = filterBLEDevices(__device);
-    consoleLog('device localName==>', device?.localName);
+    consoleLog('addFoundDevice device localName==>', device?.localName);
     if (!device) {
       // refreshFoundDevices(foundDevices);
       return false;
     }
+    
     setScanning(ScanningProps.DeviceFound);
     setFoundDevices(prevState => {
       const __isFoundDeviceUpdateNecessary = isFoundDeviceUpdateNecessary(

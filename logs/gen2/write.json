@@ -1,17 +1,42 @@
 {
+  "value": "NzIwYTAxMzIwMTY2NDFCQTA1Q0Y=",
+  "isIndicatable": true,
+  "isNotifiable": false,
+  "isWritableWithoutResponse": false,
+  "isWritableWithResponse": true,
+  "serviceUUID": "8de47721-5496-4233-ae45-e4b306fe1180",
+  "deviceID": "84:BA:20:4A:92:00",
+  "isReadable": false,
+  "serviceID": 12,
+  "isNotifying": false,
+  "uuid": "8de47721-5496-4233-ae45-e4b306fe1181",
+  "id": 13,
   "_manager": {
+    "_eventEmitter": {
+      "_nativeModule": {
+        "StateChangeEvent": "StateChangeEvent",
+        "RestoreStateEvent": "RestoreStateEvent",
+        "ScanEvent": "ScanEvent",
+        "DisconnectionEvent": "DisconnectionEvent",
+        "ReadEvent": "ReadEvent"
+      }
+    },
+    "_uniqueId": 80,
     "_activePromises": {},
     "_activeSubscriptions": {},
     "_errorCodesToMessagesMapping": {
       "0": "Unknown error occurred. This is probably a bug! Check reason property.",
       "1": "BleManager was destroyed",
+      "2": "Operation was cancelled",
+      "3": "Operation timed out",
+      "4": "Operation was rejected",
+      "5": "Invalid UUIDs or IDs were passed: {internalMessage}",
       "100": "BluetoothLE is unsupported on this device",
       "101": "Device is not authorized to use BluetoothLE",
       "102": "BluetoothLE is powered off",
       "103": "BluetoothLE is in unknown state",
       "104": "BluetoothLE is resetting",
       "105": "Bluetooth state change failed",
-      "2": "Operation was cancelled",
       "200": "Device {deviceID} connection failed",
       "201": "Device {deviceID} was disconnected",
       "202": "RSSI read failed for device {deviceID}",
@@ -19,12 +44,10 @@
       "204": "Device {deviceID} not found",
       "205": "Device {deviceID} is not connected",
       "206": "Device {deviceID} could not change MTU size",
-      "3": "Operation timed out",
       "300": "Services discovery failed for device {deviceID}",
       "301": "Included services discovery failed for device {deviceID} and service: {serviceUUID}",
       "302": "Service {serviceUUID} for device {deviceID} not found",
       "303": "Services not discovered for device {deviceID}",
-      "4": "Operation was rejected",
       "400": "Characteristic discovery failed for device {deviceID} and service {serviceUUID}",
       "401": "Characteristic {characteristicUUID} write failed for device {deviceID} and service {serviceUUID}",
       "402": "Characteristic {characteristicUUID} read failed for device {deviceID} and service {serviceUUID}",
@@ -32,7 +55,6 @@
       "404": "Characteristic {characteristicUUID} not found",
       "405": "Characteristics not discovered for device {deviceID} and service {serviceUUID}",
       "406": "Cannot write to characteristic {characteristicUUID} with invalid data format: {internalMessage}",
-      "5": "Invalid UUIDs or IDs were passed: {internalMessage}",
       "500": "Descriptor {descriptorUUID} discovery failed for device {deviceID}, service {serviceUUID} and characteristic {characteristicUUID}",
       "501": "Descriptor {descriptorUUID} write failed for device {deviceID}, service {serviceUUID} and characteristic {characteristicUUID}",
       "502": "Descriptor {descriptorUUID} read failed for device {deviceID}, service {serviceUUID} and characteristic {characteristicUUID}",
@@ -43,41 +65,6 @@
       "600": "Cannot start scanning operation",
       "601": "Location services are disabled"
     },
-    "_eventEmitter": {"_nativeModule": "[Object]"},
-    "_scanEventSubscription": {"remove": ""},
-    "_uniqueId": 25
-  },
-  "id": "84:BA:20:4A:92:00",
-  "isConnectable": true,
-  "localName": "SL EFX1XX, EFX2XX, EFX3XX, EFX6XX, EFX8XX",
-  "manufacturerData": "zQcBBwCSSiAtAAACAAEAAEJEU0tVNA==",
-  "modelStaticData": {
-    "fullNameAllModel": "EFX1XX, EFX2XX, EFX3XX, EFX6XX, EFX8XX",
-    "models": "",
-    "name": "BASYS/Aquis Faucets",
-    "type": "ADSKU",
-    "version": "20"
-  },
-  "mtu": 23,
-  "name": "SL",
-  "overflowServiceUUIDs": null,
-  "rawScanRecord": "AgEGAwlTTBf/zQcBBwCSSiAtAAACAAEAAEJEU0tVNAIBBgMJU0w=",
-  "rssi": -56,
-  "serviceData": null,
-  "serviceUUIDs": null,
-  "solicitedServiceUUIDs": null,
-  "txPowerLevel": null
+    "_scanEventSubscription": null
+  }
 }
-
-Decoded manufacturerData
-CD07010700924A202D000002000100004244534B5534
-
-00924a2062000002000100004244534b55
-
-Decoded rawScanRecord
-0201060309534C17FFCD070107 00924A20 2D000002000100004244534B55340201060309534C
-
-02 01 06 03 09 53 4c 17 ff cd 07 01 07 00 92 4a 20 2d 00 00 02 00 01 00 00 42 44 53 4b 55 34 02 01 06 03 09 53 4c
-
-Example
-0201060309534C16FFCD070003A0769E6FF371C00700025F1453686F6BA1 + F371C001004650

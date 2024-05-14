@@ -44,7 +44,10 @@ import LineFlushList from 'src/components/@ProjectComponent/DeviceSettingsList/L
 import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {base64ToHex} from 'src/utils/Helpers/encryption';
+import {
+  base64ToHex,
+  fromHexStringUint8Array,
+} from 'src/utils/Helpers/encryption';
 import {
   mappingDataCollectionGen2,
   mappingDeviceDataIntegersGen2,
@@ -120,7 +123,8 @@ const Index = ({navigation}: any) => {
   /** Function comments */
   const initlizeApp = async () => {
     // await StorageService.removeItem('@DEVICE_PREVIOUS_SETTINGS');
-
+    // consoleLog("initlizeApp connectedDeviceStaticData==>", BLEService.connectedDeviceStaticData);
+    // consoleLog("initlizeApp deviceGeneration==>", BLEService.deviceGeneration);
     if (BLEService.connectedDeviceStaticData) {
       setDeviceData(BLEService.connectedDeviceStaticData);
     }
@@ -135,6 +139,22 @@ const Index = ({navigation}: any) => {
     } else if (BLEService.deviceGeneration == 'gen4') {
       // Code need to be implemented
     }
+  };
+
+  const writeData = async () => {
+    const writableData = fromHexStringUint8Array('720a0132026641BA05CF');
+    // 720a0132016641BA05CF
+    const writeDataResponse =
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        writableData,
+      );
+
+    consoleLog(
+      'initlizeAppGen2 writeDataResponse==>',
+      JSON.stringify(writeDataResponse),
+    );
   };
 
   /** Function comments */
@@ -649,8 +669,12 @@ const Index = ({navigation}: any) => {
 
   /** Function comments */
   const dispenseWater = () => {
-    BLEService.dispenseWater();
-    // intiGen2SecurityKey();
+    var characteristicHex = '720a01321400000001CF';
+    BLEService.dispenseWater(characteristicHex);
+    if (BLEService.deviceGeneration == 'gen2') {
+      // initlizeAppGen2();
+      // settingsMappingGen2();
+    }
   };
 
   return (
@@ -881,7 +905,7 @@ const Index = ({navigation}: any) => {
                       size={20}
                       color={Theme.colors.primaryColor}
                       // onPress={() => {
-                      //   getDeviceDataGen2();
+                      //   writeData();
                       // }}
                     />
                     <Typography

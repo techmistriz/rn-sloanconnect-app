@@ -21,6 +21,7 @@ import {consoleLog, parseDateTimeInFormat} from './HelperFunction';
 import {BLE_GATT_SERVICES} from '../StaticData/BLE_GATT_SERVICES';
 import BLE_CONSTANTS from '../StaticData/BLE_CONSTANTS';
 import {sha256Bytes} from 'react-native-sha256';
+import {Device} from 'react-native-ble-plx';
 
 /**
  *
@@ -92,14 +93,13 @@ export function getBleDeviceGeneration(str: string | null | undefined = '') {
 
 /**
  *
- * @param {*} param1
- * @param {*} param2
+ * @param {*} connectedDevice
+ * @param {*} gen
  * @returns result
  */
-export function getBleDeviceVersion(
-  str: string | null | undefined = '',
-  gen = 'gen1',
-) {
+export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
+  var str = connectedDevice?.localName ?? connectedDevice?.name;
+
   if (!str) return '';
   var result = '';
   if (gen == 'gen1') {
@@ -113,6 +113,24 @@ export function getBleDeviceVersion(
     }
   } else if (gen == 'gen2') {
     result = '20';
+    const __rawScanRecord = connectedDevice?.rawScanRecord;
+    if (!__rawScanRecord) {
+      return result;
+    }
+    const __rawScanRecordHex = base64ToHex(__rawScanRecord);
+    // consoleLog('__rawScanRecordHex==>', __rawScanRecordHex);
+    const __rawScanRecordHexSpace = addSeparatorInString(
+      __rawScanRecordHex,
+      2,
+      ' ',
+    );
+    // consoleLog('__rawScanRecordHex==>', __rawScanRecordHex);
+    const __rawScanRecordHexArr = __rawScanRecordHexSpace.split(' ');
+    // consoleLog('__rawScanRecordHexArr==>', __rawScanRecordHexArr);
+    const modelNumber = __rawScanRecordHexArr?.[12];
+    result = modelNumber ?? result;
+    // consoleLog('modelNumber==>', modelNumber);
+    
   } else if (gen == 'gen3') {
     var arr = str.split(' ');
 
@@ -137,6 +155,43 @@ export function getBleDeviceVersion(
 
 /**
  *
+ * @param {*} connectedDevice: Device,
+ * @param {*} gen
+ * @returns result
+ */
+export function getBleDeviceSerialNumber(
+  connectedDevice: Device,
+  gen = 'gen1',
+) {
+  var str = connectedDevice?.localName ?? connectedDevice?.name;
+  if (!str) return '';
+  var result = '';
+  if (gen == 'gen2') {
+    const __rawScanRecord = connectedDevice?.rawScanRecord;
+    if (!__rawScanRecord) {
+      return result;
+    }
+    const __rawScanRecordHex = base64ToHex(__rawScanRecord);
+    // consoleLog('__rawScanRecordHex==>', __rawScanRecordHex);
+    const __rawScanRecordHexSpace = addSeparatorInString(
+      __rawScanRecordHex,
+      2,
+      ' ',
+    );
+    // consoleLog('__rawScanRecordHex==>', __rawScanRecordHex);
+    const __rawScanRecordHexArr = __rawScanRecordHexSpace.split(' ');
+    // consoleLog('__rawScanRecordHexArr==>', __rawScanRecordHexArr);
+    const __rawScanRecordHexArrTmp = [...__rawScanRecordHexArr];
+    const serialNumber = __rawScanRecordHexArrTmp.splice(13, 4);
+    result = serialNumber.join('');
+    // consoleLog('modelNumber==>', modelNumber);
+    // consoleLog('mappingDeviceDataStringGen2 serialNumber==>', serialNumber);
+  }
+  return result;
+}
+
+/**
+ *
  * @param {*} connectedDevice
  * @param {*} BLE_DEVICE_MODELS
  * @returns device static model object
@@ -144,24 +199,21 @@ export function getBleDeviceVersion(
 export function getDeviceModelData(
   connectedDevice: any,
   BLE_DEVICE_MODELS: any,
+  deviceGen: string,
 ) {
   var deviceStaticData = null;
-
   // localName have more relevant name indentification
   var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
   if (__deviceName) {
-    const deviceGen = getBleDeviceGeneration(__deviceName);
-    // consoleLog('deviceGen', deviceGen);
-
     if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] != 'undefined') {
-      const deviceVersion = getBleDeviceVersion(__deviceName, deviceGen);
-      // consoleLog('deviceVersion', deviceVersion);
-
+      const deviceVersion = getBleDeviceVersion(connectedDevice, deviceGen);
+      consoleLog('getDeviceModelData deviceVersion==>', deviceVersion);
       const deviceModel = BLE_DEVICE_MODELS[deviceGen];
-      // consoleLog('deviceModel', deviceModel);
+      consoleLog('getDeviceModelData deviceModel==>', deviceModel);
 
       if (deviceModel && typeof deviceModel[deviceVersion] != 'undefined') {
         deviceStaticData = deviceModel[deviceVersion];
+        consoleLog('getDeviceModelData deviceStaticData==>', deviceStaticData);
       }
     }
   }
