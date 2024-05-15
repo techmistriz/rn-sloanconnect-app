@@ -87,7 +87,7 @@ export function getBleDeviceGeneration(str: string | null | undefined = '') {
   } else if (str.search(/FAUCET/i) >= 0) {
     return 'gen1';
   } else {
-    return '';
+    return 'gen1';
   }
 }
 

@@ -123,7 +123,8 @@ const Index = ({navigation}: any) => {
   /** Function comments */
   const initlizeApp = async () => {
     // await StorageService.removeItem('@DEVICE_PREVIOUS_SETTINGS');
-    // consoleLog("initlizeApp connectedDeviceStaticData==>", BLEService.connectedDeviceStaticData);
+    // consoleLog("initlizeApp deviceGeneration==>", BLEService.deviceGeneration);
+    // consoleLog("initlizeApp deviceVersion==>", BLEService.deviceVersion);
     // consoleLog("initlizeApp deviceGeneration==>", BLEService.deviceGeneration);
     if (BLEService.connectedDeviceStaticData) {
       setDeviceData(BLEService.connectedDeviceStaticData);
@@ -604,7 +605,7 @@ const Index = ({navigation}: any) => {
   ) => {
     var __LineFlush: any = {};
     const __deviceSettingsDataTmp = {...__deviceSettingsData};
-    // consoleLog("__deviceSettingsDataTmp", __deviceSettingsDataTmp);
+    // consoleLog("onApplySettingPress __deviceSettingsDataTmp==>", __deviceSettingsDataTmp);
     // return;
 
     var timeout = 2000;

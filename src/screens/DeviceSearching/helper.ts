@@ -11,7 +11,9 @@ import {DeviceExtendedProps} from './types';
 export const filterBLEDevices = (device: DeviceExtendedProps): any => {
   var filterDevice = null;
   const deviceName = device?.localName ?? device?.name;
+
   if (device && !isObjectEmpty(device) && deviceName) {
+    device.deviceCustomName = deviceName;
     if (
       true
       // deviceName?.toUpperCase()?.includes('FAUCET') ||
@@ -37,7 +39,7 @@ export const filterBLEDevices = (device: DeviceExtendedProps): any => {
         }
         __deviceNameArr[1] = deviceStaticData?.fullNameAllModel;
         __deviceNameArr.push(deviceSerialNumber?.toUpperCase());
-        device.localName = __deviceNameArr.join(' ');
+        device.deviceCustomName = __deviceNameArr.join(' ');
       }
       // consoleLog('deviceStaticData', deviceStaticData);
       filterDevice = {

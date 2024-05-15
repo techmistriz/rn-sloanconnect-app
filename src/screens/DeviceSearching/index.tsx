@@ -148,13 +148,18 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const addFoundDevice = (__device: DeviceExtendedProps) => {
+    // {"deviceCustomName": "FAUCET ETF610 / EBF615, ETF600 / EBF650 T0224 ", "localName": "FAUCET ADSKU02 T0224"}
+    // consoleLog('addFoundDevice __device==>', __device);
     const device = filterBLEDevices(__device);
-    consoleLog('addFoundDevice device localName==>', device?.localName);
+    consoleLog('addFoundDevice device names==>', {
+      localName: device?.localName,
+      deviceCustomName: device?.deviceCustomName,
+    });
     if (!device) {
       // refreshFoundDevices(foundDevices);
       return false;
     }
-    
+
     setScanning(ScanningProps.DeviceFound);
     setFoundDevices(prevState => {
       const __isFoundDeviceUpdateNecessary = isFoundDeviceUpdateNecessary(
@@ -282,7 +287,7 @@ const Index = ({navigation, route}: any) => {
               style={{flex: 1, justifyContent: 'flex-start', paddingLeft: 10}}>
               <Typography
                 size={14}
-                text={`${item?.localName ?? item?.name}`}
+                text={`${item?.deviceCustomName}`}
                 style={{
                   textAlign: 'left',
                   // paddingVertical: 10,

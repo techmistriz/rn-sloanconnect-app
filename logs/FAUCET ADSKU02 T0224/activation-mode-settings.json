@@ -1,0 +1,50 @@
+{
+  "ActivationMode": [
+    {
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
+      "name": "modeSelection",
+      "newValue": "1",
+      "oldValue": "1",
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+    },
+    {
+      "allowedInPreviousSettings": false,
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c923",
+      "name": "modeSelectionDate",
+      "newValue": "2405150841",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    },
+    {
+      "allowedInPreviousSettings": false,
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c92B",
+      "name": "modeSelectionPhone",
+      "newValue": "0123456789",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    },
+    {
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c944",
+      "name": "metered",
+      "newValue": "104",
+      "oldValue": "1",
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940"
+    },
+    {
+      "allowedInPreviousSettings": false,
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c924",
+      "name": "meteredDate",
+      "newValue": "2405150841",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    },
+    {
+      "allowedInPreviousSettings": false,
+      "characteristicUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c92C",
+      "name": "meteredPhone",
+      "newValue": "0123456789",
+      "oldValue": null,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c920"
+    }
+  ]
+}
