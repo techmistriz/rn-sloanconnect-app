@@ -44,24 +44,12 @@ import LineFlushList from 'src/components/@ProjectComponent/DeviceSettingsList/L
 import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {
-  base64ToHex,
-  fromHexStringUint8Array,
-} from 'src/utils/Helpers/encryption';
-import {
-  mappingDataCollectionGen2,
-  mappingDeviceDataIntegersGen2,
-  mappingRealTimeDataGen2,
-} from './helperGen2';
+import {SearchBar} from 'react-native-screens';
+import {base64ToHex} from 'src/utils/Helpers/encryption';
+import {mappingDeviceDataIntegersGen2} from './helper';
 import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
-import {
-  getActivationModeSettings,
-  getFlowSettings,
-  getFlushSettings,
-  getSensorSettings,
-} from './helperGen1';
 
-const Index = ({navigation}: any) => {
+const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
   // const {referrer} = route?.params || {referrer: undefined};
   // const {device, status} = useSelector(
@@ -85,12 +73,6 @@ const Index = ({navigation}: any) => {
   const [batteryLevel, setBatteryLevel] = useState<number>(0);
   const [totalWaterUsage, setTotalWaterUsage] = useState<number>(0);
   const [savedSettingsGen1, setSavedSettingsGen1] = useState<any>(0);
-
-  // New method
-  const [activationModeSettings, setActivationModeSettings] = useState<any>();
-  const [flushSettings, setFlushSettings] = useState<any>();
-  const [flowRateSettings, setFlowRateSettings] = useState<any>();
-  const [sensorSettings, setSensorSettings] = useState<any>();
 
   /** component hooks method */
   useEffect(() => {
@@ -120,12 +102,7 @@ const Index = ({navigation}: any) => {
     return unsubscribe;
   }, [navigation]);
 
-  /** Function comments */
   const initlizeApp = async () => {
-    // await StorageService.removeItem('@DEVICE_PREVIOUS_SETTINGS');
-    // consoleLog("initlizeApp deviceGeneration==>", BLEService.deviceGeneration);
-    // consoleLog("initlizeApp deviceVersion==>", BLEService.deviceVersion);
-    // consoleLog("initlizeApp deviceGeneration==>", BLEService.deviceGeneration);
     if (BLEService.connectedDeviceStaticData) {
       setDeviceData(BLEService.connectedDeviceStaticData);
     }
@@ -134,7 +111,6 @@ const Index = ({navigation}: any) => {
       initlizeAppGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       initlizeAppGen2();
-      // settingsMappingGen2();
     } else if (BLEService.deviceGeneration == 'gen3') {
       // Code need to be implemented
     } else if (BLEService.deviceGeneration == 'gen4') {
@@ -142,77 +118,14 @@ const Index = ({navigation}: any) => {
     }
   };
 
-  const writeData = async () => {
-    const writableData = fromHexStringUint8Array('720a0132026641BA05CF');
-    // 720a0132016641BA05CF
-    const writeDataResponse =
-      await BLEService.writeCharacteristicWithResponseForDevice2(
-        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-        writableData,
-      );
-
-    consoleLog(
-      'initlizeAppGen2 writeDataResponse==>',
-      JSON.stringify(writeDataResponse),
-    );
-  };
-
-  /** Function comments */
   const initlizeAppGen1 = async () => {
     __getBatteryLevel();
     __getTotalWaterUsase();
     __getSavedSettingsGen1();
-    getActivationModeSettings(deviceSettingsData)
-      .then(response => {
-        // consoleLog(
-        //   'initlizeAppGen1 getActivationModeSettings response==>',
-        //   response,
-        // );
-
-        // if (JSON.stringify(activationModeSettings) != JSON.stringify(response)) {
-        setActivationModeSettings(response);
-        // }
-      })
-      .catch(error => {
-        consoleLog('initlizeAppGen1 getActivationModeSettings error==>', error);
-      });
-
-    getFlushSettings(deviceSettingsData)
-      .then(response => {
-        // consoleLog('initlizeAppGen1 getFlushSettings response==>', response);
-        setFlushSettings(response);
-      })
-      .catch(error => {
-        consoleLog('initlizeAppGen1 getFlushSettings error==>', error);
-      });
-    getSensorSettings(deviceSettingsData)
-      .then(response => {
-        // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
-        setSensorSettings(response);
-      })
-      .catch(error => {
-        consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
-      });
-    getFlowSettings(deviceSettingsData)
-      .then(response => {
-        // consoleLog('initlizeAppGen1 getFlowSettings response==>', response);
-        setFlowRateSettings(response);
-      })
-      .catch(error => {
-        consoleLog('initlizeAppGen1 getFlowSettings error==>', error);
-      });
   };
 
-  /** Function comments */
   const initlizeAppGen2 = async () => {
     consoleLog('getDeviceDataGen2 called');
-    __mappingDeviceDataIntegersGen2SetupMonitor();
-  };
-
-  /** Function comments */
-  const __mappingDeviceDataIntegersGen2SetupMonitor = async () => {
-    consoleLog('__mappingDeviceDataIntegersGen2SetupMonitor called');
     var __characteristicMonitorDeviceDataIntegers: string[] = [];
 
     // Device data integer
@@ -220,22 +133,17 @@ const Index = ({navigation}: any) => {
       BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_SERVICE_UUID,
       BLE_CONSTANTS?.GEN2?.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
       characteristic => {
-        // consoleLog('__mappingDeviceDataIntegersGen2SetupMonitor characteristic==>', characteristic);
+        // consoleLog('setupMonitor characteristic==>', characteristic);
         if (characteristic?.value) {
           var deviceDataIntegerHex = base64ToHex(characteristic?.value);
           // consoleLog(
-          //   '__mappingDeviceDataIntegersGen2SetupMonitor deviceDataIntegerHex==>',
+          //   'setupMonitor deviceDataIntegerHex==>',
           //   deviceDataIntegerHex,
           // );
           if (deviceDataIntegerHex == '71ff04') {
             BLEService.characteristicMonitorDeviceDataIntegers =
               __characteristicMonitorDeviceDataIntegers;
-            BLEService.finishMonitor();
             __mappingDeviceDataIntegersGen2();
-
-            setTimeout(() => {
-              __mappingDataCollectionGen2SetupMonitor();
-            }, 250);
           } else {
             __characteristicMonitorDeviceDataIntegers.push(
               deviceDataIntegerHex,
@@ -259,336 +167,103 @@ const Index = ({navigation}: any) => {
         BLEService.characteristicMonitorDeviceDataIntegers,
       );
 
-    // consoleLog(
-    //   '__mappingDeviceDataIntegersGen2 mappingDeviceDataIntegersGen2Response==>',
-    //   JSON.stringify(mappingDeviceDataIntegersGen2Response),
-    // );
+    consoleLog(
+      '__mappingDeviceDataIntegersGen2 mappingDeviceDataIntegersGen2Response==>',
+      mappingDeviceDataIntegersGen2Response,
+    );
 
     BLEService.characteristicMonitorDeviceDataIntegersMapped =
       mappingDeviceDataIntegersGen2Response;
-    __mappingDeviceDataIntegersGen2Data();
   };
 
-  /** Function comments */
-  const __mappingDeviceDataIntegersGen2Data = () => {
-    const mappingDeviceDataIntegersGen2Response =
-      BLEService.characteristicMonitorDeviceDataIntegersMapped;
+  const experimental = () => {
+    // Experimental areas
+    // await BLEService.discoverAllServicesAndCharacteristicsForDevice();
 
-    if (!isObjectEmpty(mappingDeviceDataIntegersGen2Response)) {
-      // For Activation mode
-      var __activationModeSettings = {
-        modeSelection: {},
-        metered: {},
-        onDemand: {},
-      };
+    // BLEService.disconnectDeviceById('00:0B:57:6E:87:31');
+    // consoleLog('initialize AllServicesChar==>', JSON.stringify(AllServicesChar));
+    // MA== (0) default
+    // MQ== (1)
+    const serviceuuid = 'd0aba888-fb10-4dc9-9b17-bdd8f490c920';
+    const charuuid = 'd0aba888-fb10-4dc9-9b17-bdd8f490c921';
 
-      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[21]) {
-        __activationModeSettings.modeSelection = {
-          value:
-            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[21]?.value?.currentValue?.toString(),
-        };
-      }
+    // Battery
+    // const serviceuuid = '0000180f-0000-1000-8000-00805f9b34fb';
+    // const charuuid = '00002a19-0000-1000-8000-00805f9b34fb';
 
-      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[22]) {
-        __activationModeSettings.metered = {
-          value:
-            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[22]?.value?.currentValue?.toString(),
-        };
-      }
+    // const AllServicesChar =
+    //   await BLEService.discoverAllServicesAndCharacteristicsForDevice();
+    // consoleLog('initialize AllServicesChar==>', JSON.stringify(AllServicesChar));
 
-      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[23]) {
-        __activationModeSettings.onDemand = {
-          value:
-            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[23]?.value?.currentValue?.toString(),
-        };
-      }
-      // consoleLog(
-      //   'settingsMappingGen2 __activationModeSettings==>',
-      //   __activationModeSettings,
-      // );
-      if (__activationModeSettings) {
-        setActivationModeSettings(__activationModeSettings);
-      }
+    // const AllServices = await BLEService.getServicesForDevice();
+    // consoleLog('initialize AllServices2==>', JSON.stringify(AllServices));
 
-      // For Line flush
-      var __flushSettings = {
-        flush: {},
-        flushTime: {},
-        flushInterval: {},
-      };
-
-      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[24]) {
-        __flushSettings.flush = {
-          value:
-            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[24]?.value?.currentValue?.toString(),
-        };
-      }
-
-      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[28]) {
-        __flushSettings.flushTime = {
-          value:
-            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[28]?.value?.currentValue?.toString(),
-        };
-      }
-
-      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[31]) {
-        __flushSettings.flushInterval = {
-          value:
-            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[31]?.value?.currentValue?.toString(),
-        };
-      }
-      // consoleLog('settingsMappingGen2 __flushSettings==>', __flushSettings);
-      if (__flushSettings) {
-        setFlushSettings(__flushSettings);
-      }
-
-      // For flowRateSettings
-      var __flowRateSettings = {
-        flowRate: {},
-      };
-
-      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[19]) {
-        __flowRateSettings.flowRate = {
-          value:
-            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[19]?.value?.currentValue?.toString(),
-        };
-      }
-
-      // consoleLog(
-      //   'settingsMappingGen2 __flowRateSettings==>',
-      //   __flowRateSettings,
-      // );
-      if (__flowRateSettings) {
-        setFlowRateSettings(__flowRateSettings);
-      }
-
-      // For sensorSettings
-      var __sensorSettings = {
-        sensorRange: {},
-      };
-
-      if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[20]) {
-        __sensorSettings.sensorRange = {
-          value:
-            mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[20]?.value?.currentValue?.toString(),
-        };
-      }
-
-      // consoleLog('settingsMappingGen2 __sensorSettings==>', __sensorSettings);
-      if (__sensorSettings) {
-        setSensorSettings(__sensorSettings);
-      }
-    }
-  };
-
-  /** Function comments */
-  const __mappingDataCollectionGen2SetupMonitor = async () => {
-    consoleLog('__mappingDataCollectionGen2SetupMonitor called');
-    var __characteristicMonitorDataCollection: string[] = [];
-
-    // Device data integer
-    BLEService.setupMonitor(
-      BLE_CONSTANTS?.GEN2?.DATA_COLLECTION_SERVICE_UUID,
-      BLE_CONSTANTS?.GEN2?.DATA_COLLECTION_CHARACTERISTIC_UUID,
-      characteristic => {
-        // consoleLog(
-        //   '__mappingDataCollectionGen2SetupMonitor characteristic==>',
-        //   characteristic,
-        // );
-        if (characteristic?.value) {
-          var deviceDataIntegerHex = base64ToHex(characteristic?.value);
-          consoleLog(
-            '__mappingDataCollectionGen2SetupMonitor deviceDataIntegerHex==>',
-            deviceDataIntegerHex,
-          );
-
-          __characteristicMonitorDataCollection.push(deviceDataIntegerHex);
-          BLEService.characteristicMonitorDataCollection =
-            __characteristicMonitorDataCollection;
-          BLEService.finishMonitor();
-          __mappingDataCollectionGen2();
-          setTimeout(() => {
-            __mappingRealTimeDataGen2SetupMonitor();
-          }, 250);
-        }
-      },
-      error => {
-        consoleLog('__mappingDataCollectionGen2SetupMonitor error==>', error);
-      },
-    );
-  };
-
-  /** Function comments */
-  const __mappingDataCollectionGen2 = async () => {
-    const mappingDataCollectionGen2Response = await mappingDataCollectionGen2(
-      BLE_GEN2_GATT_SERVICES,
-      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_SERVICE_UUID,
-      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_CHARACTERISTIC_UUID,
-      BLEService.characteristicMonitorDataCollection,
-    );
-
+    // const getCharacteristicsForDevice =
+    //   await BLEService.getCharacteristicsForDevice(serviceuuid);
     // consoleLog(
-    //   '__mappingDataCollectionGen2 mappingDataCollectionGen2Response==>',
-    //   JSON.stringify(mappingDataCollectionGen2Response),
+    //   'initialize getCharacteristicsForDevice==>',
+    //   JSON.stringify(getCharacteristicsForDevice),
     // );
 
-    BLEService.characteristicMonitorDataCollectionMapped =
-      mappingDataCollectionGen2Response;
-    __mappingDataCollectionGen2Data();
-  };
-
-  /** Function comments */
-  const __mappingDataCollectionGen2Data = () => {
-    consoleLog('__mappingDataCollectionGen2Data called');
-    const characteristicMonitorDeviceDataIntegersMappedResponse =
-      BLEService.characteristicMonitorDeviceDataIntegersMapped;
-    var flowRate = 0;
-    var activationsDuration = 0;
-    var totalWaterUsage = 0;
-    if (!isObjectEmpty(characteristicMonitorDeviceDataIntegersMappedResponse)) {
-      // For flowRate
-      // consoleLog("flowRate==>", characteristicMonitorDeviceDataIntegersMappedResponse?.chunks?.[0]
-      // ?.uuidData?.[19]);
-      if (
-        characteristicMonitorDeviceDataIntegersMappedResponse?.chunks?.[0]
-          ?.uuidData?.[19]
-      ) {
-        flowRate =
-          characteristicMonitorDeviceDataIntegersMappedResponse?.chunks?.[0]
-            ?.uuidData?.[19]?.value?.currentValue;
-        flowRate = Number(flowRate);
-      }
-    }
-
-    const characteristicMonitorDataCollectionMappedResponse =
-      BLEService.characteristicMonitorDataCollectionMapped;
-
-    if (!isObjectEmpty(characteristicMonitorDataCollectionMappedResponse)) {
-      // For activationsDuration
-      // consoleLog("activationsDuration==>", characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
-      // ?.uuidData?.[8]);
-      if (
-        characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
-          ?.uuidData?.[8]
-      ) {
-        activationsDuration =
-          characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
-            ?.uuidData?.[8]?.value?.currentValue;
-
-        activationsDuration = Number(activationsDuration);
-      }
-    }
-
-    const __totalWaterUsage = (flowRate / 10 / 60) * activationsDuration;
-    totalWaterUsage = Number(__totalWaterUsage.toFixed(2));
-    setTotalWaterUsage(totalWaterUsage);
-  };
-
-  /** Function comments */
-  const __mappingRealTimeDataGen2SetupMonitor = async () => {
-    consoleLog('__mappingRealTimeDataGen2SetupMonitor called');
-    var __characteristicMonitorRealTimeData: string[] = [];
-
-    // Device data integer
-    BLEService.setupMonitor(
-      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_SERVICE_UUID,
-      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_CHARACTERISTIC_UUID,
-      characteristic => {
-        // consoleLog(
-        //   '__mappingRealTimeDataGen2SetupMonitor characteristic==>',
-        //   characteristic,
-        // );
-        // if (characteristic?.value) {
-        var deviceDataIntegerHex = base64ToHex(characteristic?.value);
-        consoleLog(
-          '__mappingRealTimeDataGen2SetupMonitor deviceDataIntegerHex==>',
-          deviceDataIntegerHex,
-        );
-
-        __characteristicMonitorRealTimeData.push(deviceDataIntegerHex);
-        BLEService.characteristicMonitorRealTimeData =
-          __characteristicMonitorRealTimeData;
-        BLEService.finishMonitor();
-        __mappingRealTimeDataGen2();
-        // }
-      },
-      error => {
-        consoleLog('__mappingRealTimeDataGen2SetupMonitor error==>', error);
-      },
-    );
-  };
-
-  /** Function comments */
-  const __mappingRealTimeDataGen2 = async () => {
-    const mappingRealTimeDataGen2Response = await mappingRealTimeDataGen2(
-      BLE_GEN2_GATT_SERVICES,
-      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_SERVICE_UUID,
-      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_CHARACTERISTIC_UUID,
-      BLEService.characteristicMonitorRealTimeData,
-    );
-
+    // const readCharacteristicForDevice =
+    //   await BLEService.readCharacteristicForDevice(serviceuuid, charuuid);
     // consoleLog(
-    //   '__mappingRealTimeDataGen2 mappingRealTimeDataGen2Response==>',
-    //   JSON.stringify(mappingRealTimeDataGen2Response),
+    //   'initialize readCharacteristicForDevice2==>',
+    //   JSON.stringify(readCharacteristicForDevice),
     // );
 
-    BLEService.characteristicMonitorRealTimeDataMapped =
-      mappingRealTimeDataGen2Response;
-    __mappingRealTimeDataGen2Data();
+    // const writeCharacteristicWithResponseForDevice =
+    //   await BLEService.writeCharacteristicWithResponseForDevice(
+    //     serviceuuid,
+    //     charuuid,
+    //     '0',
+    //   );
+    // consoleLog(
+    //   'initialize writeCharacteristicWithResponseForDevice==>',
+    //   JSON.stringify(writeCharacteristicWithResponseForDevice),
+    // );
+
+    const serviceuui1 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
+    const charuuid1 = 'd0aba888-fb10-4dc9-9b17-bdd8f490c943';
+    const descptr1 = '00002901-0000-1000-8000-00805f9b34fb';
+
+    // const getDescriptorsForDevice = await BLEService.getDescriptorsForDevice(
+    //   serviceuui1,
+    //   charuuid1,
+    // );
+    // consoleLog(
+    //   'initialize getDescriptorsForDevice==>',
+    //   JSON.stringify(getDescriptorsForDevice),
+    // );
+    // const readDescriptorForDevice = await BLEService.readDescriptorForDevice(
+    //   serviceuui1,
+    //   charuuid1,
+    //   descptr1,
+    // );
+    // consoleLog(
+    //   'initialize readDescriptorForDevice==>',
+    //   JSON.stringify(readDescriptorForDevice),
+    // );
   };
 
-  /** Function comments */
-  const __mappingRealTimeDataGen2Data = () => {
-    consoleLog('__mappingRealTimeDataGen2Data called');
-    const characteristicMonitorRealTimeDataMappedResponse =
-      BLEService.characteristicMonitorRealTimeDataMapped;
-
-    if (!isObjectEmpty(characteristicMonitorRealTimeDataMappedResponse)) {
-      // For Battery level
-      if (
-        characteristicMonitorRealTimeDataMappedResponse?.chunks?.[0]
-          ?.uuidData?.[3]
-      ) {
-        var batteryLevel = 0;
-        var __batteryLevel =
-          characteristicMonitorRealTimeDataMappedResponse?.chunks?.[0]
-            ?.uuidData?.[3]?.value?.currentValue;
-
-        if (__batteryLevel > 0 && __batteryLevel < 101) {
-          batteryLevel = __batteryLevel;
-        }
-
-        BLEService.batteryLevel = batteryLevel;
-        setBatteryLevel(batteryLevel);
-      }
-    }
-  };
-
-  /** Function comments */
   const __getBatteryLevel = async () => {
     setBatteryLevel(BLEService.batteryLevel);
   };
 
-  /** Function comments */
   const __getTotalWaterUsase = async () => {
     if (BLEService.totalWaterUsase) {
       setTotalWaterUsage(BLEService.totalWaterUsase);
     }
   };
 
-  /** Function comments */
   const __getSavedSettingsGen1 = async () => {
     const __savedSettingsGen1 = await getSavedSettingsGen1(connectedDevice);
-    // consoleLog(
-    //   '__getSavedSettingsGen1 __savedSettingsGen1==>',
-    //   JSON.stringify(__savedSettingsGen1),
-    // );
+    // consoleLog('__savedSettingsGen1', JSON.stringify(__savedSettingsGen1));
     if (__savedSettingsGen1) {
       setSavedSettingsGen1(__savedSettingsGen1);
     }
   };
 
-  /** Function comments */
   const applyLoadPreviosSettings = () => {
     if (!isObjectEmpty(savedSettingsGen1?.data)) {
       onApplySettingPress(savedSettingsGen1, false, true);
@@ -597,36 +272,14 @@ const Index = ({navigation}: any) => {
     }
   };
 
-  /** Function comments */
   const onApplySettingPress = async (
-    __deviceSettingsData: any,
-    shouldUpdatePreviosSettings: boolean = true,
-    shouldShowToast: boolean = false,
-  ) => {
-    if (BLEService.deviceGeneration == 'gen1') {
-      __onApplySettingPress(
-        __deviceSettingsData,
-        shouldUpdatePreviosSettings,
-        shouldShowToast,
-      );
-    } else if (BLEService.deviceGeneration == 'gen2') {
-      // Code need to be implemented
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
-    } else if (BLEService.deviceGeneration == 'gen4') {
-      // Code need to be implemented
-    }
-  };
-
-  /** Function comments */
-  const __onApplySettingPress = async (
     __deviceSettingsData: any,
     shouldUpdatePreviosSettings: boolean = true,
     shouldShowToast: boolean = false,
   ) => {
     var __LineFlush: any = {};
     const __deviceSettingsDataTmp = {...__deviceSettingsData};
-    // consoleLog("onApplySettingPress __deviceSettingsDataTmp==>", __deviceSettingsDataTmp);
+    // consoleLog("__deviceSettingsDataTmp", __deviceSettingsDataTmp);
     // return;
 
     var timeout = 2000;
@@ -650,6 +303,7 @@ const Index = ({navigation}: any) => {
     }
 
     // return false;
+
     const status = await saveSettings(__deviceSettingsDataTmp);
     // consoleLog('status', status);
 
@@ -696,14 +350,9 @@ const Index = ({navigation}: any) => {
     // consoleLog('status7');
   };
 
-  /** Function comments */
   const dispenseWater = () => {
-    var characteristicHex = '720a01321400000001CF';
-    BLEService.dispenseWater(characteristicHex);
-    if (BLEService.deviceGeneration == 'gen2') {
-      // initlizeAppGen2();
-      // settingsMappingGen2();
-    }
+    BLEService.dispenseWater();
+    // intiGen2SecurityKey();
   };
 
   return (
@@ -934,18 +583,12 @@ const Index = ({navigation}: any) => {
                       size={20}
                       color={Theme.colors.primaryColor}
                       // onPress={() => {
-                      //   writeData();
+                      //   getDeviceDataGen2();
                       // }}
                     />
                     <Typography
                       size={22}
-                      text={`${
-                        totalWaterUsage
-                          ? (
-                              totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA
-                            ).toFixed(2)
-                          : 0
-                      } Gal`}
+                      text={`${totalWaterUsage} Gal`}
                       style={{
                         textAlign: 'left',
                         marginLeft: 5,
@@ -1096,55 +739,58 @@ const Index = ({navigation}: any) => {
 
             <Wrap autoMargin={false}>
               <ActivationModeList
-                settings={{
+                setting={{
+                  id: 1,
                   title: 'Activation Mode',
                   route: 'ActivationMode',
+                  serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c943',
                   name: 'ActivationMode',
                 }}
-                settingsData={activationModeSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
               />
 
               <LineFlushList
-                settings={{
+                setting={{
+                  id: 2,
                   title: 'Line Flush',
                   route: 'LineFlush',
-                  name: 'LineFlush',
                   serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
                   characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
+                  name: 'LineFlush',
                 }}
-                settingsData={flushSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
               />
 
               <FlowRateList
-                settings={{
+                setting={{
+                  id: 3,
                   title: 'Confirm Flow Rate',
+                  // subTitle: 'Galons Per Minute',
                   route: 'FlowRate',
+                  serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
                   name: 'FlowRate',
-                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
                 }}
-                settingsData={flowRateSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
               />
 
               <SensorRangeList
-                settings={{
+                setting={{
+                  id: 4,
                   title: 'Sensor Range',
-                  name: 'SensorRange',
+                  subTitle: 'Units',
                   route: 'SensorRange',
-                  sensorRangeConfig: {min: 1, max: 5, step: 1},
-                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c942',
+                  serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c942',
+                  name: 'SensorRange',
                 }}
-                settingsData={sensorSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
@@ -1174,7 +820,7 @@ const Index = ({navigation}: any) => {
         message={
           savedSettingsGen1?.text
             ? savedSettingsGen1?.text
-            : 'No previous saved settings found'
+            : 'No Previous saved settings found'
         }
         okayText={'CONFIRM'}
         onCancelPress={() => {
