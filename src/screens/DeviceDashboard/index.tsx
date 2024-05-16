@@ -12,6 +12,7 @@ import {
   hasSensorRangeSetting,
   intiGen2SecurityKey,
   saveSettings,
+  shortBursts,
   shortBurstsGen1,
   updatePreviousSettings,
 } from 'src/utils/Helpers/project';
@@ -45,6 +46,7 @@ import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {
+  base64EncodeFromByteArray,
   base64ToHex,
   fromHexStringUint8Array,
 } from 'src/utils/Helpers/encryption';
@@ -610,7 +612,11 @@ const Index = ({navigation}: any) => {
         shouldShowToast,
       );
     } else if (BLEService.deviceGeneration == 'gen2') {
-      // Code need to be implemented
+      __onApplySettingPress(
+        __deviceSettingsData,
+        shouldUpdatePreviosSettings,
+        shouldShowToast,
+      );
     } else if (BLEService.deviceGeneration == 'gen3') {
       // Code need to be implemented
     } else if (BLEService.deviceGeneration == 'gen4') {
@@ -673,8 +679,8 @@ const Index = ({navigation}: any) => {
         // consoleLog('status1', status1);
       }
 
-      const shortBurstsGen1Status = await shortBurstsGen1(__deviceSettingsData);
-      // consoleLog('shortBurstsGen1Status', shortBurstsGen1Status);
+      const shortBurstsStatus = await shortBursts(__deviceSettingsData);
+      // consoleLog('shortBurstsStatus', shortBurstsStatus);
     }, timeout);
 
     setTimeout(() => {
@@ -698,8 +704,15 @@ const Index = ({navigation}: any) => {
 
   /** Function comments */
   const dispenseWater = () => {
+    // 720a01321900000001CF
     var characteristicHex = '720a01321400000001CF';
     BLEService.dispenseWater(characteristicHex);
+    // const writableData = fromHexStringUint8Array(characteristicHex);
+    // consoleLog('writableData', writableData);
+    // consoleLog(
+    //   'base64EncodeFromByteArray',
+    //   base64EncodeFromByteArray(writableData),
+    // );
     if (BLEService.deviceGeneration == 'gen2') {
       // initlizeAppGen2();
       // settingsMappingGen2();

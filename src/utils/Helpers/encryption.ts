@@ -149,9 +149,22 @@ export const hexToDecimal = (hex: any, base: number = 16) => {
  * @param {string} base
  * @return {any} Decode (in decimal) string
  */
-export const decimalToHex = (encodedString: any, base: number = 16) => {
+export const decimalToHex = (
+  encodedString: any,
+  base: number = 16,
+  padding: number = 0,
+) => {
   if (!encodedString) return encodedString;
-  return encodedString.toString(base);
+  // return encodedString.toString(base);
+  var hex = Number(encodedString).toString(base);
+
+  if (typeof padding != 'undefined' && padding > 0) {
+    while (hex.length < padding) {
+      hex = '0' + hex;
+    }
+  }
+
+  return hex;
 };
 
 /**
@@ -226,6 +239,11 @@ export const fromHexStringUint8Array = (hexString: any, base = 16) => {
   );
 };
 
+/**
+ * Function to convert hex to string
+ * @param {any} hexString
+ * @return {string}
+ */
 export function toHexString(byteArray: any) {
   return Array.from(byteArray, function (byte) {
     return ('0' + (byte & 0xff).toString(16)).slice(-2);

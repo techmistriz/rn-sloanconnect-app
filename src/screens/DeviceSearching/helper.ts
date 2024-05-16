@@ -10,8 +10,8 @@ import {DeviceExtendedProps} from './types';
 
 export const filterBLEDevices = (device: DeviceExtendedProps): any => {
   var filterDevice = null;
-  const deviceName = device?.localName ?? device?.name;
-
+  var deviceName = device?.localName ?? device?.name ?? 'Unknown';
+  
   if (device && !isObjectEmpty(device) && deviceName) {
     device.deviceCustomName = deviceName;
     if (

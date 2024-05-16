@@ -130,7 +130,6 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
     const modelNumber = __rawScanRecordHexArr?.[12];
     result = modelNumber ?? result;
     // consoleLog('modelNumber==>', modelNumber);
-    
   } else if (gen == 'gen3') {
     var arr = str.split(' ');
 
@@ -506,12 +505,22 @@ export const saveSettings = async (
             element?.newValue != ''
           ) {
             // const x = await new Promise(r => setTimeout(r, t, i));
-            const promise =
-              await BLEService.writeCharacteristicWithResponseForDevice(
-                element?.serviceUUID,
-                element?.characteristicUUID,
-                element?.newValue,
-              );
+            var promise;
+            if (BLEService.deviceGeneration == 'gen2') {
+              promise =
+                await BLEService.writeCharacteristicWithResponseForDevice2(
+                  element?.serviceUUID,
+                  element?.characteristicUUID,
+                  fromHexStringUint8Array(element?.modfiedNewValue),
+                );
+            } else {
+              promise =
+                await BLEService.writeCharacteristicWithResponseForDevice(
+                  element?.serviceUUID,
+                  element?.characteristicUUID,
+                  element?.newValue,
+                );
+            }
 
             promises.push(promise);
           }
@@ -906,7 +915,20 @@ export const getSavedSettingsGen1 = async (connectedDevice: any) => {
  * @param {*} param2
  * @returns result
  */
-export const shortBurstsGen1 = async (__deviceSettingsData: any) => {
+export const shortBursts = async (__deviceSettingsData: any) => {
+  if (BLEService.deviceGeneration == 'gen1') {
+    shortBurstsGen1(__deviceSettingsData);
+  } else if (BLEService.deviceGeneration == 'gen2') {
+    // shortBurstsGen2(__deviceSettingsData);
+  }
+};
+
+/**
+ *
+ * @param {*} __deviceSettingsData
+ * @returns result
+ */
+const shortBurstsGen1 = async (__deviceSettingsData: any) => {
   const __hasLineFlushSetting = hasLineFlushSetting(__deviceSettingsData);
 
   if (__hasLineFlushSetting) {
@@ -949,6 +971,19 @@ export const shortBurstsGen1 = async (__deviceSettingsData: any) => {
     );
 
   return flushIntervalResponse;
+};
+
+/**
+ *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
+const shortBurstsGen2 = async (__deviceSettingsData: any) => {
+  if (BLEService.deviceGeneration == 'gen1') {
+    shortBurstsGen1(__deviceSettingsData);
+  } else if (BLEService.deviceGeneration == 'gen1') {
+  }
 };
 
 /**
@@ -1319,4 +1354,16 @@ const generateSessionKey = async (
   __sessionUintArray[36] = isProvision ? 1 : 0;
   // console.log('generateSessionKey __sessionUintArray==>', __sessionUintArray);
   return __sessionUintArray;
+};
+
+export const mapValueGen2 = (WRITE_DATA_MAPPING: any, value: any) => {
+  // consoleLog('mapValueGen2 WRITE_DATA_MAPPING==>', WRITE_DATA_MAPPING);
+  // consoleLog('mapValueGen2 value==>', value);
+  // consoleLog('mapValueGen2 decimalToHex==>', decimalToHex(value, 16, 8));
+  const hex = decimalToHex(value, 16, 8);
+  var hexReplaced = WRITE_DATA_MAPPING.replace(/ACTUAL_VALUE/gi, hex);
+  hexReplaced = hexReplaced.replace(/\|/gi, '');
+  consoleLog('mapValueGen2 hexReplaced==>', hexReplaced);
+
+  return hexReplaced;
 };

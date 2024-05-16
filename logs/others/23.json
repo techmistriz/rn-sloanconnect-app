@@ -1,0 +1,38 @@
+{
+  "ActivationMode": [
+    {
+      "characteristicUUID": "8de47721-5496-4233-ae45-e4b306fe1181",
+      "modfiedNewValue": "720a01321900000000CF",
+      "name": "modeSelection",
+      "newValue": "0",
+      "oldValue": "0",
+      "serviceUUID": "8de47721-5496-4233-ae45-e4b306fe1180"
+    },
+    {
+      "allowedInPreviousSettings": false,
+      "characteristicUUID": "8de47721-5496-4233-ae45-e4b306fe1181",
+      "modfiedNewValue": "720a013202664589e9CF",
+      "name": "modeSelectionDate",
+      "newValue": "2405160952",
+      "oldValue": null,
+      "serviceUUID": "8de47721-5496-4233-ae45-e4b306fe1180"
+    },
+    {
+      "characteristicUUID": "8de47721-5496-4233-ae45-e4b306fe1181",
+      "modfiedNewValue": "720a01321b0000012cCF",
+      "name": "onDemand",
+      "newValue": "300",
+      "oldValue": null,
+      "serviceUUID": "8de47721-5496-4233-ae45-e4b306fe1180"
+    },
+    {
+      "allowedInPreviousSettings": false,
+      "characteristicUUID": "8de47721-5496-4233-ae45-e4b306fe1181",
+      "modfiedNewValue": "720a013204664589e9CF",
+      "name": "onDemandDate",
+      "newValue": "2405160952",
+      "oldValue": null,
+      "serviceUUID": "8de47721-5496-4233-ae45-e4b306fe1180"
+    }
+  ]
+}

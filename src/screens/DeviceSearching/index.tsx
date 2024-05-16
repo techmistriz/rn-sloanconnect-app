@@ -151,6 +151,8 @@ const Index = ({navigation, route}: any) => {
     // {"deviceCustomName": "FAUCET ETF610 / EBF615, ETF600 / EBF650 T0224 ", "localName": "FAUCET ADSKU02 T0224"}
     // consoleLog('addFoundDevice __device==>', __device);
     const device = filterBLEDevices(__device);
+    // const device = __device;
+    // device.deviceCustomName = device?.localName ?? 'Unknown';
     consoleLog('addFoundDevice device names==>', {
       localName: device?.localName,
       deviceCustomName: device?.deviceCustomName,

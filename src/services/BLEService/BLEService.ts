@@ -944,7 +944,7 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-  dispenseWaterGen2 = async (characteristicHex: string = '720a01321a01CF') => {
+  dispenseWaterGen2 = async (characteristicHex: string = '720a01321400000001CF') => {
     const writableData = fromHexStringUint8Array(characteristicHex);
     const writeDataResponse =
       await BLEService.writeCharacteristicWithResponseForDevice2(

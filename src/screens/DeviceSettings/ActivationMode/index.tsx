@@ -1,39 +1,26 @@
-import React, {Component, Fragment, useEffect, useState} from 'react';
-import {View, StyleSheet, Image, StatusBar, Keyboard} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Keyboard} from 'react-native';
 import Theme from 'src/theme';
-import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   consoleLog,
-  getImgSource,
   parseDateTimeInFormat,
   showSimpleAlert,
-  showToastMessage,
+  timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {Wrap, Row} from 'src/components/Common';
+import {Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import {styles} from './styles';
 import AppContainer from 'src/components/AppContainer';
-import Loader from 'src/components/Loader';
 import Input from 'src/components/Input';
 import Toggle from 'src/components/Toggle';
-import {getActivationModeType, getActivationModeValue} from './helper';
 import {BLEService} from 'src/services/BLEService/BLEService';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
-import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
-import {
-  getDeviceCharacteristic,
-  getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID,
-  getDeviceCharacteristicsByServiceUUID,
-  getDeviceService,
-  hasDateSetting,
-  hasPhoneSetting,
-} from 'src/utils/Helpers/project';
-import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {mapValueGen2} from 'src/utils/Helpers/project';
 
 const Index = ({navigation, route}: any) => {
   const {referrer, settings, settingsData} = route?.params;
@@ -263,7 +250,163 @@ const Index = ({navigation, route}: any) => {
     }, 100);
   };
 
-  const onDonePressGen2 = () => {
+  const onDonePressGen2 = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+
+    // const modifiedValue = mapValueGen2(
+    //   BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.MODE_SELECTION,
+    //   modeSelection,
+    // );
+    // consoleLog('onDonePressGen1', {
+    //   old: settingsData?.modeSelection?.value,
+    //   modeSelection,
+    //   activationModeSecOld,
+    //   activationModeSec,
+    // });
+    // return false;
+
+    if (
+      settingsData?.modeSelection?.value != modeSelection ||
+      activationModeSecOld != activationModeSec
+    ) {
+      params.push({
+        name: 'modeSelection',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.modeSelection?.value,
+        newValue: modeSelection,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.MODE_SELECTION,
+          modeSelection,
+        ),
+      });
+
+      // consoleLog('onDonePressGen2 params==>', params);
+      // return false;
+
+      params.push({
+        name: 'modeSelectionDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_LAST_OD_OR_M_CHANGE,
+          timestampInSec(),
+        ),
+      });
+
+      // params.push({
+      //   name: 'modeSelectionPhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.contact ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      //   modfiedNewValue: mapValueGen2(
+      //     BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_LAST_OD_OR_M_CHANGE,
+      //     timestampInSec(),
+      //   )
+      // });
+    }
+
+    if (
+      settingsData?.modeSelection?.value != modeSelection ||
+      activationModeSecOld != activationModeSec
+    ) {
+      if (modeSelection == '0') {
+        params.push({
+          name: 'onDemand',
+          serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+          oldValue: null,
+          newValue: activationModeSec,
+          modfiedNewValue: mapValueGen2(
+            BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.MAXIMUM_ON_DEMAND_RUN_TIME,
+            activationModeSec,
+          ),
+        });
+
+        params.push({
+          name: 'onDemandDate',
+          serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+          oldValue: null,
+          newValue: parseDateTimeInFormat(new Date(), dateFormat),
+          allowedInPreviousSettings: false,
+          modfiedNewValue: mapValueGen2(
+            BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_OD_RUNTIME_CHANGE,
+            timestampInSec(),
+          ),
+        });
+
+        // params.push({
+        //   name: 'onDemandPhone',
+        //   serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        //   characteristicUUID:
+        //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        //   oldValue: null,
+        //   newValue: user?.contact ?? '0123456789',
+        //   allowedInPreviousSettings: false,
+        // });
+      } else if (modeSelection == '1') {
+        params.push({
+          name: 'metered',
+          serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+          oldValue: null,
+          newValue: activationModeSec,
+          modfiedNewValue: mapValueGen2(
+            BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.METERED_RUN_TIME,
+            activationModeSec,
+          ),
+        });
+
+        params.push({
+          name: 'meteredDate',
+          serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+          characteristicUUID:
+            BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+          oldValue: null,
+          newValue: parseDateTimeInFormat(new Date(), dateFormat),
+          allowedInPreviousSettings: false,
+          modfiedNewValue: mapValueGen2(
+            BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_METER_RUNTIME_CHANGE,
+            timestampInSec(),
+          ),
+        });
+
+        // params.push({
+        //   name: 'meteredPhone',
+        //   serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        //   characteristicUUID:
+        //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        //   oldValue: null,
+        //   newValue: user?.contact ?? '0123456789',
+        //   allowedInPreviousSettings: false,
+        // });
+      }
+    }
+
+    // consoleLog('onDonePressGen2 params==>', params);
+    // return false;
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {ActivationMode: params},
+        }),
+      );
+    }
+    // deviceSettingsData
     setTimeout(() => {
       NavigationService.goBack();
     }, 100);
