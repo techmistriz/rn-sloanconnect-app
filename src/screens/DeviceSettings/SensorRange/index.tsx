@@ -20,6 +20,7 @@ import {SensorRangeProps} from './types';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {mapValueGen2} from 'src/utils/Helpers/project';
 
 const defaultSensorRangeConfig = {min: 1, max: 5, step: 1};
 
@@ -146,7 +147,32 @@ const Index = ({navigation, route}: any) => {
     }, 100);
   };
 
-  const onDonePressGen2 = () => {
+  const onDonePressGen2 = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.sensorRange?.value != sensorRange) {
+      params.push({
+        name: 'sensorRange',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.sensorRange?.value,
+        newValue: sensorRange,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.SENSOR_RANGE,
+          sensorRange,
+        ),
+      });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {SensorRange: params},
+        }),
+      );
+    }
+    // deviceSettingsData
     setTimeout(() => {
       NavigationService.goBack();
     }, 100);

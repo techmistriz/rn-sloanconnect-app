@@ -5,6 +5,7 @@ import {
   consoleLog,
   parseDateTimeInFormat,
   showSimpleAlert,
+  timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
@@ -19,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {mapValueGen2} from 'src/utils/Helpers/project';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -218,7 +220,119 @@ const Index = ({navigation, route}: any) => {
     }, 100);
   };
 
-  const onDonePressGen2 = () => {
+  const onDonePressGen2 = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+
+    // consoleLog('onDonePressGen1', {
+    //   old: settingsData?.flush?.value,
+    //   flush,
+    //   activationModeSecOld,
+    //   activationModeSec,
+    // });
+    // return false;
+
+    if (settingsData?.flush?.value != flush) {
+      params.push({
+        name: 'flush',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flush?.value,
+        newValue: flush,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.FLUSH_ENABLE,
+          flush,
+        ),
+      });
+
+      params.push({
+        name: 'flushDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_FLUSH_ENABLE_CHANGE,
+          timestampInSec(),
+        ),
+      });
+    }
+
+    if (
+      settingsData?.flush?.value != flush ||
+      settingsData?.flushTime?.value != flushTime
+    ) {
+      params.push({
+        name: 'flushTime',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flushTime?.value,
+        newValue: flushTime,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.FLUSH_TIME_DURATION_TEMP_Z1,
+          flushTime,
+        ),
+      });
+
+      params.push({
+        name: 'flushTimeDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_FLUSH_TIME_CHANGE,
+          timestampInSec(),
+        ),
+      });
+    }
+
+    if (
+      settingsData?.flush?.value != flush ||
+      settingsData?.flushInterval?.value != flushInterval
+    ) {
+      params.push({
+        name: 'flushInterval',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flushInterval?.value,
+        newValue: flushInterval,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.FLUSH_INTERVAL_TEMP_Z1,
+          flushInterval,
+        ),
+      });
+
+      params.push({
+        name: 'flushIntervalDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_FLUSH_INTERVAL_CHANGE,
+          timestampInSec(),
+        ),
+      });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {LineFlush: params},
+        }),
+      );
+    }
+    // deviceSettingsData
     setTimeout(() => {
       NavigationService.goBack();
     }, 100);

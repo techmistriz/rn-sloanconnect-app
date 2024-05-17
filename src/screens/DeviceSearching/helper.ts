@@ -15,9 +15,9 @@ export const filterBLEDevices = (device: DeviceExtendedProps): any => {
   if (device && !isObjectEmpty(device) && deviceName) {
     device.deviceCustomName = deviceName;
     if (
-      true
-      // deviceName?.toUpperCase()?.includes('FAUCET') ||
-      // deviceName?.toUpperCase()?.includes('SL')
+      // true
+      deviceName?.toUpperCase()?.includes('FAUCET') ||
+      deviceName?.toUpperCase()?.includes('SL')
     ) {
       var __deviceNameArr = deviceName.split(' ');
       // consoleLog('__deviceNameArr', __deviceNameArr);

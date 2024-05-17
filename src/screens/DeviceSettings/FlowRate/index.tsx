@@ -18,6 +18,7 @@ import {getCalculatedValue, getFlowRateRangeGen1} from './helper';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import { mapValueGen2 } from 'src/utils/Helpers/project';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -167,7 +168,32 @@ const Index = ({navigation, route}: any) => {
     }, 100);
   };
 
-  const onDonePressGen2 = () => {
+  const onDonePressGen2 = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.flowRate?.value != flowRate) {
+      params.push({
+        name: 'flowRate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flowRate?.value,
+        newValue: flowRate,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.FLOW_RATE_AD,
+          flowRate,
+        ),
+      });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {FlowRate: params},
+        }),
+      );
+    }
+    // deviceSettingsData
     setTimeout(() => {
       NavigationService.goBack();
     }, 100);
