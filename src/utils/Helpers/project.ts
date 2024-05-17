@@ -3,6 +3,7 @@ import {constants} from '../../common';
 import moment from 'moment';
 import {
   addSeparatorInString,
+  asciiToHex,
   base64EncodeDecode,
   base64ToDecimal,
   base64ToHex,
@@ -1356,14 +1357,34 @@ const generateSessionKey = async (
   return __sessionUintArray;
 };
 
-export const mapValueGen2 = (WRITE_DATA_MAPPING: any, value: any) => {
+export const mapValueGen2 = (
+  WRITE_DATA_MAPPING: any,
+  value: any,
+  padding: number = 8,
+) => {
   // consoleLog('mapValueGen2 WRITE_DATA_MAPPING==>', WRITE_DATA_MAPPING);
   // consoleLog('mapValueGen2 value==>', value);
   // consoleLog('mapValueGen2 decimalToHex==>', decimalToHex(value, 16, 8));
-  const hex = decimalToHex(value, 16, 8);
+  const hex = decimalToHex(value, 16, padding);
   var hexReplaced = WRITE_DATA_MAPPING.replace(/ACTUAL_VALUE/gi, hex);
   hexReplaced = hexReplaced.replace(/\|/gi, '');
   consoleLog('mapValueGen2 hexReplaced==>', hexReplaced);
+
+  return hexReplaced;
+};
+
+export const mapValueGenTextToHex = (
+  WRITE_DATA_MAPPING: any,
+  value: any,
+  padding: number = 8,
+) => {
+  // consoleLog('mapValueGen2 WRITE_DATA_MAPPING==>', WRITE_DATA_MAPPING);
+  // consoleLog('mapValueGen2 value==>', value);
+  // consoleLog('mapValueGen2 decimalToHex==>', decimalToHex(value, 16, 8));
+  const hex = asciiToHex(value, padding);
+  var hexReplaced = WRITE_DATA_MAPPING.replace(/ACTUAL_VALUE/gi, hex);
+  hexReplaced = hexReplaced.replace(/\|/gi, '');
+  consoleLog('mapValueGenTextToHex hexReplaced==>', hexReplaced);
 
   return hexReplaced;
 };

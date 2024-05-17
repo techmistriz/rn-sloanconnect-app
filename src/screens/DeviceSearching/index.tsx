@@ -98,9 +98,9 @@ const Index = ({navigation, route}: any) => {
       if (foundDevices.length == 0) {
         // consoleLog('setTimeout==>', timeoutID);
         // NavigationService.replace('NoDeviceFound');
-        // clearTimeout(timeoutID);
-        // BLEService.manager.stopDeviceScan();
-        // setScanning(ScanningProps.NoDevice);
+        clearTimeout(timeoutID);
+        BLEService.manager.stopDeviceScan();
+        setScanning(ScanningProps.NoDevice);
       }
     }, WAITING_TIMEOUT_FOR_CHECKING_DEVICE);
 

@@ -73,7 +73,7 @@ const Index = ({navigation, route}: any) => {
     // Handle unsaved value which were changed
     const resultObj = findObject(
       'sensorRange',
-      deviceSettingsData?.ActivationMode,
+      deviceSettingsData?.SensorRange,
       {
         searchKey: 'name',
       },

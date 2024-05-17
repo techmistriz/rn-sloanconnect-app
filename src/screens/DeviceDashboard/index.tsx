@@ -505,7 +505,7 @@ const Index = ({navigation}: any) => {
           __mappingDataCollectionGen2();
           setTimeout(() => {
             __mappingRealTimeDataGen2SetupMonitor();
-          }, 250);
+          }, 500);
         }
       },
       error => {
@@ -594,7 +594,6 @@ const Index = ({navigation}: any) => {
         //   '__mappingRealTimeDataGen2SetupMonitor characteristic==>',
         //   characteristic,
         // );
-        // if (characteristic?.value) {
         var deviceDataIntegerHex = base64ToHex(characteristic?.value);
         consoleLog(
           '__mappingRealTimeDataGen2SetupMonitor deviceDataIntegerHex==>',
@@ -606,7 +605,6 @@ const Index = ({navigation}: any) => {
           __characteristicMonitorRealTimeData;
         BLEService.finishMonitor();
         __mappingRealTimeDataGen2();
-        // }
       },
       error => {
         consoleLog('__mappingRealTimeDataGen2SetupMonitor error==>', error);
@@ -727,7 +725,10 @@ const Index = ({navigation}: any) => {
   ) => {
     var __LineFlush: any = {};
     const __deviceSettingsDataTmp = {...__deviceSettingsData};
-    // consoleLog("onApplySettingPress __deviceSettingsDataTmp==>", __deviceSettingsDataTmp);
+    // consoleLog(
+    //   'onApplySettingPress __deviceSettingsDataTmp==>',
+    //   __deviceSettingsDataTmp,
+    // );
     // return;
 
     var timeout = 2000;

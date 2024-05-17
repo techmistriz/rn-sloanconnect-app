@@ -23,7 +23,7 @@ import {
   getTimezone,
   parseDateHumanFormat,
 } from 'src/utils/Helpers/HelperFunction';
-import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
+import {base64EncodeDecode, cleanString} from 'src/utils/Helpers/encryption';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
@@ -43,21 +43,32 @@ const DeviceSettingList = ({
     (state: any) => state?.DeviceSettingsReducer,
   );
 
-  const [characteristicMain, setCharacteristicMain] = useState<any>();
-  // const [characteristicMainDecodeValue, setCharacteristicMainDecodeValue] =
-  // useState<string>('');
-  const [deviceStaticDataMain, setDeviceStaticDataMain] = useState<any>();
-  const [characteristicRight, setCharacteristicRight] = useState<any>();
-  const [deviceStaticDataRight, setDeviceStaticDataRight] = useState<any>();
-  const [characteristicRight2, setCharacteristicRight2] = useState<any>();
-  const [deviceStaticDataRight2, setDeviceStaticDataRight2] = useState<any>();
-  // const [settingChangeData, setSettingChangeData] = useState<any>();
+  const [note, setNote] = useState<any>('');
 
   /** component hooks method */
   useEffect(() => {
-    // initlizeApp();
-  }, [applied]);
+    initlizeApp();
+  }, [applied, settingsData]);
 
+  const initlizeApp = async () => {
+    let __note = settingsData?.note?.value ?? '';
+    // consoleLog("__note==>", __note.toString("utf8").length);
+
+    // Handle unsaved value which were changed
+    const resultObj = findObject(
+      'note',
+      deviceSettingsData?.note,
+      {
+        searchKey: 'name',
+      },
+    );
+    // consoleLog('__note resultObj==>', deviceSettingsData);
+
+    if (!isObjectEmpty(resultObj)) {
+      __note = resultObj?.newValue;
+    }
+    setNote(cleanString(__note));
+  };
 
   return (
     <TouchableItem
@@ -68,7 +79,6 @@ const DeviceSettingList = ({
             referrer: settings?.title,
             settings: settings,
             settingsData: settingsData,
-           
           });
       }}>
       <>
@@ -99,7 +109,7 @@ const DeviceSettingList = ({
             <Row autoMargin={false} style={styles.innerRow}>
               <Typography
                 size={16}
-                text={''}
+                text={note}
                 style={{
                   textAlign: 'right',
                 }}

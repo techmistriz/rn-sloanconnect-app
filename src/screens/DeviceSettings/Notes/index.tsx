@@ -1,124 +1,150 @@
-import React, {Component, Fragment, useEffect, useState} from 'react';
-import {View, StyleSheet, Image, StatusBar, Keyboard} from 'react-native';
-import Theme, {Layout} from 'src/theme';
-import {Images} from 'src/assets';
+import React, {useEffect, useState} from 'react';
+import {Keyboard} from 'react-native';
+import Theme from 'src/theme';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  consoleLog,
-  getImgSource,
-  showSimpleAlert,
-  showToastMessage,
-} from 'src/utils/Helpers/HelperFunction';
-import { base64EncodeDecode } from 'src/utils/Helpers/encryption';
+import {consoleLog, showSimpleAlert} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {Wrap, Row} from 'src/components/Common';
+import {Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import AppInfo from 'src/components/@ProjectComponent/AppInfo';
-import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
-import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import {
-  PERMISSIONS_RESULTS,
-  checkBluetoothPermissions,
-  requestBluetoothPermissions,
-  checkLocationPermissions,
-  requestLocationPermissions,
-} from 'src/utils/Permissions';
-import Loader from 'src/components/Loader';
 import Input from 'src/components/Input';
-import Toggle from 'src/components/Toggle';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import {constants} from 'src/common';
-import {
-  getSensorRange,
-  getSensorRangeRangeArr,
-  getSensorRangeSec,
-} from './helper';
 import {BLEService} from 'src/services/BLEService/BLEService';
-import {SensorRangeProps} from './types';
-import {result} from 'lodash';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
+import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
+import {mapValueGen2, mapValueGenTextToHex} from 'src/utils/Helpers/project';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {cleanString} from 'src/utils/Helpers/encryption';
 
 const Index = ({navigation, route}: any) => {
-  // const {referrer} = route?.params || {referrer: undefined};
-  // const {user, loading, token, message, media_storage, type} = useSelector(
-  //   (state: any) => state?.AuthReducer,
-  // );
   const dispatch = useDispatch();
+  const {user} = useSelector((state: any) => state?.AuthReducer);
+  const {deviceSettingsData} = useSelector(
+    (state: any) => state?.DeviceSettingsReducer,
+  );
+  const {referrer, settings, settingsData} = route?.params;
 
-  const {
-    referrer,
-    setting,
-    deviceStaticDataMain,
-    characteristicMain,
-    deviceStaticDataRight,
-    characteristicRight,
-    deviceStaticDataRight2,
-    characteristicRight2,
-  } = route?.params;
-
-  const notesOld = getSensorRangeSec(characteristicMain);
-  const [notes, setNotes] = useState(notesOld);
+  const [note, setNote] = useState('');
+  const [noteOld, setNoteOld] = useState('');
 
   useEffect(() => {
-    // consoleLog('SensorRange==>', {
+    // consoleLog('note==>', {
     //   referrer,
-    //   setting,
-    //   deviceStaticDataMain,
-    //   characteristicMain,
-    //   deviceStaticDataRight,
-    //   characteristicRight,
-    //   deviceStaticDataRight2,
-    //   characteristicRight2,
+    //   settings,
+    //   settingsData,
     // });
+    initlizeApp();
   }, []);
 
-  const onDonePress = async () => {
+  const initlizeApp = async () => {
+    let __note = settingsData?.note?.value ?? '';
+
+    // Handle unsaved value which were changed
+    const resultObj = findObject('note', deviceSettingsData?.Note, {
+      searchKey: 'name',
+    });
+
+    if (!isObjectEmpty(resultObj)) {
+      __note = resultObj?.newValue;
+    }
+
+    setNote(cleanString(__note));
+  };
+
+  const onDonePress = () => {
     Keyboard.dismiss();
-    var params = [];
     const checkValid = checkValidation();
     if (checkValid) {
-
-      // consoleLog("notes", notes);
-      // const writeCharacteristicWithResponseForDevice1 =
-      //   await BLEService.writeCharacteristicWithResponseForDevice(
-      //     characteristicMain?.serviceUUID,
-      //     characteristicMain?.uuid,
-      //     notes,
-      //   );
-      params.push({
-        serviceUUID: characteristicMain?.serviceUUID,
-        characteristicUUID: characteristicMain?.uuid,
-        oldValue: base64EncodeDecode(notesOld),
-        newValue: base64EncodeDecode(notes),
-      });
-      // consoleLog(
-      //   'onDonePress writeCharacteristicWithResponseForDevice1==>',
-      //   JSON.stringify(writeCharacteristicWithResponseForDevice1),
-      // );
-
-      // showToastMessage('Success', 'success', 'Settings changed successfully.');
-      // dispatch(
-      //   deviceSettingsSuccessAction({
-      //     data: {Notes: params},
-      //   }),
-      // );
-      NavigationService.goBack();
+      if (BLEService.deviceGeneration == 'gen1') {
+        onDonePressGen1();
+      } else if (BLEService.deviceGeneration == 'gen2') {
+        onDonePressGen2();
+      } else if (BLEService.deviceGeneration == 'gen3') {
+        // Code need to be implemented
+      } else if (BLEService.deviceGeneration == 'gen4') {
+        // Code need to be implemented
+      }
     }
+  };
+
+  const onDonePressGen1 = async () => {
+    var params: any = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.note?.value != note) {
+      // params.push({
+      //   name: 'note',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_SERVICE_UUID,
+      //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_CHARACTERISTIC_UUID,
+      //   oldValue: settingsData?.note?.value,
+      //   newValue: note,
+      // });
+      // params.push({
+      //   name: 'noteDate',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_SERVICE_UUID,
+      //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      //   allowedInPreviousSettings: false,
+      // });
+      // params.push({
+      //   name: 'notePhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_SERVICE_UUID,
+      //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.contact ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
+    }
+
+    if (params && params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {Note: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressGen2 = async () => {
+    var params = [];
+    if (settingsData?.note?.value != note) {
+      params.push({
+        name: 'note',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_STRING_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.sensorRange?.value,
+        newValue: note,
+        modfiedNewValue: mapValueGenTextToHex(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.NOTE,
+          note,
+          120,
+        ),
+      });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {Note: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
   };
 
   /**validation checking for email */
   const checkValidation = () => {
-    if (notes.trim() === '') {
-      showSimpleAlert('Please select sensor range');
-      return false;
-    } else if (Number(notes) < 1) {
-      showSimpleAlert('Sensor range seconds can`t be less than 1');
-      return false;
-    } else if (Number(notes) > 5) {
-      showSimpleAlert('Sensor range seconds can`t be greater than 5');
+    if (note.trim() === '') {
+      showSimpleAlert('Please enter note');
       return false;
     } else {
       return true;
@@ -146,18 +172,18 @@ const Index = ({navigation, route}: any) => {
                   // @ts-ignore
                   notesTextInputRef = input;
                 }}
-                onChangeText={text => setNotes(text)}
+                onChangeText={text => setNote(text)}
                 onSubmitEditing={() => {
                   // @ts-ignore
                   Keyboard.dismiss();
                 }}
                 returnKeyType="done"
                 blurOnSubmit={false}
-                keyboardType="numeric"
+                keyboardType="default"
                 placeholder="Please add full description here"
                 placeholderTextColor={Theme.colors.black}
-                value={notes}
-                editable={false}
+                value={note}
+                // editable={false}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.textInput}
                 multiline={true}

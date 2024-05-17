@@ -1,0 +1,275 @@
+{
+  "uuid": "8de47721-5496-4233-ae45-e4b306fe1182",
+  "name": "Device Data STRING",
+  "size": "182 bytes",
+  "type": "string",
+  "range": null,
+  "initialValue": null,
+  "properties": ["R"],
+  "sloanApp": "",
+  "remarks": "",
+  "generation": "gen2",
+  "prefix": null,
+  "postfix": null,
+  "chunks": [
+    {
+      "meta": [
+        {
+          "name": "0x73",
+          "size": 1,
+          "position": 0,
+          "description": "Byte Position 0: Start Flag, Ox72 signals the start of Integers write payload."
+        },
+        {
+          "name": "LEN",
+          "size": 1,
+          "position": 2,
+          "description": "Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag)."
+        }
+      ],
+      "uuidData": [
+        {
+          "size": 13,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "AD Serial Number", "size": 3, "type": "String"},
+          "value": {
+            "size": 10,
+            "dataFormat": "ANNSSSSSSS",
+            "type": "String",
+            "range": null,
+            "initialValue": "A000000000",
+            "properties": ["R"],
+            "whenToUpdate": "At AD-BD connection",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "B070001827"
+          }
+        },
+        {
+          "size": 13,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "BD Serial Number", "size": 3, "type": "String"},
+          "value": {
+            "size": 10,
+            "dataFormat": "ANNSSSSSSS",
+            "type": "String",
+            "range": null,
+            "initialValue": "A000000000",
+            "properties": ["R"],
+            "whenToUpdate": "At AD-BD connection",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "T041810036"
+          }
+        },
+        {
+          "size": 9,
+          "displayInList": true,
+          "position": 0,
+          "name": {
+            "name": "AD Manufacturing Date",
+            "size": 3,
+            "type": "String"
+          },
+          "value": {
+            "size": 6,
+            "dataFormat": "YYMMDD",
+            "type": "String",
+            "range": null,
+            "initialValue": "700101",
+            "properties": ["R"],
+            "whenToUpdate": "At AD-BD connection",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "valueFormat": "YYMMDD",
+            "valueType": "Date",
+            "dateFormat": "YY/MM/DD",
+            "currentValue": "190726"
+          }
+        },
+        {
+          "size": 9,
+          "displayInList": true,
+          "position": 0,
+          "name": {
+            "name": "BD Manufacturing Date",
+            "size": 3,
+            "type": "String"
+          },
+          "value": {
+            "size": 6,
+            "dataFormat": "YYMMDD",
+            "type": "String",
+            "range": null,
+            "initialValue": "700101",
+            "properties": ["R"],
+            "whenToUpdate": "At AD-BD connection",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "valueFormat": "YYMMDD",
+            "valueType": "Date",
+            "dateFormat": "YY/MM/DD",
+            "currentValue": "231207"
+          }
+        },
+        {
+          "size": 7,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "AD Hardware Version", "size": 3, "type": "String"},
+          "value": {
+            "size": 4,
+            "dataFormat": "AAaa",
+            "type": "String",
+            "range": null,
+            "initialValue": "0000",
+            "properties": ["R"],
+            "whenToUpdate": "At AD-BD connection",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "0306"
+          }
+        },
+        {
+          "size": 7,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "AD Firmware Version", "size": 3, "type": "String"},
+          "value": {
+            "size": 4,
+            "dataFormat": "AAaa",
+            "type": "String",
+            "range": null,
+            "initialValue": "0000",
+            "properties": ["R"],
+            "whenToUpdate": "At AD-BD connection",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "0214"
+          }
+        },
+        {
+          "size": 7,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "BD Hardware Version", "size": 3, "type": "String"},
+          "value": {
+            "size": 4,
+            "dataFormat": "AAaa",
+            "type": "String",
+            "range": null,
+            "initialValue": "assigned by Tester",
+            "properties": ["R"],
+            "whenToUpdate": "At AD-BD connection",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "0407"
+          }
+        },
+        {
+          "size": 7,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "BD Firmware Version", "size": 3, "type": "String"},
+          "value": {
+            "size": 4,
+            "dataFormat": "AAaa",
+            "type": "String",
+            "range": null,
+            "initialValue": "BDFW hard-coded",
+            "properties": ["R"],
+            "whenToUpdate": "At AD-BD connection",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "0108"
+          }
+        }
+      ]
+    },
+    {
+      "meta": [
+        {
+          "name": "0x73",
+          "size": 1,
+          "position": 0,
+          "description": "Byte Position 0: Start Flag, Ox72 signals the start of Integers write payload."
+        },
+        {
+          "name": "LEN",
+          "size": 1,
+          "position": 2,
+          "description": "Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag)."
+        }
+      ],
+      "uuidData": [
+        {
+          "size": 33,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "Full Name", "size": 3, "type": "String"},
+          "value": {
+            "size": 30,
+            "dataFormat": "30 characters",
+            "type": "String",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R", "W"],
+            "whenToUpdate": "every Full Name change",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "T041810036\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+          }
+        },
+        {
+          "size": 9,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "Nick Name", "size": 3, "type": "String"},
+          "value": {
+            "size": 6,
+            "dataFormat": "6 characters",
+            "type": "String",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R", "W"],
+            "whenToUpdate": "every Nickname change",
+            "remarks": "",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "BDSKU4"
+          }
+        },
+        {
+          "size": 123,
+          "displayInList": true,
+          "position": 0,
+          "name": {"name": "BD Note", "size": 3, "type": "String"},
+          "value": {
+            "size": 120,
+            "dataFormat": "120 characters",
+            "type": "String",
+            "range": null,
+            "initialValue": "",
+            "properties": ["R", "W"],
+            "whenToUpdate": "every BD Note change",
+            "remarks": "BD Note 1 (40 bytes), BD Note 2 (40 bytes), BD Note 3 (40 bytes)",
+            "prefix": null,
+            "postfix": null,
+            "currentValue": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000test notes\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+          }
+        }
+      ]
+    }
+  ]
+}

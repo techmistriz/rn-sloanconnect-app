@@ -168,6 +168,39 @@ export const decimalToHex = (
 };
 
 /**
+ * // Define a function named ascii_to_hexa that takes a string parameter str
+ *
+ * @param {string} encodedString decimal string
+ * @param {string} base
+ * @return {any} Decode (in decimal) string
+ */
+
+export function asciiToHex(str: string, padding = 8) {
+  // Initialize an empty array to store the hexadecimal values
+  var arr1 = [];
+
+  // Iterate through each character in the input string
+  for (var n = 0, l = str.length; n < l; n++) {
+    // Convert the ASCII value of the current character to its hexadecimal representation
+    var hex = Number(str.charCodeAt(n)).toString(16);
+
+    // Push the hexadecimal value to the array
+    arr1.push(hex);
+  }
+
+  // Join the hexadecimal values in the array to form a single string
+  var hex = arr1.join('');
+
+  if (typeof padding != 'undefined' && padding > 0) {
+    while (hex.length < padding) {
+      hex = '0' + hex;
+    }
+  }
+
+  return hex;
+}
+
+/**
  * Function to get unixTimestamp in microseconds
  *
  * @return {number} unixTimestamp
@@ -248,4 +281,18 @@ export function toHexString(byteArray: any) {
   return Array.from(byteArray, function (byte) {
     return ('0' + (byte & 0xff).toString(16)).slice(-2);
   }).join(' ');
+}
+
+/**
+ * Function to convert hex to string
+ * @param {any} hexString
+ * @return {string}
+ */
+export function cleanString(str: string) {
+  return str
+    .split('')
+    .filter(function (char, index) {
+      return char.charCodeAt(0) > 0 && char.charCodeAt(0) <= 127;
+    })
+    .join('');
 }
