@@ -5,8 +5,6 @@ import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {base64EncodeDecode, hexToDecimal} from 'src/utils/Helpers/encryption';
 import {
   formatCharateristicValue,
-  getBleDeviceGeneration,
-  getBleDeviceVersion,
   getDeviceCharacteristicsByServiceUUID,
   getDeviceModelData,
 } from 'src/utils/Helpers/project';
@@ -77,10 +75,7 @@ const getStatisticsInformationDataGen1 = () => {
   var deviceVersion = '01';
   var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
   if (__deviceName) {
-    deviceVersion = getBleDeviceVersion(
-      __deviceName,
-      BLEService.deviceGeneration,
-    );
+    deviceVersion = BLEService.deviceVersion;
   }
 
   return new Promise<any>(async resolve => {

@@ -7,7 +7,8 @@ import {
 } from 'react-native';
 
 export type DeviceSettingListProps = {
-  setting: any;
+  settings: any;
+  settingsData: any;
   style?: ViewStyle | ViewStyle[];
   borderTop?: JSX.Element | null;
   borderBottom?: JSX.Element | null;

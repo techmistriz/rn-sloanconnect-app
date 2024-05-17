@@ -27,7 +27,6 @@ import Help from 'src/screens/Cms/Help';
 import Terms from 'src/screens/Cms/Terms';
 import Invitation from 'src/screens/Cms/Invitation';
 import ActivateDevice from 'src/screens/ActivateDevice';
-import NoDeviceFound from 'src/screens/NoDeviceFound';
 import DeviceSearching from 'src/screens/DeviceSearching';
 // import DeviceDashboard from 'src/screens/DeviceDashboard';
 import DeviceDiagnostics from 'src/screens/DeviceDiagnostics';
@@ -199,13 +198,7 @@ const MainNavigator = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="NoDeviceFound"
-          component={NoDeviceFound}
-          options={{
-            headerShown: false,
-          }}
-        />
+        
         <Stack.Screen
           name="DeviceSearching"
           component={DeviceSearching}

@@ -6,7 +6,6 @@ import NavigationIcon from './NavigationIcon';
 import Theme, {generateBoxShadowStyle} from 'src/theme';
 import {constants} from 'src/common';
 import DeviceDashboard from '../screens/DeviceDashboard';
-import DeviceSettingsApplying from '../screens/DeviceSettingsApplying';
 import DeviceDiagnostics from '../screens/DeviceDiagnostics';
 import DeviceDiagnosticResults from '../screens/DeviceDiagnosticResults';
 import DeviceDiagnosticTroubleshoot from '../screens/DeviceDiagnosticTroubleshoot';
@@ -41,18 +40,7 @@ const DeviceDashboardStack = (props: any) => {
           },
         }}
       />
-      <Stack.Screen
-        name="DeviceSettingsApplying"
-        component={DeviceSettingsApplying}
-        options={{
-          headerShown: false,
-          title: 'Settings Applying', //Set Header Title
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: Theme.fonts.ThemeFontRegular,
-          },
-        }}
-      />
+      
     </Stack.Navigator>
   );
 };

@@ -2,10 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Theme from 'src/theme';
 import {useSelector} from 'react-redux';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
-import {
-  isObjectEmpty,
-  findObject,
-} from 'src/utils/Helpers/array';
+import {isObjectEmpty, findObject} from 'src/utils/Helpers/array';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -17,14 +14,6 @@ import DeviceInfoList from 'src/components/@ProjectComponent/DeviceInfoList';
 import DeviceBottomTab from 'src/components/@ProjectComponent/DeviceBottomTab';
 import {TABS} from 'src/utils/StaticData/StaticData';
 import {getDeviceInfoNormal, getDeviceInfoAdvance} from './helperGen1';
-import {
-  mappingDeviceDataStringGen2,
-} from './helperGen2';
-import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
-import {
-  base64ToHex,
-} from 'src/utils/Helpers/encryption';
 import moment from 'moment';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
 
@@ -70,34 +59,37 @@ const Index = ({navigation, route}: any) => {
 
   /** This is for gen1 */
   const initializeNormal = async () => {
-    setLoading(true);
-    const deviceStaticData = BLEService.connectedDeviceStaticData;
-    consoleLog('initializeNormal deviceStaticData==>', deviceStaticData);
-    // setDeviceData(deviceStaticData);
-    const deviceInfoNormal = await getDeviceInfoNormal();
-    // consoleLog('ADBDInformationARR', ADBDInformationARR);
+    try {
+      const deviceStaticData = BLEService.connectedDeviceStaticData;
+      consoleLog('initializeNormal deviceStaticData==>', deviceStaticData);
+      // setDeviceData(deviceStaticData);
+      const deviceInfoNormal = await getDeviceInfoNormal();
+      // consoleLog('ADBDInformationARR', ADBDInformationARR);
 
-    var sloanModel: any = [];
-    if (deviceStaticData) {
-      sloanModel = [
+      var sloanModel: any = [];
+      if (deviceStaticData) {
+        sloanModel = [
+          {
+            name: 'SLOAN MODEL',
+            value: deviceStaticData?.fullNameAllModel,
+            uuid: '111111',
+          },
+        ];
+      }
+
+      const batteryStatus = [
         {
-          name: 'SLOAN MODEL',
-          value: deviceStaticData?.fullNameAllModel,
-          uuid: '111111',
+          name: 'Battery Status',
+          value: `${BLEService.batteryLevel}%`,
+          uuid: '0000000',
         },
       ];
+
+      setDeviceDetails([...sloanModel, ...deviceInfoNormal, ...batteryStatus]);
+    } catch (error) {
+    } finally {
+      setLoading(false);
     }
-
-    const batteryStatus = [
-      {
-        name: 'Battery Status',
-        value: `${BLEService.batteryLevel}%`,
-        uuid: '0000000',
-      },
-    ];
-
-    setDeviceDetails([...sloanModel, ...deviceInfoNormal, ...batteryStatus]);
-    setLoading(false);
   };
 
   /** This is for gen1 */
@@ -154,48 +146,50 @@ const Index = ({navigation, route}: any) => {
     } catch (error) {
       //
     } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   /** This is for gen2 */
   const initializeNormalGen2 = async () => {
     setLoading(true);
     consoleLog('initializeNormalGen2 called');
-    var __characteristicMonitorDeviceDataString: string[] = [];
+    __mappingDeviceDataStringGen2();
+    // var __characteristicMonitorDeviceDataString: string[] = [];
 
-    // Device data string
-    BLEService.setupMonitor(
-      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
-      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
-      characteristic => {
-        // consoleLog('initializeNormalGen2 characteristic==>', characteristic);
-        if (characteristic?.value) {
-          var deviceDataStringHex = base64ToHex(characteristic?.value);
-          consoleLog(
-            'initializeNormalGen2 deviceDataStringHex==>',
-            deviceDataStringHex,
-          );
-          if (deviceDataStringHex == '71ff04') {
-            BLEService.characteristicMonitorDeviceDataString =
-              __characteristicMonitorDeviceDataString;
-            BLEService.finishMonitor();
-            __mappingDeviceDataStringGen2();
-          } else {
-            __characteristicMonitorDeviceDataString.push(deviceDataStringHex);
-          }
-        }
-      },
-      error => {
-        consoleLog('setupMonitor error==>', error);
-      },
-    );
+    // // Device data string
+    // BLEService.setupMonitor(
+    //   BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
+    //   BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+    //   characteristic => {
+    //     // consoleLog('initializeNormalGen2 characteristic==>', characteristic);
+    //     if (characteristic?.value) {
+    //       var deviceDataStringHex = base64ToHex(characteristic?.value);
+    //       consoleLog(
+    //         'initializeNormalGen2 deviceDataStringHex==>',
+    //         deviceDataStringHex,
+    //       );
+    //       if (deviceDataStringHex == '71ff04') {
+    //         BLEService.characteristicMonitorDeviceDataString =
+    //           __characteristicMonitorDeviceDataString;
+    //         BLEService.finishMonitor();
+    //         __mappingDeviceDataStringGen2();
+    //       } else {
+    //         __characteristicMonitorDeviceDataString.push(deviceDataStringHex);
+    //       }
+    //     }
+    //   },
+    //   error => {
+    //     consoleLog('setupMonitor error==>', error);
+    //   },
+    // );
   };
 
   /** This is for gen2 */
   const initializeAdvanceGen2 = async () => {
+    setLoading(true);
+    consoleLog('initializeAdvanceGen2 called');
     __mappingDeviceDataIntegersGen2();
-    // consoleLog('initializeAdvanceGen2 called');
     // var __characteristicMonitorDeviceDataIntegers: string[] = [];
 
     // // Device data string
@@ -228,85 +222,86 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const __mappingDeviceDataStringGen2 = async () => {
-    const mappingDeviceDataStringGen2Response =
-      await mappingDeviceDataStringGen2(
-        BLE_GEN2_GATT_SERVICES,
-        BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
-        BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
-        BLEService.characteristicMonitorDeviceDataString,
-      );
+    // const mappingDeviceDataStringGen2Response =
+    //   await mappingDeviceDataStringGen2(
+    //     BLE_GEN2_GATT_SERVICES,
+    //     BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
+    //     BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+    //     BLEService.characteristicMonitorDeviceDataString,
+    //   );
 
-    consoleLog(
-      '__mappingDeviceDataStringGen2 mappingDeviceDataStringGen2Response==>',
-      JSON.stringify(mappingDeviceDataStringGen2Response),
-    );
+    // consoleLog(
+    //   '__mappingDeviceDataStringGen2 mappingDeviceDataStringGen2Response==>',
+    //   JSON.stringify(mappingDeviceDataStringGen2Response),
+    // );
 
-    BLEService.characteristicMonitorDeviceDataStringMapped =
-      mappingDeviceDataStringGen2Response;
+    // BLEService.characteristicMonitorDeviceDataStringMapped =
+    //   mappingDeviceDataStringGen2Response;
     __mappingDeviceDataStringGen2Data();
   };
 
   /** Function comments */
   const __mappingDeviceDataStringGen2Data = async () => {
-    const deviceStaticData = BLEService.connectedDeviceStaticData;
-    consoleLog(
-      '__mappingDeviceDataStringGen2Data called',
-      BLEService.characteristicMonitorDeviceDataString,
-    );
+    consoleLog('__mappingDeviceDataStringGen2Data called');
 
-    const __mappingDeviceDataIntegersGen2 =
-      BLEService.characteristicMonitorDeviceDataStringMapped;
+    try {
+      const deviceStaticData = BLEService.connectedDeviceStaticData;
+      const __mappingDeviceDataStringGen2 =
+        BLEService.characteristicMonitorDeviceDataStringMapped;
 
-    consoleLog(
-      '__mappingDeviceDataStringGen2Data __mappingDeviceDataIntegersGen2==>',
-      __mappingDeviceDataIntegersGen2,
-    );
+      consoleLog(
+        '__mappingDeviceDataStringGen2Data __mappingDeviceDataStringGen2==>',
+        __mappingDeviceDataStringGen2,
+      );
 
-    var allData: any = [];
-    if (
-      __mappingDeviceDataIntegersGen2?.chunks &&
-      Array.isArray(__mappingDeviceDataIntegersGen2?.chunks)
-    ) {
-      __mappingDeviceDataIntegersGen2?.chunks.forEach((element, index) => {
-        if (element?.uuidData && Array.isArray(element?.uuidData)) {
-          element?.uuidData.forEach((element2, index2) => {
-            if (element2) {
-              allData.push({
-                name: element2?.name?.name,
-                // value: element2?.value?.currentValue ?? 'N/A',
-                value: formatCharateristicValue(
-                  element2?.value,
-                  element2?.value?.currentValue,
-                ),
-                uuid: `${index}-${index2}`,
-              });
-            }
-          });
-        }
-      });
-    }
+      var allData: any = [];
+      if (
+        __mappingDeviceDataStringGen2?.chunks &&
+        Array.isArray(__mappingDeviceDataStringGen2?.chunks)
+      ) {
+        __mappingDeviceDataStringGen2?.chunks.forEach((element, index) => {
+          if (element?.uuidData && Array.isArray(element?.uuidData)) {
+            element?.uuidData.forEach((element2, index2) => {
+              if (element2) {
+                allData.push({
+                  name: element2?.name?.name,
+                  // value: element2?.value?.currentValue ?? 'N/A',
+                  value: formatCharateristicValue(
+                    element2?.value,
+                    element2?.value?.currentValue,
+                  ),
+                  uuid: `${index}-${index2}`,
+                });
+              }
+            });
+          }
+        });
+      }
 
-    var sloanModel: any = [];
-    if (deviceStaticData) {
-      sloanModel = [
+      var sloanModel: any = [];
+      if (deviceStaticData) {
+        sloanModel = [
+          {
+            name: 'SLOAN MODEL',
+            value: deviceStaticData?.fullNameAllModel,
+            uuid: '111111',
+          },
+        ];
+      }
+
+      const batteryStatus = [
         {
-          name: 'SLOAN MODEL',
-          value: deviceStaticData?.fullNameAllModel,
-          uuid: '111111',
+          name: 'Battery Status',
+          value: `${BLEService.batteryLevel}%`,
+          uuid: '0000000',
         },
       ];
+
+      setDeviceDetails([...sloanModel, ...allData, ...batteryStatus]);
+    } catch (error) {
+    } finally {
+      setLoading(false);
     }
-
-    const batteryStatus = [
-      {
-        name: 'Battery Status',
-        value: `${BLEService.batteryLevel}%`,
-        uuid: '0000000',
-      },
-    ];
-
-    setDeviceDetails([...sloanModel, ...allData, ...batteryStatus]);
-    setLoading(false);
   };
 
   /** Function comments */
@@ -331,65 +326,46 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const __mappingDeviceDataIntegersGen2Data = async () => {
-    const deviceStaticData = BLEService.connectedDeviceStaticData;
-    consoleLog(
-      '__mappingDeviceDataIntegersGen2Data called',
-      BLEService.characteristicMonitorDeviceDataIntegers,
-    );
+    consoleLog('__mappingDeviceDataIntegersGen2Data called');
+    try {
+      const __mappingDeviceDataIntegersGen2 =
+        BLEService.characteristicMonitorDeviceDataIntegersMapped;
 
-    const __mappingDeviceDataIntegersGen2 =
-      BLEService.characteristicMonitorDeviceDataIntegersMapped;
+      consoleLog(
+        '__mappingDeviceDataIntegersGen2Data __mappingDeviceDataIntegersGen2==>',
+        __mappingDeviceDataIntegersGen2,
+      );
 
-    consoleLog(
-      '__mappingDeviceDataIntegersGen2Data __mappingDeviceDataIntegersGen2==>',
-      __mappingDeviceDataIntegersGen2,
-    );
+      var allData: any = [];
+      if (
+        __mappingDeviceDataIntegersGen2?.chunks &&
+        Array.isArray(__mappingDeviceDataIntegersGen2?.chunks)
+      ) {
+        __mappingDeviceDataIntegersGen2?.chunks.forEach((element, index) => {
+          if (element?.uuidData && Array.isArray(element?.uuidData)) {
+            element?.uuidData.forEach((element2, index2) => {
+              if (element2) {
+                allData.push({
+                  name: element2?.name?.name,
+                  // value: element2?.value?.currentValue ?? 'N/A',
+                  value: formatCharateristicValue(
+                    element2?.value,
+                    element2?.value?.currentValue,
+                  ),
+                  uuid: `${index}-${index2}`,
+                });
+              }
+            });
+          }
+        });
+      }
 
-    var allData: any = [];
-    if (
-      __mappingDeviceDataIntegersGen2?.chunks &&
-      Array.isArray(__mappingDeviceDataIntegersGen2?.chunks)
-    ) {
-      __mappingDeviceDataIntegersGen2?.chunks.forEach((element, index) => {
-        if (element?.uuidData && Array.isArray(element?.uuidData)) {
-          element?.uuidData.forEach((element2, index2) => {
-            if (element2) {
-              allData.push({
-                name: element2?.name?.name,
-                // value: element2?.value?.currentValue ?? 'N/A',
-                value: formatCharateristicValue(
-                  element2?.value,
-                  element2?.value?.currentValue,
-                ),
-                uuid: `${index}-${index2}`,
-              });
-            }
-          });
-        }
-      });
+      var userData = await getUserData();
+      setDeviceDetails([...allData, ...userData]);
+    } catch (error) {
+    } finally {
+      setLoading(false);
     }
-
-    var sloanModel: any = [];
-    if (deviceStaticData) {
-      sloanModel = [
-        {
-          name: 'SLOAN MODEL',
-          value: deviceStaticData?.fullNameAllModel,
-          uuid: '111111',
-        },
-      ];
-    }
-
-    const batteryStatus = [
-      {
-        name: 'Battery Status',
-        value: `${BLEService.batteryLevel}%`,
-        uuid: '0000000',
-      },
-    ];
-
-    setDeviceDetails([...sloanModel, ...allData, ...batteryStatus]);
-    setLoading(false);
   };
 
   /** Function comments */

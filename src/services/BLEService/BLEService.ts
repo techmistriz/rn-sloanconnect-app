@@ -88,7 +88,7 @@ class BLEServiceInstance {
     this.deviceRaw = null;
     this.scannedDevices = [];
     this.deviceGeneration = '';
-    this.deviceVersion = 'gen1';
+    this.deviceVersion = '01';
     this.batteryLevel = 0;
     this.totalWaterUsase = 0;
     this.connectedDeviceStaticData = null;

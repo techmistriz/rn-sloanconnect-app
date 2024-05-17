@@ -13,7 +13,6 @@ import {
   intiGen2SecurityKey,
   saveSettings,
   shortBursts,
-  shortBurstsGen1,
   updatePreviousSettings,
 } from 'src/utils/Helpers/project';
 
@@ -53,6 +52,7 @@ import {
 import {
   mappingDataCollectionGen2,
   mappingDeviceDataIntegersGen2,
+  mappingDeviceDataStringGen2,
   mappingRealTimeDataGen2,
 } from './helperGen2';
 import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
@@ -62,6 +62,7 @@ import {
   getFlushSettings,
   getSensorSettings,
 } from './helperGen1';
+import NotesList from 'src/components/@ProjectComponent/DeviceSettingsList/NotesList';
 
 const Index = ({navigation}: any) => {
   const dispatch = useDispatch();
@@ -93,6 +94,7 @@ const Index = ({navigation}: any) => {
   const [flushSettings, setFlushSettings] = useState<any>();
   const [flowRateSettings, setFlowRateSettings] = useState<any>();
   const [sensorSettings, setSensorSettings] = useState<any>();
+  const [noteSettings, setNoteSettings] = useState<any>();
 
   /** component hooks method */
   useEffect(() => {
@@ -123,6 +125,23 @@ const Index = ({navigation}: any) => {
   }, [navigation]);
 
   /** Function comments */
+  const writeDataGen2Test = async () => {
+    const writableData = fromHexStringUint8Array('720a0132026641BA05CF');
+    // 720a0132016641BA05CF
+    const writeDataResponse =
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        writableData,
+      );
+
+    consoleLog(
+      'initlizeAppGen2 writeDataResponse==>',
+      JSON.stringify(writeDataResponse),
+    );
+  };
+
+  /** Function comments */
   const initlizeApp = async () => {
     // await StorageService.removeItem('@DEVICE_PREVIOUS_SETTINGS');
     // consoleLog("initlizeApp deviceGeneration==>", BLEService.deviceGeneration);
@@ -144,24 +163,9 @@ const Index = ({navigation}: any) => {
     }
   };
 
-  const writeData = async () => {
-    const writableData = fromHexStringUint8Array('720a0132026641BA05CF');
-    // 720a0132016641BA05CF
-    const writeDataResponse =
-      await BLEService.writeCharacteristicWithResponseForDevice2(
-        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-        writableData,
-      );
-
-    consoleLog(
-      'initlizeAppGen2 writeDataResponse==>',
-      JSON.stringify(writeDataResponse),
-    );
-  };
-
   /** Function comments */
   const initlizeAppGen1 = async () => {
+    setLoading(true);
     __getBatteryLevel();
     __getTotalWaterUsase();
     __getSavedSettingsGen1();
@@ -204,10 +208,13 @@ const Index = ({navigation}: any) => {
       .catch(error => {
         consoleLog('initlizeAppGen1 getFlowSettings error==>', error);
       });
+
+    setLoading(false);
   };
 
   /** Function comments */
   const initlizeAppGen2 = async () => {
+    setLoading(true);
     consoleLog('getDeviceDataGen2 called');
     __mappingDeviceDataIntegersGen2SetupMonitor();
   };
@@ -236,7 +243,7 @@ const Index = ({navigation}: any) => {
             __mappingDeviceDataIntegersGen2();
 
             setTimeout(() => {
-              __mappingDataCollectionGen2SetupMonitor();
+              __mappingDeviceDataStringGen2SetupMonitor();
             }, 250);
           } else {
             __characteristicMonitorDeviceDataIntegers.push(
@@ -379,6 +386,93 @@ const Index = ({navigation}: any) => {
       // consoleLog('settingsMappingGen2 __sensorSettings==>', __sensorSettings);
       if (__sensorSettings) {
         setSensorSettings(__sensorSettings);
+      }
+    }
+  };
+
+  /** This is for gen2 */
+  const __mappingDeviceDataStringGen2SetupMonitor = async () => {
+    consoleLog('__mappingDeviceDataStringGen2SetupMonitor called');
+    var __characteristicMonitorDeviceDataString: string[] = [];
+
+    // Device data string
+    BLEService.setupMonitor(
+      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+      characteristic => {
+        // consoleLog('__mappingDeviceDataStringGen2SetupMonitor characteristic==>', characteristic);
+        if (characteristic?.value) {
+          var deviceDataStringHex = base64ToHex(characteristic?.value);
+          consoleLog(
+            '__mappingDeviceDataStringGen2SetupMonitor deviceDataStringHex==>',
+            deviceDataStringHex,
+          );
+          if (deviceDataStringHex == '71ff04') {
+            BLEService.characteristicMonitorDeviceDataString =
+              __characteristicMonitorDeviceDataString;
+            BLEService.finishMonitor();
+            __mappingDeviceDataStringGen2();
+            setTimeout(() => {
+              __mappingDataCollectionGen2SetupMonitor();
+            }, 250);
+          } else {
+            __characteristicMonitorDeviceDataString.push(deviceDataStringHex);
+          }
+        }
+      },
+      error => {
+        consoleLog('__mappingDeviceDataStringGen2SetupMonitor error==>', error);
+      },
+    );
+  };
+
+  /** Function comments */
+  const __mappingDeviceDataStringGen2 = async () => {
+    const mappingDeviceDataStringGen2Response =
+      await mappingDeviceDataStringGen2(
+        BLE_GEN2_GATT_SERVICES,
+        BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_SERVICE_UUID,
+        BLE_CONSTANTS?.GEN2?.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+        BLEService.characteristicMonitorDeviceDataString,
+      );
+
+    consoleLog(
+      '__mappingDeviceDataStringGen2 mappingDeviceDataStringGen2Response==>',
+      JSON.stringify(mappingDeviceDataStringGen2Response),
+    );
+
+    BLEService.characteristicMonitorDeviceDataStringMapped =
+      mappingDeviceDataStringGen2Response;
+    __mappingDeviceDataStringGen2Data();
+  };
+
+  /** Function comments */
+  const __mappingDeviceDataStringGen2Data = async () => {
+    const characteristicMonitorDeviceDataStringResponse =
+      BLEService.characteristicMonitorDeviceDataStringMapped;
+
+    if (!isObjectEmpty(characteristicMonitorDeviceDataStringResponse)) {
+      // For Note
+      var __noteSettings = {
+        note: {},
+      };
+
+      if (
+        characteristicMonitorDeviceDataStringResponse?.chunks?.[1]
+          ?.uuidData?.[2]
+      ) {
+        __noteSettings.note = {
+          value:
+            characteristicMonitorDeviceDataStringResponse?.chunks?.[1]?.uuidData?.[2]?.value?.currentValue?.toString(),
+        };
+      }
+
+      // consoleLog(
+      //   'settingsMappingGen2 __noteSettings==>',
+      //   __noteSettings,
+      // );
+      if (__noteSettings) {
+        setNoteSettings(__noteSettings);
       }
     }
   };
@@ -564,6 +658,7 @@ const Index = ({navigation}: any) => {
         setBatteryLevel(batteryLevel);
       }
     }
+    setLoading(false);
   };
 
   /** Function comments */
@@ -1163,18 +1258,21 @@ const Index = ({navigation}: any) => {
                 applied={applied}
               />
 
-              {/* <NotesList
-                setting={{
-                  id: 4,
-                  title: 'Notes',
-                  subTitle: 'DEVICE NOTES',
-                  route: 'Notes',
-                  serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c94A',
-                  name: 'Notes',
-                }}
-                navigation={navigation}
-              /> */}
+              {noteSettings && (
+                <NotesList
+                  settings={{
+                    id: 4,
+                    title: 'Notes',
+                    subTitle: 'DEVICE NOTES',
+                    route: 'Notes',
+                    name: 'Notes',
+                  }}
+                  settingsData={noteSettings}
+                  navigation={navigation}
+                  borderBottom={<Divider color={Theme.colors.lightGray} />}
+                  applied={applied}
+                />
+              )}
             </Wrap>
           </Wrap>
         </Wrap>
