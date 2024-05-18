@@ -126,18 +126,19 @@ class BLEServiceInstance {
       const subscription = this.manager.onStateChange(state => {
         switch (state) {
           case BluetoothState.Unsupported:
-            this.showErrorToast('');
+            // this.showErrorToast('');
             break;
           case BluetoothState.PoweredOff:
             this.onBluetoothPowerOff();
-            this.manager.enable().catch((error: BleError) => {
-              if (error?.errorCode === BleErrorCode?.BluetoothUnauthorized) {
-                this.requestBluetoothPermission();
-              }
-            });
+            // this.manager.enable().catch((error: BleError) => {
+            //   if (error?.errorCode === BleErrorCode?.BluetoothUnauthorized) {
+            //     this.requestBluetoothPermission();
+            //   }
+            // });
             break;
           case BluetoothState.Unauthorized:
-            this.requestBluetoothPermission();
+            this.showErrorToast('Bluetooth Unauthorized');
+            // this.requestBluetoothPermission();
             break;
           case BluetoothState.PoweredOn:
             // this.onBluetoothPowerOn();
@@ -145,7 +146,7 @@ class BLEServiceInstance {
             subscription.remove();
             break;
           default:
-            console.error('Unsupported state: ', state);
+            consoleLog('Unsupported state: ', state);
         }
       }, true);
     });
@@ -944,7 +945,9 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-  dispenseWaterGen2 = async (characteristicHex: string = '720a01321400000001CF') => {
+  dispenseWaterGen2 = async (
+    characteristicHex: string = '720a01321400000001CF',
+  ) => {
     const writableData = fromHexStringUint8Array(characteristicHex);
     const writeDataResponse =
       await BLEService.writeCharacteristicWithResponseForDevice2(

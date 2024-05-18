@@ -27,10 +27,10 @@ type AppContainerProps = {
   hasLeftButton?: boolean;
   hasRightButton?: boolean;
   hasHeader?: boolean;
-  // onLeftPress?: boolean;
-  // onRightPress?: boolean;
-  // onLogoutPress?: boolean;
-  // onBackPress?: boolean;
+  onLeftPress?: any;
+  onRightPress?: any;
+  onLogoutPress?: any;
+  onBackPress?: any;
 };
 
 // AppContainer

@@ -11,6 +11,11 @@ import {Alert, Platform} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
 import {consoleLog} from './Helpers/HelperFunction';
+import Geolocation from '@react-native-community/geolocation';
+import {
+  isLocationEnabled,
+  promptForEnableLocationIfNeeded,
+} from 'react-native-android-location-enabler';
 
 const PERMISSIONS_RESULTS = Object({
   UNAVAILABLE: 'unavailable',
@@ -19,6 +24,35 @@ const PERMISSIONS_RESULTS = Object({
   GRANTED: 'granted',
   LIMITED: 'limited',
 });
+
+/**
+ * Request GeoLocation permission
+ */
+const requestGeoLocationPermission = async () => {
+  if (Platform.OS === 'android') {
+    try {
+      const enableResult = await promptForEnableLocationIfNeeded();
+      // consoleLog('requestGeoLocationPermission enableResult', enableResult);
+      return true;
+      // The user has accepted to enable the location services
+      // data can be :
+      //  - "already-enabled" if the location services has been already enabled
+      //  - "enabled" if user has clicked on OK button in the popup
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        // consoleLog('requestGeoLocationPermission error==>', error?.message);
+        return false;
+        // The user has not accepted to enable the location services or something went wrong during the process
+        // "err" : { "code" : "ERR00|ERR01|ERR02|ERR03", "message" : "message"}
+        // codes :
+        //  - ERR00 : The user has clicked on Cancel button in the popup
+        //  - ERR01 : If the Settings change are unavailable
+        //  - ERR02 : If the popup has failed to open
+        //  - ERR03 : Internal error
+      }
+    }
+  }
+};
 
 /**
  * Check permission to access push notification
@@ -561,13 +595,17 @@ const checkLocationPermissions = () => {
   return new Promise(resolve => {
     checkMultiple([
       PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
       PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
     ])
       .then((statuses: any) => {
         let PERM_STATUS = PERMISSIONS_RESULTS.BLOCKED;
         if (Platform.OS === 'android') {
           PERM_STATUS = resolvePermision([
-            statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION],
+            statuses[
+              (PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+              PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
+            ],
           ]);
         } else if (Platform.OS === 'ios') {
           PERM_STATUS = resolvePermision([
@@ -589,13 +627,17 @@ const requestLocationPermissions = () => {
   return new Promise((resolve, reject) => {
     requestMultiple([
       PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
       PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
     ])
       .then((statuses: any) => {
         let PERM_STATUS = PERMISSIONS_RESULTS.BLOCKED;
         if (Platform.OS === 'android') {
           PERM_STATUS = resolvePermision([
-            statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION],
+            statuses[
+              (PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+              PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
+            ],
           ]);
         } else if (Platform.OS === 'ios') {
           PERM_STATUS = resolvePermision([
@@ -739,20 +781,35 @@ const requestContactPermissions = () => {
  */
 const checkBluetoothPermissions = () => {
   return new Promise(resolve => {
-    checkMultiple([
+    var permReqArr: any = [
       PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
       PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
       PERMISSIONS.IOS.BLUETOOTH,
-    ])
+    ];
+    if (parseInt(Platform.Version + '') <= 30) {
+      permReqArr = [
+        PERMISSIONS.ANDROID.BLUETOOTH,
+        PERMISSIONS.ANDROID.BLUETOOTH_ADMIN,
+        PERMISSIONS.IOS.BLUETOOTH,
+      ];
+    }
+
+    checkMultiple(permReqArr)
       .then((statuses: any) => {
         let PERM_STATUS = PERMISSIONS_RESULTS.BLOCKED;
         if (Platform.OS === 'android') {
-          PERM_STATUS = resolvePermision([
-            statuses[
-              (PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-              PERMISSIONS.ANDROID.BLUETOOTH_CONNECT)
-            ],
-          ]);
+          var permStatusAndroidArr = [
+            statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN],
+            statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT],
+          ];
+          if (parseInt(Platform.Version + '') <= 30) {
+            permStatusAndroidArr = [
+              statuses[PERMISSIONS.ANDROID.BLUETOOTH],
+              statuses[PERMISSIONS.ANDROID.BLUETOOTH_ADMIN],
+            ];
+          }
+
+          PERM_STATUS = resolvePermision(permStatusAndroidArr);
         } else if (Platform.OS === 'ios') {
           PERM_STATUS = resolvePermision([statuses[PERMISSIONS.IOS.BLUETOOTH]]);
         }
@@ -769,20 +826,35 @@ const checkBluetoothPermissions = () => {
  */
 const requestBluetoothPermissions = () => {
   return new Promise(resolve => {
-    requestMultiple([
+    var permReqArr: any = [
       PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
       PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
       PERMISSIONS.IOS.BLUETOOTH,
-    ])
+    ];
+    if (parseInt(Platform.Version + '') <= 30) {
+      permReqArr = [
+        PERMISSIONS.ANDROID.BLUETOOTH,
+        PERMISSIONS.ANDROID.BLUETOOTH_ADMIN,
+        PERMISSIONS.IOS.BLUETOOTH,
+      ];
+    }
+
+    requestMultiple(permReqArr)
       .then((statuses: any) => {
         let PERM_STATUS = PERMISSIONS_RESULTS.BLOCKED;
         if (Platform.OS === 'android') {
-          PERM_STATUS = resolvePermision([
-            statuses[
-              (PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-              PERMISSIONS.ANDROID.BLUETOOTH_CONNECT)
-            ],
-          ]);
+          var permStatusAndroidArr = [
+            statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN],
+            statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT],
+          ];
+          if (parseInt(Platform.Version + '') <= 30) {
+            permStatusAndroidArr = [
+              statuses[PERMISSIONS.ANDROID.BLUETOOTH],
+              statuses[PERMISSIONS.ANDROID.BLUETOOTH_ADMIN],
+            ];
+          }
+
+          PERM_STATUS = resolvePermision(permStatusAndroidArr);
         } else if (Platform.OS === 'ios') {
           PERM_STATUS = resolvePermision([statuses[PERMISSIONS.IOS.BLUETOOTH]]);
         }
@@ -794,7 +866,6 @@ const requestBluetoothPermissions = () => {
         }
       })
       .catch(err => {
-        // resolve(false);
         resolve(PERMISSIONS_RESULTS.BLOCKED);
       });
   });
@@ -893,6 +964,7 @@ const resolvePermision = (permissions: Array<any>) => {
 
 export {
   PERMISSIONS_RESULTS,
+  requestGeoLocationPermission,
   checkCameraPermissions,
   requestCameraPermissions,
   checkGalleryPermissions,
