@@ -40,7 +40,6 @@ import {
   requestLocationPermissions,
   requestGeoLocationPermission,
 } from 'src/utils/Permissions';
-import Geolocation from '@react-native-community/geolocation';
 
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
@@ -194,7 +193,10 @@ const Index = ({navigation, route}: any) => {
     consoleLog('useEffect setTimeout NoDevice==>', {requirePermissionAllowed});
     if (requirePermissionAllowed) {
       timeoutID = setTimeout(() => {
-        if (foundDevices.length == 0) {
+        if (
+          foundDevices.length == 0 &&
+          isScanning != ScanningProps.Connecting
+        ) {
           // consoleLog('setTimeout==>', timeoutID);
           // NavigationService.replace('NoDeviceFound');
           clearTimeout(timeoutID);

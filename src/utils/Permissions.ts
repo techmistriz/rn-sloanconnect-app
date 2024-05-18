@@ -29,7 +29,10 @@ const PERMISSIONS_RESULTS = Object({
  * Request GeoLocation permission
  */
 const requestGeoLocationPermission = async () => {
-  if (Platform.OS === 'android') {
+  if (
+    Platform.OS === 'android' &&
+    parseInt(Platform?.Version?.toString, 10) <= 12
+  ) {
     try {
       const enableResult = await promptForEnableLocationIfNeeded();
       // consoleLog('requestGeoLocationPermission enableResult', enableResult);
@@ -51,6 +54,8 @@ const requestGeoLocationPermission = async () => {
         //  - ERR03 : Internal error
       }
     }
+  } else {
+    return true;
   }
 };
 
