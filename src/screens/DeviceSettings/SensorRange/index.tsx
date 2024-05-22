@@ -3,6 +3,7 @@ import {Keyboard} from 'react-native';
 import Theme from 'src/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  consoleLog,
   parseDateTimeInFormat,
   showSimpleAlert,
 } from 'src/utils/Helpers/HelperFunction';
@@ -45,7 +46,7 @@ const Index = ({navigation, route}: any) => {
   const [sensorRange, setSensorRange] = useState('');
   const [sensorRangeOld, setSensorRangeOld] = useState('');
   const [sensorRangeConfig, setSensorRangeConfig] = useState<SensorRangeProps>(
-    settingsData?.sensorRangeConfig ?? defaultSensorRangeConfig,
+    settings?.sensorRangeConfig ?? defaultSensorRangeConfig,
   );
   const [sliderOneValue, setSliderOneValue] = React.useState([1]);
 
@@ -59,11 +60,9 @@ const Index = ({navigation, route}: any) => {
   // const sliderOneValuesChangeFinish = () => setSliderOneChanging(false);
 
   useEffect(() => {
-    // consoleLog('SensorRange==>', {
-    //   referrer,
-    //   settings,
-    //   settingsData,
-    // });
+    consoleLog('SensorRange==>', {
+      settings,
+    });
     initlizeApp();
   }, []);
 

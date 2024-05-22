@@ -88,7 +88,7 @@ export function getBleDeviceGeneration(str: string | null | undefined = '') {
   } else if (str.search(/FAUCET/i) >= 0) {
     return 'gen1';
   } else {
-    return 'gen1';
+    return '';
   }
 }
 
@@ -203,8 +203,8 @@ export function getDeviceModelData(
 ) {
   var deviceStaticData = null;
   // localName have more relevant name indentification
-  var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
-  if (__deviceName) {
+  var deviceName = connectedDevice?.localName ?? connectedDevice?.name;
+  if (deviceName) {
     if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] != 'undefined') {
       const deviceVersion = getBleDeviceVersion(connectedDevice, deviceGen);
       consoleLog('getDeviceModelData deviceVersion==>', deviceVersion);

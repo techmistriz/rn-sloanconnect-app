@@ -214,7 +214,7 @@ const Index = ({navigation}: any) => {
 
   /** Function comments */
   const initlizeAppGen2 = async () => {
-    setLoading(true);
+    // setLoading(true);
     consoleLog('getDeviceDataGen2 called');
     __mappingDeviceDataIntegersGen2SetupMonitor();
   };
@@ -505,7 +505,7 @@ const Index = ({navigation}: any) => {
           __mappingDataCollectionGen2();
           setTimeout(() => {
             __mappingRealTimeDataGen2SetupMonitor();
-          }, 500);
+          }, 1000);
         }
       },
       error => {
@@ -605,6 +605,12 @@ const Index = ({navigation}: any) => {
           __characteristicMonitorRealTimeData;
         BLEService.finishMonitor();
         __mappingRealTimeDataGen2();
+        setTimeout(() => {
+          BLEService.finishMonitor();
+        }, 250);
+        setTimeout(() => {
+          BLEService.finishMonitor();
+        }, 500);
       },
       error => {
         consoleLog('__mappingRealTimeDataGen2SetupMonitor error==>', error);

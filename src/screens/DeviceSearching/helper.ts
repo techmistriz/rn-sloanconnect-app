@@ -11,7 +11,8 @@ import {DeviceExtendedProps} from './types';
 export const filterBLEDevices = (device: DeviceExtendedProps): any => {
   var filterDevice = null;
   var deviceName = device?.localName ?? device?.name ?? 'Unknown';
-  
+  // deviceName = 'FAUCET ADSKU00 AYYSS';
+
   if (device && !isObjectEmpty(device) && deviceName) {
     device.deviceCustomName = deviceName;
     if (
@@ -19,8 +20,8 @@ export const filterBLEDevices = (device: DeviceExtendedProps): any => {
       deviceName?.toUpperCase()?.includes('FAUCET') ||
       deviceName?.toUpperCase()?.includes('SL')
     ) {
-      var __deviceNameArr = deviceName.split(' ');
-      // consoleLog('__deviceNameArr', __deviceNameArr);
+      var deviceNameArr = deviceName.split(' ');
+      // consoleLog('deviceNameArr', deviceNameArr);
       const deviceGen = getBleDeviceGeneration(deviceName);
       const deviceStaticData = getDeviceModelData(
         device,
@@ -30,16 +31,15 @@ export const filterBLEDevices = (device: DeviceExtendedProps): any => {
       const deviceSerialNumber = getBleDeviceSerialNumber(device, deviceGen);
 
       if (
-        Array.isArray(__deviceNameArr) &&
-        __deviceNameArr.length > 0 &&
-        deviceStaticData?.fullNameAllModel
+        Array.isArray(deviceNameArr) &&
+        deviceNameArr.length > 0
       ) {
-        if (__deviceNameArr[0] == 'SL') {
-          __deviceNameArr[0] = 'FAUCET';
+        if (deviceNameArr[0] == 'SL') {
+          deviceNameArr[0] = 'FAUCET';
         }
-        __deviceNameArr[1] = deviceStaticData?.fullNameAllModel;
-        __deviceNameArr.push(deviceSerialNumber?.toUpperCase());
-        device.deviceCustomName = __deviceNameArr.join(' ');
+        deviceNameArr[1] = deviceStaticData?.fullNameAllModel ?? 'UNKNOWN';
+        deviceNameArr.push(deviceSerialNumber?.toUpperCase());
+        device.deviceCustomName = deviceNameArr.join(' ');
       }
       // consoleLog('deviceStaticData', deviceStaticData);
       filterDevice = {

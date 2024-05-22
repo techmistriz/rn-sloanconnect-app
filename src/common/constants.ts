@@ -13,7 +13,7 @@ const activeOpacity = 0.5;
 const APP_NAME = 'Sloan Connect App';
 const COMPANY_NAME = '© Sloan Valve Company';
 const COPYRIGHT_TEXT = 'All rights reserved';
-const RELEASE_TEXT = 'Release On: May 13, 2024';
+const RELEASE_TEXT = 'Release On: May 22, 2024';
 const PREFIX_SHARE_STRING = 'Sloan Connect App, ';
 const BASE_DATE_TO_FORMAT = 'MM-DD-YYYY';
 const BASE_DATE_TO_FORMAT2 = 'MMM Do YYYY';
@@ -24,10 +24,10 @@ const BASE_DATE_TIME_FROM_FORMAT = 'YYYY-MM-DD HH:mm';
 
 const ANDROID_APP_LINK =
   'https://play.google.com/store/apps/details?id=app.appID&pli=1';
-const ANDROID_APP_VERSION = '1.0.5';
+const ANDROID_APP_VERSION = '1.0.7';
 const IOS_APP_LINK =
   'https://play.google.com/store/apps/details?id=app.appID&pli=1';
-const IOS_APP_VERSION = '1.0.5';
+const IOS_APP_VERSION = '1.0.7';
 const APP_VERSION = isAndroid ? ANDROID_APP_VERSION : IOS_APP_VERSION;
 const BASE_URL_LOCAL = 'http://192.168.42.225/';
 const BASE_URL_LIVE = 'https://console.radiobridge.com/api/visualization/';

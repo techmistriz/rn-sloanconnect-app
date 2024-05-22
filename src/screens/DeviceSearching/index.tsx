@@ -41,8 +41,8 @@ import {
   requestGeoLocationPermission,
 } from 'src/utils/Permissions';
 
-const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
+const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
 
 const Index = ({navigation, route}: any) => {
@@ -251,7 +251,7 @@ const Index = ({navigation, route}: any) => {
     setFoundDevices([]);
     setScanning(ScanningProps.Scanning);
     BLEService.initializeBLE().then(() =>
-      BLEService.scanDevices(addFoundDevice, null, false),
+      BLEService.scanDevices(addFoundDevice, null, true),
     );
   };
 

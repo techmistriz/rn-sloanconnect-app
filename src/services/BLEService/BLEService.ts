@@ -255,11 +255,11 @@ class BLEServiceInstance {
         .then(device => {
           // Device localName not getting fetched when device connected
           // But when device scanning, localName available
-          var __deviceLocalName = __device?.localName ?? __device?.name;
-          device.localName = __deviceLocalName;
+          var deviceLocalName = __device?.localName ?? __device?.name;
+          device.localName = deviceLocalName;
           this.device = device;
           this.deviceRaw = __device;
-          const deviceGen = getBleDeviceGeneration(__deviceLocalName);
+          const deviceGen = getBleDeviceGeneration(deviceLocalName);
           const deviceVer = getBleDeviceVersion(__device, deviceGen);
           this.deviceGeneration = deviceGen;
           this.deviceVersion = deviceVer;
@@ -1008,8 +1008,8 @@ class BLEServiceInstance {
     var deviceStaticData = null;
 
     // localName have more relevant name indentification
-    var __deviceName = this.device?.localName ?? this.device?.name;
-    if (__deviceName) {
+    var deviceName = this.device?.localName ?? this.device?.name;
+    if (deviceName) {
       const deviceGen = this.deviceGeneration;
       const deviceVer = this.deviceVersion;
       consoleLog('setDeviceModelData deviceGen==>', deviceGen);

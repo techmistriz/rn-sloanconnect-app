@@ -89,7 +89,7 @@ export const getCalculatedValue = (
       return 'Other';
     }
   }
-  var result: number = 0;
+  var result: number | string = 0;
   const GMPFormula = BLE_CONSTANTS.COMMON.GMP_FORMULA;
   const valueInNumber = Number(value);
   result = valueInNumber / __flowRateTypeDivider;
@@ -97,5 +97,12 @@ export const getCalculatedValue = (
   if (flowRateType == '0') {
     result = result / GMPFormula;
   }
-  return result?.toFixed(1);
+  result = result?.toFixed(2);
+  // result = Math.round(result * 10) / 10;
+  // result = Math.round((result + Number.EPSILON) * 100) / 100;
+  // result = Math.ceil(result);
+  // var p = Math.pow(10, 2);
+  // result = Math.round(result * p) / p;
+
+  return result;
 };
