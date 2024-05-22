@@ -101,7 +101,7 @@ const Index = ({navigation, route}: any) => {
       // consoleLog('initializeAdvance deviceInfoAdvance==>', deviceInfoAdvance);
 
       const resultObj = findObject(
-        'Phone of last factory reset',
+        'D/T of last factory reset',
         deviceInfoAdvance,
         {
           searchKey: 'name',
