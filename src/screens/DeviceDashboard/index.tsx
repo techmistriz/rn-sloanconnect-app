@@ -4,24 +4,18 @@ import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  getBatteryLevel,
-  getDeviceModelData,
   getSavedSettingsGen1,
-  getTotalWaterUsase,
   hasLineFlushSetting,
   hasSensorRangeSetting,
-  intiGen2SecurityKey,
   saveSettings,
   shortBursts,
   updatePreviousSettings,
 } from 'src/utils/Helpers/project';
-
 import {
   consoleLog,
   getImgSource,
   showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
-
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -33,11 +27,10 @@ import Divider from 'src/components/Divider';
 import {BLEService} from 'src/services';
 import {deviceSettingsResetDataAction} from 'src/redux/actions';
 import AlertBox from 'src/components/AlertBox';
-import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import Swiper from 'react-native-swiper';
 import ActivationModeList from 'src/components/@ProjectComponent/DeviceSettingsList/ActivationModeList';
-import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 import FlowRateList from 'src/components/@ProjectComponent/DeviceSettingsList/FlowRateList';
 import SensorRangeList from 'src/components/@ProjectComponent/DeviceSettingsList/SensorRangeList';
 import LineFlushList from 'src/components/@ProjectComponent/DeviceSettingsList/LineFlushList';
@@ -45,7 +38,6 @@ import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {
-  base64EncodeFromByteArray,
   base64ToHex,
   fromHexStringUint8Array,
 } from 'src/utils/Helpers/encryption';
