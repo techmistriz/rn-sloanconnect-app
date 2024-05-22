@@ -33,6 +33,7 @@ import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {DeviceExtendedProps} from 'src/screens/DeviceSearching/types';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {BleScanMode} from "react-native-ble-manager";
 
 const deviceNotConnectedErrorText = 'Device is not connected';
 
@@ -228,7 +229,7 @@ class BLEServiceInstance {
     UUIDs: UUID[] | null = null,
     legacyScan?: boolean,
   ) => {
-    this.manager.startDeviceScan(UUIDs, {legacyScan}, (error, device) => {
+    this.manager.startDeviceScan(UUIDs, {legacyScan, scanMode: BleScanMode.LowPower}, (error, device) => {
       if (error) {
         this.onError(error);
         this.manager.stopDeviceScan();
