@@ -12,6 +12,7 @@ import {
   mapAsString,
 } from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 
 export const getFlowRateType = (
   characteristicMain: BLECharacteristic,
@@ -100,9 +101,38 @@ export const getCalculatedValue = (
   result = result?.toFixed(2);
   // result = Math.round(result * 10) / 10;
   // result = Math.round((result + Number.EPSILON) * 100) / 100;
-  // result = Math.ceil(result);
+  // result = Math.round( result * 100 + Number.EPSILON ) / 100
   // var p = Math.pow(10, 2);
   // result = Math.round(result * p) / p;
+  // return Math.round(3.4 * 10) / 10;
+  const resultArr = result.split('.');
+  const decimalPartArr = resultArr[1].split('');
+  let difference = 0;
+  if (parseInt(decimalPartArr[1]) > 2 && parseInt(decimalPartArr[1]) < 5) {
+    difference = 1;
+  } else if (
+    parseInt(decimalPartArr[1]) > 0 &&
+    parseInt(decimalPartArr[1]) < 5
+  ) {
+    difference = -1;
+  } else if (
+    parseInt(decimalPartArr[1]) > 5 &&
+    parseInt(decimalPartArr[1]) <= 9
+  ) {
+    difference = 1;
+  }
 
+  let final = parseFloat(
+    `${resultArr[0]}.${parseInt(resultArr[1]) + difference}`,
+  );
+
+  return toFixedWithoutZeros(final, 2);
+};
+
+const toFixedWithoutZeros = (num: number, precision: number) => {
+  let result = `${Number.parseFloat(num.toFixed(precision))}`;
+  if (result?.split('.')?.length == 1) {
+    result = `${result}.0`;
+  }
   return result;
 };

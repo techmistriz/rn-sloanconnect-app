@@ -446,7 +446,7 @@ export const mappingDataCollectionGen2 = async (
 
       if (Array.isArray(__elementArr) && __elementArr?.[0] == '74') {
         consoleLog('mappingDataCollectionGen2 __elementArr==>', __elementArr);
-        const lengthHex = __elementArr[2];
+        const lengthHex = __elementArr[1];
         const lengthDec = hexToDecimal(lengthHex);
 
         consoleLog('mappingDataCollectionGen2 hexToDecimal==>', lengthDec);
@@ -458,7 +458,7 @@ export const mappingDataCollectionGen2 = async (
           __elementArrTmp,
         );
 
-        const __elementArrTmpChunk = chunk(__elementArrTmp, 1);
+        const __elementArrTmpChunk = chunk(__elementArrTmp, 5);
         // __elementArrTmpChunk.splice(-1);
         consoleLog(
           'mappingDataCollectionGen2 __elementArrTmpChunk==>',
@@ -490,13 +490,13 @@ export const mappingDataCollectionGen2 = async (
             'mappingDataCollectionGen2 characteristic==>',
             characteristic,
           );
-          const __characteristic = characteristic?.[0];
-          // __characteristic.splice(0, 1);
+          const __characteristic = [...characteristic];
+          __characteristic.splice(0, 1);
           consoleLog(
             'mappingDataCollectionGen2 __characteristic==>',
             __characteristic,
           );
-          const __characteristicHex = __characteristic;
+          const __characteristicHex = __characteristic.join('');
           consoleLog(
             'mappingDataCollectionGen2 __characteristicHex==>',
             __characteristicHex,

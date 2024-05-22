@@ -518,15 +518,15 @@ const Index = ({navigation}: any) => {
   const __mappingDataCollectionGen2 = async () => {
     const mappingDataCollectionGen2Response = await mappingDataCollectionGen2(
       BLE_GEN2_GATT_SERVICES,
-      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_SERVICE_UUID,
-      BLE_CONSTANTS?.GEN2?.REAL_TIME_DATA_CHARACTERISTIC_UUID,
+      BLE_CONSTANTS?.GEN2?.DATA_COLLECTION_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.DATA_COLLECTION_CHARACTERISTIC_UUID,
       BLEService.characteristicMonitorDataCollection,
     );
 
-    // consoleLog(
-    //   '__mappingDataCollectionGen2 mappingDataCollectionGen2Response==>',
-    //   JSON.stringify(mappingDataCollectionGen2Response),
-    // );
+    consoleLog(
+      '__mappingDataCollectionGen2 mappingDataCollectionGen2Response==>',
+      JSON.stringify(mappingDataCollectionGen2Response),
+    );
 
     BLEService.characteristicMonitorDataCollectionMapped =
       mappingDataCollectionGen2Response;
@@ -562,14 +562,14 @@ const Index = ({navigation}: any) => {
     if (!isObjectEmpty(characteristicMonitorDataCollectionMappedResponse)) {
       // For activationsDuration
       // consoleLog("activationsDuration==>", characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
-      // ?.uuidData?.[8]);
+      // ?.uuidData?.[5]);
       if (
         characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
-          ?.uuidData?.[8]
+          ?.uuidData?.[5]
       ) {
         activationsDuration =
           characteristicMonitorDataCollectionMappedResponse?.chunks?.[0]
-            ?.uuidData?.[8]?.value?.currentValue;
+            ?.uuidData?.[5]?.value?.currentValue;
 
         activationsDuration = Number(activationsDuration);
       }

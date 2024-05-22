@@ -11,6 +11,7 @@ import {
   type Characteristic,
   type Base64,
   type Subscription,
+  ScanMode,
 } from 'react-native-ble-plx';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
@@ -33,7 +34,7 @@ import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {DeviceExtendedProps} from 'src/screens/DeviceSearching/types';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {BleScanMode} from "react-native-ble-manager";
+import {BleScanMode} from 'react-native-ble-manager';
 
 const deviceNotConnectedErrorText = 'Device is not connected';
 
@@ -230,17 +231,21 @@ class BLEServiceInstance {
     UUIDs: UUID[] | null = null,
     legacyScan?: boolean,
   ) => {
-    this.manager.startDeviceScan(UUIDs, {legacyScan, scanMode: BleScanMode.LowPower}, (error, device) => {
-      if (error) {
-        this.onError(error);
-        this.manager.stopDeviceScan();
-        return;
-      }
+    this.manager.startDeviceScan(
+      UUIDs,
+      {legacyScan: legacyScan, scanMode: ScanMode.LowPower},
+      (error, device) => {
+        if (error) {
+          this.onError(error);
+          this.manager.stopDeviceScan();
+          return;
+        }
 
-      if (device) {
-        onDeviceFound(device);
-      }
-    });
+        if (device) {
+          onDeviceFound(device);
+        }
+      },
+    );
   };
 
   /**
@@ -429,6 +434,14 @@ class BLEServiceInstance {
     transactionId?: TransactionId,
     hideErrorDisplay?: boolean,
   ) => {
+    this.characteristicMonitor?.remove();
+    consoleLog('this.characteristicMonitor', this.characteristicMonitor);
+
+    // if (this.characteristicMonitor) {
+    //   return this.showErrorToast('characteristicMonitor');
+    //   // throw new Error(deviceNotConnectedErrorText);
+    // }
+
     if (!this.device) {
       return this.showErrorToast(deviceNotConnectedErrorText);
       // throw new Error(deviceNotConnectedErrorText);
@@ -449,7 +462,7 @@ class BLEServiceInstance {
           }
           onError(error);
           if (!hideErrorDisplay) {
-            this.onError(error);
+            // this.onError(error);
             this.characteristicMonitor?.remove();
           }
           return;
