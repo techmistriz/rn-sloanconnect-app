@@ -31,8 +31,10 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app require Bluetooth Always to connect device</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>This app require bluetooth to connect device</string>
+	<string>This app require Bluetooth Peripheral to connect device</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Black.ttf</string>

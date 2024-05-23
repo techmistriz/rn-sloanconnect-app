@@ -12,12 +12,11 @@ import BottomTabNavigator from './BottomTabNavigator';
 import SplashScreen from 'src/screens/SplashScreen';
 import Welcome from 'src/screens/Welcome';
 import Login from 'src/screens/Auth/Login';
-import Otp from 'src/screens/Auth/Otp';
 import Register from 'src/screens/Auth/Register';
-import ForgotPassword from 'src/screens/Auth/ForgotPassword';
-import ResetPassword from 'src/screens/Auth/ResetPassword';
+// import ForgotPassword from 'src/screens/Auth/ForgotPassword';
+// import ResetPassword from 'src/screens/Auth/ResetPassword';
 import Profile from 'src/screens/Profile';
-import EditProfile from 'src/screens/Profile/EditProfile';
+// import EditProfile from 'src/screens/Profile/EditProfile';
 import ChangePassword from 'src/screens/Profile/ChangePassword';
 import Notification from 'src/screens/Notification';
 import Settings from 'src/screens/Settings';
@@ -86,15 +85,6 @@ const MainNavigator = () => {
             headerShown: false,
           }}
         />
-
-        <Stack.Screen
-          name="Otp"
-          component={Otp}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: '',
-          })}
-        />
         <Stack.Screen
           name="Register"
           component={Register}
@@ -102,22 +92,6 @@ const MainNavigator = () => {
             headerShown: false,
             title: '',
           }}
-        />
-        <Stack.Screen
-          name="ForgotPassword"
-          component={ForgotPassword}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: '',
-          })}
-        />
-        <Stack.Screen
-          name="ResetPassword"
-          component={ResetPassword}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: '',
-          })}
         />
 
         <Stack.Screen
@@ -134,15 +108,6 @@ const MainNavigator = () => {
             // headerLeft: () => false,
             headerShown: true,
             title: 'My Profile',
-          })}
-        />
-        <Stack.Screen
-          name="EditProfile"
-          component={EditProfile}
-          options={({navigation}) => ({
-            // headerLeft: () => false,
-            headerShown: true,
-            title: '',
           })}
         />
 
@@ -213,13 +178,6 @@ const MainNavigator = () => {
             headerShown: false,
           }}
         />
-        {/* <Stack.Screen
-          name="DeviceDashboard"
-          component={DeviceDashboard}
-          options={{
-            headerShown: false,
-          }}
-        /> */}
         <Stack.Screen
           name="DeviceDiagnostics"
           component={DeviceDiagnostics}

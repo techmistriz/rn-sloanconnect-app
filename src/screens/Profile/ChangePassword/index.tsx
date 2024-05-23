@@ -1,11 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Image,
-  Text,
-  Alert,
-  Platform,
   Keyboard,
 } from 'react-native';
 import {Images} from 'src/assets';
@@ -14,22 +9,15 @@ import Input from 'src/components/Input';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
-import {Wrap, Row} from 'src/components/Common';
-import TouchableItem from 'src/components/TouchableItem';
+import {Wrap} from 'src/components/Common';
 import {styles} from './styles';
 import {
-  showToastMessage,
-  consoleLog,
-  getUserAPiPrefixByUserType,
   isValidPassword,
   showSimpleAlert,
-  isValidEmail,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {constants} from 'src/common';
 import {
   changePasswordRequestAction,
-  changePasswordFailureAction,
 } from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -97,7 +85,7 @@ const Index = ({route, navigation}: any) => {
         <Wrap autoMargin={false} style={styles.section2}>
           <Wrap autoMargin={false} style={styles.imageContainer}>
             <Image
-              source={getImgSource(Images?.appLogoTransparent)}
+              source={getImgSource(Images?.appLogo)}
               style={{height: 200}}
               resizeMode="contain"
             />
