@@ -11,7 +11,6 @@ import {Alert, Platform} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
 import {consoleLog} from './Helpers/HelperFunction';
-import Geolocation from '@react-native-community/geolocation';
 import {
   isLocationEnabled,
   promptForEnableLocationIfNeeded,

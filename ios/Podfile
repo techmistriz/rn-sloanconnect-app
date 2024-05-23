@@ -23,24 +23,24 @@ node_require('react-native-permissions/scripts/setup.rb')
 # uncomment wanted permissions
 setup_permissions([
   # 'AppTrackingTransparency',
-  # 'Bluetooth',
+  'Bluetooth',
   # 'Calendars',
   # 'CalendarsWriteOnly',
-  'Camera',
+  # 'Camera',
   # 'Contacts',
-  'FaceID',
+  # 'FaceID',
   # 'LocationAccuracy',
   # 'LocationAlways',
   # 'LocationWhenInUse',
-  'MediaLibrary',
-  'Microphone',
+  # 'MediaLibrary',
+  # 'Microphone',
   # 'Motion',
   'Notifications',
-  'PhotoLibrary',
+  # 'PhotoLibrary',
   # 'PhotoLibraryAddOnly',
   # 'Reminders',
-  'Siri',
-  'SpeechRecognition'
+  # 'Siri',
+  # 'SpeechRecognition'
   # 'StoreKit',
 ])
 
@@ -84,7 +84,7 @@ target 'sloanconnectapp' do
     #
     # Note that if you have use_frameworks! enabled, Flipper will not work and
     # you should disable the next line.
-    :flipper_configuration => flipper_config,
+    # :flipper_configuration => flipper_config,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
