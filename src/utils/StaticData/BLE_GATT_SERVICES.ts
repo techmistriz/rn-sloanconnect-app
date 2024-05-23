@@ -602,7 +602,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c929': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c929',
-        name: 'Phone of last factory reset',
+        name: 'D/T of last factory reset',
         size: '15 bytes',
         type: 'String',
         range: null,
