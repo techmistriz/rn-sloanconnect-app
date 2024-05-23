@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {View, Pressable, Dimensions, StyleSheet} from 'react-native';
+import {View, Pressable, StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import NavigationIcon from './NavigationIcon';
-import Theme, {generateBoxShadowStyle} from 'src/theme';
+import Theme from 'src/theme';
 import {constants} from 'src/common';
 import DeviceDashboard from '../screens/DeviceDashboard';
 import DeviceDiagnostics from '../screens/DeviceDiagnostics';
@@ -12,7 +12,6 @@ import DeviceDiagnosticTroubleshoot from '../screens/DeviceDiagnosticTroubleshoo
 import DeviceInfo from '../screens/DeviceInfo';
 import DeviceHelp from '../screens/DeviceHelp';
 import DeviceDisconnect from '../screens/DeviceDisconnect';
-import {NavigationMenuIcon, NavigationNotificationIcon} from './NavigationIcon';
 import Typography from 'src/components/Typography';
 import AlertBox from 'src/components/AlertBox';
 import NavigationService from 'src/services/NavigationService/NavigationService';
@@ -40,7 +39,6 @@ const DeviceDashboardStack = (props: any) => {
           },
         }}
       />
-      
     </Stack.Navigator>
   );
 };

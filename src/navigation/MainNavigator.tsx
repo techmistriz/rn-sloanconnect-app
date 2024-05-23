@@ -1,11 +1,8 @@
 import React from 'react';
-import {Easing, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import DrawerNavigator from './DrawerNavigator';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import Theme from 'src/theme';
-import {NavigationBackIcon, NavigationNotificationIcon} from './NavigationIcon';
 import BottomTabNavigator from './BottomTabNavigator';
 
 // Screens

@@ -1,18 +1,16 @@
 import React from 'react';
-import {Share, Image, StyleSheet} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList,
 } from '@react-navigation/drawer';
-import {Wrap, Row} from 'src/components/Common';
+import {Wrap} from 'src/components/Common';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import {
   getImgSource,
   openUrl,
-  onShare,
   showConfirmAlert,
   assetsBaseUrl,
 } from 'src/utils/Helpers/HelperFunction';
@@ -22,9 +20,9 @@ import VectorIcon from 'src/components/VectorIcon';
 import {Images} from 'src/assets';
 // import screens
 import Home from 'src/screens/Home';
-import {NavigationMenuIcon, NavigationNotificationIcon} from './NavigationIcon';
+import {NavigationMenuIcon} from './NavigationIcon';
 import {useDispatch, useSelector} from 'react-redux';
-import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
+import {loginResetDataAction} from 'src/redux/actions';
 import LinearGradient from 'react-native-linear-gradient';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 

@@ -1,10 +1,8 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   ViewStyle,
-  ImageBackgroundProps,
   Image,
 } from 'react-native';
 import Theme from 'src/theme';
