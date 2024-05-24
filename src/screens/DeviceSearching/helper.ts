@@ -7,6 +7,7 @@ import {
 } from 'src/utils/Helpers/project';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {DeviceExtendedProps} from './types';
+import { consoleLog } from 'src/utils/Helpers/HelperFunction';
 
 export const filterBLEDevices = (device: DeviceExtendedProps): any => {
   var filterDevice = null;
@@ -20,8 +21,6 @@ export const filterBLEDevices = (device: DeviceExtendedProps): any => {
       deviceName?.toUpperCase()?.includes('FAUCET') ||
       deviceName?.toUpperCase()?.includes('SL')
     ) {
-      var deviceNameArr = deviceName.split(' ');
-      // consoleLog('deviceNameArr', deviceNameArr);
       const deviceGen = getBleDeviceGeneration(deviceName);
       const deviceStaticData = getDeviceModelData(
         device,
@@ -29,7 +28,12 @@ export const filterBLEDevices = (device: DeviceExtendedProps): any => {
         deviceGen,
       );
       const deviceSerialNumber = getBleDeviceSerialNumber(device, deviceGen);
+      // consoleLog('filterBLEDevices deviceGen==>', deviceGen);
+      // consoleLog('filterBLEDevices deviceSerialNumber==>', deviceSerialNumber);
+      // consoleLog('filterBLEDevices deviceStaticData==>', deviceStaticData);
 
+      var deviceNameArr = deviceName.split(' ');
+      // consoleLog('deviceNameArr', deviceNameArr);
       if (
         Array.isArray(deviceNameArr) &&
         deviceNameArr.length > 0

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   I18nManager,
+  Platform,
   StyleSheet,
   TextInput,
   View,
@@ -85,7 +86,12 @@ const Input = ({
               editable={editable}
               spellCheck={spellCheck}
               multiline={multiline}
-              numberOfLines={numberOfLines}
+              numberOfLines={Platform.OS === 'ios' ? null : numberOfLines}
+              minHeight={
+                Platform.OS === 'ios' && numberOfLines
+                  ? 20 * numberOfLines
+                  : null
+              }
               style={[
                 styles.textInput,
                 //@ts-ignore
@@ -134,7 +140,10 @@ const Input = ({
         editable={editable}
         spellCheck={spellCheck}
         multiline={multiline}
-        numberOfLines={numberOfLines}
+        numberOfLines={Platform.OS === 'ios' ? null : numberOfLines}
+        minHeight={
+          Platform.OS === 'ios' && numberOfLines ? 20 * numberOfLines : null
+        }
         style={[
           styles.textInput,
           //@ts-ignore

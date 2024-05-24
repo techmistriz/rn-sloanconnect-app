@@ -40,6 +40,7 @@ import {
   requestLocationPermissions,
   requestGeoLocationPermission,
 } from 'src/utils/Permissions';
+import Header from 'src/components/Header';
 
 const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
@@ -197,8 +198,6 @@ const Index = ({navigation, route}: any) => {
           foundDevices.length == 0 &&
           isScanning != ScanningProps.Connecting
         ) {
-          // consoleLog('setTimeout==>', timeoutID);
-          // NavigationService.replace('NoDeviceFound');
           clearTimeout(timeoutID);
           BLEService.manager.stopDeviceScan();
           setScanning(ScanningProps.NoDevice);
@@ -265,6 +264,7 @@ const Index = ({navigation, route}: any) => {
     consoleLog('addFoundDevice device names==>', {
       localName: device?.localName,
       deviceCustomName: device?.deviceCustomName,
+      rawScanRecord: __device?.rawScanRecord,
     });
     if (!device) {
       // refreshFoundDevices(foundDevices);
@@ -451,16 +451,6 @@ const Index = ({navigation, route}: any) => {
     );
   };
 
-  /** Function comments */
-  const onLogout = async () => {
-    const result = await showConfirmAlert('Are you sure?');
-    if (result) {
-      dispatch(loginResetDataAction());
-      // dispatch(settingsResetDataAction());
-      NavigationService.resetAllAction('Login');
-    }
-  };
-
   if (isScanning == ScanningProps.Connecting) {
     return <DeviceConnecting />;
   } else if (isScanning == ScanningProps.NoDevice) {
@@ -478,12 +468,16 @@ const Index = ({navigation, route}: any) => {
         scroll={false}
         scrollViewStyle={{}}
         backgroundType="solid"
-        haslogOutButton={true}
-        hasRightButton={true}
+        hasHeader={true}
+        hasLogOutButton
+        hasDeviceSearchButton
+        headerBackgroundType="solid"
+        // haslogOutButton={true}
+        // hasRightButton={true}
         // onLogoutPress={onLogout}
-        onRightPress={() => {
-          initlizeApp();
-        }}
+        // onRightPress={() => {
+        //   initlizeApp();
+        // }}
         headerContainerStyle={{backgroundColor: Theme.colors.primaryColor}}>
         <Wrap autoMargin={false} style={styles.container}>
           <Wrap autoMargin={false} style={styles.sectionContainer}>
@@ -567,7 +561,7 @@ const Index = ({navigation, route}: any) => {
       </AppContainer>
     );
   } else {
-    return <ActivateDevice onLogout={onLogout} />;
+    return <ActivateDevice />;
   }
 };
 

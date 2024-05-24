@@ -5,9 +5,6 @@ export const styles = StyleSheet.create({
   __headerContainerStyle: {
     paddingHorizontal: 20,
     backgroundColor: Theme.colors.transparent,
-    // backgroundColor: Theme.colors.gradientBg1,
-    // borderWidth: 1,
-    paddingVertical: 15,
   },
   __headerLeftStyle: {
     flex: 1,
@@ -22,6 +19,6 @@ export const styles = StyleSheet.create({
   __headerCenterStyle: {
     flex: 1,
     justifyContent: 'center',
-    // borderWidth: 1,
+    // borderWidth:1
   },
 });

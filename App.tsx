@@ -20,9 +20,6 @@ import FlashMessage from 'react-native-flash-message';
 import NetworkLost from 'src/components/NetworkLost';
 import crashlytics from '@react-native-firebase/crashlytics';
 import MainNavigator from 'src/navigation/MainNavigator';
-// import PushNotification, {
-//   pushNotificationRef,
-// } from 'src/screens/PushNotification';
 
 enableScreens();
 // TODO: Remove when fixed
@@ -61,20 +58,19 @@ function App() {
   try {
     return (
       <StoreProvider store={store}>
-        {/* <PushNotification /> */}
         <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
           <SafeAreaProvider>
-            {/* <MyStatusBar
+            <MyStatusBar
               backgroundColor={Theme.colors.statusBarColor}
               barStyle={Theme.colors.statusBarContent}
-            /> */}
+            />
 
-            <StatusBar
+            {/* <StatusBar
               // @ts-ignore
               barStyle={Theme.colors.statusBarContent}
               backgroundColor={Theme.colors.statusBarColor}
               // translucent={true}
-            />
+            /> */}
             <MainNavigator />
             <FlashMessage position="bottom" />
             <NetworkLost
@@ -88,7 +84,7 @@ function App() {
     );
   } catch (error: any) {
     //* error handling
-    crashlytics().recordError(error);
+    crashlytics()?.recordError(error);
     return null;
   }
 }

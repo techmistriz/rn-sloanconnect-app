@@ -5,12 +5,16 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
   sectionContainer: {
     flex: 1,
+    // borderWidth: 1,
+    // borderColor: 'green',
   },
   section1: {
-    flex: 1,
+    // flex: 1,
     // justifyContent: 'flex-end',
     // borderWidth: 1,
     // borderColor: 'red',
@@ -29,7 +33,7 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 30,
   },
-  formWrapper1:{
+  formWrapper1: {
     backgroundColor: 'white',
     borderRadius: 8,
     paddingVertical: 45,

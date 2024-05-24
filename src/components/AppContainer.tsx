@@ -44,7 +44,7 @@ const AppContainer = ({
   loading = false,
   loadingText = 'Loading...',
   backgroundType = 'solid',
-  hasHeader = true,
+  hasHeader = false,
   ...rest
 }: AppContainerProps) => {
   return (

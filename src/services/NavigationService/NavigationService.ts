@@ -96,7 +96,7 @@ function setParams(params: any) {
 
 /** goback method */
 function goBack() {
-  _navigator.dispatch(NavigationActions.back({}));
+  _navigator.dispatch(NavigationActions?.back({}));
 }
 
 /**

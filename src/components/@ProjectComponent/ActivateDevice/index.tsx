@@ -10,13 +10,9 @@ import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
 import {ActivateDeviceProps} from './types';
 
-const Index = ({onLogout}: ActivateDeviceProps) => {
+const Index = ({}: ActivateDeviceProps) => {
   return (
-    <AppContainer
-      scroll={false}
-      scrollViewStyle={{}}
-      backgroundType="gradient"
-      hasHeader={false}>
+    <AppContainer scroll={false} scrollViewStyle={{}} backgroundType="gradient">
       <Wrap autoMargin={false} style={styles.container}>
         <Image
           // @ts-ignore
@@ -30,7 +26,7 @@ const Index = ({onLogout}: ActivateDeviceProps) => {
           resizeMode="cover"
           // blurRadius={1}
         />
-        <Header haslogOutButton onLogoutPress={onLogout && onLogout} />
+        <Header hasLogOutButton headerBackgroundType="transparent" />
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
             <Typography

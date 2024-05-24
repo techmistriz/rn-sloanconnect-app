@@ -5,8 +5,3 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
-
-export interface ContainerProps {
-  style?: ViewStyle;
-  children?: JSX.Element | JSX.Element[] | ReactFragment | null;
-}

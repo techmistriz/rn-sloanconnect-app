@@ -43,7 +43,7 @@ export type InputProps = {
   spellCheck?: boolean;
   autoCorrect?: boolean;
   multiline?: boolean;
-  numberOfLines?: number;
+  numberOfLines?: number|null;
   borderColor?: string;
   focusedBorderColor?: string;
   inputContainerStyle?: ViewStyle;

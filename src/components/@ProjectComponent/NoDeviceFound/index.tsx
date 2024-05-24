@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React from 'react';
 import Theme from 'src/theme';
 import Typography from 'src/components/Typography';
 import {Wrap} from 'src/components/Common';
@@ -9,7 +9,13 @@ import AppContainer from 'src/components/AppContainer';
 
 const Index = ({onSearchAgainPress}: any) => {
   return (
-    <AppContainer scroll={false} scrollViewStyle={{}} backgroundType="gradient">
+    <AppContainer
+      scroll={false}
+      scrollViewStyle={{}}
+      backgroundType="gradient"
+      hasHeader={true}
+      hasBackButton
+      headerBackgroundType="solid">
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>

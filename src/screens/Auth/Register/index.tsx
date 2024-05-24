@@ -283,7 +283,13 @@ const Index = ({route, navigation}: any) => {
                     alignItems: 'center',
                   }}>
                   <CheckBox
-                    style={{borderRadius: 20, marginTop: 3}}
+                    style={{
+                      borderRadius: 20,
+                      marginTop: 3,
+                      height: 40,
+                      width: 40,
+                      transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+                    }}
                     disabled={false}
                     value={terms}
                     onValueChange={newValue => setTerms(newValue)}

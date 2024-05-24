@@ -25,8 +25,8 @@ export const colors = {
   headerBorderColor: '#FBF5F2',
   iconColor1: '#fff',
   iconColor2: '#fff',
-  statusBarColor: '#006CBB',
-  statusBarContent: 'light-content',
+  statusBarColor: '#fff',
+  statusBarContent: 'dark-content',
   // Bottom Tabs
   tabContainerBGColor: '#fafafa',
   tabBGColor: '#fff',

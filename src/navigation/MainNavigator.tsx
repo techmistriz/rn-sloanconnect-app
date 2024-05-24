@@ -10,11 +10,7 @@ import SplashScreen from 'src/screens/SplashScreen';
 import Welcome from 'src/screens/Welcome';
 import Login from 'src/screens/Auth/Login';
 import Register from 'src/screens/Auth/Register';
-// import ForgotPassword from 'src/screens/Auth/ForgotPassword';
-// import ResetPassword from 'src/screens/Auth/ResetPassword';
 import Profile from 'src/screens/Profile';
-// import EditProfile from 'src/screens/Profile/EditProfile';
-import ChangePassword from 'src/screens/Profile/ChangePassword';
 import Notification from 'src/screens/Notification';
 import Settings from 'src/screens/Settings';
 
@@ -22,9 +18,7 @@ import Settings from 'src/screens/Settings';
 import Help from 'src/screens/Cms/Help';
 import Terms from 'src/screens/Cms/Terms';
 import Invitation from 'src/screens/Cms/Invitation';
-import ActivateDevice from 'src/screens/ActivateDevice';
 import DeviceSearching from 'src/screens/DeviceSearching';
-// import DeviceDashboard from 'src/screens/DeviceDashboard';
 import DeviceDiagnostics from 'src/screens/DeviceDiagnostics';
 import DeviceDiagnosticResults from 'src/screens/DeviceDiagnosticResults';
 import DeviceDiagnosticTroubleshoot from 'src/screens/DeviceDiagnosticTroubleshoot';
@@ -37,6 +31,7 @@ import SensorRange from 'src/screens/DeviceSettings/SensorRange';
 import Notes from 'src/screens/DeviceSettings/Notes';
 import DeviceInfo from 'src/screens/DeviceInfo';
 import DeviceHelp from 'src/screens/DeviceHelp';
+import Header from 'src/components/Header';
 
 // create stack navigator
 const Stack = createNativeStackNavigator();
@@ -109,15 +104,6 @@ const MainNavigator = () => {
         />
 
         <Stack.Screen
-          name="ChangePassword"
-          component={ChangePassword}
-          options={{
-            headerShown: true,
-            title: 'Change Password',
-          }}
-        />
-
-        <Stack.Screen
           name="Settings"
           component={Settings}
           options={{
@@ -154,18 +140,11 @@ const MainNavigator = () => {
           // }}
         />
         <Stack.Screen
-          name="ActivateDevice"
-          component={ActivateDevice}
-          options={{
-            headerShown: false,
-          }}
-        />
-        
-        <Stack.Screen
           name="DeviceSearching"
           component={DeviceSearching}
           options={{
             headerShown: false,
+            // header: () => <Header />,
           }}
         />
         <Stack.Screen
@@ -179,14 +158,16 @@ const MainNavigator = () => {
           name="DeviceDiagnostics"
           component={DeviceDiagnostics}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header />,
           }}
         />
         <Stack.Screen
           name="DeviceDiagnosticResults"
           component={DeviceDiagnosticResults}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header />,
           }}
         />
 
@@ -194,14 +175,16 @@ const MainNavigator = () => {
           name="DeviceDiagnosticTroubleshoot"
           component={DeviceDiagnosticTroubleshoot}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header />,
           }}
         />
         <Stack.Screen
           name="DeviceDisconnect"
           component={DeviceDisconnect}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header hasBackButton={false} />,
           }}
         />
 
@@ -209,56 +192,65 @@ const MainNavigator = () => {
           name="ActivationMode"
           component={ActivationMode}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header title="Activation Mode" />,
           }}
         />
         <Stack.Screen
           name="LineFlush"
           component={LineFlush}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header title="Line Flush" />,
           }}
         />
         <Stack.Screen
           name="FlowRate"
           component={FlowRate}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header title="Flow Rate" />,
           }}
         />
         <Stack.Screen
           name="FlowRateInput"
           component={FlowRateInput}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header title="Flow Rate" />,
           }}
         />
         <Stack.Screen
           name="SensorRange"
           component={SensorRange}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header title="Sensor Range" />,
           }}
         />
         <Stack.Screen
           name="Notes"
           component={Notes}
           options={{
-            headerShown: false,
+            headerShown: true,
+            // headerRight: () => <Header route={route?.params?.image} />
+            header: () => <Header title="Notes" />,
           }}
         />
         <Stack.Screen
           name="DeviceInfo"
           component={DeviceInfo}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header />,
           }}
         />
         <Stack.Screen
           name="DeviceHelp"
           component={DeviceHelp}
           options={{
-            headerShown: false,
+            headerShown: true,
+            header: () => <Header />,
           }}
         />
       </Stack.Navigator>

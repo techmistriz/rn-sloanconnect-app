@@ -244,9 +244,9 @@ const Index = ({navigation, route}: any) => {
               <MultiSlider
                 values={sliderOneValue}
                 snapped={true}
-                min={sensorRangeConfig?.min}
-                max={sensorRangeConfig?.max}
-                step={sensorRangeConfig?.step}
+                min={sensorRangeConfig?.min ?? 1}
+                max={sensorRangeConfig?.max ?? 5}
+                step={sensorRangeConfig?.step ?? 1}
                 // enableLabel={true}
                 sliderLength={constants.screenWidth - 120}
                 // onValuesChangeStart={sliderOneValuesChangeStart}
