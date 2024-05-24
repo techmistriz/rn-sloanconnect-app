@@ -15,6 +15,7 @@ import DeviceDisconnect from '../screens/DeviceDisconnect';
 import Typography from 'src/components/Typography';
 import AlertBox from 'src/components/AlertBox';
 import NavigationService from 'src/services/NavigationService/NavigationService';
+import Header from 'src/components/Header';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,12 +32,8 @@ const DeviceDashboardStack = (props: any) => {
         name="DeviceDashboard"
         component={DeviceDashboard}
         options={{
-          headerShown: false,
-          title: 'Device Dashboard', //Set Header Title
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: Theme.fonts.ThemeFontRegular,
-          },
+          headerShown: true,
+          header: () => <Header hasBackButton={false} />,
         }}
       />
     </Stack.Navigator>
@@ -50,36 +47,24 @@ const DeviceDiagnosticsStack = (props: any) => {
         name="DeviceDiagnostics"
         component={DeviceDiagnostics}
         options={{
-          headerShown: false,
-          title: 'Device Diagnostics',
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: Theme.fonts.ThemeFontRegular,
-          },
+          headerShown: true,
+          header: () => <Header />,
         }}
       />
       <Stack.Screen
         name="DeviceDiagnosticResults"
         component={DeviceDiagnosticResults}
         options={{
-          headerShown: false,
-          title: 'Diagnostics Results',
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: Theme.fonts.ThemeFontRegular,
-          },
+          headerShown: true,
+          header: () => <Header />,
         }}
       />
       <Stack.Screen
         name="DeviceDiagnosticTroubleshoot"
         component={DeviceDiagnosticTroubleshoot}
         options={{
-          headerShown: false,
-          title: 'Diagnostics Results',
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: Theme.fonts.ThemeFontRegular,
-          },
+          headerShown: true,
+          header: () => <Header />,
         }}
       />
     </Stack.Navigator>
@@ -93,13 +78,8 @@ const DeviceInfoStack = (props: any) => {
         name="DeviceInfo"
         component={DeviceInfo}
         options={({navigation}) => ({
-          headerShown: false,
-          // headerRight: () => NavigationNotificationIcon(navigation),
-          title: 'DeviceInfo', //Set Header Title
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: Theme.fonts.ThemeFontRegular,
-          },
+          headerShown: true,
+          header: () => <Header />,
         })}
       />
     </Stack.Navigator>
@@ -113,13 +93,8 @@ const DeviceHelpStack = (props: any) => {
         name="DeviceHelp"
         component={DeviceHelp}
         options={({navigation}) => ({
-          headerShown: false,
-          // headerRight: () => NavigationNotificationIcon(navigation),
-          title: 'DeviceInfo', //Set Header Title
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: Theme.fonts.ThemeFontRegular,
-          },
+          headerShown: true,
+          header: () => <Header />,
         })}
       />
     </Stack.Navigator>
@@ -133,13 +108,8 @@ const DeviceDisconnectStack = (props: any) => {
         name="DeviceDisconnect"
         component={DeviceDisconnect}
         options={({navigation}) => ({
-          headerShown: false,
-          // headerRight: () => NavigationNotificationIcon(navigation),
-          title: 'DeviceInfo', //Set Header Title
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: Theme.fonts.ThemeFontRegular,
-          },
+          headerShown: true,
+          header: () => <Header />,
         })}
       />
     </Stack.Navigator>

@@ -29,8 +29,6 @@ import FlowRate from 'src/screens/DeviceSettings/FlowRate';
 import FlowRateInput from 'src/screens/DeviceSettings/FlowRate/FlowRateInput';
 import SensorRange from 'src/screens/DeviceSettings/SensorRange';
 import Notes from 'src/screens/DeviceSettings/Notes';
-import DeviceInfo from 'src/screens/DeviceInfo';
-import DeviceHelp from 'src/screens/DeviceHelp';
 import Header from 'src/components/Header';
 
 // create stack navigator
@@ -158,8 +156,7 @@ const MainNavigator = () => {
           name="DeviceDiagnostics"
           component={DeviceDiagnostics}
           options={{
-            headerShown: true,
-            header: () => <Header />,
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -235,22 +232,6 @@ const MainNavigator = () => {
             headerShown: true,
             // headerRight: () => <Header route={route?.params?.image} />
             header: () => <Header title="Notes" />,
-          }}
-        />
-        <Stack.Screen
-          name="DeviceInfo"
-          component={DeviceInfo}
-          options={{
-            headerShown: true,
-            header: () => <Header />,
-          }}
-        />
-        <Stack.Screen
-          name="DeviceHelp"
-          component={DeviceHelp}
-          options={{
-            headerShown: true,
-            header: () => <Header />,
           }}
         />
       </Stack.Navigator>

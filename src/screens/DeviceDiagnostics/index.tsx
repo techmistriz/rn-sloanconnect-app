@@ -1,46 +1,18 @@
-import React, {Component, Fragment, useEffect, useState} from 'react';
-import {View, StyleSheet, Image, StatusBar} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  consoleLog,
-  getImgSource,
-  showConfirmAlert,
-} from 'src/utils/Helpers/HelperFunction';
+import {consoleLog, getImgSource} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Wrap,
-  TochableWrap,
-  RippleWrap,
-} from 'src/components/Common';
+import {Row, Col, Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import AppInfo from 'src/components/@ProjectComponent/AppInfo';
-import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
 import Header from 'src/components/Header';
-import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
-import {
-  PERMISSIONS_RESULTS,
-  checkBluetoothPermissions,
-  requestBluetoothPermissions,
-  checkLocationPermissions,
-  requestLocationPermissions,
-} from 'src/utils/Permissions';
 import {BLEService} from 'src/services';
 import AppContainer from 'src/components/AppContainer';
 
 const Index = ({navigation, route}: any) => {
-  // const dispatch = useDispatch();
-  // const {referrer} = route?.params || {referrer: undefined};
-  // const {user, loading, token, message, media_storage, type} = useSelector(
-  //   (state: any) => state?.AuthReducer,
-  // );
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -71,10 +43,7 @@ const Index = ({navigation, route}: any) => {
       scroll={false}
       scrollViewStyle={{}}
       backgroundType="solid"
-      haslogOutButton={false}
-      hasBackButton={false}
-      loading={loading}
-      hasHeader={false}>
+      loading={loading}>
       <Wrap autoMargin={false} style={styles.mainContainer}>
         <Image
           // @ts-ignore
@@ -88,7 +57,7 @@ const Index = ({navigation, route}: any) => {
           resizeMode="cover"
           // blurRadius={1}
         />
-        <Header hasBackButton />
+        <Header hasBackButton headerBackgroundType="transparent" />
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
             <Wrap autoMargin={false}>
