@@ -2,11 +2,10 @@ import {
   loginActionTypes,
   otpActionTypes,
   verifyOtpActionTypes,
+  verifyEmailActionTypes,
   signupActionTypes,
   forgotPasswordActionTypes,
   resetPasswordActionTypes,
-  userProfileActionTypes,
-  changePasswordActionTypes,
   settingsActionTypes,
   connectedDeviceActionTypes,
   deviceSettingsActionTypes,
@@ -82,38 +81,25 @@ export const verifyOtpResetDataAction = () => ({
   type: verifyOtpActionTypes.VERIFY_OTP_RESET_DATA,
 });
 
-/** user profile module related actions */
-export const userProfileRequestAction = (payload: any, options: any) => ({
-  type: userProfileActionTypes.USER_PROFILE_REQUEST,
+/** verify otp module related actions */
+export const verifyEmailRequestAction = (payload: any, options?: any) => ({
+  type: verifyEmailActionTypes.VERIFY_EMAIL_REQUEST,
   payload,
   options,
 });
 
-export const userProfileSuccessAction = (payload: any) => ({
-  type: userProfileActionTypes.USER_PROFILE_SUCCESS,
+export const verifyEmailSuccessAction = (payload: any) => ({
+  type: verifyEmailActionTypes.VERIFY_EMAIL_SUCCESS,
   payload,
 });
 
-export const userProfileFailureAction = (payload: any) => ({
-  type: userProfileActionTypes.USER_PROFILE_FAILURE,
+export const verifyEmailFailureAction = (payload: any) => ({
+  type: verifyEmailActionTypes.VERIFY_EMAIL_FAILURE,
   payload,
 });
 
-/** user profile module related actions */
-export const changePasswordRequestAction = (payload: any, options?: any) => ({
-  type: changePasswordActionTypes.CHANGE_PASSWORD_REQUEST,
-  payload,
-  options,
-});
-
-export const changePasswordSuccessAction = (payload: any) => ({
-  type: changePasswordActionTypes.CHANGE_PASSWORD_SUCCESS,
-  payload,
-});
-
-export const changePasswordFailureAction = (payload: any) => ({
-  type: changePasswordActionTypes.CHANGE_PASSWORD_FAILURE,
-  payload,
+export const verifyEmailResetDataAction = () => ({
+  type: verifyEmailActionTypes.VERIFY_EMAIL_RESET_DATA,
 });
 
 /** signup module related actions */

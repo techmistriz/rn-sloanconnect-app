@@ -13,7 +13,7 @@ import {
   isValidEmail,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {forgotPasswordRequestAction} from 'src/redux/actions';
+import {verifyEmailRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
@@ -27,7 +27,7 @@ const Index = ({route, navigation}: any) => {
 
   useEffect(() => {}, []);
 
-  const onForgotPasswordPress = () => {
+  const onVerifyEmailPress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
@@ -36,7 +36,10 @@ const Index = ({route, navigation}: any) => {
         source: 'sloan',
         verify_method: 'otp',
       };
-      dispatch(forgotPasswordRequestAction(payload));
+      const options = {
+        referrer: 'VerifyEmailScreen',
+      };
+      dispatch(verifyEmailRequestAction(payload, options));
     }
   };
 
@@ -71,7 +74,7 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Forgot Password"
+                text="Verify Email"
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -104,9 +107,9 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="Forgot Password"
+                  title="Verify Email"
                   onPress={() => {
-                    onForgotPasswordPress();
+                    onVerifyEmailPress();
                   }}
                   // disable={true}
                 />
@@ -120,7 +123,7 @@ const Index = ({route, navigation}: any) => {
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}
                   onPress={() => {
-                    NavigationService.goBack()
+                    NavigationService.goBack();
                   }}
                 />
               </Wrap>

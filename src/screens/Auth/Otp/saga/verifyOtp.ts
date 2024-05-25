@@ -1,21 +1,17 @@
-import {call, put, takeLatest} from 'redux-saga/effects';
+import {put, takeLatest} from 'redux-saga/effects';
 import Network from 'src/network/Network';
 import {verifyOtpActionTypes} from 'src/redux/types';
 import {
-  verifyOtpRequestAction,
   verifyOtpFailureAction,
   verifyOtpSuccessAction,
-  settingsSuccessAction,
 } from 'src/redux/actions';
 
 import {
   showToastMessage,
   consoleLog,
-  showSimpleAlert,
-  isValidEmail,
 } from 'src/utils/Helpers/HelperFunction';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import {createNameValueArray, isObjectEmpty} from 'src/utils/Helpers/array';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 
 function* __verifyOtpRequestSaga({payload, options}: any) {
   //consoleLog('__verifyOtpRequestSaga payload saga==>', payload);

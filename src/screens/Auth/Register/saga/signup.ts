@@ -9,7 +9,6 @@ import {
 import {
   showToastMessage,
   consoleLog,
-  getUserAPiPrefixByUserType,
   showSimpleAlert,
   isValidEmail,
 } from 'src/utils/Helpers/HelperFunction';
@@ -26,7 +25,11 @@ function* __signupRequestSaga({payload, options}: any) {
     if (response.message == 'Registration successful.') {
       yield put(signupSuccessAction({}));
       showToastMessage(response?.message, 'success');
-      NavigationService.goBack();
+      NavigationService.navigate('Otp', {
+        ...payload,
+        hash: response?.hash,
+        referrer: options?.referrer,
+      });
     } else {
       yield put(signupFailureAction({}));
       showToastMessage(response?.message);

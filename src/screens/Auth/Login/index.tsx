@@ -209,6 +209,20 @@ const Index = ({route, navigation}: any) => {
                   }}
                 />
               </Wrap>
+
+              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
+                <Typography
+                  size={13}
+                  text={'Verify Email'}
+                  style={{textAlign: 'center', textDecorationLine: 'underline'}}
+                  color={Theme.colors.primaryColor}
+                  ff={Theme.fonts.ThemeFontMedium}
+                  onPress={() => {
+                    NavigationService.navigate('VerifyEmail');
+                  }}
+                />
+              </Wrap>
+
             </Wrap>
           </Wrap>
           <Wrap autoMargin={false} style={styles.section2}>

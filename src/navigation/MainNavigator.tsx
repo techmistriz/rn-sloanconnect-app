@@ -13,8 +13,7 @@ import Register from 'src/screens/Auth/Register';
 import ForgotPassword from 'src/screens/Auth/ForgotPassword';
 import ResetPassword from 'src/screens/Auth/ResetPassword';
 import Otp from 'src/screens/Auth/Otp';
-import Profile from 'src/screens/Profile';
-import Notification from 'src/screens/Notification';
+import VerifyEmail from 'src/screens/Auth/VerifyEmail';
 import Settings from 'src/screens/Settings';
 
 //Cms
@@ -110,6 +109,14 @@ const MainNavigator = () => {
             title: '',
           }}
         />
+        <Stack.Screen
+          name="VerifyEmail"
+          component={VerifyEmail}
+          options={{
+            headerShown: false,
+            title: '',
+          }}
+        />
 
         <Stack.Screen
           name="DrawerNavigator"
@@ -119,29 +126,12 @@ const MainNavigator = () => {
           }}
         />
         <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={({navigation}) => ({
-            // headerLeft: () => false,
-            headerShown: true,
-            title: 'My Profile',
-          })}
-        />
-
-        <Stack.Screen
           name="Settings"
           component={Settings}
           options={{
             headerShown: true,
             title: 'Settings',
           }}
-        />
-        <Stack.Screen
-          name="Notification"
-          component={Notification}
-          // options={{
-          //     headerShown: false,
-          // }}
         />
         <Stack.Screen
           name="Help"
