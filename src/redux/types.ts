@@ -7,14 +7,6 @@ export const loginActionTypes = {
   LOGIN_RESET_DATA: 'LOGIN_RESET_DATA',
 };
 
-/**action types for connectedDevice module */
-export const connectedDeviceActionTypes = {
-  CONNECTED_DEVICE_REQUEST: 'CONNECTED_DEVICE_REQUEST',
-  CONNECTED_DEVICE_FAILURE: 'CONNECTED_DEVICE_FAILURE',
-  CONNECTED_DEVICE_SUCCESS: 'CONNECTED_DEVICE_SUCCESS',
-  CONNECTED_DEVICE_RESET_DATA: 'CONNECTED_DEVICE_RESET_DATA',
-};
-
 /**action types for deviceSettings module */
 export const deviceSettingsActionTypes = {
   DEVICE_SETTINGS_REQUEST: 'DEVICE_SETTINGS_REQUEST',

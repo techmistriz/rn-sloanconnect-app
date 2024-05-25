@@ -7,7 +7,6 @@ import {
   forgotPasswordActionTypes,
   resetPasswordActionTypes,
   settingsActionTypes,
-  connectedDeviceActionTypes,
   deviceSettingsActionTypes,
 } from 'src/redux/types';
 
@@ -184,27 +183,6 @@ export const settingsFailureAction = (payload: any) => ({
 
 export const settingsResetDataAction = () => ({
   type: settingsActionTypes.SETTINGS_RESET_DATA,
-});
-
-/** connectedDevice module related actions */
-export const connectedDeviceRequestAction = (payload: any, options?: any) => ({
-  type: connectedDeviceActionTypes.CONNECTED_DEVICE_REQUEST,
-  payload,
-  options,
-});
-
-export const connectedDeviceSuccessAction = (payload: any) => ({
-  type: connectedDeviceActionTypes.CONNECTED_DEVICE_SUCCESS,
-  payload,
-});
-
-export const connectedDeviceFailureAction = (payload: any) => ({
-  type: connectedDeviceActionTypes.CONNECTED_DEVICE_FAILURE,
-  payload,
-});
-
-export const connectedDeviceResetDataAction = () => ({
-  type: connectedDeviceActionTypes.CONNECTED_DEVICE_RESET_DATA,
 });
 
 /** deviceSettings module related actions */

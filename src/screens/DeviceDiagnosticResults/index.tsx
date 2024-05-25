@@ -1,65 +1,34 @@
-import React, {Component, Fragment, useEffect, useState} from 'react';
-import {View, StyleSheet, Image, StatusBar, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Theme from 'src/theme';
-import {Images} from 'src/assets';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
   cleanCharacteristic,
-  getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID,
-  getDeviceModelData,
-  getDeviceService,
-  mapValue,
 } from 'src/utils/Helpers/project';
 import {
-  consoleLog,
-  getImgSource,
   getTimezone,
   parseDateHumanFormat,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {
-  Container,
   Row,
   Col,
-  Card,
   Wrap,
-  TochableWrap,
-  RippleWrap,
 } from 'src/components/Common';
-import TouchableItem from 'src/components/TouchableItem';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import AppInfo from 'src/components/@ProjectComponent/AppInfo';
 import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
-import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
-import EmptyComponent from 'src/components/EmptyState';
-import Loader from 'src/components/Loader';
 import Divider from 'src/components/Divider';
 import {BLEService} from 'src/services';
-import {
-  connectedDeviceRequestAction,
-  connectedDeviceSuccessAction,
-  connectedDeviceFailureAction,
-} from 'src/redux/actions';
-import DeviceInfoList from 'src/components/@ProjectComponent/DeviceInfoList';
-import DeviceBottomTab from 'src/components/@ProjectComponent/DeviceBottomTab';
-import {TABS} from 'src/utils/StaticData/StaticData';
-import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
-import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
+
 import DiagnosticResultsList from 'src/components/@ProjectComponent/DiagnosticResultsList';
-import GlobalStyle from 'src/utils/GlobalStyles';
 import InfoBox from 'src/components/InfoBox';
 import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
   const {user, token} = useSelector((state: any) => state?.AuthReducer);
-  // const {device, status} = useSelector(
-  //   (state: any) => state?.ConnectedDeviceReducer,
-  // );
-
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
   const [infoModal, setInfoModal] = useState<boolean>(true);
