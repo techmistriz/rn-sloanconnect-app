@@ -5,11 +5,7 @@ import {
   forgotPasswordFailureAction,
   forgotPasswordSuccessAction,
 } from 'src/redux/actions';
-
-import {
-  showToastMessage,
-  consoleLog,
-} from 'src/utils/Helpers/HelperFunction';
+import {showToastMessage, consoleLog} from 'src/utils/Helpers/HelperFunction';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 
@@ -24,7 +20,6 @@ function* __forgotPasswordRequestSaga({payload, options}: any) {
       showToastMessage(response?.message, 'success');
       NavigationService.navigate('ResetPassword', {
         ...payload,
-        referrer: options?.referrer,
         hash: response?.hash,
       });
     } else {

@@ -21,7 +21,7 @@ import Input from 'src/components/Input';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 const Index = ({route, navigation}: any) => {
-  const {email, hash, referrer} = route?.params;
+  const {email, hash} = route?.params;
   const dispatch = useDispatch();
   const {loading} = useSelector((state: any) => state?.AuthReducer);
   const __resetPasswordReducer = useSelector(
@@ -36,9 +36,8 @@ const Index = ({route, navigation}: any) => {
 
   useEffect(() => {
     consoleLog('AuthReducer ResetPassword Screen==>', {
-      loading,
+      email,
       hash,
-      referrer,
     });
     // consoleLog('ResetPasswordReducer OTP Screen==>', {__resetPasswordReducer});
   }, []);
@@ -60,15 +59,6 @@ const Index = ({route, navigation}: any) => {
     }
   };
 
-  const onResendOtpPress = () => {
-    Keyboard.dismiss();
-    const checkValid = checkValidationForResendOtp();
-    if (checkValid) {
-      const payload = {email: email, source: 'sloan', verify_method: 'otp'};
-      dispatch(otpRequestAction(payload));
-    }
-  };
-
   /**validation checking for email and password */
   const checkValidation = () => {
     if (otp.length == 0) {
@@ -85,20 +75,6 @@ const Index = ({route, navigation}: any) => {
       return false;
     } else if (password.trim() !== passwordConfirmation.trim()) {
       showSimpleAlert('Password and confirm password should same');
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  /**validation checking for email */
-  const checkValidationForResendOtp = () => {
-    const checkEmail = isValidEmail(email);
-    if (email.trim() === '') {
-      showSimpleAlert('Please enter your email address');
-      return false;
-    } else if (!checkEmail) {
-      showSimpleAlert('Please enter valid email address');
       return false;
     } else {
       return true;

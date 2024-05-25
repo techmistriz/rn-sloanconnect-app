@@ -36,10 +36,7 @@ const Index = ({route, navigation}: any) => {
         source: 'sloan',
         verify_method: 'otp',
       };
-      const options = {
-        referrer: 'ForgotPasswordScreen',
-      };
-      dispatch(forgotPasswordRequestAction(payload, options));
+      dispatch(forgotPasswordRequestAction(payload));
     }
   };
 
