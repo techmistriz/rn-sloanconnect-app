@@ -1,6 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  StyleSheet,
+  View,
   Image,
+  Text,
+  Alert,
+  Platform,
   Keyboard,
 } from 'react-native';
 import {Images} from 'src/assets';
@@ -9,55 +14,65 @@ import Input from 'src/components/Input';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
-import {Wrap} from 'src/components/Common';
+import {Wrap, Row} from 'src/components/Common';
+import TouchableItem from 'src/components/TouchableItem';
 import {styles} from './styles';
 import {
+  showToastMessage,
+  consoleLog,
   isValidPassword,
   showSimpleAlert,
+  isValidEmail,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {
-  changePasswordRequestAction,
-} from 'src/redux/actions';
+import {constants} from 'src/common';
+import {resetPasswordRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
+import VectorIcon from 'src/components/VectorIcon';
+import Network from 'src/network/Network';
 
 /**Reset Password Screen Component */
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
-  const {loading, token, type} = useSelector(
-    (state: any) => state?.AuthReducer,
+  const {type, email, otp} = route?.params;
+  const {loading} = useSelector(
+    (state: any) => state?.ForgotResetPasswordReducer,
   );
 
   // const [loading, setLoading] = useState(false);
-  const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [cpassword, setCpassword] = useState('');
 
   /**component hooks method */
   useEffect(() => {}, []);
 
-  /**action for change password */
-  const onChangePasswordPress = () => {
+  /**action for reset password */
+  const onResetPasswordPress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
       const payload = {
-        old_password: oldPassword.trim(),
+        email: email.trim(),
+        otp: otp,
         password: password.trim(),
       };
       const options = {
         type: type,
-        referrer: 'ChangePasswordScreen',
-        token: token,
+        referrer: 'ResetPasswordScreen',
       };
-      dispatch(changePasswordRequestAction(payload, options));
+
+      dispatch(resetPasswordRequestAction(payload, options));
     }
   };
 
   /**validation checking for email and password */
   const checkValidation = () => {
-    if (oldPassword.trim() === '') {
-      showSimpleAlert('Please enter your old password');
+    const checkEmail = isValidEmail(email);
+    if (email.trim() === '') {
+      showSimpleAlert('Please enter your email address');
+      return false;
+    } else if (!checkEmail) {
+      showSimpleAlert('Please enter valid email address');
       return false;
     } else if (password.trim() == '') {
       showSimpleAlert('Please enter your password');
@@ -67,7 +82,7 @@ const Index = ({route, navigation}: any) => {
       return false;
     } else if (!isValidPassword(password)) {
       showSimpleAlert(
-        'Password should contain atleast one number, one special character',
+        'Password should contain atleast 2 numbers, 1 special character',
       );
       return false;
     } else if (password != cpassword) {
@@ -93,7 +108,7 @@ const Index = ({route, navigation}: any) => {
 
           <Typography
             size={32}
-            text="Change Password"
+            text="Reset Password"
             style={{
               textAlign: 'center',
               textShadowColor: 'rgba(0, 0, 0, 0.75)',
@@ -106,36 +121,12 @@ const Index = ({route, navigation}: any) => {
 
           <Typography
             size={18}
-            text={`Enter your new password  \n  to change password`}
+            text={`Enter your new password  \n  to reset password`}
             style={{textAlign: 'center'}}
             color={Theme.colors.secondaryColor}
           />
 
           <Wrap autoMargin={false} style={styles.formWrapper}>
-            <Wrap autoMargin={false} style={styles.inputWrapper}>
-              <Input
-                onRef={input => {
-                  // @ts-ignore
-                  oldpasswordTextInputRef = input;
-                }}
-                onChangeText={text => setOldPassword(text)}
-                onSubmitEditing={() => {
-                  // @ts-ignore
-                  passwordTextInputRef.focus();
-                }}
-                returnKeyType="next"
-                blurOnSubmit={false}
-                keyboardType="default"
-                placeholder="Old password"
-                secureTextEntry={true}
-                value={oldPassword}
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={styles.textInput}
-                placeholderTextColor={Theme.colors.inputPlaceholderColor}
-              />
-              
-            </Wrap>
-
             <Wrap autoMargin={false} style={styles.inputWrapper}>
               <Input
                 onRef={input => {
@@ -150,7 +141,7 @@ const Index = ({route, navigation}: any) => {
                 returnKeyType="next"
                 blurOnSubmit={false}
                 keyboardType="default"
-                placeholder="New password"
+                placeholder="New Password"
                 secureTextEntry={true}
                 value={password}
                 inputContainerStyle={styles.inputContainer}
@@ -175,7 +166,7 @@ const Index = ({route, navigation}: any) => {
                 }}
                 onChangeText={text => setCpassword(text)}
                 onSubmitEditing={() => {
-                  onChangePasswordPress();
+                  onResetPasswordPress();
                 }}
                 returnKeyType="done"
                 blurOnSubmit={false}
@@ -193,9 +184,9 @@ const Index = ({route, navigation}: any) => {
               autoMargin={false}
               style={[styles.inputWrapper, {marginTop: 10}]}>
               <Button
-                title="Change Password"
+                title="Reset Password"
                 onPress={() => {
-                  onChangePasswordPress();
+                  onResetPasswordPress();
                 }}
               />
             </Wrap>

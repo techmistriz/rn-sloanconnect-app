@@ -27,6 +27,7 @@ import {
   showConfirmAlert,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
+import {createNameValueArray, isObjectEmpty} from 'src/utils/Helpers/array';
 import {constants} from 'src/common';
 import {
   signupRequestAction,
@@ -39,6 +40,8 @@ import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
 import VectorIcon from 'src/components/VectorIcon';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
 import CheckBox from '@react-native-community/checkbox';
+import DropdownPicker from 'src/components/DropdownPicker';
+import Network from 'src/network/Network';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -48,32 +51,73 @@ const Index = ({route, navigation}: any) => {
 
   const [firstName, setFirstName] = useState(__DEV__ ? 'Pradeep' : '');
   const [lastName, setLastName] = useState(__DEV__ ? 'Kumar' : '');
+  const [title, setTitle] = useState(__DEV__ ? 'Mr' : '');
+  const [company, setCompany] = useState(__DEV__ ? 'ABC' : '');
+  const [phoneNumber, setPhoneNumber] = useState(__DEV__ ? '+1-91817161' : '');
   const [email, setEmail] = useState(__DEV__ ? 'pk836746+5@gmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? '123456' : '');
   const [passwordConfirmation, setPasswordConfirmation] = useState(
     __DEV__ ? '123456' : '',
   );
-  const [terms, setTerms] = useState(false);
 
+  const [industry, setIndustry] = useState<any>();
+  const [country, setCountry] = useState<any>();
+  const [state, setState] = useState<any>();
+  const [city, setCity] = useState<any>();
+  const [address, setAddress] = useState<any>();
+  const [zip, setZip] = useState<any>();
+  const [timezone, setTimezone] = useState<any>();
+  const [terms, setTerms] = useState<any>(false);
+
+  const [industriesDropdownModal, setIndustriesDropdownModal] = useState(false);
+  const [industriesMaster, setIndustriesMaster] = useState([]);
+  const [timezonesDropdownModal, setTimezonesDropdownModal] = useState(false);
+  const [timezonesMaster, setTimezonesMaster] = useState([]);
+  const [countriesDropdownModal, setCountriesDropdownModal] = useState(false);
+  const [countriesMaster, setCountriesMaster] = useState([]);
+  const [statesDropdownModal, setStatesDropdownModal] = useState(false);
+  const [statesMaster, setStatesMaster] = useState([]);
+
+  /**
+   * Hooks method for TermsAccept Event
+   */
   useEffect(() => {
-    DeviceEventEmitter.addListener('TermsAcceptEvent', eventData =>
-      TermsAcceptEventCallback(eventData),
-    );
+    DeviceEventEmitter.addListener('TermsAcceptEvent', eventData => {
+      if (eventData?.termsAccept) {
+        setTerms(true);
+      }
+    });
     return () => {
       DeviceEventEmitter.removeAllListeners('TermsAcceptEvent');
     };
   }, []);
 
-  const TermsAcceptEventCallback = (eventData: any) => {
-    if (eventData?.termsAccept) {
-      setTerms(true);
-    }
-  };
+  /**
+   * Hooks method for getting master data for registration
+   */
+  useEffect(() => {
+    getRegisterMasters();
+  }, []);
 
+  /**
+   *
+   */
   const onRegisterPress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
+      const user_metadata = {
+        title: title,
+        company: company,
+        industry: industry?.name,
+        phone_number: phoneNumber,
+        country: country?.id,
+        state: state?.id,
+        city: city,
+        address: address,
+        zipcode: zip,
+      };
+
       const payload = {
         first_name: firstName,
         last_name: lastName,
@@ -82,6 +126,8 @@ const Index = ({route, navigation}: any) => {
         password_confirmation: passwordConfirmation,
         terms: terms ? 'yes' : 'no',
         source: 'sloan',
+        timezone: timezone,
+        user_metadata: user_metadata,
       };
 
       const options = {
@@ -91,7 +137,9 @@ const Index = ({route, navigation}: any) => {
     }
   };
 
-  /**validation checking for email and password */
+  /**
+   * validation checking for email and password
+   */
   const checkValidation = () => {
     const checkEmail = isValidEmail(email);
     if (firstName.trim() === '') {
@@ -126,6 +174,77 @@ const Index = ({route, navigation}: any) => {
     }
   };
 
+  /**
+   *
+   */
+  const getRegisterMasters = async () => {
+    try {
+      const response: any = await Network('auth/sloan-register-data', 'GET');
+      // consoleLog('getRegisterMasters response==>', response);
+
+      if (response && !isObjectEmpty(response)) {
+        if (response?.industries && response?.industries?.length) {
+          const __industriesMaster: any = createNameValueArray(
+            response?.industries,
+          );
+          // consoleLog('__industriesMaster==>', __industriesMaster);
+          setIndustriesMaster(__industriesMaster);
+        }
+
+        if (response?.timezones && response?.timezones?.length) {
+          setTimezonesMaster(response?.timezones);
+        }
+
+        if (response?.countries && response?.countries?.length) {
+          setCountriesMaster(response?.countries);
+        }
+      } else {
+      }
+    } catch (error) {
+      consoleLog('getRegisterMasters error==>', error);
+      showToastMessage('Something went wrong!');
+    } finally {
+    }
+  };
+
+  /**
+   * action for set country code from selection
+   */
+  const __setIndustry = (item: any) => {
+    // console.log('item', item);
+    setIndustry(item);
+  };
+
+  /**
+   * action for set country code from selection
+   */
+  const __setCountry = (item: any) => {
+    // console.log('item', item);
+    setCountry(item);
+
+    if (Array.isArray(item?.states) && item?.states?.length) {
+      setStatesMaster(item?.states);
+    } else {
+      setStatesMaster([]);
+    }
+  };
+
+  /**
+   * action for set country code from selection
+   */
+  const __setState = (item: any) => {
+    // console.log('item', item);
+    setState(item);
+  };
+
+  /**
+   * action for set country code from selection
+   */
+  const __setTimezone = (item: any) => {
+    // console.log('item', item);
+    setTimezone(item);
+  };
+
   return (
     <AppContainer
       scroll={false}
@@ -141,19 +260,6 @@ const Index = ({route, navigation}: any) => {
                 style={{width: '50%', height: 80}}
                 resizeMode="contain"
               />
-
-              {/* <Image
-                source={getImgSource(Images?.appLogo)}
-                style={{width: '60%'}}
-                resizeMode="contain"
-              />
-              <Typography
-                size={14}
-                text="Water Connect Us"
-                style={{textAlign: 'left', marginTop: -10}}
-                color={Theme.colors.primaryColor}
-                ff={Theme.fonts.ThemeFontRegular}
-              /> */}
             </Wrap>
 
             <Wrap autoMargin={false} style={styles.formWrapper}>
@@ -198,13 +304,110 @@ const Index = ({route, navigation}: any) => {
                     onChangeText={text => setLastName(text)}
                     onSubmitEditing={() => {
                       // @ts-ignore
-                      emailTextInputRef.focus();
+                      titleTextInputRef.focus();
                     }}
                     returnKeyType="next"
                     blurOnSubmit={false}
                     keyboardType="default"
                     placeholder="Last Name"
                     value={lastName}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      titleTextInputRef = input;
+                    }}
+                    onChangeText={text => setTitle(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      companyTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Title"
+                    value={title}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      companyTextInputRef = input;
+                    }}
+                    onChangeText={text => setCompany(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      industryTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Company"
+                    value={company}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      industryTextInputRef = input;
+                    }}
+                    onChangeText={text => setIndustry(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      phoneNumberTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Industry"
+                    value={industry?.name}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                    editable={false}
+                    onPress={() => {
+                      setIndustriesDropdownModal(true);
+                    }}
+                    right={
+                      <VectorIcon
+                        iconPack="Feather"
+                        name={'chevron-down'}
+                        size={15}
+                        color={Theme.colors.primaryColor}
+                      />
+                    }
+                    rightStyle={{right: 0}}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      phoneNumberTextInputRef = input;
+                    }}
+                    onChangeText={text => setPhoneNumber(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      emailTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Phone Number"
+                    value={phoneNumber}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
                   />
@@ -252,6 +455,7 @@ const Index = ({route, navigation}: any) => {
                     secureTextEntry={true}
                   />
                 </Wrap>
+
                 <Wrap autoMargin={false} style={styles.inputWrapper}>
                   <Input
                     onRef={input => {
@@ -260,7 +464,8 @@ const Index = ({route, navigation}: any) => {
                     }}
                     onChangeText={text => setPasswordConfirmation(text)}
                     onSubmitEditing={() => {
-                      onRegisterPress();
+                      // @ts-ignore
+                      countryTextInputRef.focus();
                     }}
                     returnKeyType="done"
                     blurOnSubmit={false}
@@ -270,6 +475,170 @@ const Index = ({route, navigation}: any) => {
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
                     secureTextEntry={true}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      countryTextInputRef = input;
+                    }}
+                    onChangeText={text => setCountry(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      stateTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Country"
+                    value={country?.name}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                    editable={false}
+                    onPress={() => {
+                      setCountriesDropdownModal(true);
+                    }}
+                    right={
+                      <VectorIcon
+                        iconPack="Feather"
+                        name={'chevron-down'}
+                        size={15}
+                        color={Theme.colors.primaryColor}
+                      />
+                    }
+                    rightStyle={{right: 0}}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      stateTextInputRef = input;
+                    }}
+                    onChangeText={text => setState(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      cityTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="State/Province"
+                    value={state?.state_name}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                    editable={false}
+                    onPress={() => {
+                      setStatesDropdownModal(true);
+                    }}
+                    right={
+                      <VectorIcon
+                        iconPack="Feather"
+                        name={'chevron-down'}
+                        size={15}
+                        color={Theme.colors.primaryColor}
+                      />
+                    }
+                    rightStyle={{right: 0}}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      cityTextInputRef = input;
+                    }}
+                    onChangeText={text => setCity(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      addressTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="City"
+                    value={city}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      addressTextInputRef = input;
+                    }}
+                    onChangeText={text => setAddress(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      zipTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Address"
+                    value={address}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      zipTextInputRef = input;
+                    }}
+                    onChangeText={text => setZip(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      timezoneTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Zip/Postal"
+                    value={zip}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      timezoneTextInputRef = input;
+                    }}
+                    onChangeText={text => setTimezone(text)}
+                    onSubmitEditing={() => {
+                      // onRegisterPress();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Timezone"
+                    value={timezone?.format}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                    editable={false}
+                    onPress={() => {
+                      setTimezonesDropdownModal(true);
+                    }}
+                    right={
+                      <VectorIcon
+                        iconPack="Feather"
+                        name={'chevron-down'}
+                        size={15}
+                        color={Theme.colors.primaryColor}
+                      />
+                    }
+                    rightStyle={{right: 0}}
                   />
                 </Wrap>
               </ScrollView>
@@ -288,7 +657,7 @@ const Index = ({route, navigation}: any) => {
                       marginTop: 3,
                       height: 40,
                       width: 40,
-                      transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+                      transform: [{scaleX: 0.8}, {scaleY: 0.8}],
                     }}
                     disabled={false}
                     value={terms}
@@ -365,6 +734,58 @@ const Index = ({route, navigation}: any) => {
           <Wrap autoMargin={false} style={styles.section2}>
             <Copyright />
           </Wrap>
+
+          <DropdownPicker
+            dialogVisible={industriesDropdownModal}
+            setDialogVisible={() => setIndustriesDropdownModal(false)}
+            title={'Select Industry'}
+            data={industriesMaster}
+            onSelectedItem={(item: any) => {
+              setIndustriesDropdownModal(false);
+              __setIndustry(item);
+            }}
+            dropdownSelectedItem={industry?.value}
+            dropdownKeyValue={{id: 'value', title: 'name'}}
+          />
+
+          <DropdownPicker
+            dialogVisible={countriesDropdownModal}
+            setDialogVisible={() => setCountriesDropdownModal(false)}
+            title={'Select Country'}
+            data={countriesMaster}
+            onSelectedItem={(item: any) => {
+              setCountriesDropdownModal(false);
+              __setCountry(item);
+            }}
+            dropdownSelectedItem={country?.id}
+            dropdownKeyValue={{id: 'id', title: 'name'}}
+          />
+
+          <DropdownPicker
+            dialogVisible={statesDropdownModal}
+            setDialogVisible={() => setStatesDropdownModal(false)}
+            title={'Select State'}
+            data={statesMaster}
+            onSelectedItem={(item: any) => {
+              setStatesDropdownModal(false);
+              __setState(item);
+            }}
+            dropdownSelectedItem={state?.id}
+            dropdownKeyValue={{id: 'id', title: 'state_name'}}
+          />
+
+          <DropdownPicker
+            dialogVisible={timezonesDropdownModal}
+            setDialogVisible={() => setTimezonesDropdownModal(false)}
+            title={'Select Timezone'}
+            data={timezonesMaster}
+            onSelectedItem={(item: any) => {
+              setTimezonesDropdownModal(false);
+              __setTimezone(item);
+            }}
+            dropdownSelectedItem={state?.id}
+            dropdownKeyValue={{id: 'id', title: 'format'}}
+          />
         </Wrap>
       </Wrap>
     </AppContainer>
