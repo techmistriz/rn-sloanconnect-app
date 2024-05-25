@@ -21,23 +21,12 @@ function* __resetPasswordRequestSaga({payload, options}: any) {
   try {
     //@ts-ignore
     // getUserAPiPrefixByUserType(options?.type) +
-    const response = yield Network('reset-password', 'POST', payload);
+    const response = yield Network('auth/reset-password', 'POST', payload);
     // console.log('__resetPasswordRequestSaga response saga==>', response);
-    if (response?.status) {
+    if (!isObjectEmpty(response)) {
       yield put(resetPasswordSuccessAction({}));
       showToastMessage(response?.message, 'success');
-
-      if (
-        options?.referrer == 'ForgotPasswordScreen' &&
-        payload.type == 'VERIFY_OTP'
-      ) {
-        NavigationService.resetAction('ResetPassword', {
-          ...payload,
-          type: options?.type,
-        });
-      } else {
-        NavigationService.resetAllAction('Login', {type: options?.type});
-      }
+      NavigationService.pop(2);
     } else {
       yield put(resetPasswordFailureAction({}));
       showToastMessage(response?.message);

@@ -1,5 +1,4 @@
 import Network from 'src/network/Network';
-import notifications from 'src/utils/notifications';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {commonText, constants} from 'src/common';
 

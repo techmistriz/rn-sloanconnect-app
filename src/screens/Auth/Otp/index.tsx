@@ -1,13 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  Alert,
-  Platform,
-  Keyboard,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, Keyboard} from 'react-native';
 import {Images} from 'src/assets';
 import {Button} from 'src/components/Button';
 import Typography from 'src/components/Typography';
@@ -16,23 +8,21 @@ import AppContainer from 'src/components/AppContainer';
 import {Wrap, Row} from 'src/components/Common';
 import {styles} from './styles';
 import {
-  showToastMessage,
   consoleLog,
   showSimpleAlert,
   isValidEmail,
+  getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import Network from 'src/network/Network';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
-import {
-  otpRequestAction,
-  verifyOtpRequestAction,
-  forgotPasswordRequestAction,
-  resetPasswordRequestAction,
-} from 'src/redux/actions';
+import {otpRequestAction, verifyOtpRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
+import NavigationService from 'src/services/NavigationService/NavigationService';
+import Copyright from 'src/components/@ProjectComponent/Copyright';
+import Input from 'src/components/Input';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 const Index = ({route, navigation}: any) => {
-  const {email, password, type, referrer} = route?.params;
+  
+  const {email, password, hash, referrer} = route?.params;
   const dispatch = useDispatch();
   const {loading} = useSelector((state: any) => state?.AuthReducer);
   const __resetPasswordReducer = useSelector(
@@ -43,7 +33,7 @@ const Index = ({route, navigation}: any) => {
   const [otp, setOtp] = useState('');
 
   useEffect(() => {
-    consoleLog('AuthReducer OTP Screen==>', {loading, type, referrer});
+    consoleLog('AuthReducer OTP Screen==>', {loading, hash, referrer});
     // consoleLog('ResetPasswordReducer OTP Screen==>', {__resetPasswordReducer});
   }, []);
 
@@ -54,37 +44,18 @@ const Index = ({route, navigation}: any) => {
       const payload = {
         email: email,
         otp: otp,
-        type: 'VERIFY_OTP',
+        hash: hash,
       };
-
-      const options = {
-        type: type,
-        referrer: referrer,
-      };
-
-      if (referrer == 'ForgotPasswordScreen') {
-        dispatch(resetPasswordRequestAction(payload, options));
-      } else {
-        dispatch(verifyOtpRequestAction(payload, options));
-      }
+      dispatch(verifyOtpRequestAction(payload));
     }
   };
 
   const onResendOtpPress = () => {
-    consoleLog('referrer', referrer);
     Keyboard.dismiss();
     const checkValid = checkValidationForResendOtp();
     if (checkValid) {
-      const payload = {email: email, type: 'VERIFY_OTP'};
-      const options = {
-        type: type,
-        referrer: referrer,
-      };
-      if (referrer == 'ForgotPasswordScreen') {
-        dispatch(forgotPasswordRequestAction(payload, options));
-      } else {
-        dispatch(otpRequestAction(payload, options));
-      }
+      const payload = {email: email, source: 'sloan', verify_method: 'otp'};
+      dispatch(otpRequestAction(payload));
     }
   };
 
@@ -104,12 +75,8 @@ const Index = ({route, navigation}: any) => {
 
   /**validation checking for email */
   const checkValidationForResendOtp = () => {
-    const checkEmail = isValidEmail(email);
-    if (email.trim() === '') {
-      showSimpleAlert('Please enter your email address');
-      return false;
-    } else if (!checkEmail) {
-      showSimpleAlert('Please enter valid email address');
+    if (otp.length == 0) {
+      showSimpleAlert('Please enter your OTP');
       return false;
     } else {
       return true;
@@ -118,58 +85,54 @@ const Index = ({route, navigation}: any) => {
 
   return (
     <AppContainer
-      scroll={false}
-      loading={
-        loading || __resetPasswordReducer?.loading || __otpReducer?.loading
-      }>
+      scroll={true}
+      loading={loading}
+      scrollViewStyle={{}}
+      hasHeader={false}>
       <Wrap autoMargin={false} style={styles.container}>
-        <Wrap autoMargin={false} style={styles.section2}>
-          <Typography
-            size={26}
-            text="2 Step Verification"
-            style={{textAlign: 'center', marginTop: 18}}
-            color={Theme.colors.white}
-            ff={Theme.fonts.ThemeFontBold}
-          />
-          <Row
-            autoMargin={false}
-            style={{
-              justifyContent: 'center',
-              marginTop: 10,
-            }}>
-            <Typography
-              size={18}
-              text="Verify your "
-              style={{textAlign: 'center'}}
-              color={Theme.colors.white}
-            />
-            <Typography
-              size={18}
-              text="Email Id "
-              style={{textAlign: 'center'}}
-              color={Theme.colors.white}
-              ff={Theme.fonts.ThemeFontBold}
-            />
-            <Typography
-              size={18}
-              text="with codes "
-              style={{textAlign: 'center'}}
-              color={Theme.colors.white}
-            />
-          </Row>
-          <Typography
-            size={18}
-            text="sent to you"
-            style={{textAlign: 'center'}}
-            color={Theme.colors.white}
-          />
+        <Wrap autoMargin={false} style={styles.sectionContainer}>
+          <Wrap autoMargin={false} style={styles.section1}>
+            <Wrap autoMargin={false} style={styles.imageContainer}>
+              <Image
+                source={getImgSource(Images?.appLogoWithText)}
+                style={{width: '50%', height: 80}}
+                resizeMode="contain"
+              />
+            </Wrap>
 
-          <Wrap autoMargin={false} style={styles.formWrapper}>
-            <Wrap autoMargin={false} style={[styles.inputWrapper]}>
-              <Wrap autoMargin={false} style={[styles.inputOTPWrapper]}>
+            <Wrap autoMargin={false} style={styles.formWrapper}>
+              <Typography
+                size={20}
+                text="Verify OTP"
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 20,
+                }}
+                color={Theme.colors.primaryColor}
+                ff={Theme.fonts.ThemeFontMedium}
+              />
+              <Wrap autoMargin={false} style={styles.inputWrapper}>
+                {/* <Input
+                  onRef={input => {
+                    // @ts-ignore
+                    emailTextInputRef = input;
+                  }}
+                  // onChangeText={text => setEmail(text)}
+                  onSubmitEditing={() => {
+                    // @ts-ignore
+                    passwordTextInputRef.focus();
+                  }}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  keyboardType="email-address"
+                  placeholder="Email Address"
+                  value={email}
+                  inputContainerStyle={styles.inputContainer}
+                  inputStyle={styles.textInput}
+                /> */}
                 <OTPInputView
-                  style={{height: 100}}
-                  pinCount={4}
+                  style={{height: 80}}
+                  pinCount={6}
                   // code={otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
                   // onCodeChanged={code => {
                   //   consoleLog('OTP', otp);
@@ -184,7 +147,19 @@ const Index = ({route, navigation}: any) => {
                 />
               </Wrap>
 
-              <Wrap>
+              <Wrap
+                autoMargin={false}
+                style={[styles.inputWrapper, {marginTop: 10}]}>
+                <Button
+                  title="Verify"
+                  onPress={() => {
+                    onOtpPress();
+                  }}
+                  // disable={true}
+                />
+              </Wrap>
+
+              <Wrap autoMargin={false}>
                 <Row
                   autoMargin={false}
                   style={{
@@ -193,38 +168,41 @@ const Index = ({route, navigation}: any) => {
                   <Typography
                     size={16}
                     text="I didn't receive the code, "
-                    color={Theme.colors.white}
+                    color={Theme.colors.black}
                   />
 
                   <Typography
                     size={16}
                     text="Resend"
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontBold}
-                    style={{textDecorationLine: 'underline'}}
+                    style={{
+                      textAlign: 'center',
+                      textDecorationLine: 'underline',
+                    }}
+                    color={Theme.colors.primaryColor}
+                    ff={Theme.fonts.ThemeFontMedium}
                     onPress={() => {
                       onResendOtpPress();
                     }}
                   />
                 </Row>
               </Wrap>
-            </Wrap>
 
-            <Wrap
-              autoMargin={false}
-              style={[styles.inputWrapper, {justifyContent: 'flex-end'}]}>
-              <Button
-                title="Submit"
-                onPress={() => {
-                  onOtpPress();
-                }}
-                style={{marginTop: 10}}
-                textStyle={{
-                  fontSize: 18,
-                  fontFamily: Theme.fonts.ThemeFontBold,
-                }}
-              />
+              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
+                <Typography
+                  size={13}
+                  text={'Back to login'}
+                  style={{textAlign: 'center', textDecorationLine: 'underline'}}
+                  color={Theme.colors.primaryColor}
+                  ff={Theme.fonts.ThemeFontMedium}
+                  onPress={() => {
+                    NavigationService.pop(2);
+                  }}
+                />
+              </Wrap>
             </Wrap>
+          </Wrap>
+          <Wrap autoMargin={false} style={styles.section2}>
+            <Copyright />
           </Wrap>
         </Wrap>
       </Wrap>

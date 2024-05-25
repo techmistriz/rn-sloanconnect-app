@@ -14,14 +14,20 @@ import {
   isValidEmail,
 } from 'src/utils/Helpers/HelperFunction';
 import NavigationService from 'src/services/NavigationService/NavigationService';
+import {createNameValueArray, isObjectEmpty} from 'src/utils/Helpers/array';
 
 function* __otpRequestSaga({payload, options}: any) {
   //consoleLog('__otpRequestSaga payload saga==>', payload);
   try {
     //@ts-ignore
-    const response = yield Network('send-otp', 'POST', payload, null);
+    const response = yield Network(
+      'auth/activation-email',
+      'POST',
+      payload,
+      null,
+    );
     // console.log('__otpRequestSaga response saga==>', response);
-    if (response.status) {
+    if (!isObjectEmpty(response)) {
       yield put(otpSuccessAction({}));
       showToastMessage(response?.message, 'success');
     } else {

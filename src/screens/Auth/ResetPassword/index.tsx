@@ -1,72 +1,98 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  Alert,
-  Platform,
-  Keyboard,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, Keyboard} from 'react-native';
 import {Images} from 'src/assets';
 import {Button} from 'src/components/Button';
-import Input from 'src/components/Input';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
 import {Wrap, Row} from 'src/components/Common';
-import TouchableItem from 'src/components/TouchableItem';
 import {styles} from './styles';
 import {
-  showToastMessage,
   consoleLog,
-  isValidPassword,
   showSimpleAlert,
   isValidEmail,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {constants} from 'src/common';
-import {resetPasswordRequestAction} from 'src/redux/actions';
+import {otpRequestAction, verifyOtpRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import VectorIcon from 'src/components/VectorIcon';
-import Network from 'src/network/Network';
+import NavigationService from 'src/services/NavigationService/NavigationService';
+import Copyright from 'src/components/@ProjectComponent/Copyright';
+import Input from 'src/components/Input';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 
-/**Reset Password Screen Component */
 const Index = ({route, navigation}: any) => {
+  const {email, hash, referrer} = route?.params;
   const dispatch = useDispatch();
-  const {type, email, otp} = route?.params;
-  const {loading} = useSelector(
+  const {loading} = useSelector((state: any) => state?.AuthReducer);
+  const __resetPasswordReducer = useSelector(
     (state: any) => state?.ForgotResetPasswordReducer,
   );
+  const __otpReducer = useSelector((state: any) => state?.OtpReducer);
+  const [otp, setOtp] = useState('');
+  const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
+  const [passwordConfirmation, setPasswordConfirmation] = useState(
+    __DEV__ ? 'Maurya@2019' : '',
+  );
 
-  // const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState('');
-  const [cpassword, setCpassword] = useState('');
+  useEffect(() => {
+    consoleLog('AuthReducer ResetPassword Screen==>', {
+      loading,
+      hash,
+      referrer,
+    });
+    // consoleLog('ResetPasswordReducer OTP Screen==>', {__resetPasswordReducer});
+  }, []);
 
-  /**component hooks method */
-  useEffect(() => {}, []);
-
-  /**action for reset password */
   const onResetPasswordPress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
       const payload = {
-        email: email.trim(),
+        email: email,
         otp: otp,
-        password: password.trim(),
+        token: hash,
+        password: password,
+        password_confirmation: passwordConfirmation,
+        source: 'sloan',
+        verify_method: 'otp',
       };
-      const options = {
-        type: type,
-        referrer: 'ResetPasswordScreen',
-      };
+      dispatch(verifyOtpRequestAction(payload));
+    }
+  };
 
-      dispatch(resetPasswordRequestAction(payload, options));
+  const onResendOtpPress = () => {
+    Keyboard.dismiss();
+    const checkValid = checkValidationForResendOtp();
+    if (checkValid) {
+      const payload = {email: email, source: 'sloan', verify_method: 'otp'};
+      dispatch(otpRequestAction(payload));
     }
   };
 
   /**validation checking for email and password */
   const checkValidation = () => {
+    if (otp.length == 0) {
+      showSimpleAlert('Please enter your OTP');
+      return false;
+    } else if (password.trim() == '') {
+      showSimpleAlert('Please enter your password');
+      return false;
+    } else if (password.trim().length < 6) {
+      showSimpleAlert('Password must contain at least minimum 6 characters');
+      return false;
+    } else if (passwordConfirmation.trim() == '') {
+      showSimpleAlert('Please enter your confirm password');
+      return false;
+    } else if (password.trim() !== passwordConfirmation.trim()) {
+      showSimpleAlert('Password and confirm password should same');
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  /**validation checking for email */
+  const checkValidationForResendOtp = () => {
     const checkEmail = isValidEmail(email);
     if (email.trim() === '') {
       showSimpleAlert('Please enter your email address');
@@ -74,122 +100,131 @@ const Index = ({route, navigation}: any) => {
     } else if (!checkEmail) {
       showSimpleAlert('Please enter valid email address');
       return false;
-    } else if (password.trim() == '') {
-      showSimpleAlert('Please enter your password');
-      return false;
-    } else if (password.trim().length < 10) {
-      showSimpleAlert('Password must contain at least 10 characters.');
-      return false;
-    } else if (!isValidPassword(password)) {
-      showSimpleAlert(
-        'Password should contain atleast 2 numbers, 1 special character',
-      );
-      return false;
-    } else if (password != cpassword) {
-      showSimpleAlert('Confirm password should be same as password');
-      return false;
     } else {
       return true;
     }
   };
 
-  /**component render method */
   return (
-    <AppContainer scroll={true} loading={loading} scrollViewStyle={{}}>
+    <AppContainer
+      scroll={true}
+      loading={loading}
+      scrollViewStyle={{}}
+      hasHeader={false}>
       <Wrap autoMargin={false} style={styles.container}>
-        <Wrap autoMargin={false} style={styles.section2}>
-          <Wrap autoMargin={false} style={styles.imageContainer}>
-            <Image
-              source={getImgSource(Images?.appLogo)}
-              style={{height: 200}}
-              resizeMode="contain"
-            />
-          </Wrap>
-
-          <Typography
-            size={32}
-            text="Reset Password"
-            style={{
-              textAlign: 'center',
-              textShadowColor: 'rgba(0, 0, 0, 0.75)',
-              textShadowOffset: {width: 0, height: 3},
-              textShadowRadius: 10,
-            }}
-            color={Theme.colors.secondaryColor}
-            ff={Theme.fonts.ThemeFontMedium}
-          />
-
-          <Typography
-            size={18}
-            text={`Enter your new password  \n  to reset password`}
-            style={{textAlign: 'center'}}
-            color={Theme.colors.secondaryColor}
-          />
-
-          <Wrap autoMargin={false} style={styles.formWrapper}>
-            <Wrap autoMargin={false} style={styles.inputWrapper}>
-              <Input
-                onRef={input => {
-                  // @ts-ignore
-                  passwordTextInputRef = input;
-                }}
-                onChangeText={text => setPassword(text)}
-                onSubmitEditing={() => {
-                  // @ts-ignore
-                  cpasswordTextInputRef.focus();
-                }}
-                returnKeyType="next"
-                blurOnSubmit={false}
-                keyboardType="default"
-                placeholder="New Password"
-                secureTextEntry={true}
-                value={password}
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={styles.textInput}
-                placeholderTextColor={Theme.colors.inputPlaceholderColor}
+        <Wrap autoMargin={false} style={styles.sectionContainer}>
+          <Wrap autoMargin={false} style={styles.section1}>
+            <Wrap autoMargin={false} style={styles.imageContainer}>
+              <Image
+                source={getImgSource(Images?.appLogoWithText)}
+                style={{width: '50%', height: 80}}
+                resizeMode="contain"
               />
+            </Wrap>
+
+            <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
-                size={14}
-                text={`10 character minimum\n 2 numbers \n 1 special character`}
+                size={20}
+                text="Reset Password"
                 style={{
-                  textAlign: 'left',
+                  textAlign: 'center',
+                  marginBottom: 20,
                 }}
-                color={Theme.colors.secondaryColor}
+                color={Theme.colors.primaryColor}
+                ff={Theme.fonts.ThemeFontMedium}
               />
-            </Wrap>
 
-            <Wrap autoMargin={false} style={styles.inputWrapper}>
-              <Input
-                onRef={input => {
-                  // @ts-ignore
-                  cpasswordTextInputRef = input;
-                }}
-                onChangeText={text => setCpassword(text)}
-                onSubmitEditing={() => {
-                  onResetPasswordPress();
-                }}
-                returnKeyType="done"
-                blurOnSubmit={false}
-                keyboardType="default"
-                placeholder="Re-enter new password"
-                secureTextEntry={true}
-                value={cpassword}
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={styles.textInput}
-                placeholderTextColor={Theme.colors.inputPlaceholderColor}
-              />
-            </Wrap>
+              <Wrap autoMargin={false} style={styles.inputWrapper}>
+                <OTPInputView
+                  style={{height: 60}}
+                  pinCount={6}
+                  // code={otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+                  // onCodeChanged={code => {
+                  //   consoleLog('OTP', otp);
+                  // }}
+                  // autoFocusOnLoad
+                  codeInputFieldStyle={styles.otpInput}
+                  codeInputHighlightStyle={styles.styleHighLighted}
+                  onCodeFilled={code => {
+                    setOtp(code);
+                    // @ts-ignore
+                    passwordTextInputRef?.focus();
+                    // consoleLog(`Code is ${code}, you are good to go!`);
+                  }}
+                />
+              </Wrap>
 
-            <Wrap
-              autoMargin={false}
-              style={[styles.inputWrapper, {marginTop: 10}]}>
-              <Button
-                title="Reset Password"
-                onPress={() => {
-                  onResetPasswordPress();
-                }}
-              />
+              <Wrap autoMargin={false} style={styles.inputWrapper}>
+                <Input
+                  onRef={input => {
+                    // @ts-ignore
+                    passwordTextInputRef = input;
+                  }}
+                  onChangeText={text => setPassword(text)}
+                  onSubmitEditing={() => {
+                    // @ts-ignore
+                    passwordConfirmationTextInputRef.focus();
+                  }}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  keyboardType="default"
+                  placeholder="Password"
+                  value={password}
+                  inputContainerStyle={styles.inputContainer}
+                  inputStyle={styles.textInput}
+                  secureTextEntry={true}
+                />
+              </Wrap>
+
+              <Wrap autoMargin={false} style={styles.inputWrapper}>
+                <Input
+                  onRef={input => {
+                    // @ts-ignore
+                    passwordConfirmationTextInputRef = input;
+                  }}
+                  onChangeText={text => setPasswordConfirmation(text)}
+                  onSubmitEditing={() => {
+                    // @ts-ignore
+                    countryTextInputRef.focus();
+                  }}
+                  returnKeyType="done"
+                  blurOnSubmit={false}
+                  keyboardType="default"
+                  placeholder="Confirm Password"
+                  value={passwordConfirmation}
+                  inputContainerStyle={styles.inputContainer}
+                  inputStyle={styles.textInput}
+                  secureTextEntry={true}
+                />
+              </Wrap>
+
+              <Wrap
+                autoMargin={false}
+                style={[styles.inputWrapper, {marginTop: 10}]}>
+                <Button
+                  title="Reset Password"
+                  onPress={() => {
+                    onResetPasswordPress();
+                  }}
+                />
+              </Wrap>
+
+              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
+                <Typography
+                  size={13}
+                  text={'Back to login'}
+                  style={{textAlign: 'center', textDecorationLine: 'underline'}}
+                  color={Theme.colors.primaryColor}
+                  ff={Theme.fonts.ThemeFontMedium}
+                  onPress={() => {
+                    NavigationService.pop(2);
+                  }}
+                />
+              </Wrap>
             </Wrap>
+          </Wrap>
+          <Wrap autoMargin={false} style={styles.section2}>
+            <Copyright />
           </Wrap>
         </Wrap>
       </Wrap>

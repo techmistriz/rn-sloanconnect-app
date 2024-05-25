@@ -1,11 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Image,
-  Text,
-  Alert,
-  Platform,
   Keyboard,
 } from 'react-native';
 import {Images} from 'src/assets';
@@ -14,24 +9,18 @@ import Input from 'src/components/Input';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
-import {Wrap, Row} from 'src/components/Common';
-import TouchableItem from 'src/components/TouchableItem';
+import {Wrap} from 'src/components/Common';
 import {styles} from './styles';
 import {
-  showToastMessage,
   consoleLog,
   showSimpleAlert,
   isValidEmail,
-  showConfirmAlert,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {constants} from 'src/common';
 import {
   loginRequestAction,
-  boimetricLoginRequestAction,
 } from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
@@ -44,7 +33,6 @@ const Index = ({route, navigation}: any) => {
 
   const [email, setEmail] = useState(__DEV__ ? 'deepakmaurya@hotmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
-  const [isSensorAvailable, setIsSensorAvailable] = useState(false);
 
   useEffect(() => {
     consoleLog('AuthReducer Login Screen==>', {loading, settings});
@@ -184,7 +172,7 @@ const Index = ({route, navigation}: any) => {
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}
                   onPress={() => {
-                    // navigation.navigate('ForgotPassword');
+                    navigation.navigate('ForgotPassword');
                   }}
                 />
               </Wrap>

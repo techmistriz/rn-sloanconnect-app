@@ -10,6 +10,9 @@ import SplashScreen from 'src/screens/SplashScreen';
 import Welcome from 'src/screens/Welcome';
 import Login from 'src/screens/Auth/Login';
 import Register from 'src/screens/Auth/Register';
+import ForgotPassword from 'src/screens/Auth/ForgotPassword';
+import ResetPassword from 'src/screens/Auth/ResetPassword';
+import Otp from 'src/screens/Auth/Otp';
 import Profile from 'src/screens/Profile';
 import Notification from 'src/screens/Notification';
 import Settings from 'src/screens/Settings';
@@ -78,6 +81,30 @@ const MainNavigator = () => {
         <Stack.Screen
           name="Register"
           component={Register}
+          options={{
+            headerShown: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPassword}
+          options={{
+            headerShown: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPassword}
+          options={{
+            headerShown: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="Otp"
+          component={Otp}
           options={{
             headerShown: false,
             title: '',

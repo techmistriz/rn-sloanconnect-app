@@ -1,8 +1,7 @@
-import {call, put, takeLatest} from 'redux-saga/effects';
+import {put, takeLatest} from 'redux-saga/effects';
 import Network from 'src/network/Network';
 import {forgotPasswordActionTypes} from 'src/redux/types';
 import {
-  forgotPasswordRequestAction,
   forgotPasswordFailureAction,
   forgotPasswordSuccessAction,
 } from 'src/redux/actions';
@@ -10,24 +9,23 @@ import {
 import {
   showToastMessage,
   consoleLog,
-  showSimpleAlert,
-  isValidEmail,
 } from 'src/utils/Helpers/HelperFunction';
 import NavigationService from 'src/services/NavigationService/NavigationService';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 
 function* __forgotPasswordRequestSaga({payload, options}: any) {
-  //consoleLog('__forgotPasswordRequestSaga payload saga==>', payload);
+  // consoleLog('__forgotPasswordRequestSaga payload saga==>', payload);
   try {
     //@ts-ignore
-    const response = yield Network('forgot-password', 'POST', payload);
+    const response = yield Network('auth/forgot-password', 'POST', payload);
     console.log('__forgotPasswordRequestSaga response saga==>', response);
-    if (response.status) {
+    if (!isObjectEmpty(response)) {
       yield put(forgotPasswordSuccessAction({user: null}));
       showToastMessage(response?.message, 'success');
-      NavigationService.navigate('Otp', {
+      NavigationService.navigate('ResetPassword', {
         ...payload,
         referrer: options?.referrer,
-        type: response?.data?.type,
+        hash: response?.hash,
       });
     } else {
       yield put(forgotPasswordFailureAction({}));

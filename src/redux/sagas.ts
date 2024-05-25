@@ -18,3 +18,5 @@ function* rootSaga() {
     settingsRequestSaga(),
   ]);
 }
+
+export default rootSaga;
