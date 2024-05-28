@@ -1,15 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  Keyboard,
-} from 'react-native';
+import {Image, Keyboard} from 'react-native';
 import {Images} from 'src/assets';
 import {Button} from 'src/components/Button';
-import Input from 'src/components/Input';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
-import {Wrap} from 'src/components/Common';
+import {Wrap, Row} from 'src/components/Common';
 import {styles} from './styles';
 import {
   consoleLog,
@@ -17,69 +13,68 @@ import {
   isValidEmail,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {
-  loginRequestAction,
-} from 'src/redux/actions';
+import {otpRequestAction, verifyOtpRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
+import Input from 'src/components/Input';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 const Index = ({route, navigation}: any) => {
+  const {email, hash} = route?.params;
   const dispatch = useDispatch();
-  const {referrer} = route?.params || {referrer: undefined};
   const {loading} = useSelector((state: any) => state?.AuthReducer);
-  const {settings} = useSelector((state: any) => state?.SettingsReducer);
-
-  const [email, setEmail] = useState(__DEV__ ? 'deepakmaurya@hotmail.com' : '');
+  const __resetPasswordReducer = useSelector(
+    (state: any) => state?.ForgotResetPasswordReducer,
+  );
+  const __otpReducer = useSelector((state: any) => state?.OtpReducer);
+  const [otp, setOtp] = useState('');
   const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
-
-  // const [email, setEmail] = useState(__DEV__ ? 'abc3@gmail.com' : '');
-  // const [password, setPassword] = useState(__DEV__ ? '123456' : '');
+  const [passwordConfirmation, setPasswordConfirmation] = useState(
+    __DEV__ ? 'Maurya@2019' : '',
+  );
 
   useEffect(() => {
-    consoleLog('AuthReducer Login Screen==>', {loading, settings});
-    checkIfComeFromUnauthenticated();
+    consoleLog('AuthReducer ResetPassword Screen==>', {
+      email,
+      hash,
+    });
+    // consoleLog('ResetPasswordReducer OTP Screen==>', {__resetPasswordReducer});
   }, []);
 
-  const checkIfComeFromUnauthenticated = () => {
-    if (referrer === 'Unauthenticated') {
-      dispatch(loginResetDataAction());
-      dispatch(settingsResetDataAction());
-      NavigationService.resetAllAction('Login');
-    }
-  };
-
-  const onLoginPress = () => {
+  const onResetPasswordPress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
       const payload = {
-        email: email.trim(),
-        password: password.trim(),
+        email: email,
+        otp: otp,
+        token: hash,
+        password: password,
+        password_confirmation: passwordConfirmation,
+        source: 'sloan',
+        verify_method: 'otp',
       };
-
-      const options = {
-        referrer: 'Login',
-      };
-      dispatch(loginRequestAction(payload, options));
+      dispatch(verifyOtpRequestAction(payload));
     }
   };
 
   /**validation checking for email and password */
   const checkValidation = () => {
-    const checkEmail = isValidEmail(email);
-    if (email.trim() === '') {
-      showSimpleAlert('Please enter your email address');
-      return false;
-    } else if (!checkEmail) {
-      showSimpleAlert('Please enter valid email address');
+    if (otp.length == 0) {
+      showSimpleAlert('Please enter your OTP');
       return false;
     } else if (password.trim() == '') {
       showSimpleAlert('Please enter your password');
       return false;
     } else if (password.trim().length < 6) {
-      showSimpleAlert('Password must contain at least minimum 6 characters.');
+      showSimpleAlert('Password must contain at least minimum 6 characters');
+      return false;
+    } else if (passwordConfirmation.trim() == '') {
+      showSimpleAlert('Please enter your confirm password');
+      return false;
+    } else if (password.trim() !== passwordConfirmation.trim()) {
+      showSimpleAlert('Password and confirm password should same');
       return false;
     } else {
       return true;
@@ -101,25 +96,12 @@ const Index = ({route, navigation}: any) => {
                 style={{width: '50%', height: 80}}
                 resizeMode="contain"
               />
-              
-              {/* <Image
-                source={getImgSource(Images?.appLogo)}
-                style={{width: '60%'}}
-                resizeMode="contain"
-              />
-              <Typography
-                size={14}
-                text="Water Connect Us"
-                style={{textAlign: 'left', marginTop: -10}}
-                color={Theme.colors.primaryColor}
-                ff={Theme.fonts.ThemeFontRegular}
-              /> */}
             </Wrap>
 
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Login"
+                text="Reset Password"
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -127,24 +109,24 @@ const Index = ({route, navigation}: any) => {
                 color={Theme.colors.primaryColor}
                 ff={Theme.fonts.ThemeFontMedium}
               />
+
               <Wrap autoMargin={false} style={styles.inputWrapper}>
-                <Input
-                  onRef={input => {
+                <OTPInputView
+                  style={{height: 60}}
+                  pinCount={6}
+                  // code={otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+                  // onCodeChanged={code => {
+                  //   consoleLog('OTP', otp);
+                  // }}
+                  // autoFocusOnLoad
+                  codeInputFieldStyle={styles.otpInput}
+                  codeInputHighlightStyle={styles.styleHighLighted}
+                  onCodeFilled={code => {
+                    setOtp(code);
                     // @ts-ignore
-                    emailTextInputRef = input;
+                    passwordTextInputRef?.focus();
+                    // consoleLog(`Code is ${code}, you are good to go!`);
                   }}
-                  onChangeText={text => setEmail(text)}
-                  onSubmitEditing={() => {
-                    // @ts-ignore
-                    passwordTextInputRef.focus();
-                  }}
-                  returnKeyType="next"
-                  blurOnSubmit={false}
-                  keyboardType="email-address"
-                  placeholder="Email Address"
-                  value={email}
-                  inputContainerStyle={styles.inputContainer}
-                  inputStyle={styles.textInput}
                 />
               </Wrap>
 
@@ -156,27 +138,39 @@ const Index = ({route, navigation}: any) => {
                   }}
                   onChangeText={text => setPassword(text)}
                   onSubmitEditing={() => {
-                    // onLoginPress();
+                    // @ts-ignore
+                    passwordConfirmationTextInputRef.focus();
                   }}
-                  returnKeyType="done"
+                  returnKeyType="next"
                   blurOnSubmit={false}
                   keyboardType="default"
                   placeholder="Password"
                   value={password}
                   inputContainerStyle={styles.inputContainer}
                   inputStyle={styles.textInput}
-                  placeholderTextColor={Theme.colors.inputPlaceholderColor}
                   secureTextEntry={true}
                 />
-                <Typography
-                  size={12}
-                  text={'Forgot your password?'}
-                  style={{textAlign: 'right', textDecorationLine: 'underline'}}
-                  color={Theme.colors.primaryColor}
-                  ff={Theme.fonts.ThemeFontMedium}
-                  onPress={() => {
-                    navigation.navigate('ForgotPassword');
+              </Wrap>
+
+              <Wrap autoMargin={false} style={styles.inputWrapper}>
+                <Input
+                  onRef={input => {
+                    // @ts-ignore
+                    passwordConfirmationTextInputRef = input;
                   }}
+                  onChangeText={text => setPasswordConfirmation(text)}
+                  onSubmitEditing={() => {
+                    // @ts-ignore
+                    countryTextInputRef.focus();
+                  }}
+                  returnKeyType="done"
+                  blurOnSubmit={false}
+                  keyboardType="default"
+                  placeholder="Confirm Password"
+                  value={passwordConfirmation}
+                  inputContainerStyle={styles.inputContainer}
+                  inputStyle={styles.textInput}
+                  secureTextEntry={true}
                 />
               </Wrap>
 
@@ -184,31 +178,9 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="LOGIN"
+                  title="Reset Password"
                   onPress={() => {
-                    onLoginPress();
-                  }}
-                  // disable={true}
-                />
-              </Wrap>
-
-              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
-                <Typography
-                  size={12}
-                  text={`Don't have an account?`}
-                  style={{textAlign: 'center'}}
-                  color={Theme.colors.darkGray}
-                  ff={Theme.fonts.ThemeFontRegular}
-                />
-
-                <Typography
-                  size={13}
-                  text={'Register Here'}
-                  style={{textAlign: 'center', textDecorationLine: 'underline'}}
-                  color={Theme.colors.primaryColor}
-                  ff={Theme.fonts.ThemeFontMedium}
-                  onPress={() => {
-                    NavigationService.navigate('Register');
+                    onResetPasswordPress();
                   }}
                 />
               </Wrap>
@@ -216,16 +188,15 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                 <Typography
                   size={13}
-                  text={'Verify Email'}
+                  text={'Back to login'}
                   style={{textAlign: 'center', textDecorationLine: 'underline'}}
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}
                   onPress={() => {
-                    NavigationService.navigate('VerifyEmail');
+                    NavigationService.pop(2);
                   }}
                 />
               </Wrap>
-
             </Wrap>
           </Wrap>
           <Wrap autoMargin={false} style={styles.section2}>

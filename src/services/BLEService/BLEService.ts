@@ -897,7 +897,7 @@ class BLEServiceInstance {
       message: 'Error',
       description: error,
     });
-    console.error(error);
+    // console.error(error);
   };
 
   /**

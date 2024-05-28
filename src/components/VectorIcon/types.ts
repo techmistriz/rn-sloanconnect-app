@@ -13,7 +13,8 @@ export type VectorIconProps = {
     | 'MaterialCommunityIcons'
     | 'MaterialIcons'
     | 'FontAwesome5'
-    | 'FontAwesome6';
+    | 'FontAwesome6'
+    | 'SimpleLineIcons';
   onPress?: () => void;
   containerStyle?: ViewStyle | ViewStyle[] | {};
   style?: ViewStyle | ViewStyle[];

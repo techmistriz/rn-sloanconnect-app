@@ -18,6 +18,7 @@ type HeaderProps = {
   hasLogOutButton?: boolean;
   hasBackButton?: boolean;
   hasDeviceSearchButton?: boolean;
+  hasProfileButton?: boolean;
   title?: string;
   headerContainerStyle?: ViewStyle;
   headerLeftStyle?: ViewStyle;
@@ -30,6 +31,7 @@ const Header = ({
   hasBackButton = true,
   hasLogOutButton = false,
   hasDeviceSearchButton = false,
+  hasProfileButton = false,
   title = '',
   headerContainerStyle,
   headerLeftStyle,
@@ -128,7 +130,7 @@ const Header = ({
       <Wrap
         autoMargin={false}
         style={[styles.__headerRightStyle, {...headerRightStyle}]}>
-        {hasDeviceSearchButton ? (
+        {hasDeviceSearchButton && (
           <TouchableItem borderless={true} onPress={() => {}}>
             <>
               <Image
@@ -139,7 +141,28 @@ const Header = ({
               />
             </>
           </TouchableItem>
-        ) : null}
+        )}
+        {hasProfileButton && (
+          <TouchableItem
+            borderless={true}
+            onPress={() => {
+              NavigationService.navigate('Profile');
+            }}>
+            {/* Placeholder */}
+            <VectorIcon
+              iconPack="SimpleLineIcons"
+              name={'user'}
+              size={22}
+              color={Theme.colors.white}
+              onPress={() => {}}
+              style={
+                {
+                  // display: 'none',
+                }
+              }
+            />
+          </TouchableItem>
+        )}
       </Wrap>
 
       <AlertBox

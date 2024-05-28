@@ -6,6 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -97,6 +98,9 @@ const GetIconPack = ({iconPack, ...rest}: any) => {
   }
   if (iconPack === 'FontAwesome6') {
     return <FontAwesome6 {...rest} />;
+  }
+  if (iconPack === 'SimpleLineIcons') {
+    return <SimpleLineIcons {...rest} />;
   }
 
   return <Feather {...rest} />;

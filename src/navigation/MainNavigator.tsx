@@ -15,6 +15,9 @@ import ResetPassword from 'src/screens/Auth/ResetPassword';
 import Otp from 'src/screens/Auth/Otp';
 import VerifyEmail from 'src/screens/Auth/VerifyEmail';
 import Settings from 'src/screens/Settings';
+import Profile from 'src/screens/Profile';
+import EditProfile from 'src/screens/Profile/EditProfile';
+import ChangePassword from 'src/screens/Profile/ChangePassword';
 
 //Cms
 import Help from 'src/screens/Cms/Help';
@@ -131,6 +134,30 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             title: 'Settings',
+          }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerShown: true,
+            title: 'Profile',
+          }}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{
+            headerShown: true,
+            title: 'Edit Profile',
+          }}
+        />
+        <Stack.Screen
+          name="ChangePassword"
+          component={ChangePassword}
+          options={{
+            headerShown: true,
+            title: 'Change Password',
           }}
         />
         <Stack.Screen

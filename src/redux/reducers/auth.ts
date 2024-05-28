@@ -1,4 +1,9 @@
-import {loginActionTypes, verifyOtpActionTypes} from 'src/redux/types';
+import {
+  loginActionTypes,
+  verifyOtpActionTypes,
+  userProfileActionTypes,
+  changePasswordActionTypes,
+} from 'src/redux/types';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 
 /**
@@ -77,6 +82,50 @@ const auth = (state = initialState, action: any) => {
         token: null,
         loading: false,
       };
+
+    case userProfileActionTypes.USER_PROFILE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case userProfileActionTypes.USER_PROFILE_SUCCESS:
+      return {
+        ...state,
+        user: action?.payload?.user,
+        loading: false,
+      };
+
+    case userProfileActionTypes.USER_PROFILE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    case userProfileActionTypes.USER_PROFILE_RESET_DATA:
+      return initialState;
+
+    case changePasswordActionTypes.CHANGE_PASSWORD_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case changePasswordActionTypes.CHANGE_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    case changePasswordActionTypes.CHANGE_PASSWORD_FAILURE:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    case changePasswordActionTypes.CHANGE_PASSWORD_RESET_DATA:
+      return initialState;
+
     default:
       return state || initialState;
   }

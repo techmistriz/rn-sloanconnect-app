@@ -13,16 +13,21 @@ function* __verifyEmailRequestSaga({payload, options}: any) {
   // consoleLog('__verifyEmailRequestSaga payload saga==>', payload);
   try {
     //@ts-ignore
-    const response = yield Network('auth/forgot-password', 'POST', payload);
+    const response = yield Network('auth/activation-email', 'POST', payload);
     console.log('__verifyEmailRequestSaga response saga==>', response);
     if (!isObjectEmpty(response)) {
-      yield put(verifyEmailSuccessAction({user: null}));
-      showToastMessage(response?.message, 'success');
-      NavigationService.navigate('Otp', {
-        ...payload,
-        hash: response?.hash,
-        referrer: options?.referrer,
-      });
+      yield put(verifyEmailSuccessAction({}));
+
+      if (response?.status) {
+        showToastMessage(response?.message, 'success');
+        NavigationService.navigate('Otp', {
+          ...payload,
+          hash: response?.hash,
+          referrer: options?.referrer,
+        });
+      } else {
+        showToastMessage(response?.message, 'danger');
+      }
     } else {
       yield put(verifyEmailFailureAction({}));
       showToastMessage(response?.message);

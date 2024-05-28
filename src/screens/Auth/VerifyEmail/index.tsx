@@ -21,13 +21,13 @@ import Copyright from 'src/components/@ProjectComponent/Copyright';
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const {loading} = useSelector(
-    (state: any) => state?.ForgotResetPasswordReducer,
+    (state: any) => state?.VerifyEmailReducer,
   );
-  const [email, setEmail] = useState(__DEV__ ? 'deepakmaurya@hotmail.com' : '');
+  const [email, setEmail] = useState(route?.params?.email ?? '');
 
   useEffect(() => {}, []);
 
-  const onVerifyEmailPress = () => {
+  const onVerifyEmailPress = () => {``
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {

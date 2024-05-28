@@ -6,6 +6,8 @@ import {
   signupActionTypes,
   forgotPasswordActionTypes,
   resetPasswordActionTypes,
+  userProfileActionTypes,
+  changePasswordActionTypes,
   settingsActionTypes,
   deviceSettingsActionTypes,
 } from 'src/redux/types';
@@ -78,6 +80,45 @@ export const verifyOtpFailureAction = (payload: any) => ({
 
 export const verifyOtpResetDataAction = () => ({
   type: verifyOtpActionTypes.VERIFY_OTP_RESET_DATA,
+});
+
+/** user profile module related actions */
+export const userProfileRequestAction = (payload: any, options: any) => ({
+  type: userProfileActionTypes.USER_PROFILE_REQUEST,
+  payload,
+  options,
+});
+
+export const userProfileSuccessAction = (payload: any) => ({
+  type: userProfileActionTypes.USER_PROFILE_SUCCESS,
+  payload,
+});
+
+export const userProfileFailureAction = (payload: any) => ({
+  type: userProfileActionTypes.USER_PROFILE_FAILURE,
+  payload,
+});
+
+export const userProfileResetDataAction = (payload: any) => ({
+  type: userProfileActionTypes.USER_PROFILE_RESET_DATA,
+  payload,
+});
+
+/** change password module related actions */
+export const changePasswordRequestAction = (payload: any, options?: any) => ({
+  type: changePasswordActionTypes.CHANGE_PASSWORD_REQUEST,
+  payload,
+  options,
+});
+
+export const changePasswordSuccessAction = (payload: any) => ({
+  type: changePasswordActionTypes.CHANGE_PASSWORD_SUCCESS,
+  payload,
+});
+
+export const changePasswordFailureAction = (payload: any) => ({
+  type: changePasswordActionTypes.CHANGE_PASSWORD_FAILURE,
+  payload,
 });
 
 /** verify otp module related actions */

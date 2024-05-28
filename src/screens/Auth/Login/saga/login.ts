@@ -20,13 +20,12 @@ function* __loginRequestSaga({payload, options}: any) {
   try {
     //@ts-ignore
     const response = yield Network('auth/login', 'POST', payload, null);
-    // console.log('__loginRequestSaga response saga==>', response);
+    console.log('__loginRequestSaga response saga==>', response);
     if (
       response?.token &&
       typeof response?.organizations[0] !== 'undefined' &&
       response?.organizations[0]
     ) {
-
       // consoleLog("loginSuccessAction", {
       //   data: response?.organizations[0],
       //   token: response?.token,
@@ -44,6 +43,12 @@ function* __loginRequestSaga({payload, options}: any) {
     } else {
       yield put(loginFailureAction({}));
       showToastMessage(response?.message);
+
+      if (response?.error === 'email_unverified') {
+        NavigationService.navigate('VerifyEmail', {
+          ...payload,
+        });
+      }
     }
   } catch (error: any) {
     console.log('__loginRequestSaga error saga==>', error);

@@ -72,6 +72,7 @@ const Network = (
                 resolve({
                   status: false,
                   message: error?.response?.data?.message,
+                  error: error?.response?.data?.error,
                   data: {},
                 });
               }
