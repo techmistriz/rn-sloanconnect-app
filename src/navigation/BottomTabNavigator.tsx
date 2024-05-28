@@ -217,7 +217,7 @@ const BottomTab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
-      initialRouteName="DeviceHelp"
+      initialRouteName="DeviceDashboardStack"
       backBehavior="initialRoute"
       tabBar={props => <CustomTabBar {...props} />}
       screenOptions={({route}) => ({

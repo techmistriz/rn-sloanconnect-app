@@ -1,30 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, FlatList, Image, Keyboard} from 'react-native';
 import {Wrap, Row} from 'src/components/Common';
 import Typography from 'src/components/Typography';
 import {
   showSimpleAlert,
   showConfirmAlert,
   consoleLog,
-  getImgSource,
-  assetsBaseUrl,
 } from 'src/utils/Helpers/HelperFunction';
 import TouchableItem from 'src/components/TouchableItem';
 import VectorIcon from 'src/components/VectorIcon';
-import {Images} from 'src/assets';
-import Theme, {hexToRGBA} from 'src/theme';
+import Theme from 'src/theme';
 import {styles} from './styles';
-import {constants} from 'src/common';
 import AppContainer from 'src/components/AppContainer';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
-import AlertBox from 'src/components/AlertBox';
-import {
-  userProfileRequestAction,
-  userProfileFailureAction,
-  userProfileSuccessAction,
-} from 'src/redux/actions';
+import {loginResetDataAction} from 'src/redux/actions';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
@@ -55,7 +44,6 @@ const Index = ({route, navigation}: any) => {
     const result = await showConfirmAlert('Are you sure?');
     if (result) {
       dispatch(loginResetDataAction());
-      // dispatch(settingsResetDataAction());
       NavigationService.resetAllAction('Login');
     }
   };
@@ -65,33 +53,52 @@ const Index = ({route, navigation}: any) => {
     <AppContainer scroll={true} loading={loading} scrollViewStyle={{}}>
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.profileContentContainer}>
-          <Wrap autoMargin={false} style={styles.imageContainer}>
-            {user && user?.user_image ? (
-              <Image
-                // @ts-ignore
-                source={getImgSource(`${assetsBaseUrl()}/${user?.user_image}`)}
-                style={styles.profileImage}
-                resizeMode="contain"
-              />
-            ) : (
-              <Image
-                // @ts-ignore
-                source={getImgSource(Images?.imgHolder)}
-                style={styles.profileImage}
-                resizeMode="contain"
-              />
-            )}
-          </Wrap>
-
           <Typography
+            text={`Name: `}
             style={styles.profileName}
+            color={Theme?.colors?.black}
+            size={16}
+            fw="700"
+          />
+          <Typography
             text={`${user?.name}`}
-            color={Theme?.colors?.white}
-            size={18}
+            style={styles.profileName}
+            color={Theme?.colors?.black}
+            size={16}
+          />
+        </Wrap>
+        <Wrap autoMargin={false} style={styles.profileContentContainer}>
+          <Typography
+            text={`Email: `}
+            style={styles.profileName}
+            color={Theme?.colors?.black}
+            size={16}
+            fw="700"
+          />
+          <Typography
+            text={`${user?.email ?? 'N/A'}`}
+            style={styles.profileName}
+            color={Theme?.colors?.black}
+            size={16}
+          />
+        </Wrap>
+        <Wrap autoMargin={false} style={styles.profileContentContainer}>
+          <Typography
+            text={`Timezone: `}
+            style={styles.profileName}
+            color={Theme?.colors?.black}
+            size={16}
+            fw="700"
+          />
+          <Typography
+            text={`${user?.account?.timezone_format ?? 'N/A'}`}
+            style={styles.profileName}
+            color={Theme?.colors?.black}
+            size={16}
           />
         </Wrap>
 
-        <Wrap autoMargin={false} style={[styles.profileItemContainer]}>
+        <Wrap autoMargin={true} style={[styles.profileItemContainer]}>
           <Wrap autoMargin={false} style={[styles.itemContainer]}>
             <TouchableItem
               onPress={() => {
@@ -104,13 +111,13 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
                   text="Edit Profile"
-                  color={Theme?.colors?.white}
-                  size={18}
+                  color={Theme?.colors?.black}
+                  size={16}
                 />
                 <VectorIcon
                   iconPack="Feather"
                   name={'chevron-right'}
-                  color={Theme.colors.white}
+                  color={Theme.colors.black}
                   size={20}
                 />
               </Wrap>
@@ -130,37 +137,13 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
                   text="Change Password"
-                  color={Theme?.colors?.white}
-                  size={18}
+                  color={Theme?.colors?.black}
+                  size={16}
                 />
                 <VectorIcon
                   iconPack="Feather"
                   name={'chevron-right'}
-                  color={Theme.colors.white}
-                  size={20}
-                />
-              </Wrap>
-            </TouchableItem>
-          </Wrap>
-
-          <Wrap autoMargin={false} style={[styles.itemContainer]}>
-            <TouchableItem
-              onPress={() => {
-                NavigationService.navigate('Settings', {
-                  referer: 'ProfileScreen',
-                });
-              }}
-              style={styles.item}>
-              <Wrap autoMargin={false} style={styles.itemRow}>
-                <Typography
-                  text="Settings"
-                  color={Theme?.colors?.white}
-                  size={18}
-                />
-                <VectorIcon
-                  iconPack="Feather"
-                  name={'chevron-right'}
-                  color={Theme.colors.white}
+                  color={Theme.colors.black}
                   size={20}
                 />
               </Wrap>
@@ -172,13 +155,13 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
                   text="Logout"
-                  color={Theme?.colors?.white}
-                  size={18}
+                  color={Theme?.colors?.black}
+                  size={16}
                 />
                 <VectorIcon
                   iconPack="Feather"
                   name={'chevron-right'}
-                  color={Theme.colors.white}
+                  color={Theme.colors.black}
                   size={20}
                 />
               </Wrap>

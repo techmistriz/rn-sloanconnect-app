@@ -142,6 +142,7 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             title: 'Profile',
+            header: () => <Header />,
           }}
         />
         <Stack.Screen
@@ -150,6 +151,7 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             title: 'Edit Profile',
+            header: () => <Header />,
           }}
         />
         <Stack.Screen
@@ -158,6 +160,7 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             title: 'Change Password',
+            header: () => <Header />,
           }}
         />
         <Stack.Screen
@@ -211,7 +214,6 @@ const MainNavigator = () => {
             header: () => <Header />,
           }}
         />
-
         <Stack.Screen
           name="DeviceDiagnosticTroubleshoot"
           component={DeviceDiagnosticTroubleshoot}

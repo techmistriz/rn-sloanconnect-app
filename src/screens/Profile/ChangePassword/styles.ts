@@ -10,11 +10,11 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   section1: {
-    flex: 1,
+    flex: 2,
     // justifyContent: 'flex-end',
     // borderWidth: 1,
     // borderColor: 'red',
-    paddingTop: 40,
+    // paddingTop: 40,
   },
   section2: {
     flex: 1,

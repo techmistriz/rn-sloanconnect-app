@@ -6,14 +6,8 @@ import {
   userProfileFailureAction,
   userProfileSuccessAction,
 } from 'src/redux/actions';
-import {
-  showToastMessage,
-  consoleLog,
-  getUserAPiPrefixByUserType,
-  showSimpleAlert,
-  isValidEmail,
-} from 'src/utils/HelperFunction';
-import NavigationService from 'src/utils/NavigationService';
+import {showToastMessage} from 'src/utils/Helpers/HelperFunction';
+import NavigationService from 'src/services/NavigationService/NavigationService';
 
 function* __userProfileRequestSaga({
   payload,
@@ -27,29 +21,15 @@ function* __userProfileRequestSaga({
 
   try {
     //@ts-ignore
-    const response = yield Network(
-      getUserAPiPrefixByUserType(options?.type) + 'profile/update',
-      'POST',
-      payload,
-      options?.token,
-    );
+    const response = yield Network('POST', payload, options?.token);
     // console.log('__userProfileRequestSaga response saga==>', response);
     if (response.status) {
-      if(options?.referrer !== 'Home'){
-        showToastMessage(response?.message, 'success');
-      }
       yield put(
         userProfileSuccessAction({
           user: response?.data?.user,
         }),
       );
-      if (options?.referrer == 'PushNotification') {
-      } else if (options?.referrer == 'SignupScreen') {
-        NavigationService.resetAllAction('DrawerNavigator');
-      } else if (options?.referrer == 'Home') {
-      } else {
-        NavigationService.goBack();
-      }
+      NavigationService.goBack();
     } else {
       yield put(userProfileFailureAction({}));
       showToastMessage(response?.message);

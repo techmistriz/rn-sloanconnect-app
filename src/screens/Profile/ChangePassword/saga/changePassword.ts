@@ -6,27 +6,15 @@ import {
   changePasswordFailureAction,
   changePasswordSuccessAction,
 } from 'src/redux/actions';
-
-import {
-  showToastMessage,
-  consoleLog,
-  getUserAPiPrefixByUserType,
-  showSimpleAlert,
-  isValidEmail,
-} from 'src/utils/HelperFunction';
-import NavigationService from 'src/utils/NavigationService';
+import {showToastMessage} from 'src/utils/Helpers/HelperFunction';
+import NavigationService from 'src/services/NavigationService/NavigationService';
 
 function* __changePasswordRequestSaga({payload, options}: any) {
   // console.log('__changePasswordRequestSaga payload saga==>', payload);
 
   try {
     //@ts-ignore
-    const response = yield Network(
-      getUserAPiPrefixByUserType(options?.type) + 'change-password',
-      'POST',
-      payload,
-      options?.token,
-    );
+    const response = yield Network('POST', payload, options?.token);
     console.log('__changePasswordRequestSaga response saga==>', response);
     if (response.status) {
       yield put(changePasswordSuccessAction({}));

@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     // borderColor: 'green',
   },
   section1: {
-    flex: 1, // enabled due to scroll view
+    flex: 2.5, // enabled due to scroll view
     // justifyContent: 'flex-end',
     // borderWidth: 1,
     // borderColor: 'red',

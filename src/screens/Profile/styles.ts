@@ -10,9 +10,10 @@ export const styles = StyleSheet.create({
     // borderColor: 'yellow',
   },
   profileContentContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#E9E9E9',
-    paddingVertical: 20,
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#E9E9E9',
+    paddingVertical: 10,
+    // justifyContent: 'flex-start',
   },
   imageContainer: {
     alignSelf: 'center',

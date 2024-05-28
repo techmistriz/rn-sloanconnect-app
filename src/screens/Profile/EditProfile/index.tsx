@@ -1,73 +1,54 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  Alert,
-  Platform,
-  Keyboard,
-  ScrollView,
-  DeviceEventEmitter,
-} from 'react-native';
-import {Images} from 'src/assets';
+import React, {useEffect, useState} from 'react';
+import {Keyboard, ScrollView} from 'react-native';
 import {Button} from 'src/components/Button';
 import Input from 'src/components/Input';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
-import {Wrap, Row} from 'src/components/Common';
-import TouchableItem from 'src/components/TouchableItem';
+import {Wrap} from 'src/components/Common';
 import {styles} from './styles';
 import {
   showToastMessage,
   consoleLog,
   showSimpleAlert,
   isValidEmail,
-  showConfirmAlert,
-  getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {createNameValueArray, isObjectEmpty} from 'src/utils/Helpers/array';
-import {constants} from 'src/common';
 import {
-  signupRequestAction,
-  boimetricLoginRequestAction,
-} from 'src/redux/actions';
+  createNameValueArray,
+  findIndexObject,
+  findObject,
+  isObjectEmpty,
+} from 'src/utils/Helpers/array';
+import {userProfileRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
-import NavigationService from 'src/services/NavigationService/NavigationService';
-import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
 import VectorIcon from 'src/components/VectorIcon';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
-import CheckBox from '@react-native-community/checkbox';
 import DropdownPicker from 'src/components/DropdownPicker';
 import Network from 'src/network/Network';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const {referrer} = route?.params || {referrer: undefined};
-  const {loading} = useSelector((state: any) => state?.SignupReducer);
-  const {settings} = useSelector((state: any) => state?.SettingsReducer);
-
-  const [firstName, setFirstName] = useState(__DEV__ ? 'Pradeep' : '');
-  const [lastName, setLastName] = useState(__DEV__ ? 'Kumar' : '');
-  const [title, setTitle] = useState(__DEV__ ? 'Mr' : '');
-  const [company, setCompany] = useState(__DEV__ ? 'ABC' : '');
-  const [phoneNumber, setPhoneNumber] = useState(__DEV__ ? '+1-91817161' : '');
-  const [email, setEmail] = useState(__DEV__ ? 'pk836746+5@gmail.com' : '');
-  const [password, setPassword] = useState(__DEV__ ? '123456' : '');
-  const [passwordConfirmation, setPasswordConfirmation] = useState(
-    __DEV__ ? '123456' : '',
+  const {user, loading, token} = useSelector(
+    (state: any) => state?.AuthReducer,
   );
+
+  const [firstName, setFirstName] = useState(user?.first_name ?? '');
+  const [lastName, setLastName] = useState(user?.last_name ?? '');
+  const [title, setTitle] = useState(user?.first_name ?? '');
+  const [company, setCompany] = useState(user?.last_name ?? '');
+  const [phoneNumber, setPhoneNumber] = useState(
+    user?.user_metadata?.phone_number ?? '',
+  );
+  const [email, setEmail] = useState(user?.email ?? '');
 
   const [industry, setIndustry] = useState<any>();
   const [country, setCountry] = useState<any>();
   const [state, setState] = useState<any>();
-  const [city, setCity] = useState<any>();
-  const [address, setAddress] = useState<any>();
-  const [zip, setZip] = useState<any>();
+  const [city, setCity] = useState<any>(user?.city ?? '');
+  const [address, setAddress] = useState<any>(user?.address_line_1 ?? '');
+  const [zip, setZip] = useState<any>(user?.zip ?? '');
   const [timezone, setTimezone] = useState<any>();
-  const [terms, setTerms] = useState<any>(false);
 
   const [industriesDropdownModal, setIndustriesDropdownModal] = useState(false);
   const [industriesMaster, setIndustriesMaster] = useState([]);
@@ -79,30 +60,73 @@ const Index = ({route, navigation}: any) => {
   const [statesMaster, setStatesMaster] = useState([]);
 
   /**
-   * Hooks method for TermsAccept Event
-   */
-  useEffect(() => {
-    DeviceEventEmitter.addListener('TermsAcceptEvent', eventData => {
-      if (eventData?.termsAccept) {
-        setTerms(true);
-      }
-    });
-    return () => {
-      DeviceEventEmitter.removeAllListeners('TermsAcceptEvent');
-    };
-  }, []);
-
-  /**
    * Hooks method for getting master data for registration
    */
   useEffect(() => {
-    getRegisterMasters();
+    getMasters();
   }, []);
 
   /**
    *
    */
-  const onRegisterPress = () => {
+  const getMasters = async () => {
+    try {
+      const response: any = await Network('auth/sloan-register-data', 'GET');
+      // consoleLog('getRegisterMasters response==>', response);
+
+      if (response && !isObjectEmpty(response)) {
+        if (response?.industries && response?.industries?.length) {
+          const __industriesMaster: any = createNameValueArray(
+            response?.industries,
+          );
+          // consoleLog('__industriesMaster==>', __industriesMaster);
+          setIndustriesMaster(__industriesMaster);
+          // const org_id = user?.account?.org_id;
+          // if (org_id) {
+          //   const org = findObject(org_id, __industriesMaster, {
+          //     searchKey: 'name',
+          //   });
+          //   consoleLog('getMasters org==>', org);
+          // }
+        }
+
+        if (response?.timezones && response?.timezones?.length) {
+          setTimezonesMaster(response?.timezones);
+
+          const timezone_id = user?.account?.timezone_id;
+          if (timezone_id) {
+            const timezonesObj = findObject(timezone_id, response?.timezones, {
+              searchKey: 'id',
+            });
+            __setTimezone(timezonesObj);
+          }
+        }
+
+        if (response?.countries && response?.countries?.length) {
+          setCountriesMaster(response?.countries);
+          // consoleLog('getMasters countries==>', response?.countries);
+
+          const country_id = user?.account?.country_id;
+          if (country_id) {
+            const countryObj = findObject(country_id, response?.countries, {
+              searchKey: 'id',
+            });
+            __setCountry(countryObj, true);
+          }
+        }
+      } else {
+      }
+    } catch (error) {
+      consoleLog('getRegisterMasters error==>', error);
+      showToastMessage('Something went wrong!');
+    } finally {
+    }
+  };
+
+  /**
+   *
+   */
+  const onUpdateProfilePress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
@@ -122,18 +146,15 @@ const Index = ({route, navigation}: any) => {
         first_name: firstName,
         last_name: lastName,
         email: email.trim(),
-        password: password.trim(),
-        password_confirmation: passwordConfirmation,
-        terms: terms ? 'yes' : 'no',
         source: 'sloan',
         timezone: timezone,
         user_metadata: user_metadata,
       };
 
       const options = {
-        referrer: 'RegisterScreen',
+        referrer: 'EditProfileScreen',
       };
-      dispatch(signupRequestAction(payload, options));
+      dispatch(userProfileRequestAction(payload, options));
     }
   };
 
@@ -154,56 +175,8 @@ const Index = ({route, navigation}: any) => {
     } else if (!checkEmail) {
       showSimpleAlert('Please enter valid email');
       return false;
-    } else if (password.trim() == '') {
-      showSimpleAlert('Please enter your password');
-      return false;
-    } else if (password.trim().length < 6) {
-      showSimpleAlert('Password must contain at least minimum 6 characters');
-      return false;
-    } else if (passwordConfirmation.trim() == '') {
-      showSimpleAlert('Please enter your confirm password');
-      return false;
-    } else if (password.trim() !== passwordConfirmation.trim()) {
-      showSimpleAlert('Password and confirm password should same');
-      return false;
-    } else if (!terms) {
-      showSimpleAlert('Please agree our terms and condition');
-      return false;
     } else {
       return true;
-    }
-  };
-
-  /**
-   *
-   */
-  const getRegisterMasters = async () => {
-    try {
-      const response: any = await Network('auth/sloan-register-data', 'GET');
-      // consoleLog('getRegisterMasters response==>', response);
-
-      if (response && !isObjectEmpty(response)) {
-        if (response?.industries && response?.industries?.length) {
-          const __industriesMaster: any = createNameValueArray(
-            response?.industries,
-          );
-          // consoleLog('__industriesMaster==>', __industriesMaster);
-          setIndustriesMaster(__industriesMaster);
-        }
-
-        if (response?.timezones && response?.timezones?.length) {
-          setTimezonesMaster(response?.timezones);
-        }
-
-        if (response?.countries && response?.countries?.length) {
-          setCountriesMaster(response?.countries);
-        }
-      } else {
-      }
-    } catch (error) {
-      consoleLog('getRegisterMasters error==>', error);
-      showToastMessage('Something went wrong!');
-    } finally {
     }
   };
 
@@ -218,12 +191,23 @@ const Index = ({route, navigation}: any) => {
   /**
    * action for set country code from selection
    */
-  const __setCountry = (item: any) => {
-    // console.log('item', item);
+  const __setCountry = (item: any, setExistingState = false) => {
     setCountry(item);
 
     if (Array.isArray(item?.states) && item?.states?.length) {
       setStatesMaster(item?.states);
+      if (setExistingState) {
+        const state_id = user?.account?.state_id;
+        if (state_id) {
+          const stateObj = findObject(state_id, item?.states, {
+            searchKey: 'id',
+          });
+
+          if (stateObj) {
+            setState(stateObj);
+          }
+        }
+      }
     } else {
       setStatesMaster([]);
     }
@@ -233,7 +217,6 @@ const Index = ({route, navigation}: any) => {
    * action for set country code from selection
    */
   const __setState = (item: any) => {
-    // console.log('item', item);
     setState(item);
   };
 
@@ -254,18 +237,10 @@ const Index = ({route, navigation}: any) => {
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
-            <Wrap autoMargin={false} style={styles.imageContainer}>
-              <Image
-                source={getImgSource(Images?.appLogoWithText)}
-                style={{width: '50%', height: 80}}
-                resizeMode="contain"
-              />
-            </Wrap>
-
-            <Wrap autoMargin={false} style={styles.formWrapper}>
+            <Wrap autoMargin={true} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Register"
+                text="Edit Profile"
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -422,7 +397,7 @@ const Index = ({route, navigation}: any) => {
                     onChangeText={text => setEmail(text)}
                     onSubmitEditing={() => {
                       // @ts-ignore
-                      passwordTextInputRef.focus();
+                      countryTextInputRef.focus();
                     }}
                     returnKeyType="next"
                     blurOnSubmit={false}
@@ -431,50 +406,6 @@ const Index = ({route, navigation}: any) => {
                     value={email}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
-                  />
-                </Wrap>
-
-                <Wrap autoMargin={false} style={styles.inputWrapper}>
-                  <Input
-                    onRef={input => {
-                      // @ts-ignore
-                      passwordTextInputRef = input;
-                    }}
-                    onChangeText={text => setPassword(text)}
-                    onSubmitEditing={() => {
-                      // @ts-ignore
-                      passwordConfirmationTextInputRef.focus();
-                    }}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
-                    keyboardType="default"
-                    placeholder="Password"
-                    value={password}
-                    inputContainerStyle={styles.inputContainer}
-                    inputStyle={styles.textInput}
-                    secureTextEntry={true}
-                  />
-                </Wrap>
-
-                <Wrap autoMargin={false} style={styles.inputWrapper}>
-                  <Input
-                    onRef={input => {
-                      // @ts-ignore
-                      passwordConfirmationTextInputRef = input;
-                    }}
-                    onChangeText={text => setPasswordConfirmation(text)}
-                    onSubmitEditing={() => {
-                      // @ts-ignore
-                      countryTextInputRef.focus();
-                    }}
-                    returnKeyType="done"
-                    blurOnSubmit={false}
-                    keyboardType="default"
-                    placeholder="Confirm Password"
-                    value={passwordConfirmation}
-                    inputContainerStyle={styles.inputContainer}
-                    inputStyle={styles.textInput}
-                    secureTextEntry={true}
                   />
                 </Wrap>
 
@@ -617,7 +548,7 @@ const Index = ({route, navigation}: any) => {
                     }}
                     onChangeText={text => setTimezone(text)}
                     onSubmitEditing={() => {
-                      // onRegisterPress();
+                      // onUpdateProfilePress();
                     }}
                     returnKeyType="next"
                     blurOnSubmit={false}
@@ -643,88 +574,13 @@ const Index = ({route, navigation}: any) => {
                 </Wrap>
               </ScrollView>
 
-              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
-                <Row
-                  autoMargin={false}
-                  style={{
-                    marginBottom: 10,
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <CheckBox
-                    style={{
-                      borderRadius: 20,
-                      marginTop: 3,
-                      height: 40,
-                      width: 40,
-                      transform: [{scaleX: 0.8}, {scaleY: 0.8}],
-                    }}
-                    disabled={false}
-                    value={terms}
-                    onValueChange={newValue => setTerms(newValue)}
-                    tintColors={{
-                      true: Theme.colors.primaryColor,
-                      false: Theme.colors.black,
-                    }}
-                  />
-                  <Typography
-                    size={12}
-                    text={'I have read and agree to these '}
-                    style={{
-                      textAlign: 'left',
-                    }}
-                    color={Theme.colors.black}
-                    ff={Theme.fonts.ThemeFontMedium}
-                    onPress={() => {
-                      setTerms(!terms);
-                    }}
-                  />
-                  <Typography
-                    size={12}
-                    text={'Terms'}
-                    style={{
-                      textAlign: 'left',
-                      textDecorationLine: 'underline',
-                    }}
-                    color={Theme.colors.primaryColor}
-                    ff={Theme.fonts.ThemeFontMedium}
-                    onPress={() => {
-                      NavigationService.navigate('Terms');
-                    }}
-                  />
-                </Row>
-              </Wrap>
-
               <Wrap
                 autoMargin={false}
-                style={[styles.inputWrapper, {marginTop: 0}]}>
+                style={[styles.inputWrapper, {marginTop: 20}]}>
                 <Button
-                  title="Next"
+                  title="Update"
                   onPress={() => {
-                    onRegisterPress();
-                  }}
-                />
-              </Wrap>
-
-              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
-                <Typography
-                  size={12}
-                  text={`Already have an account?`}
-                  style={{textAlign: 'center'}}
-                  color={Theme.colors.darkGray}
-                />
-
-                <Typography
-                  size={13}
-                  text={'Login Here'}
-                  style={{
-                    textAlign: 'center',
-                    textDecorationLine: 'underline',
-                  }}
-                  color={Theme.colors.primaryColor}
-                  ff={Theme.fonts.ThemeFontMedium}
-                  onPress={() => {
-                    NavigationService.goBack();
+                    onUpdateProfilePress();
                   }}
                 />
               </Wrap>

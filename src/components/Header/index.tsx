@@ -7,7 +7,7 @@ import {Icons, Images} from 'src/assets';
 import {Wrap, Row} from 'src/components/Common';
 import Typography from 'src/components/Typography';
 import TouchableItem from 'src/components/TouchableItem';
-import {getImgSource} from 'src/utils/Helpers/HelperFunction';
+import {getImgSource, showConfirmAlert} from 'src/utils/Helpers/HelperFunction';
 import {loginResetDataAction} from 'src/redux/actions';
 import {useDispatch} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
@@ -41,9 +41,13 @@ const Header = ({
   const dispatch = useDispatch();
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
 
+  /** action for logout */
   const onLogout = async () => {
-    dispatch(loginResetDataAction());
-    NavigationService.resetAllAction('Login');
+    const result = await showConfirmAlert('Are you sure?');
+    if (result) {
+      dispatch(loginResetDataAction());
+      NavigationService.resetAllAction('Login');
+    }
   };
 
   return (
@@ -148,18 +152,11 @@ const Header = ({
             onPress={() => {
               NavigationService.navigate('Profile');
             }}>
-            {/* Placeholder */}
             <VectorIcon
               iconPack="SimpleLineIcons"
               name={'user'}
               size={22}
               color={Theme.colors.white}
-              onPress={() => {}}
-              style={
-                {
-                  // display: 'none',
-                }
-              }
             />
           </TouchableItem>
         )}
