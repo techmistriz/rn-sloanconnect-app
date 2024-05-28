@@ -32,7 +32,9 @@ const DeviceSettingList = ({
           />
           <Typography
             size={14}
-            text={item?.value}
+            text={`${item?.prefix ? ' ' + item?.prefix : ''}${item?.value} ${
+              item?.postfix ?? ''
+            }`}
             style={{
               textAlign: 'left',
             }}

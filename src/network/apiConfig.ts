@@ -20,6 +20,7 @@ const errorCodes = {
 const apiHeaderData = {
   device_type: constants.isIOS ? 'iOS' : 'Android',
   app_system_version: DeviceInfo.getSystemVersion(),
+  app_install_time: DeviceInfo.getFirstInstallTimeSync(),
   app_version: DeviceInfo.getVersion(),
   app_build_number: DeviceInfo.getBuildNumber(),
   language: 'en',

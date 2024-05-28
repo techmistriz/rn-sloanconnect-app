@@ -105,6 +105,8 @@ const getStatisticsInformationDataGen1 = () => {
           if (typeof characteristic != 'undefined') {
             data.push({
               name: value?.name,
+              prefix: value?.prefix,
+              postfix: value?.postfix,
               uuid: value?.uuid,
               value: hexToDecimal(
                 base64EncodeDecode(characteristic?.value, 'decode'),

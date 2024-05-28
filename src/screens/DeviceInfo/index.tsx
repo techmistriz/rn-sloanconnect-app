@@ -16,6 +16,8 @@ import {TABS} from 'src/utils/StaticData/StaticData';
 import {getDeviceInfoNormal, getDeviceInfoAdvance} from './helperGen1';
 import moment from 'moment';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
+import {constants} from 'src/common';
+import apiConfigs from 'src/network/apiConfig';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -97,6 +99,7 @@ const Index = ({navigation, route}: any) => {
     try {
       setLoading(true);
       var deviceInfoAdvance = await getDeviceInfoAdvance();
+      var appInfo = await getAppInfo();
       var userData = await getUserData();
       // consoleLog('initializeAdvance deviceInfoAdvance==>', deviceInfoAdvance);
 
@@ -120,7 +123,7 @@ const Index = ({navigation, route}: any) => {
         consoleLog('initializeAdvance resultObj2==>', resultObj2);
 
         const resultObj3 = deviceInfoAdvance.findIndex((item: any) => {
-          return item?.name == 'D/T of last factory reset';
+          return item?.name == 'Date of last factory reset';
         });
 
         consoleLog('initializeAdvance resultObj3==>', resultObj3);
@@ -142,7 +145,7 @@ const Index = ({navigation, route}: any) => {
         }
       }
 
-      setDeviceDetails([...deviceInfoAdvance, ...userData]);
+      setDeviceDetails([...deviceInfoAdvance, ...appInfo, ...userData]);
     } catch (error) {
       //
     } finally {
@@ -360,12 +363,34 @@ const Index = ({navigation, route}: any) => {
         });
       }
 
+      var appInfo = await getAppInfo();
       var userData = await getUserData();
-      setDeviceDetails([...allData, ...userData]);
+      setDeviceDetails([...allData, ...appInfo, ...userData]);
     } catch (error) {
     } finally {
       setLoading(false);
     }
+  };
+
+  /** Function comments */
+  const getAppInfo = () => {
+    return new Promise<any>(async resolve => {
+      var data = [];
+      data.push({
+        name: 'App version and release date',
+        uuid: '6',
+        // value: `3.0.1 2022/11/22`,
+        value: `${constants.APP_VERSION} ${constants.RELEASE_DATE}`,
+      });
+      data.push({
+        name: 'App Installation Date',
+        uuid: '7',
+        value: apiConfigs?.app_install_time
+          ? moment(apiConfigs?.app_install_time).format('YYYY/MM/DD HH:MM')
+          : 'N/A',
+      });
+      resolve(data);
+    });
   };
 
   /** Function comments */
@@ -385,17 +410,17 @@ const Index = ({navigation, route}: any) => {
         });
         data.push({
           name: 'User Company',
-          uuid: '2',
+          uuid: '3',
           value: user?.parent_org_id ?? 'N/A',
         });
         data.push({
           name: 'User Title',
-          uuid: '2',
+          uuid: '4',
           value: user?.title ?? 'N/A',
         });
         data.push({
           name: 'User Email',
-          uuid: '2',
+          uuid: '5',
           value: user?.email ?? 'N/A',
         });
       }
