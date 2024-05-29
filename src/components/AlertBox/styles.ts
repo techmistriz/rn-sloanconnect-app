@@ -9,16 +9,22 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center',
     // borderWidth: 1,
+    // borderColor: 'red',
+    padding: 20,
   },
   main: {
+    // flex: 1,
     backgroundColor: Theme.colors.white,
-    marginHorizontal:
-      constants.screenWidth > constants.screenHeight
-        ? moderateScale(100)
-        : moderateScale(20),
+    // marginHorizontal:
+    //   constants.screenWidth > constants.screenHeight
+    //     ? moderateScale(100)
+    //     : moderateScale(20),
+    width: '100%',
     borderRadius: moderateScale(5),
     // borderWidth: 1,
+    // borderColor: 'red',
     padding: 20,
+    alignSelf: 'center',
   },
   titleView: {
     // borderWidth: 1,
@@ -43,20 +49,22 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginTop: 20,
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
   btnView: {
     flex: 1,
-    alignItems: 'center',
-    paddingVertical: moderateScale(10),
+    // paddingVertical: moderateScale(10),
+    // width: '50%',
   },
   btnText: {
     color: Theme.colors.black,
-    fontSize: moderateScale(14),
+    // fontSize: moderateScale(14),
     textTransform: 'uppercase',
   },
   btn: {
-    width: constants.screenWidth / 2 - 60,
-    marginHorizontal: 10,
+    // width: constants.screenWidth / 2 - 60,
+    // marginHorizontal: 10,
     shadowColor: Theme.colors.transparent,
     elevation: 4,
   },

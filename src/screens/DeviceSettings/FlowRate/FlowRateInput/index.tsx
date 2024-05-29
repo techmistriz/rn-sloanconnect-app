@@ -9,7 +9,6 @@ import NavigationService from 'src/services/NavigationService/NavigationService'
 import {styles} from './styles';
 import AppContainer from 'src/components/AppContainer';
 import Input from 'src/components/Input';
-import {useDispatch, useSelector} from 'react-redux';
 import VectorIcon from 'src/components/VectorIcon';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
@@ -103,10 +102,7 @@ const NUMBER_PAD = [
 ];
 
 const Index = ({navigation, route}: any) => {
-  const {user, token} = useSelector((state: any) => state?.AuthReducer);
-  const dispatch = useDispatch();
   const {title, subTitle, minValue, maxValue, flowRateType} = route?.params;
-
   const [flowRateInput, setFlowRateInput] = useState('');
 
   useEffect(() => {}, []);
@@ -163,7 +159,7 @@ const Index = ({navigation, route}: any) => {
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
-            <Wrap autoMargin={true} style={[styles.row, {marginTop: 40}]}>
+            <Wrap autoMargin={true} style={[styles.row]}>
               <Typography
                 size={12}
                 text={title}
@@ -216,8 +212,8 @@ const Index = ({navigation, route}: any) => {
                     autoMargin={false}
                     style={{
                       flex: 1,
-                      paddingHorizontal: 10,
-                      paddingVertical: 10,
+                      paddingHorizontal: 8,
+                      paddingVertical: 8,
                     }}>
                     <Button
                       type={'link'}
@@ -264,7 +260,7 @@ const Index = ({navigation, route}: any) => {
               contentContainerStyle={[{paddingBottom: 10}]}
             />
 
-            <Wrap autoMargin={false} style={{paddingTop: 20}}>
+            <Wrap autoMargin={false} style={{paddingTop: 10}}>
               <Button
                 type={'link'}
                 title="DONE"

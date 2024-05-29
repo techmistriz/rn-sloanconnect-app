@@ -90,7 +90,7 @@ const Index = ({navigation, route}: any) => {
                 <Row autoMargin={false} style={styles.row}>
                   <Col
                     autoMargin={false}
-                    style={[styles.col, {paddingRight: 5}]}>
+                    style={[styles.col]}>
                     <Button
                       type={'secondary'}
                       title="NO"
@@ -105,7 +105,7 @@ const Index = ({navigation, route}: any) => {
                   </Col>
                   <Col
                     autoMargin={false}
-                    style={[styles.col, {paddingLeft: 5}]}>
+                    style={[styles.col]}>
                     <Button
                       type={'secondary'}
                       title="YES"
