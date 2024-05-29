@@ -8,10 +8,14 @@ import {Wrap, Row} from 'src/components/Common';
 import Typography from 'src/components/Typography';
 import TouchableItem from 'src/components/TouchableItem';
 import {getImgSource, showConfirmAlert} from 'src/utils/Helpers/HelperFunction';
-import {loginResetDataAction} from 'src/redux/actions';
+import {
+  deviceSettingsResetDataAction,
+  loginResetDataAction,
+} from 'src/redux/actions';
 import {useDispatch} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import AlertBox from 'src/components/AlertBox';
+import {BLEService} from 'src/services/BLEService/BLEService';
 
 // Header Props
 type HeaderProps = {
@@ -43,11 +47,17 @@ const Header = ({
 
   /** action for logout */
   const onLogout = async () => {
-    const result = await showConfirmAlert('Are you sure?');
-    if (result) {
-      dispatch(loginResetDataAction());
-      NavigationService.resetAllAction('Login');
+    dispatch(loginResetDataAction());
+    await checkDevice();
+    NavigationService.resetAllAction('Login');
+  };
+
+  const checkDevice = async () => {
+    dispatch(deviceSettingsResetDataAction());
+    if (BLEService?.deviceGeneration == 'gen2') {
+      BLEService?.finishMonitor();
     }
+    BLEService?.disconnectDevice(false);
   };
 
   return (
@@ -56,6 +66,7 @@ const Header = ({
       style={[
         styles.__headerContainerStyle,
         {...headerContainerStyle},
+        // @ts-ignore
         headerBackgroundType == 'solid' && {
           backgroundColor: Theme.colors.gradientBg1,
         },

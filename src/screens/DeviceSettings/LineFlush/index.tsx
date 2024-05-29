@@ -137,7 +137,7 @@ const Index = ({navigation, route}: any) => {
         serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_SERVICE_UUID,
         characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
-        newValue: user?.contact ?? '0123456789',
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
         allowedInPreviousSettings: false,
       });
     }
@@ -169,7 +169,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID:
           BLE_CONSTANTS.GEN1.FLUSH_TIME_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
-        newValue: user?.contact ?? '0123456789',
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
         allowedInPreviousSettings: false,
       });
     }
@@ -202,7 +202,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID:
           BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
-        newValue: user?.contact ?? '0123456789',
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
         allowedInPreviousSettings: false,
       });
     }

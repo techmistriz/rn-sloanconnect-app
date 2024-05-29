@@ -14,20 +14,16 @@ function* __verifyEmailRequestSaga({payload, options}: any) {
   try {
     //@ts-ignore
     const response = yield Network('auth/activation-email', 'POST', payload);
-    console.log('__verifyEmailRequestSaga response saga==>', response);
+    console.log('__verifyEmailRequestSaga response saga==>', response?.hash);
     if (!isObjectEmpty(response)) {
       yield put(verifyEmailSuccessAction({}));
 
-      if (response?.status) {
-        showToastMessage(response?.message, 'success');
-        NavigationService.navigate('Otp', {
-          ...payload,
-          hash: response?.hash,
-          referrer: options?.referrer,
-        });
-      } else {
-        showToastMessage(response?.message, 'danger');
-      }
+      showToastMessage(response?.message, 'success');
+      NavigationService.navigate('Otp', {
+        ...payload,
+        hash: response?.hash,
+        referrer: options?.referrer,
+      });
     } else {
       yield put(verifyEmailFailureAction({}));
       showToastMessage(response?.message);

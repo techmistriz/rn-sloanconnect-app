@@ -138,4 +138,5 @@ const getHeaders = (payload: any, authToken: string | null | undefined) => ({
   app_version: apiConfigs.app_version,
   language: apiConfigs.language,
   Authorization: `Bearer ${authToken}`,
+  Organization: payload?.organization ?? '',
 });

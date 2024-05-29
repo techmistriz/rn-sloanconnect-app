@@ -9,11 +9,19 @@ export const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'yellow',
   },
+  profileContentContainerRow:{
+    justifyContent: 'space-evenly',
+    // borderRightWidth: 1,
+    // borderRightColor: '#E9E9E9',
+  },
   profileContentContainer: {
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#E9E9E9',
+    flex: 1,
+    borderRightWidth: 1,
+    borderRightColor: '#E9E9E9',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E9E9E9',
     paddingVertical: 10,
-    // justifyContent: 'flex-start',
+    justifyContent: 'flex-start',
   },
   imageContainer: {
     alignSelf: 'center',

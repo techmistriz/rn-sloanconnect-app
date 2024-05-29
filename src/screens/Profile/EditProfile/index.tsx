@@ -35,12 +35,11 @@ const Index = ({route, navigation}: any) => {
 
   const [firstName, setFirstName] = useState(user?.first_name ?? '');
   const [lastName, setLastName] = useState(user?.last_name ?? '');
-  const [title, setTitle] = useState(user?.first_name ?? '');
-  const [company, setCompany] = useState(user?.last_name ?? '');
+  const [title, setTitle] = useState(user?.user_metadata?.title ?? '');
+  const [company, setCompany] = useState(user?.user_metadata?.company ?? '');
   const [phoneNumber, setPhoneNumber] = useState(
     user?.user_metadata?.phone_number ?? '',
   );
-  const [email, setEmail] = useState(user?.email ?? '');
 
   const [industry, setIndustry] = useState<any>();
   const [country, setCountry] = useState<any>();
@@ -49,6 +48,10 @@ const Index = ({route, navigation}: any) => {
   const [address, setAddress] = useState<any>(user?.address_line_1 ?? '');
   const [zip, setZip] = useState<any>(user?.zip ?? '');
   const [timezone, setTimezone] = useState<any>();
+  const [password, setPassword] = useState(__DEV__ ? '' : '');
+  const [passwordConfirmation, setPasswordConfirmation] = useState(
+    __DEV__ ? '' : '',
+  );
 
   const [industriesDropdownModal, setIndustriesDropdownModal] = useState(false);
   const [industriesMaster, setIndustriesMaster] = useState([]);
@@ -81,19 +84,19 @@ const Index = ({route, navigation}: any) => {
           );
           // consoleLog('__industriesMaster==>', __industriesMaster);
           setIndustriesMaster(__industriesMaster);
-          // const org_id = user?.account?.org_id;
-          // if (org_id) {
-          //   const org = findObject(org_id, __industriesMaster, {
-          //     searchKey: 'name',
-          //   });
-          //   consoleLog('getMasters org==>', org);
-          // }
+          const industry = user?.user_metadata?.industry;
+          if (industry) {
+            const org = findObject(industry, __industriesMaster, {
+              searchKey: 'name',
+            });
+            // consoleLog('getMasters org==>', org);
+          }
         }
 
         if (response?.timezones && response?.timezones?.length) {
           setTimezonesMaster(response?.timezones);
 
-          const timezone_id = user?.account?.timezone_id;
+          const timezone_id = user?.organizations?.[0]?.account?.timezone_id;
           if (timezone_id) {
             const timezonesObj = findObject(timezone_id, response?.timezones, {
               searchKey: 'id',
@@ -106,10 +109,10 @@ const Index = ({route, navigation}: any) => {
           setCountriesMaster(response?.countries);
           // consoleLog('getMasters countries==>', response?.countries);
 
-          const country_id = user?.account?.country_id;
-          if (country_id) {
-            const countryObj = findObject(country_id, response?.countries, {
-              searchKey: 'id',
+          const country_name = user?.user_metadata?.country_name;
+          if (country_name) {
+            const countryObj = findObject(country_name, response?.countries, {
+              searchKey: 'name',
             });
             __setCountry(countryObj, true);
           }
@@ -145,15 +148,18 @@ const Index = ({route, navigation}: any) => {
       const payload = {
         first_name: firstName,
         last_name: lastName,
-        email: email.trim(),
         source: 'sloan',
+        new_password: password,
         timezone: timezone,
         user_metadata: user_metadata,
+        organization: user?.organizations?.[0]?.account?.org_id ?? 0,
       };
 
       const options = {
         referrer: 'EditProfileScreen',
+        token: token,
       };
+      consoleLog("onUpdateProfilePress payload==>", JSON.stringify(payload));
       dispatch(userProfileRequestAction(payload, options));
     }
   };
@@ -162,18 +168,18 @@ const Index = ({route, navigation}: any) => {
    * validation checking for email and password
    */
   const checkValidation = () => {
-    const checkEmail = isValidEmail(email);
     if (firstName.trim() === '') {
       showSimpleAlert('Please enter your first name');
       return false;
-    } else if (lastName.trim() === '') {
-      showSimpleAlert('Please enter your last name');
+    } else if (password && password.trim().length < 6) {
+      showSimpleAlert('Password must contain at least minimum 6 characters');
       return false;
-    } else if (email.trim() === '') {
-      showSimpleAlert('Please enter your email');
-      return false;
-    } else if (!checkEmail) {
-      showSimpleAlert('Please enter valid email');
+    } else if (
+      password &&
+      passwordConfirmation &&
+      password.trim() !== passwordConfirmation.trim()
+    ) {
+      showSimpleAlert('Password and confirm password should same');
       return false;
     } else {
       return true;
@@ -197,10 +203,10 @@ const Index = ({route, navigation}: any) => {
     if (Array.isArray(item?.states) && item?.states?.length) {
       setStatesMaster(item?.states);
       if (setExistingState) {
-        const state_id = user?.account?.state_id;
-        if (state_id) {
-          const stateObj = findObject(state_id, item?.states, {
-            searchKey: 'id',
+        const state_name = user?.user_metadata?.state;
+        if (state_name) {
+          const stateObj = findObject(state_name, item?.states, {
+            searchKey: 'name',
           });
 
           if (stateObj) {
@@ -376,34 +382,13 @@ const Index = ({route, navigation}: any) => {
                     onChangeText={text => setPhoneNumber(text)}
                     onSubmitEditing={() => {
                       // @ts-ignore
-                      emailTextInputRef.focus();
+                      countryTextInputRef.focus();
                     }}
                     returnKeyType="next"
                     blurOnSubmit={false}
                     keyboardType="default"
                     placeholder="Phone Number"
                     value={phoneNumber}
-                    inputContainerStyle={styles.inputContainer}
-                    inputStyle={styles.textInput}
-                  />
-                </Wrap>
-
-                <Wrap autoMargin={false} style={styles.inputWrapper}>
-                  <Input
-                    onRef={input => {
-                      // @ts-ignore
-                      emailTextInputRef = input;
-                    }}
-                    onChangeText={text => setEmail(text)}
-                    onSubmitEditing={() => {
-                      // @ts-ignore
-                      countryTextInputRef.focus();
-                    }}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
-                    keyboardType="default"
-                    placeholder="Email"
-                    value={email}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
                   />
@@ -548,7 +533,8 @@ const Index = ({route, navigation}: any) => {
                     }}
                     onChangeText={text => setTimezone(text)}
                     onSubmitEditing={() => {
-                      // onUpdateProfilePress();
+                      // @ts-ignore
+                      passwordTextInputRef.focus();
                     }}
                     returnKeyType="next"
                     blurOnSubmit={false}
@@ -570,6 +556,49 @@ const Index = ({route, navigation}: any) => {
                       />
                     }
                     rightStyle={{right: 0}}
+                  />
+                </Wrap>
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      passwordTextInputRef = input;
+                    }}
+                    onChangeText={text => setPassword(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      passwordConfirmationTextInputRef.focus();
+                    }}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Password"
+                    value={password}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                    secureTextEntry={true}
+                  />
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      passwordConfirmationTextInputRef = input;
+                    }}
+                    onChangeText={text => setPasswordConfirmation(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      onUpdateProfilePress();
+                    }}
+                    returnKeyType="done"
+                    blurOnSubmit={false}
+                    keyboardType="default"
+                    placeholder="Confirm Password"
+                    value={passwordConfirmation}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                    secureTextEntry={true}
                   />
                 </Wrap>
               </ScrollView>

@@ -6,10 +6,7 @@ import {
   verifyOtpSuccessAction,
 } from 'src/redux/actions';
 
-import {
-  showToastMessage,
-  consoleLog,
-} from 'src/utils/Helpers/HelperFunction';
+import {showToastMessage, consoleLog} from 'src/utils/Helpers/HelperFunction';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 
@@ -21,14 +18,7 @@ function* __verifyOtpRequestSaga({payload, options}: any) {
     // console.log('__verifyOtpRequestSaga response saga==>', response);
     if (!isObjectEmpty(response)) {
       showToastMessage(response?.message, 'success');
-
-      yield put(
-        verifyOtpSuccessAction({
-          user: null,
-          token: null,
-        }),
-      );
-
+      yield put(verifyOtpSuccessAction({}));
       NavigationService.pop(2);
     } else {
       yield put(verifyOtpFailureAction({}));

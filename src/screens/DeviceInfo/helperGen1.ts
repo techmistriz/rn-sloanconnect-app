@@ -1,10 +1,12 @@
+import moment from 'moment';
 import {Device} from 'react-native-ble-plx';
 import {BLEService} from 'src/services';
-import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {consoleLog, timestampInSec} from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {base64EncodeDecode, hexToDecimal} from 'src/utils/Helpers/encryption';
 import {
   formatCharateristicValue,
+  getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID,
   getDeviceCharacteristicsByServiceUUID,
   getDeviceModelData,
 } from 'src/utils/Helpers/project';
@@ -87,10 +89,77 @@ const getStatisticsInformationDataGen1 = () => {
 
     var data = [];
 
+    var characteristicStaticHoursOfOperation: any =
+      await BLEService.readCharacteristicForDevice(
+        'd0aba888-fb10-4dc9-9b17-bdd8f490c910',
+        'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
+      );
+
+    if (!isObjectEmpty(characteristicStaticHoursOfOperation)) {
+      // data.push(characteristicStaticHoursOfOperation);
+      const decodeValue = hexToDecimal(
+        base64EncodeDecode(
+          characteristicStaticHoursOfOperation?.value,
+          'decode',
+        ),
+      );
+      consoleLog(
+        'characteristicStaticHoursOfOperation decodeValue==>',
+        decodeValue,
+      );
+
+      if (decodeValue) {
+        const decodeValueInSeconds = parseInt(decodeValue);
+        const currentTimestamp = timestampInSec();
+        const dateOfInstallTimestamp = currentTimestamp - decodeValueInSeconds;
+        // consoleLog('decodeValueInSeconds==>', decodeValueInSeconds);
+        // consoleLog('dateOfInstallTimestamp==>', dateOfInstallTimestamp);
+        data.push({
+          name: 'Date of Installation',
+          prefix: null,
+          postfix: null,
+          uuid: 'DateofInstallation',
+          value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
+        });
+      }
+    }
+
     // consoleLog('allServices', allServices);
     if (typeof allServices != 'undefined' && Object.entries(allServices)) {
       for (const [key, value] of Object.entries(allServices)) {
         // console.log(`Key: ${key}, Value: ${JSON.stringify(value)}`);
+
+        // *******Custom************
+        if (data?.length == 1) {
+          const characteristicStaticADManufacturingDate =
+            await getCustomCharacteristic(
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
+            );
+
+          if (!isObjectEmpty(characteristicStaticADManufacturingDate)) {
+            data.push(characteristicStaticADManufacturingDate);
+          }
+
+          const characteristicStaticBDManufacturingDate =
+            await getCustomCharacteristic(
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
+            );
+
+          if (!isObjectEmpty(characteristicStaticBDManufacturingDate)) {
+            data.push(characteristicStaticBDManufacturingDate);
+          }
+          const characteristicStaticBDSerialNumber =
+            await getCustomCharacteristic(
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c902',
+            );
+
+          if (!isObjectEmpty(characteristicStaticBDSerialNumber)) {
+            data.push(characteristicStaticBDSerialNumber);
+          }
+        }
 
         if (
           typeof value?.uuid != 'undefined' &&
@@ -216,4 +285,44 @@ const getSettingLogsDataGen1 = () => {
     }
     resolve(data);
   });
+};
+
+/**
+ * project level function for BLE devices
+ * @param serviceUUID
+ * @param characteristicUUID
+ */
+const getCustomCharacteristic = async (
+  serviceUUID: string,
+  characteristicUUID: string,
+) => {
+  var result = {};
+  const characteristicStaticADManufacturingDate =
+    getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
+      serviceUUID,
+      characteristicUUID,
+    );
+  characteristicStaticADManufacturingDate.serviceUUID = serviceUUID;
+
+  var characteristic: any = await BLEService.readCharacteristicForDevice(
+    characteristicStaticADManufacturingDate.serviceUUID,
+    characteristicStaticADManufacturingDate.uuid,
+  );
+
+  if (typeof characteristic != 'undefined') {
+    const decodeValue = base64EncodeDecode(characteristic?.value, 'decode');
+
+    result = {
+      name: characteristicStaticADManufacturingDate?.name,
+      prefix: null,
+      postfix: null,
+      uuid: characteristicStaticADManufacturingDate?.uuid,
+      value: formatCharateristicValue(
+        characteristicStaticADManufacturingDate,
+        decodeValue,
+      ),
+    };
+  }
+
+  return result;
 };

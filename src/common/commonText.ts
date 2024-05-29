@@ -2,7 +2,7 @@
  * common messages which used in app
  */
 const commonStatement = {
-  //Api Call Related Messages
+  // Api Call Related Messages
   noNetworkAlert: 'No Internet Connection',
   requestTimeoutMessage:
     'It looks like the request is taking longer than expected time. Please check your internet connectivity and try again',

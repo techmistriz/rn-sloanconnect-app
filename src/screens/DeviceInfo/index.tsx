@@ -104,7 +104,7 @@ const Index = ({navigation, route}: any) => {
       // consoleLog('initializeAdvance deviceInfoAdvance==>', deviceInfoAdvance);
 
       const resultObj = findObject(
-        'D/T of last factory reset',
+        'Date of last factory reset',
         deviceInfoAdvance,
         {
           searchKey: 'name',
@@ -114,7 +114,7 @@ const Index = ({navigation, route}: any) => {
 
       if (!isObjectEmpty(resultObj) && resultObj?.value == 'MANUAL') {
         const resultObj2 = findObject(
-          'Operating hours since install',
+          'Hours Of Operation',
           deviceInfoAdvance,
           {
             searchKey: 'name',
@@ -127,7 +127,7 @@ const Index = ({navigation, route}: any) => {
         });
 
         consoleLog('initializeAdvance resultObj3==>', resultObj3);
-        if (resultObj3 >= 0) {
+        if (!isObjectEmpty(resultObj2) && resultObj3 >= 0) {
           const formattedDate = moment(Date.now())
             .subtract(resultObj2?.value, 's')
             .format('YYYY/MM/DD');
@@ -401,22 +401,22 @@ const Index = ({navigation, route}: any) => {
         data.push({
           name: 'User Name',
           uuid: '1',
-          value: user?.name,
+          value: `${user?.first_name} ${user?.last_name}`,
         });
         data.push({
           name: 'User Phone #',
           uuid: '2',
-          value: user?.contact ?? 'N/A',
+          value: user?.user_metadata?.phone_number ?? 'N/A',
         });
         data.push({
           name: 'User Company',
           uuid: '3',
-          value: user?.parent_org_id ?? 'N/A',
+          value: user?.user_metadata?.company ?? 'N/A',
         });
         data.push({
           name: 'User Title',
           uuid: '4',
-          value: user?.title ?? 'N/A',
+          value: user?.user_metadata?.title ?? 'N/A',
         });
         data.push({
           name: 'User Email',

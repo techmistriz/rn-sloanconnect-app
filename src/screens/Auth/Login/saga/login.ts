@@ -30,10 +30,17 @@ function* __loginRequestSaga({payload, options}: any) {
       //   data: response?.organizations[0],
       //   token: response?.token,
       // })
+
+      const __token = response?.token;
+      const __user = response;
+      delete __user?.token;
+      delete __user?.token_type;
+      delete __user?.expires_in;
+
       yield put(
         loginSuccessAction({
-          data: response?.organizations[0],
-          token: response?.token,
+          data: __user,
+          token: __token,
         }),
       );
       showToastMessage('Login successful.', 'success');

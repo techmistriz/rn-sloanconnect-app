@@ -1,5 +1,61 @@
 [
   {
+    "first_name": "Deepak",
+    "last_name": "Maurya",
+    "source": "sloan",
+    "new_password": "",
+    "timezone": {
+      "id": 2,
+      "format": "Pacific/Samoa"
+    },
+    "user_metadata": {
+      "title": "Mr",
+      "company": "Test1",
+      "industry": "Healthcare",
+      "phone_number": "9898989898",
+      "country": 101,
+      "state": 1,
+      "city": "GKP",
+      "address": "no adrees",
+      "zipcode": "665544"
+    }
+  },
+  {
+    "first_name": "Deepak",
+    "last_name": "Maurya",
+    "email": "deepakmaurya@hotmail.com",
+    "last_login": "2024-05-29 05:39:20",
+    "joined_on": "2018-04-11 22:17:07",
+    "organizations": [
+      {
+        "id": 3,
+        "name": "Deepak's Organization",
+        "parent_org_id": 1,
+        "address_line_1": null,
+        "address_line_2": null,
+        "logo": null,
+        "created_at": "2022-01-12 08:40:47",
+        "account": {
+          "identity_id": 1,
+          "org_id": 3,
+          "id": 1,
+          "parent_user_id": null,
+          "accountStatus": 1,
+          "timezone_format": "Asia/Calcutta",
+          "console_only": 0,
+          "timezone_id": 96,
+          "country_id": 226,
+          "created_at": "2018-04-11 22:17:07",
+          "updated_at": "2022-06-19 11:51:03",
+          "trial_ends_at": "2022-02-28",
+          "is_demo_account": 1
+        }
+      }
+    ],
+    "activated": 1,
+    "user_metadata": null
+  },
+  {
     "account": {
       "accountStatus": 1,
       "console_only": 0,
@@ -89,5 +145,4 @@
       }
     ]
   }
-  
 ]

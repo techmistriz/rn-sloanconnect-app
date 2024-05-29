@@ -8,6 +8,7 @@ import {
 } from 'src/redux/actions';
 import {showToastMessage} from 'src/utils/Helpers/HelperFunction';
 import NavigationService from 'src/services/NavigationService/NavigationService';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 
 function* __userProfileRequestSaga({
   payload,
@@ -16,17 +17,15 @@ function* __userProfileRequestSaga({
   payload: any;
   options: any;
 }) {
-  // console.log('__userProfileRequestSaga payload saga==>', payload);
-  // console.log('__userProfileRequestSaga options saga==>', options);
 
   try {
     //@ts-ignore
-    const response = yield Network('POST', payload, options?.token);
-    // console.log('__userProfileRequestSaga response saga==>', response);
-    if (response.status) {
+    const response = yield Network('user', 'POST', payload, options?.token);
+    console.log('__userProfileRequestSaga response saga==>', response);
+    if (!isObjectEmpty(response)) {
       yield put(
         userProfileSuccessAction({
-          user: response?.data?.user,
+          user: response,
         }),
       );
       NavigationService.goBack();

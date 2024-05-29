@@ -21,7 +21,7 @@ import Input from 'src/components/Input';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 const Index = ({route, navigation}: any) => {
-  const {email, password, hash, referrer} = route?.params;
+  const {email, hash, referrer} = route?.params;
   const dispatch = useDispatch();
   const {loading} = useSelector((state: any) => state?.AuthReducer);
   const __resetPasswordReducer = useSelector(
@@ -41,9 +41,8 @@ const Index = ({route, navigation}: any) => {
     const checkValid = checkValidation();
     if (checkValid) {
       const payload = {
-        email: email,
         otp: otp,
-        hash: hash,
+        token: hash,
       };
       const options = {
         referrer: referrer,

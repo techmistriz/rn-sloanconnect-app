@@ -89,7 +89,8 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c902': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c902',
-        name: 'BD Serial Number',
+        name: 'Sensor Serial Number',
+        nameOG: 'BD Serial Number',
         size: '10 bytes',
         type: 'string',
         range: null,
@@ -146,7 +147,8 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c903': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
-        name: 'AD Manufacturing Date',
+        name: 'Control box manufacturing date',
+        nameOG: 'AD Manufacturing Date',
         size: '6 bytes',
         type: 'string',
         range: null,
@@ -164,7 +166,8 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c904': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
-        name: 'BD Manufacturing Date',
+        name: 'Sensor manufacturing date',
+        nameOG: 'BD Manufacturing Date',
         size: '6 bytes',
         type: 'string',
         range: null,
@@ -330,7 +333,8 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c912': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c912',
-        name: 'Activations since install',
+        name: 'Activations since day 1',
+        nameOG: 'Activations since install',
         size: '8 bytes',
         type: 'Hexa String',
         range: '32 bit value',
@@ -488,21 +492,6 @@ export const BLE_GATT_SERVICES = {
         valueType: 'DateTime',
         dateFormat: 'YY/MM/DD HH:MM',
       },
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c92A': {
-        uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92A',
-        name: 'Phone of last range change',
-        size: '15 bytes',
-        type: 'String',
-        range: null,
-        initialValue: 'N/A',
-        properties: ['R', 'W'],
-        sloanApp: '',
-        remarks:
-          '15 chars for phone number. If manually set by button, this will display "MANUAL"',
-        generation: 'all',
-        prefix: null,
-        postfix: null,
-      },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c922': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c922',
         name: 'Date of last range change',
@@ -520,6 +509,21 @@ export const BLE_GATT_SERVICES = {
         postfix: null,
         valueType: 'DateTime',
         dateFormat: 'YY/MM/DD HH:MM',
+      },
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c92A': {
+        uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92A',
+        name: 'Phone of last range change',
+        size: '15 bytes',
+        type: 'String',
+        range: null,
+        initialValue: 'N/A',
+        properties: ['R', 'W'],
+        sloanApp: '',
+        remarks:
+          '15 chars for phone number. If manually set by button, this will display "MANUAL"',
+        generation: 'all',
+        prefix: null,
+        postfix: null,
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c923': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c923',
@@ -585,7 +589,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c925': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c925',
-        name: 'Date of OD timeout change',
+        name: 'Date of last OD timeout change',
         size: '10 bytes',
         type: 'String',
         range: null,
@@ -602,7 +606,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92D': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92D',
-        name: 'Phone of OD timeout change',
+        name: 'Phone of last OD timeout change',
         size: '15 bytes',
         type: 'String',
         range: null,
@@ -616,7 +620,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c926': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c926',
-        name: 'Date of flush mode change',
+        name: 'Date of last flush mode change',
         size: '10 bytes',
         type: 'String',
         range: null,
@@ -633,7 +637,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92E': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92E',
-        name: 'Phone of flush mode change',
+        name: 'Phone of last flush mode change',
         size: '15 bytes',
         type: 'String',
         range: null,
@@ -647,7 +651,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c927': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c927',
-        name: 'Date of flush duration change',
+        name: 'Date of last flush duration change',
         size: '10 bytes',
         type: 'String',
         range: null,
@@ -664,7 +668,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92F': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92F',
-        name: 'Phone of flush duration change',
+        name: 'Phone of last flush duration change',
         size: '15 bytes',
         type: 'String',
         range: null,
@@ -678,7 +682,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c928': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c928',
-        name: 'Date of flush interval change',
+        name: 'Date of last flush interval change',
         size: '10 bytes',
         type: 'String',
         range: null,
@@ -695,7 +699,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c930': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c930',
-        name: 'Phone of flush interval change',
+        name: 'Phone of last flush interval change',
         size: '15 bytes',
         type: 'String',
         range: null,

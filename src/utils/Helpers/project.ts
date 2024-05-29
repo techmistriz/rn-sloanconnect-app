@@ -301,7 +301,7 @@ export function getDeviceCharacteristics(services: any) {
 export function getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID(
   serviceUUID: string,
   characteristicUUID: string,
-  __BLE_GATT_SERVICES: any,
+  __BLE_GATT_SERVICES: any = BLE_GATT_SERVICES,
 ) {
   var result = null;
   if (serviceUUID && characteristicUUID) {

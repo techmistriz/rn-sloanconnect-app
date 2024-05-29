@@ -21,12 +21,14 @@ const Index = ({route, navigation}: any) => {
   const {user, loading, token, type} = useSelector(
     (state: any) => state?.AuthReducer,
   );
+
   const [imagePickerModal, setImagePickerModal] = useState(false);
   const [photo, setPhoto]: any = useState();
 
   /** compoment hooks method */
   useEffect(() => {
-    consoleLog('user', user);
+    consoleLog('Profile user==>', JSON.stringify(user));
+    // dispatch(userProfileFailureAction({}));
   }, []);
 
   /**validation checking for email and password */
@@ -52,51 +54,106 @@ const Index = ({route, navigation}: any) => {
   return (
     <AppContainer scroll={true} loading={loading} scrollViewStyle={{}}>
       <Wrap autoMargin={false} style={styles.container}>
-        <Wrap autoMargin={false} style={styles.profileContentContainer}>
-          <Typography
-            text={`Name: `}
-            style={styles.profileName}
-            color={Theme?.colors?.black}
-            size={16}
-            fw="700"
-          />
-          <Typography
-            text={`${user?.name}`}
-            style={styles.profileName}
-            color={Theme?.colors?.black}
-            size={16}
-          />
-        </Wrap>
-        <Wrap autoMargin={false} style={styles.profileContentContainer}>
-          <Typography
-            text={`Email: `}
-            style={styles.profileName}
-            color={Theme?.colors?.black}
-            size={16}
-            fw="700"
-          />
-          <Typography
-            text={`${user?.email ?? 'N/A'}`}
-            style={styles.profileName}
-            color={Theme?.colors?.black}
-            size={16}
-          />
-        </Wrap>
-        <Wrap autoMargin={false} style={styles.profileContentContainer}>
-          <Typography
-            text={`Timezone: `}
-            style={styles.profileName}
-            color={Theme?.colors?.black}
-            size={16}
-            fw="700"
-          />
-          <Typography
-            text={`${user?.account?.timezone_format ?? 'N/A'}`}
-            style={styles.profileName}
-            color={Theme?.colors?.black}
-            size={16}
-          />
-        </Wrap>
+        <Row autoMargin={false} style={styles.profileContentContainerRow}>
+          <Wrap autoMargin={false} style={styles.profileContentContainer}>
+            <Typography
+              text={`Name: `}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+              fw="700"
+            />
+            <Typography
+              text={`${user?.first_name} ${user?.last_name}`}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+            />
+          </Wrap>
+          <Wrap autoMargin={false} style={styles.profileContentContainer}>
+            <Typography
+              text={`Email: `}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+              fw="700"
+            />
+            <Typography
+              text={`${user?.email ?? 'N/A'}`}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+            />
+          </Wrap>
+        </Row>
+
+        <Row autoMargin={false} style={styles.profileContentContainerRow}>
+          <Wrap autoMargin={false} style={styles.profileContentContainer}>
+            <Typography
+              text={`Phone Number: `}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+              fw="700"
+            />
+            <Typography
+              text={`${user?.user_metadata?.phone_number ?? 'N/A'}`}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+            />
+          </Wrap>
+          <Wrap autoMargin={false} style={styles.profileContentContainer}>
+            <Typography
+              text={`Timezone: `}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+              fw="700"
+            />
+            <Typography
+              text={`${
+                user?.organizations?.[0]?.account?.timezone_format ?? 'N/A'
+              }`}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+            />
+          </Wrap>
+        </Row>
+
+        <Row autoMargin={false} style={styles.profileContentContainerRow}>
+          <Wrap autoMargin={false} style={styles.profileContentContainer}>
+            <Typography
+              text={`Company: `}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+              fw="700"
+            />
+            <Typography
+              text={`${user?.user_metadata?.company ?? 'N/A'}`}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+            />
+          </Wrap>
+          <Wrap autoMargin={false} style={styles.profileContentContainer}>
+            <Typography
+              text={`Industry: `}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+              fw="700"
+            />
+            <Typography
+              text={`${user?.user_metadata?.industry ?? 'N/A'}`}
+              style={styles.profileName}
+              color={Theme?.colors?.black}
+              size={16}
+            />
+          </Wrap>
+        </Row>
 
         <Wrap autoMargin={true} style={[styles.profileItemContainer]}>
           <Wrap autoMargin={false} style={[styles.itemContainer]}>
@@ -124,7 +181,7 @@ const Index = ({route, navigation}: any) => {
             </TouchableItem>
           </Wrap>
 
-          <Wrap autoMargin={false} style={[styles.itemContainer]}>
+          {/* <Wrap autoMargin={false} style={[styles.itemContainer]}>
             <TouchableItem
               onPress={() => {
                 NavigationService.navigate('ChangePassword', {
@@ -148,7 +205,7 @@ const Index = ({route, navigation}: any) => {
                 />
               </Wrap>
             </TouchableItem>
-          </Wrap>
+          </Wrap> */}
 
           <Wrap autoMargin={false} style={[styles.itemContainer]}>
             <TouchableItem onPress={() => onLogout()} style={styles.item}>

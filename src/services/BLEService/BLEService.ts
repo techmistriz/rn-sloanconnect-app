@@ -232,7 +232,7 @@ class BLEServiceInstance {
   ) => {
     this.manager.startDeviceScan(
       UUIDs,
-      {legacyScan: legacyScan, scanMode: ScanMode.LowPower},
+      {legacyScan: legacyScan, scanMode: ScanMode.Balanced},
       (error, device) => {
         if (error) {
           this.onError(error);

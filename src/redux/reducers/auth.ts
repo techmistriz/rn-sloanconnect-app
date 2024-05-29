@@ -30,13 +30,6 @@ const auth = (state = initialState, action: any) => {
         token: null,
         loading: true,
       };
-    case loginActionTypes.BIOMETRIC_LOGIN_REQUEST:
-      return {
-        ...state,
-        user: null,
-        token: null,
-        loading: true,
-      };
 
     case loginActionTypes.LOGIN_SUCCESS:
       return {
@@ -60,26 +53,18 @@ const auth = (state = initialState, action: any) => {
     case verifyOtpActionTypes.VERIFY_OTP_REQUEST:
       return {
         ...state,
-        user: null,
-        token: null,
         loading: true,
       };
 
     case verifyOtpActionTypes.VERIFY_OTP_SUCCESS:
       return {
         ...state,
-        user: action?.payload.user,
-        token: action?.payload.token,
-        type: action?.payload?.type,
-        media_storage: action?.payload?.media_storage,
         loading: false,
       };
 
     case verifyOtpActionTypes.VERIFY_OTP_FAILURE:
       return {
         ...state,
-        user: null,
-        token: null,
         loading: false,
       };
 

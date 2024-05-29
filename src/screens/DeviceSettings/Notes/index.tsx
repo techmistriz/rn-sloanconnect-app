@@ -92,7 +92,7 @@ const Index = ({navigation, route}: any) => {
       //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_SERVICE_UUID,
       //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_CHARACTERISTIC_UUID,
       //   oldValue: null,
-      //   newValue: user?.contact ?? '0123456789',
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
       //   allowedInPreviousSettings: false,
       // });
     }

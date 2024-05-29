@@ -169,7 +169,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID:
           BLE_CONSTANTS.GEN1.MODE_SELECTION_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
-        newValue: user?.contact ?? '0123456789',
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
         allowedInPreviousSettings: false,
       });
     }
@@ -203,7 +203,7 @@ const Index = ({navigation, route}: any) => {
           characteristicUUID:
             BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_CHARACTERISTIC_UUID,
           oldValue: null,
-          newValue: user?.contact ?? '0123456789',
+          newValue: user?.user_metadata?.phone_number ?? '0123456789',
           allowedInPreviousSettings: false,
         });
       } else if (modeSelection == '1') {
@@ -231,7 +231,7 @@ const Index = ({navigation, route}: any) => {
           characteristicUUID:
             BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_CHARACTERISTIC_UUID,
           oldValue: null,
-          newValue: user?.contact ?? '0123456789',
+          newValue: user?.user_metadata?.phone_number ?? '0123456789',
           allowedInPreviousSettings: false,
         });
       }
@@ -306,7 +306,7 @@ const Index = ({navigation, route}: any) => {
       //   characteristicUUID:
       //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
       //   oldValue: null,
-      //   newValue: user?.contact ?? '0123456789',
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
       //   allowedInPreviousSettings: false,
       //   modfiedNewValue: mapValueGen2(
       //     BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_LAST_OD_OR_M_CHANGE,
@@ -353,7 +353,7 @@ const Index = ({navigation, route}: any) => {
         //   characteristicUUID:
         //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
         //   oldValue: null,
-        //   newValue: user?.contact ?? '0123456789',
+        //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
         //   allowedInPreviousSettings: false,
         // });
       } else if (modeSelection == '1') {
@@ -390,7 +390,7 @@ const Index = ({navigation, route}: any) => {
         //   characteristicUUID:
         //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
         //   oldValue: null,
-        //   newValue: user?.contact ?? '0123456789',
+        //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
         //   allowedInPreviousSettings: false,
         // });
       }
