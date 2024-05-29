@@ -469,7 +469,7 @@ const Index = ({navigation, route}: any) => {
         scrollViewStyle={{}}
         backgroundType="solid"
         hasHeader={true}
-        hasLogOutButton
+        hasLogOutButton={true}
         hasDeviceSearchButton
         headerBackgroundType="solid"
         // haslogOutButton={true}

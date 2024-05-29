@@ -13,7 +13,12 @@ import {styles} from './styles';
 import AppContainer from 'src/components/AppContainer';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import {loginResetDataAction} from 'src/redux/actions';
+import {
+  deviceSettingsResetDataAction,
+  loginResetDataAction,
+} from 'src/redux/actions';
+import AlertBox from 'src/components/AlertBox';
+import {BLEService} from 'src/services';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
@@ -21,9 +26,7 @@ const Index = ({route, navigation}: any) => {
   const {user, loading, token, type} = useSelector(
     (state: any) => state?.AuthReducer,
   );
-
-  const [imagePickerModal, setImagePickerModal] = useState(false);
-  const [photo, setPhoto]: any = useState();
+  const [logoutModal, setLogoutModal] = useState<boolean>(false);
 
   /** compoment hooks method */
   useEffect(() => {
@@ -31,23 +34,19 @@ const Index = ({route, navigation}: any) => {
     // dispatch(userProfileFailureAction({}));
   }, []);
 
-  /**validation checking for email and password */
-  const checkValidation = (_photo: any) => {
-    if (typeof _photo?.uri == 'undefined' || !_photo?.uri) {
-      showSimpleAlert('Please select your photo');
-      return false;
-    } else {
-      return true;
-    }
-  };
-
   /** action for logout */
   const onLogout = async () => {
-    const result = await showConfirmAlert('Are you sure?');
-    if (result) {
-      dispatch(loginResetDataAction());
-      NavigationService.resetAllAction('Login');
+    dispatch(loginResetDataAction());
+    await checkDevice();
+    NavigationService.resetAllAction('Login');
+  };
+
+  const checkDevice = async () => {
+    dispatch(deviceSettingsResetDataAction());
+    if (BLEService?.deviceGeneration == 'gen2') {
+      BLEService?.finishMonitor();
     }
+    BLEService?.disconnectDevice(false);
   };
 
   /** compoment render method */
@@ -67,7 +66,7 @@ const Index = ({route, navigation}: any) => {
               text={`${user?.first_name} ${user?.last_name}`}
               style={styles.profileName}
               color={Theme?.colors?.black}
-              size={16}
+              size={12}
             />
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
@@ -82,7 +81,7 @@ const Index = ({route, navigation}: any) => {
               text={`${user?.email ?? 'N/A'}`}
               style={styles.profileName}
               color={Theme?.colors?.black}
-              size={16}
+              size={12}
             />
           </Wrap>
         </Row>
@@ -100,7 +99,7 @@ const Index = ({route, navigation}: any) => {
               text={`${user?.user_metadata?.phone_number ?? 'N/A'}`}
               style={styles.profileName}
               color={Theme?.colors?.black}
-              size={16}
+              size={12}
             />
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
@@ -117,7 +116,7 @@ const Index = ({route, navigation}: any) => {
               }`}
               style={styles.profileName}
               color={Theme?.colors?.black}
-              size={16}
+              size={12}
             />
           </Wrap>
         </Row>
@@ -135,7 +134,7 @@ const Index = ({route, navigation}: any) => {
               text={`${user?.user_metadata?.company ?? 'N/A'}`}
               style={styles.profileName}
               color={Theme?.colors?.black}
-              size={16}
+              size={12}
             />
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
@@ -150,7 +149,7 @@ const Index = ({route, navigation}: any) => {
               text={`${user?.user_metadata?.industry ?? 'N/A'}`}
               style={styles.profileName}
               color={Theme?.colors?.black}
-              size={16}
+              size={12}
             />
           </Wrap>
         </Row>
@@ -208,7 +207,9 @@ const Index = ({route, navigation}: any) => {
           </Wrap> */}
 
           <Wrap autoMargin={false} style={[styles.itemContainer]}>
-            <TouchableItem onPress={() => onLogout()} style={styles.item}>
+            <TouchableItem
+              onPress={() => setLogoutModal(true)}
+              style={styles.item}>
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
                   text="Logout"
@@ -225,7 +226,19 @@ const Index = ({route, navigation}: any) => {
             </TouchableItem>
           </Wrap>
 
-          {/* <AlertBox visible={true} message={"hello"} /> */}
+          <AlertBox
+            visible={logoutModal}
+            title="Logout"
+            message={`Are you sure you want to log out?`}
+            okayText={'CONFIRM'}
+            onCancelPress={() => {
+              setLogoutModal(false);
+            }}
+            onOkayPress={() => {
+              setLogoutModal(false);
+              onLogout();
+            }}
+          />
         </Wrap>
       </Wrap>
     </AppContainer>

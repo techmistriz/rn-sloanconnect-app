@@ -1,8 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  Keyboard,
-} from 'react-native';
+import {Image, Keyboard} from 'react-native';
 import {Images} from 'src/assets';
 import {Button} from 'src/components/Button';
 import Input from 'src/components/Input';
@@ -17,13 +14,12 @@ import {
   isValidEmail,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {
-  loginRequestAction,
-} from 'src/redux/actions';
+import {loginRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
+import VectorIcon from 'src/components/VectorIcon';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -33,6 +29,7 @@ const Index = ({route, navigation}: any) => {
 
   const [email, setEmail] = useState(__DEV__ ? 'deepakmaurya@hotmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
+  const [showPassword, setShowPassword] = useState(false);
 
   // const [email, setEmail] = useState(__DEV__ ? 'abc3@gmail.com' : '');
   // const [password, setPassword] = useState(__DEV__ ? '123456' : '');
@@ -101,7 +98,7 @@ const Index = ({route, navigation}: any) => {
                 style={{width: '50%', height: 80}}
                 resizeMode="contain"
               />
-              
+
               {/* <Image
                 source={getImgSource(Images?.appLogo)}
                 style={{width: '60%'}}
@@ -166,7 +163,19 @@ const Index = ({route, navigation}: any) => {
                   inputContainerStyle={styles.inputContainer}
                   inputStyle={styles.textInput}
                   placeholderTextColor={Theme.colors.inputPlaceholderColor}
-                  secureTextEntry={true}
+                  secureTextEntry={!showPassword}
+                  right={
+                    <VectorIcon
+                      iconPack="Feather"
+                      name={showPassword ? 'eye-off' : 'eye'}
+                      size={20}
+                      color={Theme.colors.primaryColor}
+                      onPress={() => {
+                        setShowPassword(!showPassword);
+                      }}
+                    />
+                  }
+                  rightStyle={{right: 0}}
                 />
                 <Typography
                   size={12}
@@ -213,7 +222,7 @@ const Index = ({route, navigation}: any) => {
                 />
               </Wrap>
 
-              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
+              {/* <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                 <Typography
                   size={13}
                   text={'Verify Email'}
@@ -224,8 +233,7 @@ const Index = ({route, navigation}: any) => {
                     NavigationService.navigate('VerifyEmail');
                   }}
                 />
-              </Wrap>
-
+              </Wrap> */}
             </Wrap>
           </Wrap>
           <Wrap autoMargin={false} style={styles.section2}>

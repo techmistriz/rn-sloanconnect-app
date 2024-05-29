@@ -68,6 +68,9 @@ const Index = ({route, navigation}: any) => {
   const [zip, setZip] = useState<any>();
   const [timezone, setTimezone] = useState<any>();
   const [terms, setTerms] = useState<any>(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
 
   const [industriesDropdownModal, setIndustriesDropdownModal] = useState(false);
   const [industriesMaster, setIndustriesMaster] = useState([]);
@@ -452,7 +455,19 @@ const Index = ({route, navigation}: any) => {
                     value={password}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
-                    secureTextEntry={true}
+                    secureTextEntry={!showPassword}
+                    right={
+                      <VectorIcon
+                        iconPack="Feather"
+                        name={showPassword ? 'eye-off' : 'eye'}
+                        size={20}
+                        color={Theme.colors.primaryColor}
+                        onPress={() => {
+                          setShowPassword(!showPassword);
+                        }}
+                      />
+                    }
+                    rightStyle={{right: 0}}
                   />
                 </Wrap>
 
@@ -474,7 +489,21 @@ const Index = ({route, navigation}: any) => {
                     value={passwordConfirmation}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
-                    secureTextEntry={true}
+                    secureTextEntry={!showPasswordConfirmation}
+                    right={
+                      <VectorIcon
+                        iconPack="Feather"
+                        name={showPasswordConfirmation ? 'eye-off' : 'eye'}
+                        size={20}
+                        color={Theme.colors.primaryColor}
+                        onPress={() => {
+                          setShowPasswordConfirmation(
+                            !showPasswordConfirmation,
+                          );
+                        }}
+                      />
+                    }
+                    rightStyle={{right: 0}}
                   />
                 </Wrap>
 

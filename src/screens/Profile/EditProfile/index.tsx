@@ -40,18 +40,24 @@ const Index = ({route, navigation}: any) => {
   const [phoneNumber, setPhoneNumber] = useState(
     user?.user_metadata?.phone_number ?? '',
   );
+  const [stateInput, setStateInput] = useState<any>();
 
   const [industry, setIndustry] = useState<any>();
   const [country, setCountry] = useState<any>();
   const [state, setState] = useState<any>();
-  const [city, setCity] = useState<any>(user?.city ?? '');
-  const [address, setAddress] = useState<any>(user?.address_line_1 ?? '');
-  const [zip, setZip] = useState<any>(user?.zip ?? '');
+  const [city, setCity] = useState<any>(user?.user_metadata?.city ?? '');
+  const [address, setAddress] = useState<any>(
+    user?.user_metadata?.address ?? '',
+  );
+  const [zip, setZip] = useState<any>(user?.user_metadata?.zipcode ?? '');
   const [timezone, setTimezone] = useState<any>();
   const [password, setPassword] = useState(__DEV__ ? '' : '');
   const [passwordConfirmation, setPasswordConfirmation] = useState(
     __DEV__ ? '' : '',
   );
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
 
   const [industriesDropdownModal, setIndustriesDropdownModal] = useState(false);
   const [industriesMaster, setIndustriesMaster] = useState([]);
@@ -86,10 +92,13 @@ const Index = ({route, navigation}: any) => {
           setIndustriesMaster(__industriesMaster);
           const industry = user?.user_metadata?.industry;
           if (industry) {
-            const org = findObject(industry, __industriesMaster, {
+            const industryObj = findObject(industry, __industriesMaster, {
               searchKey: 'name',
             });
-            // consoleLog('getMasters org==>', org);
+            if (!isObjectEmpty(industryObj)) {
+              setIndustry(industryObj);
+            }
+            // consoleLog('getMasters industryObj==>', industryObj);
           }
         }
 
@@ -109,9 +118,9 @@ const Index = ({route, navigation}: any) => {
           setCountriesMaster(response?.countries);
           // consoleLog('getMasters countries==>', response?.countries);
 
-          const country_name = user?.user_metadata?.country_name;
-          if (country_name) {
-            const countryObj = findObject(country_name, response?.countries, {
+          const country = user?.user_metadata?.country;
+          if (country) {
+            const countryObj = findObject(country, response?.countries, {
               searchKey: 'name',
             });
             __setCountry(countryObj, true);
@@ -138,8 +147,8 @@ const Index = ({route, navigation}: any) => {
         company: company,
         industry: industry?.name,
         phone_number: phoneNumber,
-        country: country?.id,
-        state: state?.id,
+        country: country?.name,
+        state: statesMaster?.length > 0 ? state?.name : stateInput,
         city: city,
         address: address,
         zipcode: zip,
@@ -159,7 +168,7 @@ const Index = ({route, navigation}: any) => {
         referrer: 'EditProfileScreen',
         token: token,
       };
-      consoleLog("onUpdateProfilePress payload==>", JSON.stringify(payload));
+      consoleLog('onUpdateProfilePress payload==>', JSON.stringify(payload));
       dispatch(userProfileRequestAction(payload, options));
     }
   };
@@ -199,11 +208,10 @@ const Index = ({route, navigation}: any) => {
    */
   const __setCountry = (item: any, setExistingState = false) => {
     setCountry(item);
-
+    const state_name = user?.user_metadata?.state ?? null;
     if (Array.isArray(item?.states) && item?.states?.length) {
       setStatesMaster(item?.states);
       if (setExistingState) {
-        const state_name = user?.user_metadata?.state;
         if (state_name) {
           const stateObj = findObject(state_name, item?.states, {
             searchKey: 'name',
@@ -216,6 +224,7 @@ const Index = ({route, navigation}: any) => {
       }
     } else {
       setStatesMaster([]);
+      setStateInput(state_name);
     }
   };
 
@@ -403,7 +412,9 @@ const Index = ({route, navigation}: any) => {
                     onChangeText={text => setCountry(text)}
                     onSubmitEditing={() => {
                       // @ts-ignore
-                      stateTextInputRef.focus();
+                      statesMaster?.length > 0
+                        ? stateTextInputRef.focus()
+                        : stateInputTextInputRef.focus();
                     }}
                     returnKeyType="next"
                     blurOnSubmit={false}
@@ -429,37 +440,58 @@ const Index = ({route, navigation}: any) => {
                 </Wrap>
 
                 <Wrap autoMargin={false} style={styles.inputWrapper}>
-                  <Input
-                    onRef={input => {
-                      // @ts-ignore
-                      stateTextInputRef = input;
-                    }}
-                    onChangeText={text => setState(text)}
-                    onSubmitEditing={() => {
-                      // @ts-ignore
-                      cityTextInputRef.focus();
-                    }}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
-                    keyboardType="default"
-                    placeholder="State/Province"
-                    value={state?.state_name}
-                    inputContainerStyle={styles.inputContainer}
-                    inputStyle={styles.textInput}
-                    editable={false}
-                    onPress={() => {
-                      setStatesDropdownModal(true);
-                    }}
-                    right={
-                      <VectorIcon
-                        iconPack="Feather"
-                        name={'chevron-down'}
-                        size={15}
-                        color={Theme.colors.primaryColor}
-                      />
-                    }
-                    rightStyle={{right: 0}}
-                  />
+                  {statesMaster?.length > 0 ? (
+                    <Input
+                      onRef={input => {
+                        // @ts-ignore
+                        stateTextInputRef = input;
+                      }}
+                      onChangeText={text => setState(text)}
+                      onSubmitEditing={() => {
+                        // @ts-ignore
+                        cityTextInputRef.focus();
+                      }}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      keyboardType="default"
+                      placeholder="State/Province"
+                      value={state?.state_name}
+                      inputContainerStyle={styles.inputContainer}
+                      inputStyle={styles.textInput}
+                      editable={false}
+                      onPress={() => {
+                        setStatesDropdownModal(true);
+                      }}
+                      right={
+                        <VectorIcon
+                          iconPack="Feather"
+                          name={'chevron-down'}
+                          size={15}
+                          color={Theme.colors.primaryColor}
+                        />
+                      }
+                      rightStyle={{right: 0}}
+                    />
+                  ) : (
+                    <Input
+                      onRef={input => {
+                        // @ts-ignore
+                        stateInputTextInputRef = input;
+                      }}
+                      onChangeText={text => setStateInput(text)}
+                      onSubmitEditing={() => {
+                        // @ts-ignore
+                        cityTextInputRef.focus();
+                      }}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      keyboardType="default"
+                      placeholder="State/Province"
+                      value={stateInput}
+                      inputContainerStyle={styles.inputContainer}
+                      inputStyle={styles.textInput}
+                    />
+                  )}
                 </Wrap>
 
                 <Wrap autoMargin={false} style={styles.inputWrapper}>
@@ -576,7 +608,19 @@ const Index = ({route, navigation}: any) => {
                     value={password}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
-                    secureTextEntry={true}
+                    secureTextEntry={!showPassword}
+                    right={
+                      <VectorIcon
+                        iconPack="Feather"
+                        name={showPassword ? 'eye-off' : 'eye'}
+                        size={20}
+                        color={Theme.colors.primaryColor}
+                        onPress={() => {
+                          setShowPassword(!showPassword);
+                        }}
+                      />
+                    }
+                    rightStyle={{right: 0}}
                   />
                 </Wrap>
 
@@ -598,7 +642,21 @@ const Index = ({route, navigation}: any) => {
                     value={passwordConfirmation}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
-                    secureTextEntry={true}
+                    secureTextEntry={!showPasswordConfirmation}
+                    right={
+                      <VectorIcon
+                        iconPack="Feather"
+                        name={showPasswordConfirmation ? 'eye-off' : 'eye'}
+                        size={20}
+                        color={Theme.colors.primaryColor}
+                        onPress={() => {
+                          setShowPasswordConfirmation(
+                            !showPasswordConfirmation,
+                          );
+                        }}
+                      />
+                    }
+                    rightStyle={{right: 0}}
                   />
                 </Wrap>
               </ScrollView>

@@ -14,6 +14,7 @@ const Index = ({onSearchAgainPress}: any) => {
       scrollViewStyle={{}}
       backgroundType="gradient"
       hasHeader={true}
+      hasProfileButton={true}
       hasBackButton
       headerBackgroundType="solid">
       <Wrap autoMargin={false} style={styles.container}>
