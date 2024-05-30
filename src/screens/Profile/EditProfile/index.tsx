@@ -32,6 +32,7 @@ const Index = ({route, navigation}: any) => {
   const {user, loading, token} = useSelector(
     (state: any) => state?.AuthReducer,
   );
+  const [__loading, __setLoading] = useState<boolean>(false);
 
   const [firstName, setFirstName] = useState(user?.first_name ?? '');
   const [lastName, setLastName] = useState(user?.last_name ?? '');
@@ -41,7 +42,6 @@ const Index = ({route, navigation}: any) => {
     user?.user_metadata?.phone_number ?? '',
   );
   const [stateInput, setStateInput] = useState<any>();
-
   const [industry, setIndustry] = useState<any>();
   const [country, setCountry] = useState<any>();
   const [state, setState] = useState<any>();
@@ -80,6 +80,7 @@ const Index = ({route, navigation}: any) => {
    */
   const getMasters = async () => {
     try {
+      __setLoading(true);
       const response: any = await Network('auth/sloan-register-data', 'GET');
       // consoleLog('getRegisterMasters response==>', response);
 
@@ -132,6 +133,7 @@ const Index = ({route, navigation}: any) => {
       consoleLog('getRegisterMasters error==>', error);
       showToastMessage('Something went wrong!');
     } finally {
+      __setLoading(false);
     }
   };
 
@@ -246,7 +248,7 @@ const Index = ({route, navigation}: any) => {
   return (
     <AppContainer
       scroll={false}
-      loading={loading}
+      loading={loading || __loading}
       scrollViewStyle={{}}
       hasHeader={false}>
       <Wrap autoMargin={false} style={styles.container}>

@@ -44,7 +44,7 @@ const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const {referrer} = route?.params || {referrer: undefined};
   const {loading} = useSelector((state: any) => state?.SignupReducer);
-  const {settings} = useSelector((state: any) => state?.SettingsReducer);
+  const [__loading, __setLoading] = useState<boolean>(false);
 
   const [firstName, setFirstName] = useState(__DEV__ ? 'Pradeep' : '');
   const [lastName, setLastName] = useState(__DEV__ ? 'Kumar' : '');
@@ -101,6 +101,41 @@ const Index = ({route, navigation}: any) => {
   useEffect(() => {
     getRegisterMasters();
   }, []);
+
+  /**
+   *
+   */
+  const getRegisterMasters = async () => {
+    try {
+      __setLoading(true);
+      const response: any = await Network('auth/sloan-register-data', 'GET');
+      // consoleLog('getRegisterMasters response==>', response);
+
+      if (response && !isObjectEmpty(response)) {
+        if (response?.industries && response?.industries?.length) {
+          const __industriesMaster: any = createNameValueArray(
+            response?.industries,
+          );
+          // consoleLog('__industriesMaster==>', __industriesMaster);
+          setIndustriesMaster(__industriesMaster);
+        }
+
+        if (response?.timezones && response?.timezones?.length) {
+          setTimezonesMaster(response?.timezones);
+        }
+
+        if (response?.countries && response?.countries?.length) {
+          setCountriesMaster(response?.countries);
+        }
+      } else {
+      }
+    } catch (error) {
+      consoleLog('getRegisterMasters error==>', error);
+      showToastMessage('Something went wrong!');
+    } finally {
+      __setLoading(false);
+    }
+  };
 
   /**
    *
@@ -212,39 +247,6 @@ const Index = ({route, navigation}: any) => {
   };
 
   /**
-   *
-   */
-  const getRegisterMasters = async () => {
-    try {
-      const response: any = await Network('auth/sloan-register-data', 'GET');
-      // consoleLog('getRegisterMasters response==>', response);
-
-      if (response && !isObjectEmpty(response)) {
-        if (response?.industries && response?.industries?.length) {
-          const __industriesMaster: any = createNameValueArray(
-            response?.industries,
-          );
-          // consoleLog('__industriesMaster==>', __industriesMaster);
-          setIndustriesMaster(__industriesMaster);
-        }
-
-        if (response?.timezones && response?.timezones?.length) {
-          setTimezonesMaster(response?.timezones);
-        }
-
-        if (response?.countries && response?.countries?.length) {
-          setCountriesMaster(response?.countries);
-        }
-      } else {
-      }
-    } catch (error) {
-      consoleLog('getRegisterMasters error==>', error);
-      showToastMessage('Something went wrong!');
-    } finally {
-    }
-  };
-
-  /**
    * action for set country code from selection
    */
   const __setIndustry = (item: any) => {
@@ -285,7 +287,7 @@ const Index = ({route, navigation}: any) => {
   return (
     <AppContainer
       scroll={false}
-      loading={loading}
+      loading={loading || __loading}
       scrollViewStyle={{}}
       hasHeader={false}>
       <Wrap autoMargin={false} style={styles.container}>
