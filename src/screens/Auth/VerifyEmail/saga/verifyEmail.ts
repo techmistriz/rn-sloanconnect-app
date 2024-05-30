@@ -14,7 +14,7 @@ function* __verifyEmailRequestSaga({payload, options}: any) {
   try {
     //@ts-ignore
     const response = yield Network('auth/activation-email', 'POST', payload);
-    console.log('__verifyEmailRequestSaga response saga==>', response?.hash);
+    console.log('__verifyEmailRequestSaga response saga==>', response);
     if (!isObjectEmpty(response)) {
       yield put(verifyEmailSuccessAction({}));
 

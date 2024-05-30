@@ -14,6 +14,7 @@ import {
   isValidEmail,
 } from 'src/utils/Helpers/HelperFunction';
 import NavigationService from 'src/services/NavigationService/NavigationService';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 
 function* __resetPasswordRequestSaga({payload, options}: any) {
   // console.log('__resetPasswordRequestSaga payload saga==>', payload);
@@ -22,11 +23,16 @@ function* __resetPasswordRequestSaga({payload, options}: any) {
     //@ts-ignore
     // getUserAPiPrefixByUserType(options?.type) +
     const response = yield Network('auth/reset-password', 'POST', payload);
-    // console.log('__resetPasswordRequestSaga response saga==>', response);
+    console.log('__resetPasswordRequestSaga response saga==>', response);
     if (!isObjectEmpty(response)) {
       yield put(resetPasswordSuccessAction({}));
-      showToastMessage(response?.message, 'success');
-      NavigationService.pop(2);
+
+      if (response?.message?.toLowerCase()?.indexOf('invalid otp') > -1) {
+        showToastMessage(response?.message, 'danger');
+      } else {
+        showToastMessage(response?.message, 'success');
+        NavigationService.pop(3);
+      }
     } else {
       yield put(resetPasswordFailureAction({}));
       showToastMessage(response?.message);

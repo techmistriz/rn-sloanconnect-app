@@ -13,7 +13,11 @@ import {
   isValidEmail,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {otpRequestAction, verifyOtpRequestAction} from 'src/redux/actions';
+import {
+  otpRequestAction,
+  resetPasswordRequestAction,
+  verifyOtpRequestAction,
+} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
@@ -21,17 +25,15 @@ import Input from 'src/components/Input';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 const Index = ({route, navigation}: any) => {
-  const {email, hash} = route?.params;
+  const {email, hash, otp} = route?.params;
   const dispatch = useDispatch();
-  const {loading} = useSelector((state: any) => state?.AuthReducer);
-  const __resetPasswordReducer = useSelector(
+  const {loading} = useSelector(
     (state: any) => state?.ForgotResetPasswordReducer,
   );
-  const __otpReducer = useSelector((state: any) => state?.OtpReducer);
-  const [otp, setOtp] = useState('');
-  const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
+
+  const [password, setPassword] = useState(__DEV__ ? '12345678' : '');
   const [passwordConfirmation, setPasswordConfirmation] = useState(
-    __DEV__ ? 'Maurya@2019' : '',
+    __DEV__ ? '12345678' : '',
   );
 
   useEffect(() => {
@@ -48,23 +50,20 @@ const Index = ({route, navigation}: any) => {
     if (checkValid) {
       const payload = {
         email: email,
-        otp: otp,
         token: hash,
         password: password,
         password_confirmation: passwordConfirmation,
         source: 'sloan',
         verify_method: 'otp',
+        otp: otp,
       };
-      dispatch(verifyOtpRequestAction(payload));
+      dispatch(resetPasswordRequestAction(payload));
     }
   };
 
   /**validation checking for email and password */
   const checkValidation = () => {
-    if (otp.length == 0) {
-      showSimpleAlert('Please enter your OTP');
-      return false;
-    } else if (password.trim() == '') {
+    if (password.trim() == '') {
       showSimpleAlert('Please enter your password');
       return false;
     } else if (password.trim().length < 6) {
@@ -109,36 +108,6 @@ const Index = ({route, navigation}: any) => {
                 color={Theme.colors.primaryColor}
                 ff={Theme.fonts.ThemeFontMedium}
               />
-              <Typography
-                size={13}
-                text="Please enter the OTP sent to your email."
-                style={{
-                  textAlign: 'center',
-                  marginBottom: 20,
-                }}
-                color={Theme.colors.primaryColor}
-                ff={Theme.fonts.ThemeFontMedium}
-              />
-
-              <Wrap autoMargin={false} style={styles.inputWrapper}>
-                <OTPInputView
-                  style={{height: 60}}
-                  pinCount={6}
-                  // code={otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-                  // onCodeChanged={code => {
-                  //   consoleLog('OTP', otp);
-                  // }}
-                  // autoFocusOnLoad
-                  codeInputFieldStyle={styles.otpInput}
-                  codeInputHighlightStyle={styles.styleHighLighted}
-                  onCodeFilled={code => {
-                    setOtp(code);
-                    // @ts-ignore
-                    passwordTextInputRef?.focus();
-                    // consoleLog(`Code is ${code}, you are good to go!`);
-                  }}
-                />
-              </Wrap>
 
               <Wrap autoMargin={false} style={styles.inputWrapper}>
                 <Input

@@ -13,7 +13,11 @@ import {
   isValidEmail,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {otpRequestAction, verifyOtpRequestAction} from 'src/redux/actions';
+import {
+  forgotPasswordRequestAction,
+  otpRequestAction,
+  verifyOtpRequestAction,
+} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
@@ -24,10 +28,11 @@ const Index = ({route, navigation}: any) => {
   const {email, hash, referrer} = route?.params;
   const dispatch = useDispatch();
   const {loading} = useSelector((state: any) => state?.AuthReducer);
-  const __resetPasswordReducer = useSelector(
+
+  // const __otpReducer = useSelector((state: any) => state?.OtpReducer);
+  const __forgotResetPasswordReducer = useSelector(
     (state: any) => state?.ForgotResetPasswordReducer,
   );
-  const __otpReducer = useSelector((state: any) => state?.OtpReducer);
   // const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState('');
 
@@ -41,6 +46,7 @@ const Index = ({route, navigation}: any) => {
     const checkValid = checkValidation();
     if (checkValid) {
       const payload = {
+        email: email,
         otp: otp,
         token: hash,
       };
@@ -53,10 +59,24 @@ const Index = ({route, navigation}: any) => {
 
   const onResendOtpPress = () => {
     Keyboard.dismiss();
-    const checkValid = checkValidationForResendOtp();
-    if (checkValid) {
-      const payload = {email: email, source: 'sloan', verify_method: 'otp'};
-      dispatch(otpRequestAction(payload));
+    if (referrer == 'ForgotPassword') {
+      const payload = {
+        email: email.trim(),
+        source: 'sloan',
+        verify_method: 'otp',
+      };
+
+      const options = {
+        referrer: 'ForgotPassword',
+        shouldRedirect: false,
+      };
+      dispatch(forgotPasswordRequestAction(payload, options));
+    } else {
+      const checkValid = checkValidation();
+      if (checkValid) {
+        const payload = {email: email, source: 'sloan', verify_method: 'otp'};
+        dispatch(otpRequestAction(payload));
+      }
     }
   };
 
@@ -76,7 +96,7 @@ const Index = ({route, navigation}: any) => {
 
   /**validation checking for email */
   const checkValidationForResendOtp = () => {
-    if (otp.length == 0) {
+    if (otp?.length == 0) {
       showSimpleAlert('Please enter your OTP');
       return false;
     } else {
@@ -87,7 +107,7 @@ const Index = ({route, navigation}: any) => {
   return (
     <AppContainer
       scroll={true}
-      loading={loading}
+      loading={loading || __forgotResetPasswordReducer?.loading}
       scrollViewStyle={{}}
       hasHeader={false}>
       <Wrap autoMargin={false} style={styles.container}>

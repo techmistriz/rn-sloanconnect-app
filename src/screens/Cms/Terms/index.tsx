@@ -1,47 +1,20 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  Alert,
-  Platform,
-  Keyboard,
-  ScrollView,
-  DeviceEventEmitter,
-} from 'react-native';
+import React, {useState} from 'react';
+import {Image, ScrollView, DeviceEventEmitter} from 'react-native';
 import {Images} from 'src/assets';
 import {Button} from 'src/components/Button';
-import Input from 'src/components/Input';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
 import {Wrap, Row} from 'src/components/Common';
-import TouchableItem from 'src/components/TouchableItem';
 import {styles} from './styles';
 import CheckBox from '@react-native-community/checkbox';
-import {
-  showToastMessage,
-  consoleLog,
-  showSimpleAlert,
-  isValidEmail,
-  showConfirmAlert,
-  getImgSource,
-} from 'src/utils/Helpers/HelperFunction';
-import {constants} from 'src/common';
-import {
-  loginRequestAction,
-  boimetricLoginRequestAction,
-} from 'src/redux/actions';
+import {showToastMessage, getImgSource} from 'src/utils/Helpers/HelperFunction';
 import {useDispatch, useSelector} from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
-import VectorIcon from 'src/components/VectorIcon';
-import Copyright from 'src/components/@ProjectComponent/Copyright';
 import {helpData} from 'src/utils/StaticData/StaticData';
 import Divider from 'src/components/Divider';
 import AppInfo from 'src/components/@ProjectComponent/AppInfo';
+import {constants} from 'src/common';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -117,7 +90,7 @@ const Index = ({route, navigation}: any) => {
                   <CheckBox
                     style={{
                       borderRadius: 20,
-                      marginTop: 5,
+                      marginTop: constants.isIOS ? 5 : 0,
                       height: 40,
                       width: 40,
                       transform: [{scaleX: 0.8}, {scaleY: 0.8}],

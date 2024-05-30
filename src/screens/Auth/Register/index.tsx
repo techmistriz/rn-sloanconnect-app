@@ -29,10 +29,7 @@ import {
 } from 'src/utils/Helpers/HelperFunction';
 import {createNameValueArray, isObjectEmpty} from 'src/utils/Helpers/array';
 import {constants} from 'src/common';
-import {
-  signupRequestAction,
-  boimetricLoginRequestAction,
-} from 'src/redux/actions';
+import {signupRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import NavigationService from 'src/services/NavigationService/NavigationService';
@@ -54,18 +51,21 @@ const Index = ({route, navigation}: any) => {
   const [title, setTitle] = useState(__DEV__ ? 'Mr' : '');
   const [company, setCompany] = useState(__DEV__ ? 'ABC' : '');
   const [phoneNumber, setPhoneNumber] = useState(__DEV__ ? '+1-91817161' : '');
-  const [email, setEmail] = useState(__DEV__ ? 'pk836746+5@gmail.com' : '');
+  const [email, setEmail] = useState(__DEV__ ? 'pk836746+1@gmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? '123456' : '');
   const [passwordConfirmation, setPasswordConfirmation] = useState(
     __DEV__ ? '123456' : '',
+  );
+  const [stateInput, setStateInput] = useState<any>(
+    __DEV__ ? 'Test state 2' : '',
   );
 
   const [industry, setIndustry] = useState<any>();
   const [country, setCountry] = useState<any>();
   const [state, setState] = useState<any>();
-  const [city, setCity] = useState<any>();
-  const [address, setAddress] = useState<any>();
-  const [zip, setZip] = useState<any>();
+  const [city, setCity] = useState<any>(__DEV__ ? 'Test city 2' : '');
+  const [address, setAddress] = useState<any>(__DEV__ ? 'Test address 2' : '');
+  const [zip, setZip] = useState<any>(__DEV__ ? '444444' : '');
   const [timezone, setTimezone] = useState<any>();
   const [terms, setTerms] = useState<any>(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -135,7 +135,7 @@ const Index = ({route, navigation}: any) => {
       };
 
       const options = {
-        referrer: 'RegisterScreen',
+        referrer: 'Register',
       };
       dispatch(signupRequestAction(payload, options));
     }
@@ -151,6 +151,18 @@ const Index = ({route, navigation}: any) => {
       return false;
     } else if (lastName.trim() === '') {
       showSimpleAlert('Please enter your last name');
+      return false;
+    } else if (title.trim() === '') {
+      showSimpleAlert('Please enter your title');
+      return false;
+    } else if (company.trim() === '') {
+      showSimpleAlert('Please enter your company');
+      return false;
+    } else if (industry?.name === '') {
+      showSimpleAlert('Please select your industry');
+      return false;
+    } else if (phoneNumber.trim() === '') {
+      showSimpleAlert('Please enter your phone number');
       return false;
     } else if (email.trim() === '') {
       showSimpleAlert('Please enter your email');
@@ -169,6 +181,27 @@ const Index = ({route, navigation}: any) => {
       return false;
     } else if (password.trim() !== passwordConfirmation.trim()) {
       showSimpleAlert('Password and confirm password should same');
+      return false;
+    } else if (country?.name === '') {
+      showSimpleAlert('Please select your country');
+      return false;
+    } else if (statesMaster?.length > 0 && state?.name === '') {
+      showSimpleAlert('Please select your state');
+      return false;
+    } else if (statesMaster?.length == 0 && stateInput?.trim() === '') {
+      showSimpleAlert('Please select your state');
+      return false;
+    } else if (city.trim() === '') {
+      showSimpleAlert('Please enter your city');
+      return false;
+    } else if (address.trim() === '') {
+      showSimpleAlert('Please enter your address');
+      return false;
+    } else if (zip.trim() === '') {
+      showSimpleAlert('Please enter your zipcode');
+      return false;
+    } else if (timezone?.format === '') {
+      showSimpleAlert('Please enter your address');
       return false;
     } else if (!terms) {
       showSimpleAlert('Please agree our terms and condition');
@@ -543,37 +576,58 @@ const Index = ({route, navigation}: any) => {
                 </Wrap>
 
                 <Wrap autoMargin={false} style={styles.inputWrapper}>
-                  <Input
-                    onRef={input => {
-                      // @ts-ignore
-                      stateTextInputRef = input;
-                    }}
-                    onChangeText={text => setState(text)}
-                    onSubmitEditing={() => {
-                      // @ts-ignore
-                      cityTextInputRef.focus();
-                    }}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
-                    keyboardType="default"
-                    placeholder="State/Province"
-                    value={state?.state_name}
-                    inputContainerStyle={styles.inputContainer}
-                    inputStyle={styles.textInput}
-                    editable={false}
-                    onPress={() => {
-                      setStatesDropdownModal(true);
-                    }}
-                    right={
-                      <VectorIcon
-                        iconPack="Feather"
-                        name={'chevron-down'}
-                        size={15}
-                        color={Theme.colors.primaryColor}
-                      />
-                    }
-                    rightStyle={{right: 0}}
-                  />
+                  {statesMaster?.length > 0 ? (
+                    <Input
+                      onRef={input => {
+                        // @ts-ignore
+                        stateTextInputRef = input;
+                      }}
+                      onChangeText={text => setState(text)}
+                      onSubmitEditing={() => {
+                        // @ts-ignore
+                        cityTextInputRef.focus();
+                      }}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      keyboardType="default"
+                      placeholder="State/Province"
+                      value={state?.state_name}
+                      inputContainerStyle={styles.inputContainer}
+                      inputStyle={styles.textInput}
+                      editable={false}
+                      onPress={() => {
+                        setStatesDropdownModal(true);
+                      }}
+                      right={
+                        <VectorIcon
+                          iconPack="Feather"
+                          name={'chevron-down'}
+                          size={15}
+                          color={Theme.colors.primaryColor}
+                        />
+                      }
+                      rightStyle={{right: 0}}
+                    />
+                  ) : (
+                    <Input
+                      onRef={input => {
+                        // @ts-ignore
+                        stateInputTextInputRef = input;
+                      }}
+                      onChangeText={text => setStateInput(text)}
+                      onSubmitEditing={() => {
+                        // @ts-ignore
+                        cityTextInputRef.focus();
+                      }}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      keyboardType="default"
+                      placeholder="State/Province"
+                      value={stateInput}
+                      inputContainerStyle={styles.inputContainer}
+                      inputStyle={styles.textInput}
+                    />
+                  )}
                 </Wrap>
 
                 <Wrap autoMargin={false} style={styles.inputWrapper}>

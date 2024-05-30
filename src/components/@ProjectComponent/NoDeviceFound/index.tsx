@@ -42,7 +42,7 @@ const Index = ({onSearchAgainPress}: any) => {
               style={[{width: '100%', marginBottom: 10}]}>
               <Button
                 type={'link'}
-                title="TRUBLESHOOT"
+                title="TROUBLESHOOT"
                 onPress={() => {
                   NavigationService.navigate('DeviceDiagnosticTroubleshoot');
                 }}

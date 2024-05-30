@@ -17,11 +17,24 @@ function* __forgotPasswordRequestSaga({payload, options}: any) {
     console.log('__forgotPasswordRequestSaga response saga==>', response);
     if (!isObjectEmpty(response)) {
       yield put(forgotPasswordSuccessAction({user: null}));
-      showToastMessage(response?.message, 'success');
-      NavigationService.navigate('ResetPassword', {
-        ...payload,
-        hash: response?.hash,
-      });
+
+      if (response?.status) {
+        showToastMessage(response?.message, 'success');
+        // NavigationService.navigate('ResetPassword', {
+        //   ...payload,
+        //   hash: response?.hash,
+        // });
+
+        if (options?.shouldRedirect) {
+          NavigationService.navigate('Otp', {
+            ...payload,
+            hash: response?.hash,
+            referrer: options?.referrer,
+          });
+        }
+      } else {
+        showToastMessage(response?.message, 'danger');
+      }
     } else {
       yield put(forgotPasswordFailureAction({}));
       showToastMessage(response?.message);

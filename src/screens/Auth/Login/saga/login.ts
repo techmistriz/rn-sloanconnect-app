@@ -50,17 +50,19 @@ function* __loginRequestSaga({payload, options}: any) {
     } else {
       yield put(loginFailureAction({}));
       showToastMessage(response?.message);
-
-      if (response?.error === 'email_unverified') {
-        NavigationService.navigate('VerifyEmail', {
-          ...payload,
-        });
-      }
     }
   } catch (error: any) {
     console.log('__loginRequestSaga error saga==>', error);
     yield put(loginFailureAction({}));
-    showToastMessage(error?.message);
+
+    if (error?.error === 'email_unverified') {
+      showToastMessage(error?.message, 'warning');
+      NavigationService.navigate('VerifyEmail', {
+        ...payload,
+      });
+    } else {
+      showToastMessage(error?.message);
+    }
   }
 }
 

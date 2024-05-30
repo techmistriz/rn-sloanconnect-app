@@ -23,7 +23,7 @@ const Index = ({route, navigation}: any) => {
   const {loading} = useSelector(
     (state: any) => state?.ForgotResetPasswordReducer,
   );
-  const [email, setEmail] = useState(__DEV__ ? 'deepakmaurya@hotmail.com' : '');
+  const [email, setEmail] = useState(__DEV__ ? 'pk836746+7@gmail.com' : '');
 
   useEffect(() => {}, []);
 
@@ -36,7 +36,12 @@ const Index = ({route, navigation}: any) => {
         source: 'sloan',
         verify_method: 'otp',
       };
-      dispatch(forgotPasswordRequestAction(payload));
+
+      const options = {
+        referrer: 'ForgotPassword',
+        shouldRedirect: true,
+      };
+      dispatch(forgotPasswordRequestAction(payload, options));
     }
   };
 

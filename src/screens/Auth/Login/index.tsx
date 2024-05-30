@@ -27,12 +27,12 @@ const Index = ({route, navigation}: any) => {
   const {loading} = useSelector((state: any) => state?.AuthReducer);
   const {settings} = useSelector((state: any) => state?.SettingsReducer);
 
-  const [email, setEmail] = useState(__DEV__ ? 'deepakmaurya@hotmail.com' : '');
-  const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
+  // const [email, setEmail] = useState(__DEV__ ? 'deepakmaurya@hotmail.com' : '');
+  // const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
   const [showPassword, setShowPassword] = useState(false);
 
-  // const [email, setEmail] = useState(__DEV__ ? 'abc3@gmail.com' : '');
-  // const [password, setPassword] = useState(__DEV__ ? '123456' : '');
+  const [email, setEmail] = useState(__DEV__ ? 'pk836746+7@gmail.com' : '');
+  const [password, setPassword] = useState(__DEV__ ? '123456' : '');
 
   useEffect(() => {
     consoleLog('AuthReducer Login Screen==>', {loading, settings});

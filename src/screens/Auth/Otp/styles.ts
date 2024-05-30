@@ -83,7 +83,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Theme.colors.primaryColor,
     borderRadius: 8,
-    fontSize: 26,
+    fontSize: 15,
     fontFamily: Theme.fonts.ThemeFontBold,
     // marginLeft: 10,
   },

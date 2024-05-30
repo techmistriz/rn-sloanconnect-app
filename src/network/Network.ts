@@ -59,7 +59,7 @@ const Network = (
             resolve(__response);
           })
           .catch(function (error) {
-            consoleLog('Network Error: ', JSON.stringify(error));
+            // consoleLog('Network Error: ', JSON.stringify(error));
             if (error.response) {
               // console.log(error.response.data);
               // console.log(error.response.status);
@@ -69,7 +69,7 @@ const Network = (
                   referrer: 'Unauthenticated',
                 });
               } else {
-                resolve({
+                reject({
                   status: false,
                   message: error?.response?.data?.message,
                   error: error?.response?.data?.error,
@@ -77,11 +77,11 @@ const Network = (
                 });
               }
             } else {
-              resolve(API_ERROR_RESPONSES.SERVER_ERROR_RESPONSE);
+              reject(API_ERROR_RESPONSES.SERVER_ERROR_RESPONSE);
             }
           });
       } else {
-        resolve(API_ERROR_RESPONSES.NO_INTERNET_RESPONSE);
+        reject(API_ERROR_RESPONSES.NO_INTERNET_RESPONSE);
       }
     });
   });

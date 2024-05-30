@@ -19,13 +19,6 @@ export const loginRequestAction = (payload: any, options?: any) => ({
   options,
 });
 
-/** login module related actions */
-export const boimetricLoginRequestAction = (payload: any, options?: any) => ({
-  type: loginActionTypes.BIOMETRIC_LOGIN_REQUEST,
-  payload,
-  options,
-});
-
 export const loginSuccessAction = (payload: any) => ({
   type: loginActionTypes.LOGIN_SUCCESS,
   payload,

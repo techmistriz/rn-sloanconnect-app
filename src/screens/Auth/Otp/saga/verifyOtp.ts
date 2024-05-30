@@ -11,15 +11,36 @@ import NavigationService from 'src/services/NavigationService/NavigationService'
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 
 function* __verifyOtpRequestSaga({payload, options}: any) {
-  //consoleLog('__verifyOtpRequestSaga payload saga==>', payload);
+  // consoleLog('__verifyOtpRequestSaga payload saga==>', payload);
   try {
     //@ts-ignore
-    const response = yield Network('auth/verify_otp', 'POST', payload, null);
-    // console.log('__verifyOtpRequestSaga response saga==>', response);
+    const response = yield Network(
+      options?.referrer == 'ForgotPassword'
+        ? 'auth/validate-otp'
+        : 'auth/verify-email',
+      'POST',
+      payload,
+      null,
+    );
+    console.log('__verifyOtpRequestSaga response saga==>', response);
     if (!isObjectEmpty(response)) {
-      showToastMessage(response?.message, 'success');
       yield put(verifyOtpSuccessAction({}));
-      NavigationService.pop(2);
+
+      if (options?.referrer == 'ForgotPassword') {
+        if (response?.message?.toLowerCase()?.indexOf('invalid otp') > -1) {
+          showToastMessage(response?.message, 'danger');
+        } else {
+          // showToastMessage(response?.message, 'success');
+          NavigationService.navigate('ResetPassword', {
+            ...payload,
+            hash: response?.hash,
+            otp: response?.otp,
+          });
+        }
+      } else {
+        showToastMessage(response?.message, 'success');
+        NavigationService.pop(2);
+      }
     } else {
       yield put(verifyOtpFailureAction({}));
       showToastMessage(response?.message);

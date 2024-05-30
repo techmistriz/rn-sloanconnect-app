@@ -20,14 +20,12 @@ import Copyright from 'src/components/@ProjectComponent/Copyright';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
-  const {loading} = useSelector(
-    (state: any) => state?.VerifyEmailReducer,
-  );
+  const {loading} = useSelector((state: any) => state?.VerifyEmailReducer);
   const [email, setEmail] = useState(route?.params?.email ?? '');
 
   useEffect(() => {}, []);
 
-  const onVerifyEmailPress = () => {``
+  const onVerifyEmailPress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
@@ -37,7 +35,7 @@ const Index = ({route, navigation}: any) => {
         verify_method: 'otp',
       };
       const options = {
-        referrer: 'VerifyEmailScreen',
+        referrer: 'VerifyEmail',
       };
       dispatch(verifyEmailRequestAction(payload, options));
     }
