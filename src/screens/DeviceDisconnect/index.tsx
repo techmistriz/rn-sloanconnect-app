@@ -25,7 +25,8 @@ import {deviceSettingsResetDataAction} from 'src/redux/actions';
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
   const connectedDevice: any = BLEService.getDevice();
-  const [deviceData, setDeviceData] = useState<any>(connectedDevice);
+  const connectedDeviceRaw: any = BLEService.deviceRaw;
+  // const [deviceData, setDeviceData] = useState<any>(connectedDevice);
 
   useEffect(() => {
     initlizeApp();
@@ -64,7 +65,10 @@ const Index = ({navigation, route}: any) => {
             <Typography
               size={12}
               text={`Disconnecting to your ${
-                deviceData?.name ?? deviceData?.localName ?? 'N/A'
+                connectedDeviceRaw?.deviceCustomName ??
+                connectedDevice?.localName ??
+                connectedDevice?.name ??
+                'N/A'
               }\n Might take a few seconds.`}
               style={{textAlign: 'center', marginTop: 10, lineHeight: 20}}
               color={Theme.colors.white}

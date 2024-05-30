@@ -129,6 +129,7 @@ const Index = ({route, navigation}: any) => {
         password_confirmation: passwordConfirmation,
         terms: terms ? 'yes' : 'no',
         source: 'sloan',
+        verify_method: 'otp',
         timezone: timezone,
         user_metadata: user_metadata,
       };

@@ -10,6 +10,7 @@ import {
   getDeviceCharacteristicsByServiceUUID,
   getDeviceModelData,
 } from 'src/utils/Helpers/project';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 
 const connectedDevice = BLEService.getDevice();
@@ -89,6 +90,15 @@ const getStatisticsInformationDataGen1 = () => {
 
     var data = [];
 
+    /**
+     * For the date of installation, logic is this:
+      For “Date of Installation”, this one is calculated from the Today date and the “Hours of Operation (Operating hours since install)”.
+      For example: 
+      if current unix timestamp in the App is 1714752879, which means (Date and time (GMT): Friday, May 3, 2024 4:14:39 PM)
+      “Hours of Operation” = 100 hours, which means 100*60*60 = 360000 seconds.
+      Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879 
+      which means the “Date of Installation” is Monday, April 29, 2024  (GMT)
+     */
     var characteristicStaticHoursOfOperation: any =
       await BLEService.readCharacteristicForDevice(
         'd0aba888-fb10-4dc9-9b17-bdd8f490c910',
@@ -96,7 +106,6 @@ const getStatisticsInformationDataGen1 = () => {
       );
 
     if (!isObjectEmpty(characteristicStaticHoursOfOperation)) {
-      // data.push(characteristicStaticHoursOfOperation);
       const decodeValue = hexToDecimal(
         base64EncodeDecode(
           characteristicStaticHoursOfOperation?.value,
@@ -105,10 +114,10 @@ const getStatisticsInformationDataGen1 = () => {
       );
       consoleLog(
         'characteristicStaticHoursOfOperation decodeValue==>',
-        decodeValue,
+        characteristicStaticHoursOfOperation,
       );
 
-      if (decodeValue) {
+      if (decodeValue >= 0) {
         const decodeValueInSeconds = parseInt(decodeValue);
         const currentTimestamp = timestampInSec();
         const dateOfInstallTimestamp = currentTimestamp - decodeValueInSeconds;
@@ -130,7 +139,7 @@ const getStatisticsInformationDataGen1 = () => {
         // console.log(`Key: ${key}, Value: ${JSON.stringify(value)}`);
 
         // *******Custom************
-        if (data?.length == 1) {
+        if (data?.length == 2) {
           const characteristicStaticADManufacturingDate =
             await getCustomCharacteristic(
               'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
@@ -159,6 +168,24 @@ const getStatisticsInformationDataGen1 = () => {
           if (!isObjectEmpty(characteristicStaticBDSerialNumber)) {
             data.push(characteristicStaticBDSerialNumber);
           }
+        }
+
+        if (data?.length == 7) {
+          /**
+           * ACCUMULATED WATER USAGE -> Total water usage
+           */
+          const totalWaterUsage = BLEService.totalWaterUsase;
+          const __totalWaterUsage = `${
+            totalWaterUsage
+              ? (totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA).toFixed(2)
+              : 0
+          } Gal`;
+          data.push({
+            name: 'Accumulated water usage',
+            position: 7,
+            value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
+            uuid: null,
+          });
         }
 
         if (

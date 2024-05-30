@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statusBar: {
-    height: STATUSBAR_HEIGHT,
+    height: STATUSBAR_HEIGHT ?? 0,
   },
 });
 

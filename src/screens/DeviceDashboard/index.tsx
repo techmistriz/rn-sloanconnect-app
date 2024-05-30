@@ -569,6 +569,7 @@ const Index = ({navigation}: any) => {
 
     const __totalWaterUsage = (flowRate / 10 / 60) * activationsDuration;
     totalWaterUsage = Number(__totalWaterUsage.toFixed(2));
+    BLEService.totalWaterUsase = totalWaterUsage;
     setTotalWaterUsage(totalWaterUsage);
   };
 
@@ -664,6 +665,7 @@ const Index = ({navigation}: any) => {
 
   /** Function comments */
   const __getTotalWaterUsase = async () => {
+    // consoleLog("BLEService.totalWaterUsase", BLEService.totalWaterUsase);
     if (BLEService.totalWaterUsase) {
       setTotalWaterUsage(BLEService.totalWaterUsase);
     }
@@ -798,7 +800,7 @@ const Index = ({navigation}: any) => {
 
   /** Function comments */
   const dispenseWater = () => {
-    // 720a01321900000001CF
+    /** @var characteristicHex for gen2*/
     var characteristicHex = '720a01321400000001CF';
     BLEService.dispenseWater(characteristicHex);
     // const writableData = fromHexStringUint8Array(characteristicHex);
@@ -807,10 +809,10 @@ const Index = ({navigation}: any) => {
     //   'base64EncodeFromByteArray',
     //   base64EncodeFromByteArray(writableData),
     // );
-    if (BLEService.deviceGeneration == 'gen2') {
+    // if (BLEService.deviceGeneration == 'gen2') {
       // initlizeAppGen2();
       // settingsMappingGen2();
-    }
+    // }
   };
 
   return (

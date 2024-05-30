@@ -998,11 +998,25 @@ export const formatCharateristicValue = (
   value: string,
 ) => {
   var result = value;
+
+  consoleLog(
+    'formatCharateristicValue characteristicStaticProperties==>',
+    characteristicStaticProperties,
+  );
   if (
     characteristicStaticProperties?.valueType &&
     characteristicStaticProperties?.valueFormat &&
     characteristicStaticProperties?.dateFormat
   ) {
+    if (characteristicStaticProperties?.dataFormat == 'Unix timestamp') {
+      const unixTimestamp = parseInt(value) ?? 0;
+      if (unixTimestamp == 0) {
+        return 'N/A';
+      }
+      return moment
+        .unix(parseInt(value) ?? 0)
+        .format(characteristicStaticProperties?.dateFormat);
+    }
     const dateFormat = characteristicStaticProperties?.dateFormat;
     const __dateFormat = dateFormat.replace(/[^A-Z]/g, '');
 

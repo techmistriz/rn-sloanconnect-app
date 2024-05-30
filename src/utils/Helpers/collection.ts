@@ -61,6 +61,6 @@ export function $collect<T = any>(items: T[]) {
   }
 }
 
-export function isObjectEmpty(obj: Record<string, any> = {}) {
+export function isObjectEmpty2(obj: Record<string, any> = {}) {
   return JSON.stringify(obj) === "{}";
 }

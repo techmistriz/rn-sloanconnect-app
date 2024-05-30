@@ -109,6 +109,16 @@ const Index = ({route, navigation}: any) => {
                 color={Theme.colors.primaryColor}
                 ff={Theme.fonts.ThemeFontMedium}
               />
+              <Typography
+                size={13}
+                text="Please enter the OTP sent to your email."
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 20,
+                }}
+                color={Theme.colors.primaryColor}
+                ff={Theme.fonts.ThemeFontMedium}
+              />
 
               <Wrap autoMargin={false} style={styles.inputWrapper}>
                 <OTPInputView

@@ -120,7 +120,7 @@ const Index = ({route, navigation}: any) => {
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}
                   onPress={() => {
-                    NavigationService.goBack()
+                    NavigationService.goBack();
                   }}
                 />
               </Wrap>

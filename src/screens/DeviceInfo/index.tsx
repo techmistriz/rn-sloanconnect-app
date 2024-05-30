@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Theme from 'src/theme';
 import {useSelector} from 'react-redux';
-import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {
+  consoleLog,
+  parseDateHumanFormat,
+  timestampInSec,
+} from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty, findObject} from 'src/utils/Helpers/array';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
@@ -18,6 +22,8 @@ import moment from 'moment';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
 import {constants} from 'src/common';
 import apiConfigs from 'src/network/apiConfig';
+import _ from 'lodash';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -113,13 +119,9 @@ const Index = ({navigation, route}: any) => {
       consoleLog('initializeAdvance resultObj==>', resultObj);
 
       if (!isObjectEmpty(resultObj) && resultObj?.value == 'MANUAL') {
-        const resultObj2 = findObject(
-          'Hours Of Operation',
-          deviceInfoAdvance,
-          {
-            searchKey: 'name',
-          },
-        );
+        const resultObj2 = findObject('Hours Of Operation', deviceInfoAdvance, {
+          searchKey: 'name',
+        });
         consoleLog('initializeAdvance resultObj2==>', resultObj2);
 
         const resultObj3 = deviceInfoAdvance.findIndex((item: any) => {
@@ -262,24 +264,29 @@ const Index = ({navigation, route}: any) => {
         __mappingDeviceDataStringGen2?.chunks &&
         Array.isArray(__mappingDeviceDataStringGen2?.chunks)
       ) {
-        __mappingDeviceDataStringGen2?.chunks.forEach((element, index) => {
-          if (element?.uuidData && Array.isArray(element?.uuidData)) {
-            element?.uuidData.forEach((element2, index2) => {
-              if (element2) {
-                allData.push({
-                  name: element2?.name?.name,
-                  // value: element2?.value?.currentValue ?? 'N/A',
-                  value: formatCharateristicValue(
-                    element2?.value,
-                    element2?.value?.currentValue,
-                  ),
-                  uuid: `${index}-${index2}`,
-                });
-              }
-            });
-          }
-        });
+        __mappingDeviceDataStringGen2?.chunks.forEach(
+          (element: any, index: number) => {
+            if (element?.uuidData && Array.isArray(element?.uuidData)) {
+              element?.uuidData.forEach((element2: any, index2: number) => {
+                if (element2 && element2?.displayInList !== false) {
+                  allData.push({
+                    name: element2?.name?.name,
+                    position: element2?.position,
+                    // value: element2?.value?.currentValue ?? 'N/A',
+                    value: formatCharateristicValue(
+                      element2?.value,
+                      element2?.value?.currentValue,
+                    ),
+                    uuid: `${index}-${index2}`,
+                  });
+                }
+              });
+            }
+          },
+        );
       }
+
+      var sortedObjs = _.sortBy(allData, 'position');
 
       var sloanModel: any = [];
       if (deviceStaticData) {
@@ -300,7 +307,7 @@ const Index = ({navigation, route}: any) => {
         },
       ];
 
-      setDeviceDetails([...sloanModel, ...allData, ...batteryStatus]);
+      setDeviceDetails([...sloanModel, ...sortedObjs, ...batteryStatus]);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -340,32 +347,226 @@ const Index = ({navigation, route}: any) => {
       );
 
       var allData: any = [];
+
+      /**
+       * For the date of installation, logic is this:
+        For “Date of Installation”, this one is calculated from the Today date and the “Hours of Operation (Operating hours since install)”.
+        For example: 
+        if current unix timestamp in the App is 1714752879, which means (Date and time (GMT): Friday, May 3, 2024 4:14:39 PM)
+        “Hours of Operation” = 100 hours, which means 100*60*60 = 360000 seconds.
+        Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879 
+        which means the “Date of Installation” is Monday, April 29, 2024  (GMT)
+       * ACCUMULATED WATER USAGE -> Total water usage
+       */
+      const __mappingDeviceDataCollectionGen2 =
+        BLEService.characteristicMonitorDataCollectionMapped;
+      const operatingHoursSinceInstall =
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[2];
+
+      if (!isObjectEmpty(operatingHoursSinceInstall)) {
+        /**
+         * Hours of Operation -> Operating hours since install
+         */
+        allData.push({
+          name: 'Hours of Operation',
+          position: 1,
+          value: operatingHoursSinceInstall?.value?.currentValue,
+          uuid: null,
+        });
+
+        const __operatingHoursSinceInstall = operatingHoursSinceInstall
+          ? parseInt(operatingHoursSinceInstall?.value?.currentValue)
+          : 0;
+
+        const __operatingHoursSinceInstallInSecs =
+          __operatingHoursSinceInstall * 60 * 60;
+        const currentTimestamp = timestampInSec();
+        const dateOfInstallTimestamp =
+          currentTimestamp - __operatingHoursSinceInstallInSecs;
+        allData.push({
+          name: 'Date of installation',
+          position: 0,
+          value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
+          uuid: null,
+        });
+      }
+
+      const __mappingDeviceDataStringGen2 =
+        BLEService.characteristicMonitorDeviceDataStringMapped;
+      /**
+       * Control box manufacturing date -> AD Manufacturing Date
+       */
+      const ADManufacturingDate =
+        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[2];
+      if (!isObjectEmpty(ADManufacturingDate)) {
+        allData.push({
+          name: 'Control box manufacturing date',
+          position: 2,
+          value: formatCharateristicValue(
+            ADManufacturingDate?.value,
+            ADManufacturingDate?.value?.currentValue,
+          ),
+          uuid: `${ADManufacturingDate?.name?.name}-${ADManufacturingDate?.value?.currentValue}`,
+        });
+      }
+
+      /**
+       * SENSOR MANUFACTURING DATE -> BD Manufacturing Date
+       */
+      const BDManufacturingDate =
+        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[3];
+      if (!isObjectEmpty(BDManufacturingDate)) {
+        allData.push({
+          name: 'Sensor manufacturing date',
+          position: 3,
+          value: formatCharateristicValue(
+            BDManufacturingDate?.value,
+            BDManufacturingDate?.value?.currentValue,
+          ),
+          uuid: null,
+        });
+      }
+
+      /**
+       * SENSOR SERIAL NUMBER -> BD Serial Number
+       */
+      const BDSerialNumber =
+        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[1];
+      if (!isObjectEmpty(BDSerialNumber)) {
+        allData.push({
+          name: 'Sensor Serial Number',
+          position: 4,
+          value: formatCharateristicValue(
+            BDSerialNumber?.value,
+            BDSerialNumber?.value?.currentValue,
+          ),
+          uuid: null,
+        });
+      }
+
+      /**
+       * ACTIVATION SINCE DAY 1 -> Activations since install
+       */
+      const activationsSinceInstall =
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[3];
+      if (!isObjectEmpty(activationsSinceInstall)) {
+        allData.push({
+          name: 'Activations since day 1',
+          position: 5,
+          value: formatCharateristicValue(
+            activationsSinceInstall?.value,
+            activationsSinceInstall?.value?.currentValue,
+          ),
+          uuid: null,
+        });
+      }
+
+      /**
+       * Accumulated activation time usage -> Duration of all activations
+       */
+      const durationOfAllActivations =
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[5];
+
+      if (!isObjectEmpty(durationOfAllActivations)) {
+        allData.push({
+          name: 'Accumulated activation time',
+          position: 6,
+          value: `${durationOfAllActivations?.value?.currentValue} sec`,
+          uuid: null,
+        });
+      }
+
+      /**
+       * ACCUMULATED WATER USAGE -> Total water usage
+       */
+      const totalWaterUsage = BLEService.totalWaterUsase;
+      const __totalWaterUsage = `${
+        totalWaterUsage
+          ? (totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA).toFixed(2)
+          : 0
+      } Gal`;
+      allData.push({
+        name: 'Accumulated water usage',
+        position: 7,
+        value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
+        uuid: null,
+      });
+
+      /**
+       * Activations since last change
+       */
+      const activationsSinceLastChange =
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[4];
+
+      if (!isObjectEmpty(activationsSinceLastChange)) {
+        allData.push({
+          name: 'Activations since last change',
+          position: 8,
+          value: activationsSinceLastChange?.value?.currentValue,
+          uuid: null,
+        });
+      }
+
+      /**
+       * Activations since last change -> Duration of all line flushes
+       */
+      const numberOfAllLineFlushes =
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[7];
+
+      if (!isObjectEmpty(numberOfAllLineFlushes)) {
+        allData.push({
+          name: 'Line flushes since day 1',
+          position: 9,
+          value: `${numberOfAllLineFlushes?.value?.currentValue}`,
+          uuid: null,
+        });
+      }
+
+      /**
+       * Activations since last change -> Duration of all line flushes
+       */
+      const durationOfAllLineFlushes =
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[6];
+
+      if (!isObjectEmpty(durationOfAllLineFlushes)) {
+        allData.push({
+          name: 'Accumulated flush time',
+          position: 10,
+          value: `${durationOfAllLineFlushes?.value?.currentValue} sec`,
+          uuid: null,
+        });
+      }
+
       if (
         __mappingDeviceDataIntegersGen2?.chunks &&
         Array.isArray(__mappingDeviceDataIntegersGen2?.chunks)
       ) {
-        __mappingDeviceDataIntegersGen2?.chunks.forEach((element, index) => {
-          if (element?.uuidData && Array.isArray(element?.uuidData)) {
-            element?.uuidData.forEach((element2, index2) => {
-              if (element2) {
-                allData.push({
-                  name: element2?.name?.name,
-                  // value: element2?.value?.currentValue ?? 'N/A',
-                  value: formatCharateristicValue(
-                    element2?.value,
-                    element2?.value?.currentValue,
-                  ),
-                  uuid: `${index}-${index2}`,
-                });
-              }
-            });
-          }
-        });
+        __mappingDeviceDataIntegersGen2?.chunks.forEach(
+          (element: any, index: number) => {
+            if (element?.uuidData && Array.isArray(element?.uuidData)) {
+              element?.uuidData.forEach((element2: any, index2: number) => {
+                if (element2 && element2?.displayInList !== false) {
+                  allData.push({
+                    name: element2?.name?.name,
+                    position: element2?.position,
+                    // value: element2?.value?.currentValue ?? 'N/A',
+                    value: formatCharateristicValue(
+                      element2?.value,
+                      element2?.value?.currentValue,
+                    ),
+                    uuid: `${index}-${index2}`,
+                  });
+                }
+              });
+            }
+          },
+        );
       }
+      var sortedObjs = _.sortBy(allData, 'position');
 
       var appInfo = await getAppInfo();
       var userData = await getUserData();
-      setDeviceDetails([...allData, ...appInfo, ...userData]);
+      setDeviceDetails([...sortedObjs, ...appInfo, ...userData]);
     } catch (error) {
     } finally {
       setLoading(false);

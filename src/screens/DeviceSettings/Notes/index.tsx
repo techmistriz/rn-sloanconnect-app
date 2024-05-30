@@ -2,7 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {Keyboard} from 'react-native';
 import Theme from 'src/theme';
 import {useDispatch, useSelector} from 'react-redux';
-import {consoleLog, showSimpleAlert} from 'src/utils/Helpers/HelperFunction';
+import {
+  consoleLog,
+  parseDateTimeInFormat,
+  showSimpleAlert,
+  timestampInSec,
+} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -112,6 +117,8 @@ const Index = ({navigation, route}: any) => {
 
   const onDonePressGen2 = async () => {
     var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+
     if (settingsData?.note?.value != note) {
       params.push({
         name: 'note',
@@ -124,6 +131,20 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.NOTE,
           note,
           120,
+        ),
+      });
+
+      params.push({
+        name: 'noteDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_STRING_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_BD_NOTE_CHANGE,
+          timestampInSec(),
         ),
       });
     }

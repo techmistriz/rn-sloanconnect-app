@@ -54,8 +54,7 @@ export const BLE_GEN2_GATT_SERVICES = {
             uuidData: [
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 11,
                 name: {
                   name: 'D/T of last factory reset',
                   size: 1,
@@ -72,12 +71,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 12,
                 name: {
                   name: 'D/T of last range change',
                   size: 1,
@@ -94,12 +95,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 13,
                 name: {
                   name: 'D/T of last OD or M change',
                   size: 1,
@@ -116,12 +119,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 14,
                 name: {
                   name: 'D/T of meter runtime change',
                   size: 1,
@@ -138,12 +143,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 15,
                 name: {
                   name: 'D/T of OD runtime change',
                   size: 1,
@@ -160,12 +167,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 16,
                 name: {
                   name: 'D/T of flush Enable change',
                   size: 1,
@@ -182,12 +191,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 17,
                 name: {
                   name: 'D/T of flush mode change',
                   size: 1,
@@ -204,12 +215,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 18,
                 name: {
                   name: 'D/T of flush Temp change',
                   size: 1,
@@ -226,12 +239,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 19,
                 name: {
                   name: 'D/T of flush Time change',
                   size: 1,
@@ -248,12 +263,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 20,
                 name: {
                   name: 'D/T of flush Interval change',
                   size: 1,
@@ -270,12 +287,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
-                position: 0,
+                position: 21,
                 name: {
                   name: 'D/T of BD Note change',
                   size: 1,
@@ -292,11 +311,14 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'D/T of Full Name change',
@@ -318,7 +340,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'D/T of Full Nick change',
@@ -340,7 +362,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'D/T of last diagnostic',
@@ -362,7 +384,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'D/T of last Flow Rate change',
@@ -384,7 +406,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'D/T of last BLE setting change',
@@ -406,7 +428,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Remote Water dispense',
@@ -428,7 +450,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Diagnostic Init',
@@ -450,7 +472,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Factory Reset',
@@ -472,7 +494,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flow Rate - AD',
@@ -494,7 +516,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Sensor Range',
@@ -516,7 +538,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Mode Selection',
@@ -538,7 +560,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Metered Run-time',
@@ -560,7 +582,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Maximum On-demand Run-time',
@@ -582,7 +604,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush Enable',
@@ -604,7 +626,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush Mode',
@@ -626,7 +648,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush Min Temperature',
@@ -648,7 +670,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush Max Temperature',
@@ -670,7 +692,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush Time/Duration (Temp Z1)',
@@ -692,7 +714,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush Time/Duration (Temp Z2)',
@@ -714,7 +736,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush Time/Duration (Temp Z3)',
@@ -736,7 +758,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush interval (Temp Z1)',
@@ -758,7 +780,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush interval (Temp Z2)',
@@ -780,7 +802,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Flush interval (Temp Z3)',
@@ -836,7 +858,7 @@ export const BLE_GEN2_GATT_SERVICES = {
             uuidData: [
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert 0 Config',
@@ -858,7 +880,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert 3 Config',
@@ -880,7 +902,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert 4 Config',
@@ -902,7 +924,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert 7 Config',
@@ -924,7 +946,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert 8 Config',
@@ -946,7 +968,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert 11 Config',
@@ -968,7 +990,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert 12 Config',
@@ -990,7 +1012,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert 150 Config',
@@ -1012,7 +1034,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'BLE Mode',
@@ -1034,7 +1056,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'BLE Tx Power',
@@ -1056,7 +1078,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'BLE Adv Frequency',
@@ -1114,7 +1136,7 @@ export const BLE_GEN2_GATT_SERVICES = {
             uuidData: [
               {
                 size: 13,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'AD Serial Number',
@@ -1136,8 +1158,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 13,
-                displayInList: true,
-                position: 0,
+                position: 2,
                 name: {
                   name: 'BD Serial Number',
                   size: 3,
@@ -1158,7 +1179,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 9,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'AD Manufacturing Date',
@@ -1183,7 +1204,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 9,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'BD Manufacturing Date',
@@ -1208,7 +1229,6 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 7,
-                displayInList: true,
                 position: 0,
                 name: {
                   name: 'AD Hardware Version',
@@ -1230,8 +1250,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 7,
-                displayInList: true,
-                position: 0,
+                position: 1,
                 name: {
                   name: 'AD Firmware Version',
                   size: 3,
@@ -1252,8 +1271,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 7,
-                displayInList: true,
-                position: 0,
+                position: 3,
                 name: {
                   name: 'BD Hardware Version',
                   size: 3,
@@ -1274,8 +1292,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 7,
-                displayInList: true,
-                position: 0,
+                position: 4,
                 name: {
                   name: 'BD Firmware Version',
                   size: 3,
@@ -1316,7 +1333,7 @@ export const BLE_GEN2_GATT_SERVICES = {
             uuidData: [
               {
                 size: 33,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Full Name',
@@ -1338,7 +1355,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 9,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Nick Name',
@@ -1360,7 +1377,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 123,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'BD Note',
@@ -1433,7 +1450,7 @@ export const BLE_GEN2_GATT_SERVICES = {
             uuidData: [
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'AD SKU',
@@ -1455,7 +1472,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'BD SKU',
@@ -1477,7 +1494,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Operating hours since install',
@@ -1500,7 +1517,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Activations since install',
@@ -1522,7 +1539,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Activations since last change',
@@ -1544,7 +1561,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Duration of all activations',
@@ -1566,10 +1583,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
-                  name: 'Duration of all Line flushes',
+                  name: 'Duration of all line flushes',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -1588,7 +1605,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Number of Line flushes',
@@ -1610,7 +1627,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Number of setting changes since install',
@@ -1632,7 +1649,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Number of BLE connections',
@@ -1654,7 +1671,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Number of BLE advertisement',
@@ -1713,7 +1730,7 @@ export const BLE_GEN2_GATT_SERVICES = {
             uuidData: [
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert Flags',
@@ -1735,7 +1752,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Alert Flags',
@@ -1757,7 +1774,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Temperature',
@@ -1780,7 +1797,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Battery Level %',
@@ -1802,7 +1819,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 4,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Water Usage',
@@ -1824,7 +1841,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 1,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: '0xFF',
@@ -1846,7 +1863,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 1,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: '0xFF',
@@ -1868,7 +1885,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 1,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'External Power Status',
@@ -1890,7 +1907,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 1,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'Range Change',
@@ -1912,7 +1929,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 1,
-                displayInList: true,
+                displayInList: false,
                 position: 0,
                 name: {
                   name: 'EF',
