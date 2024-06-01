@@ -98,7 +98,7 @@ const Index = ({navigation, route}: any) => {
       } else {
         NavigationService.navigate('FlowRateInput', {
           title: `Set flow rate to between 0.3 and 2.6\n gallons per minute`,
-          subTitle: 'GMP',
+          subTitle: 'GPM',
           minValue: 0.3,
           maxValue: 2.6,
           flowRateType: flowRateType,

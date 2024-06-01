@@ -11,6 +11,7 @@ import {InputProps} from './types';
 import {styles} from './styles';
 import Theme from 'src/theme';
 import TouchableItem from 'src/components/TouchableItem';
+import { constants } from 'src/common';
 
 // Input
 const Input = ({
@@ -140,10 +141,8 @@ const Input = ({
         editable={editable}
         spellCheck={spellCheck}
         multiline={multiline}
-        numberOfLines={Platform.OS === 'ios' ? null : numberOfLines}
-        minHeight={
-          Platform.OS === 'ios' && numberOfLines ? 20 * numberOfLines : null
-        }
+        numberOfLines={constants.isIOS ? null : numberOfLines}
+        minHeight={constants.isIOS && numberOfLines ? 20 * numberOfLines : null}
         style={[
           styles.textInput,
           //@ts-ignore
