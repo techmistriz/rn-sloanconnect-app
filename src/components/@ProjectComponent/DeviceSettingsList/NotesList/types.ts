@@ -17,4 +17,5 @@ export type DeviceSettingListProps = {
   settingChangeData?: any;
   onSettingSaved?: () => void;
   applied?: boolean;
+  showApplySettingButton?: boolean;
 };

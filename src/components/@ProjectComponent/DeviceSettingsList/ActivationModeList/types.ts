@@ -17,4 +17,5 @@ export type FlowRateProps = {
   settingChangeData?: any;
   onSettingSaved?: () => void;
   applied?: boolean;
+  showApplySettingButton?: boolean;
 };

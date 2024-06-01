@@ -244,7 +244,7 @@ const Index = ({navigation, route}: any) => {
   };
 
   return (
-    <AppContainer scroll={true} scrollViewStyle={{}} backgroundType="gradient">
+    <AppContainer scroll={false} scrollViewStyle={{}} backgroundType="gradient">
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>

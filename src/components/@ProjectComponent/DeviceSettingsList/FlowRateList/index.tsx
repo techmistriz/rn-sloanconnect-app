@@ -37,6 +37,7 @@ const DeviceSettingList = ({
   style,
   navigation,
   applied = false,
+  showApplySettingButton
 }: // onSettingChange,
 // onSettingSaved,
 DeviceSettingListProps) => {
@@ -52,6 +53,8 @@ DeviceSettingListProps) => {
   }, [applied, settingsData]);
 
   const initlizeApp = async () => {
+    consoleLog('__flowRate initlizeApp called==>');
+
     let __flowRate = settingsData?.flowRate?.value ?? '';
 
     // Handle unsaved value which were changed
@@ -129,7 +132,7 @@ DeviceSettingListProps) => {
                 ff={Theme.fonts.ThemeFontLight}
               />
 
-              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) ? (
+              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) && showApplySettingButton ? (
                 <>
                   {applied ? (
                     <VectorIcon

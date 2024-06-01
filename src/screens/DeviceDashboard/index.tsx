@@ -58,11 +58,6 @@ import NotesList from 'src/components/@ProjectComponent/DeviceSettingsList/Notes
 
 const Index = ({navigation}: any) => {
   const dispatch = useDispatch();
-  // const {referrer} = route?.params || {referrer: undefined};
-  // const {device, status} = useSelector(
-  //   (state: any) => state?.ConnectedDeviceReducer,
-  // );
-  // const [expanded, setExpanded] = useState(false);
   const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
@@ -71,6 +66,8 @@ const Index = ({navigation}: any) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [applying, setApplying] = useState<boolean>(false);
   const [applied, setApplied] = useState<boolean>(false);
+  const [showApplySettingButton, setShowApplySettingButton] =
+    useState<boolean>(true);
   const [applyingLoadingText, setApplyingLoadingText] =
     useState<string>('Applying...');
   const [loadPreviosSettingsModal, setLoadPreviosSettingsModal] =
@@ -780,9 +777,11 @@ const Index = ({navigation}: any) => {
     }, timeout);
 
     setTimeout(() => {
-      dispatch(deviceSettingsResetDataAction());
+      setShowApplySettingButton(false);
+      // dispatch(deviceSettingsResetDataAction());
       // consoleLog('status5');
     }, timeout + 2000);
+
     setTimeout(() => {
       setApplied(false);
       initlizeApp();
@@ -795,6 +794,12 @@ const Index = ({navigation}: any) => {
         );
       }
     }, timeout + 3000);
+
+    setTimeout(() => {
+      dispatch(deviceSettingsResetDataAction());
+      setShowApplySettingButton(true);
+    }, timeout + 4000);
+
     // consoleLog('status7');
   };
 
@@ -810,8 +815,8 @@ const Index = ({navigation}: any) => {
     //   base64EncodeFromByteArray(writableData),
     // );
     // if (BLEService.deviceGeneration == 'gen2') {
-      // initlizeAppGen2();
-      // settingsMappingGen2();
+    // initlizeAppGen2();
+    // settingsMappingGen2();
     // }
   };
 
@@ -1164,7 +1169,10 @@ const Index = ({navigation}: any) => {
               <Divider color={Theme.colors.lightGray} />
             </Wrap>
 
-            <CollapsableContainer expanded={!isObjectEmpty(deviceSettingsData)}>
+            <CollapsableContainer
+              expanded={
+                !isObjectEmpty(deviceSettingsData) && showApplySettingButton
+              }>
               <Wrap autoMargin={false} style={styles.rowContainer}>
                 <Row
                   autoMargin={false}
@@ -1214,6 +1222,7 @@ const Index = ({navigation}: any) => {
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
+                showApplySettingButton={showApplySettingButton}
               />
 
               <LineFlushList
@@ -1228,6 +1237,7 @@ const Index = ({navigation}: any) => {
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
+                showApplySettingButton={showApplySettingButton}
               />
 
               <FlowRateList
@@ -1242,6 +1252,7 @@ const Index = ({navigation}: any) => {
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
+                showApplySettingButton={showApplySettingButton}
               />
 
               <SensorRangeList
@@ -1257,6 +1268,7 @@ const Index = ({navigation}: any) => {
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
+                showApplySettingButton={showApplySettingButton}
               />
 
               {noteSettings && (
@@ -1272,6 +1284,7 @@ const Index = ({navigation}: any) => {
                   navigation={navigation}
                   borderBottom={<Divider color={Theme.colors.lightGray} />}
                   applied={applied}
+                  showApplySettingButton={showApplySettingButton}
                 />
               )}
             </Wrap>

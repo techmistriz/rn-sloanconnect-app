@@ -38,6 +38,7 @@ const DeviceSettingList = ({
   style,
   navigation,
   applied,
+  showApplySettingButton
 }: DeviceSettingListProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
@@ -117,7 +118,7 @@ const DeviceSettingList = ({
                 ff={Theme.fonts.ThemeFontLight}
               />
 
-              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) ? (
+              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) && showApplySettingButton? (
                 <>
                   {applied ? (
                     <VectorIcon

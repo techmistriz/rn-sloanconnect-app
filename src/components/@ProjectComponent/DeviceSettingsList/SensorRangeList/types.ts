@@ -14,4 +14,5 @@ export type DeviceSettingListProps = {
   borderBottom?: JSX.Element | null;
   navigation?: any;
   applied?: boolean;
+  showApplySettingButton?: boolean;
 };

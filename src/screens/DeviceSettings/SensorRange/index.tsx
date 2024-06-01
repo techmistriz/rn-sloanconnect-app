@@ -52,7 +52,7 @@ const Index = ({navigation, route}: any) => {
 
   // const sliderOneValuesChangeStart = () => setSliderOneChanging(true);
   const sliderOneValuesChange = (values: any) => {
-    setSliderOneValue(values);
+    // setSliderOneValue(values);
     if (Array.isArray(values) && values?.length > 0) {
       setSensorRange(values?.[0]?.toString());
     }
@@ -60,9 +60,9 @@ const Index = ({navigation, route}: any) => {
   // const sliderOneValuesChangeFinish = () => setSliderOneChanging(false);
 
   useEffect(() => {
-    consoleLog('SensorRange==>', {
-      settings,
-    });
+    // consoleLog('SensorRange==>', {
+    //   settings,
+    // });
     initlizeApp();
   }, []);
 
@@ -83,7 +83,7 @@ const Index = ({navigation, route}: any) => {
     }
     // setSensorRangeOld(__sensorRange);
     setSensorRange(__sensorRange);
-    setSliderOneValue([Number(__sensorRange)]);
+    setSliderOneValue([parseInt(__sensorRange)]);
   };
 
   const onDonePress = () => {
@@ -248,6 +248,8 @@ const Index = ({navigation, route}: any) => {
                 max={sensorRangeConfig?.max ?? 5}
                 step={sensorRangeConfig?.step ?? 1}
                 // enableLabel={true}
+                enabledTwo={false}
+                allowOverlap={true}
                 sliderLength={constants.screenWidth - 120}
                 // onValuesChangeStart={sliderOneValuesChangeStart}
                 onValuesChange={sliderOneValuesChange}
