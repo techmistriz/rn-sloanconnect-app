@@ -23,7 +23,7 @@ function* __resetPasswordRequestSaga({payload, options}: any) {
     //@ts-ignore
     // getUserAPiPrefixByUserType(options?.type) +
     const response = yield Network('auth/reset-password', 'POST', payload);
-    console.log('__resetPasswordRequestSaga response saga==>', response);
+    // console.log('__resetPasswordRequestSaga response saga==>', response);
     if (!isObjectEmpty(response)) {
       yield put(resetPasswordSuccessAction({}));
 
@@ -31,7 +31,8 @@ function* __resetPasswordRequestSaga({payload, options}: any) {
         showToastMessage(response?.message, 'danger');
       } else {
         showToastMessage(response?.message, 'success');
-        NavigationService.pop(3);
+        // NavigationService.pop(3);
+        NavigationService.navigate('ResetPasswordSuccess');
       }
     } else {
       yield put(resetPasswordFailureAction({}));

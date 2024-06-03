@@ -25,7 +25,12 @@ function* __signupRequestSaga({payload, options}: any) {
     if (response.message == 'Registration successful.') {
       yield put(signupSuccessAction({}));
       showToastMessage(response?.message, 'success');
-      NavigationService.navigate('Otp', {
+      // NavigationService.navigate('Otp', {
+      //   ...payload,
+      //   hash: response?.hash,
+      //   referrer: options?.referrer,
+      // });
+      NavigationService.navigate('RegisterInvitation', {
         ...payload,
         hash: response?.hash,
         referrer: options?.referrer,

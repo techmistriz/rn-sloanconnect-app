@@ -80,6 +80,16 @@ const Index = ({route, navigation}: any) => {
                 color={Theme.colors.primaryColor}
                 ff={Theme.fonts.ThemeFontMedium}
               />
+              <Typography
+                size={14}
+                text="Enter your email to receive the verification code in your inbox."
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 20,
+                }}
+                color={Theme.colors.black}
+                ff={Theme.fonts.ThemeFontLight}
+              />
               <Wrap autoMargin={false} style={styles.inputWrapper}>
                 <Input
                   onRef={input => {
@@ -105,7 +115,7 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="Verify Email"
+                  title="VERIFY EMAIL"
                   onPress={() => {
                     onVerifyEmailPress();
                   }}

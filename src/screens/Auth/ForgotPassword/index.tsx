@@ -76,13 +76,23 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Forgot Password"
+                text="Forgot Your Password?"
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
                 }}
                 color={Theme.colors.primaryColor}
                 ff={Theme.fonts.ThemeFontMedium}
+              />
+              <Typography
+                size={14}
+                text="if you forget your password, please enter your email address below to be emailed a OTP"
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 20,
+                }}
+                color={Theme.colors.black}
+                ff={Theme.fonts.ThemeFontLight}
               />
               <Wrap autoMargin={false} style={styles.inputWrapper}>
                 <Input
@@ -109,7 +119,7 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="Forgot Password"
+                  title="RESET PASSWORD"
                   onPress={() => {
                     onForgotPasswordPress();
                   }}
@@ -120,7 +130,7 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                 <Typography
                   size={13}
-                  text={'Back to login'}
+                  text={'Return to login'}
                   style={{textAlign: 'center', textDecorationLine: 'underline'}}
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}

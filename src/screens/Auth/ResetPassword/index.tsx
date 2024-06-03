@@ -12,6 +12,7 @@ import {
   showSimpleAlert,
   isValidEmail,
   getImgSource,
+  isValidPassword,
 } from 'src/utils/Helpers/HelperFunction';
 import {
   otpRequestAction,
@@ -31,9 +32,9 @@ const Index = ({route, navigation}: any) => {
     (state: any) => state?.ForgotResetPasswordReducer,
   );
 
-  const [password, setPassword] = useState(__DEV__ ? '12345678' : '');
+  const [password, setPassword] = useState(__DEV__ ? 'Test@12345' : '');
   const [passwordConfirmation, setPasswordConfirmation] = useState(
-    __DEV__ ? '12345678' : '',
+    __DEV__ ? 'Test@12345' : '',
   );
 
   useEffect(() => {
@@ -66,11 +67,14 @@ const Index = ({route, navigation}: any) => {
     if (password.trim() == '') {
       showSimpleAlert('Please enter your password');
       return false;
-    } else if (password.trim().length < 6) {
-      showSimpleAlert('Password must contain at least minimum 6 characters');
+    } else if (password.trim().length < 8) {
+      showSimpleAlert('Password must contain at least minimum 8 characters');
       return false;
     } else if (passwordConfirmation.trim() == '') {
       showSimpleAlert('Please enter your confirm password');
+      return false;
+    } else if (!isValidPassword(passwordConfirmation)) {
+      showSimpleAlert('Please enter valid password');
       return false;
     } else if (password.trim() !== passwordConfirmation.trim()) {
       showSimpleAlert('Password and confirm password should same');
@@ -100,13 +104,24 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Reset Password"
+                text="Reset Your Password"
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
                 }}
                 color={Theme.colors.primaryColor}
                 ff={Theme.fonts.ThemeFontMedium}
+              />
+
+              <Typography
+                size={14}
+                text={`Please provide new password for account ${email}`}
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 20,
+                }}
+                color={Theme.colors.black}
+                ff={Theme.fonts.ThemeFontLight}
               />
 
               <Wrap autoMargin={false} style={styles.inputWrapper}>
@@ -156,15 +171,70 @@ const Index = ({route, navigation}: any) => {
               <Wrap
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
+                <Typography
+                  size={13}
+                  text={`Password Requirements`}
+                  style={{
+                    textAlign: 'left',
+                    marginBottom: 20,
+                  }}
+                  color={Theme.colors.black}
+                  ff={Theme.fonts.ThemeFontBold}
+                />
+
+                <Typography
+                  size={11}
+                  text={`At least 8 characters`}
+                  style={{
+                    textAlign: 'left',
+                    marginBottom: 5,
+                  }}
+                  color={Theme.colors.black}
+                  ff={Theme.fonts.ThemeFontLight}
+                />
+                <Typography
+                  size={11}
+                  text={`A mixture of both uppercase and lowercase letters`}
+                  style={{
+                    textAlign: 'left',
+                    marginBottom: 5,
+                  }}
+                  color={Theme.colors.black}
+                  ff={Theme.fonts.ThemeFontLight}
+                />
+                <Typography
+                  size={11}
+                  text={`A mixture of letters and numbers`}
+                  style={{
+                    textAlign: 'left',
+                    marginBottom: 5,
+                  }}
+                  color={Theme.colors.black}
+                  ff={Theme.fonts.ThemeFontLight}
+                />
+                <Typography
+                  size={11}
+                  text={`Inclusive of at least one special charater, e.g., ! @ # ?`}
+                  style={{
+                    textAlign: 'left',
+                    marginBottom: 5,
+                  }}
+                  color={Theme.colors.black}
+                  ff={Theme.fonts.ThemeFontLight}
+                />
+              </Wrap>
+              <Wrap
+                autoMargin={false}
+                style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="Reset Password"
+                  title="RESET PASSWORD"
                   onPress={() => {
                     onResetPasswordPress();
                   }}
                 />
               </Wrap>
 
-              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
+              {/* <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                 <Typography
                   size={13}
                   text={'Back to login'}
@@ -175,7 +245,7 @@ const Index = ({route, navigation}: any) => {
                     NavigationService.pop(2);
                   }}
                 />
-              </Wrap>
+              </Wrap> */}
             </Wrap>
           </Wrap>
           <Wrap autoMargin={false} style={styles.section2}>

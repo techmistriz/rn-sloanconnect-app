@@ -10,8 +10,11 @@ import SplashScreen from 'src/screens/SplashScreen';
 import Welcome from 'src/screens/Welcome';
 import Login from 'src/screens/Auth/Login';
 import Register from 'src/screens/Auth/Register';
+import RegisterInvitation from 'src/screens/Auth/RegisterInvitation';
+import RegisterSuccess from 'src/screens/Auth/RegisterSuccess';
 import ForgotPassword from 'src/screens/Auth/ForgotPassword';
 import ResetPassword from 'src/screens/Auth/ResetPassword';
+import ResetPasswordSuccess from 'src/screens/Auth/ResetPasswordSuccess';
 import Otp from 'src/screens/Auth/Otp';
 import VerifyEmail from 'src/screens/Auth/VerifyEmail';
 import Settings from 'src/screens/Settings';
@@ -89,6 +92,22 @@ const MainNavigator = () => {
           }}
         />
         <Stack.Screen
+          name="RegisterInvitation"
+          component={RegisterInvitation}
+          options={{
+            headerShown: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="RegisterSuccess"
+          component={RegisterSuccess}
+          options={{
+            headerShown: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
           name="ForgotPassword"
           component={ForgotPassword}
           options={{
@@ -99,6 +118,14 @@ const MainNavigator = () => {
         <Stack.Screen
           name="ResetPassword"
           component={ResetPassword}
+          options={{
+            headerShown: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="ResetPasswordSuccess"
+          component={ResetPasswordSuccess}
           options={{
             headerShown: false,
             title: '',

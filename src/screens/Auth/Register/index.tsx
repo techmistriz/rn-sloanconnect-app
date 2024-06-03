@@ -51,7 +51,7 @@ const Index = ({route, navigation}: any) => {
   const [title, setTitle] = useState(__DEV__ ? 'Mr' : '');
   const [company, setCompany] = useState(__DEV__ ? 'ABC' : '');
   const [phoneNumber, setPhoneNumber] = useState(__DEV__ ? '+1-91817161' : '');
-  const [email, setEmail] = useState(__DEV__ ? 'pk836746+1@gmail.com' : '');
+  const [email, setEmail] = useState(__DEV__ ? 'pk836746+9@gmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? '123456' : '');
   const [passwordConfirmation, setPasswordConfirmation] = useState(
     __DEV__ ? '123456' : '',

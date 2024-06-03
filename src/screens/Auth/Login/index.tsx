@@ -31,7 +31,7 @@ const Index = ({route, navigation}: any) => {
   // const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
   const [showPassword, setShowPassword] = useState(false);
 
-  const [email, setEmail] = useState(__DEV__ ? 'pk836746+7@gmail.com' : '');
+  const [email, setEmail] = useState(__DEV__ ? 'pk836746+11@gmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? '123456' : '');
 
   useEffect(() => {
@@ -54,6 +54,7 @@ const Index = ({route, navigation}: any) => {
       const payload = {
         email: email.trim(),
         password: password.trim(),
+        source: 'sloan',
       };
 
       const options = {

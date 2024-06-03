@@ -22,7 +22,7 @@ function* __verifyOtpRequestSaga({payload, options}: any) {
       payload,
       null,
     );
-    console.log('__verifyOtpRequestSaga response saga==>', response);
+    // console.log('__verifyOtpRequestSaga response saga==>', response);
     if (!isObjectEmpty(response)) {
       yield put(verifyOtpSuccessAction({}));
 
@@ -39,7 +39,10 @@ function* __verifyOtpRequestSaga({payload, options}: any) {
         }
       } else {
         showToastMessage(response?.message, 'success');
-        NavigationService.pop(2);
+        // NavigationService.pop(2);
+        NavigationService.navigate('RegisterSuccess', {
+          referrer: options?.referrer,
+        });
       }
     } else {
       yield put(verifyOtpFailureAction({}));

@@ -504,23 +504,12 @@ export function isValidEmail(string: string): boolean {
  * @param string
  * check email is valid or not
  */
-export function isValidPassword(string: string) {
-  string = string.replace(/\s/g, '');
-  const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
+export function isValidPassword(password: string) {
+  password = password.replace(/\s/g, '');
+  const __passwordRegex =
+    /^(?=.*[0-9].*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-zA-Z]).{8,}$/;
 
-  const mediumRegex = new RegExp(
-    "r'(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!% *?&]{6,18})';",
-  );
-
-  const strongRegex = new RegExp(
-    '^(?=.*[0-9].*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{10,}$',
-  );
-
-  if (strongRegex.test(string) === true) {
-    return true;
-  }
-  return false;
+  return __passwordRegex.test(password);
 }
 
 /**

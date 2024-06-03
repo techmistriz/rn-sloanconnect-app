@@ -12,6 +12,7 @@ import {
   showSimpleAlert,
   isValidEmail,
   getImgSource,
+  showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
 import {
   forgotPasswordRequestAction,
@@ -23,6 +24,8 @@ import NavigationService from 'src/services/NavigationService/NavigationService'
 import Copyright from 'src/components/@ProjectComponent/Copyright';
 import Input from 'src/components/Input';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import Network from 'src/network/Network';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 
 const Index = ({route, navigation}: any) => {
   const {email, hash, referrer} = route?.params;
@@ -33,7 +36,8 @@ const Index = ({route, navigation}: any) => {
   const __forgotResetPasswordReducer = useSelector(
     (state: any) => state?.ForgotResetPasswordReducer,
   );
-  // const [loading, setLoading] = useState(false);
+  const [__loading, __setLoading] = useState(false);
+  const [__hash, __setHash] = useState(hash);
   const [otp, setOtp] = useState('');
 
   useEffect(() => {
@@ -48,7 +52,7 @@ const Index = ({route, navigation}: any) => {
       const payload = {
         email: email,
         otp: otp,
-        token: hash,
+        token: __hash,
       };
       const options = {
         referrer: referrer,
@@ -57,7 +61,7 @@ const Index = ({route, navigation}: any) => {
     }
   };
 
-  const onResendOtpPress = () => {
+  const onResendOtpPress = async () => {
     Keyboard.dismiss();
     if (referrer == 'ForgotPassword') {
       const payload = {
@@ -65,17 +69,50 @@ const Index = ({route, navigation}: any) => {
         source: 'sloan',
         verify_method: 'otp',
       };
-
-      const options = {
-        referrer: 'ForgotPassword',
-        shouldRedirect: false,
-      };
-      dispatch(forgotPasswordRequestAction(payload, options));
+      try {
+        setOtp('');
+        __setLoading(true);
+        const response = await Network('auth/forgot-password', 'POST', payload);
+        if (response?.status) {
+          __setHash(response?.hash);
+          showToastMessage(response?.message, 'success');
+        } else {
+          showToastMessage(response?.message, 'danger');
+        }
+      } catch (error) {
+        showToastMessage(error?.message, 'danger');
+      } finally {
+        __setLoading(false);
+      }
     } else {
       const checkValid = checkValidation();
       if (checkValid) {
         const payload = {email: email, source: 'sloan', verify_method: 'otp'};
-        dispatch(otpRequestAction(payload));
+        // dispatch(otpRequestAction(payload));
+        try {
+          setOtp('');
+          __setLoading(true);
+          const response = await Network(
+            'auth/activation-email',
+            'POST',
+            payload,
+          );
+
+          consoleLog(
+            'onResendOtpPress auth/activation-email response==>',
+            response,
+          );
+          if (!isObjectEmpty(response)) {
+            __setHash(response?.hash);
+            showToastMessage(response?.message, 'success');
+          } else {
+            showToastMessage(response?.message, 'danger');
+          }
+        } catch (error) {
+          showToastMessage(error?.message, 'danger');
+        } finally {
+          __setLoading(false);
+        }
       }
     }
   };
@@ -107,7 +144,7 @@ const Index = ({route, navigation}: any) => {
   return (
     <AppContainer
       scroll={true}
-      loading={loading || __forgotResetPasswordReducer?.loading}
+      loading={loading || __forgotResetPasswordReducer?.loading || __loading}
       scrollViewStyle={{}}
       hasHeader={false}>
       <Wrap autoMargin={false} style={styles.container}>
@@ -131,6 +168,16 @@ const Index = ({route, navigation}: any) => {
                 }}
                 color={Theme.colors.primaryColor}
                 ff={Theme.fonts.ThemeFontMedium}
+              />
+              <Typography
+                size={14}
+                text="Enter the code you received in your email."
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 20,
+                }}
+                color={Theme.colors.black}
+                ff={Theme.fonts.ThemeFontLight}
               />
               <Wrap autoMargin={false} style={styles.inputWrapper}>
                 {/* <Input
@@ -172,7 +219,7 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="Verify"
+                  title="VERIFY"
                   onPress={() => {
                     onOtpPress();
                   }}
@@ -208,7 +255,7 @@ const Index = ({route, navigation}: any) => {
                 </Row>
               </Wrap>
 
-              <Wrap autoMargin={false} style={[styles.inputWrapper]}>
+              <Wrap autoMargin={true} style={[styles.inputWrapper]}>
                 <Typography
                   size={13}
                   text={'Back to login'}
