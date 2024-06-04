@@ -23,7 +23,7 @@ import {
   getTimezone,
   parseDateHumanFormat,
 } from 'src/utils/Helpers/HelperFunction';
-import {base64EncodeDecode, cleanString} from 'src/utils/Helpers/encryption';
+import {base64EncodeDecode, cleanString, cleanString2} from 'src/utils/Helpers/encryption';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
@@ -38,7 +38,7 @@ const DeviceSettingList = ({
   style,
   navigation,
   applied,
-  showApplySettingButton
+  showApplySettingButton,
 }: DeviceSettingListProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
@@ -56,19 +56,15 @@ const DeviceSettingList = ({
     // consoleLog("__note==>", __note.toString("utf8").length);
 
     // Handle unsaved value which were changed
-    const resultObj = findObject(
-      'note',
-      deviceSettingsData?.note,
-      {
-        searchKey: 'name',
-      },
-    );
+    const resultObj = findObject('note', deviceSettingsData?.Note, {
+      searchKey: 'name',
+    });
     // consoleLog('__note resultObj==>', deviceSettingsData);
 
     if (!isObjectEmpty(resultObj)) {
       __note = resultObj?.newValue;
     }
-    setNote(cleanString(__note));
+    setNote(cleanString2(cleanString(__note)));
   };
 
   return (
@@ -118,7 +114,8 @@ const DeviceSettingList = ({
                 ff={Theme.fonts.ThemeFontLight}
               />
 
-              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) && showApplySettingButton? (
+              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) &&
+              showApplySettingButton ? (
                 <>
                   {applied ? (
                     <VectorIcon

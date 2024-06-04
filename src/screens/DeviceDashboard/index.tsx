@@ -702,6 +702,8 @@ const Index = ({navigation}: any) => {
         shouldShowToast,
       );
     } else if (BLEService.deviceGeneration == 'gen2') {
+      // consoleLog('__deviceSettingsData', JSON.stringify(__deviceSettingsData));
+      // return;
       __onApplySettingPress(
         __deviceSettingsData,
         shouldUpdatePreviosSettings,
@@ -1278,7 +1280,7 @@ const Index = ({navigation}: any) => {
                     title: 'Notes',
                     subTitle: 'DEVICE NOTES',
                     route: 'Notes',
-                    name: 'Notes',
+                    name: 'Note',
                   }}
                   settingsData={noteSettings}
                   navigation={navigation}

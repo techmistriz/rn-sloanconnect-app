@@ -309,7 +309,8 @@ export const urlParser = (url: string) => {
 };
 
 export const timestampInSec = () => {
-  return Math.floor(Date.now() / 1000);
+  // return Math.floor(Date.now() / 1000);
+  return moment().unix();
 };
 
 /**

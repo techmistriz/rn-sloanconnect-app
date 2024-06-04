@@ -18,7 +18,7 @@ import {getCalculatedValue, getFlowRateRangeGen1} from './helper';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import { mapValueGen2 } from 'src/utils/Helpers/project';
+import {mapValueGen2} from 'src/utils/Helpers/project';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -60,9 +60,10 @@ const Index = ({navigation, route}: any) => {
 
   useEffect(() => {
     checkForOtherInitialValue();
-    DeviceEventEmitter.addListener('FlowRateInputEvent', eventData =>
-      flowRateInputEventCallback(eventData),
-    );
+    DeviceEventEmitter.addListener('FlowRateInputEvent', eventData => {
+      // consoleLog("FlowRateInputEvent eventData==>", eventData);
+      flowRateInputEventCallback(eventData);
+    });
     return () => {
       DeviceEventEmitter.removeAllListeners('FlowRateInputEvent');
     };
@@ -80,6 +81,7 @@ const Index = ({navigation, route}: any) => {
   const flowRateInputEventCallback = (eventData: any) => {
     if (eventData?.flowRateInput) {
       const val: string | number = (eventData?.flowRateInput * 10)?.toString();
+      // consoleLog("flowRateInputEventCallback val==>", val);
       setOther(val);
       setFlowRate(val);
     }

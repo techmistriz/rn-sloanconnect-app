@@ -165,13 +165,13 @@ const Index = ({navigation, route}: any) => {
 
   /** component hooks method */
   useEffect(() => {
-    consoleLog('useEffect DeviceSearching focused==>', {
-      requirePermissionAllowed,
-    });
+    // consoleLog('useEffect DeviceSearching focused==>', {
+    //   requirePermissionAllowed,
+    // });
     if (requirePermissionAllowed) {
-      consoleLog('useEffect initlizeApp called==>', {
-        requirePermissionAllowed,
-      });
+      // consoleLog('useEffect initlizeApp called==>', {
+      //   requirePermissionAllowed,
+      // });
       initlizeApp();
     }
     if (requirePermissionAllowed) {
@@ -343,6 +343,8 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const onDeviceConnectingPress = (item: any) => {
+    clearInterval(intervalID);
+    clearTimeout(timeoutID);
     setScanning(ScanningProps.Connecting);
     BLEService.connectToDevice(item?.id, item)
       .then(onConnectSuccess)

@@ -56,7 +56,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 11,
                 name: {
-                  name: 'D/T of last factory reset',
+                  name: 'Date of last factory reset',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -80,7 +80,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 12,
                 name: {
-                  name: 'D/T of last range change',
+                  name: 'Date of last range change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -104,7 +104,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 13,
                 name: {
-                  name: 'D/T of last OD or M change',
+                  name: 'Date of last mode change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -128,7 +128,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 14,
                 name: {
-                  name: 'D/T of meter runtime change',
+                  name: 'Date of last meter run time change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -152,7 +152,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 15,
                 name: {
-                  name: 'D/T of OD runtime change',
+                  name: 'Date of last OD timeout change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -176,7 +176,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 16,
                 name: {
-                  name: 'D/T of flush Enable change',
+                  name: 'Date of last flush mode change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -198,9 +198,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
+                displayInList: false,
                 position: 17,
                 name: {
-                  name: 'D/T of flush mode change',
+                  name: 'Date of flush mode change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -222,9 +223,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
+                displayInList: false,
                 position: 18,
                 name: {
-                  name: 'D/T of flush Temp change',
+                  name: 'Date of flush Temp change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -248,7 +250,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 19,
                 name: {
-                  name: 'D/T of flush Time change',
+                  name: 'Date of last flush time change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -272,7 +274,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 20,
                 name: {
-                  name: 'D/T of flush Interval change',
+                  name: 'Date of last flush interval change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -296,7 +298,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 21,
                 name: {
-                  name: 'D/T of BD Note change',
+                  name: 'Date of last BD note change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -321,7 +323,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 displayInList: false,
                 position: 0,
                 name: {
-                  name: 'D/T of Full Name change',
+                  name: 'Date of Full Name change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -343,7 +345,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 displayInList: false,
                 position: 0,
                 name: {
-                  name: 'D/T of Full Nick change',
+                  name: 'Date of Full Nick change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -365,7 +367,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 displayInList: false,
                 position: 0,
                 name: {
-                  name: 'D/T of last diagnostic',
+                  name: 'Date of last diagnostic',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -387,7 +389,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 displayInList: false,
                 position: 0,
                 name: {
-                  name: 'D/T of last Flow Rate change',
+                  name: 'Date of last Flow Rate change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -409,7 +411,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 displayInList: false,
                 position: 0,
                 name: {
-                  name: 'D/T of last BLE setting change',
+                  name: 'Date of last BLE setting change',
                   size: 1,
                   type: 'uint32_t',
                 },

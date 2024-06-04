@@ -6,6 +6,7 @@ import {
   consoleLog,
   parseDateTimeInFormat,
   showSimpleAlert,
+  timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
@@ -160,6 +161,20 @@ const Index = ({navigation, route}: any) => {
         modfiedNewValue: mapValueGen2(
           BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.SENSOR_RANGE,
           sensorRange,
+        ),
+      });
+
+      params.push({
+        name: 'sensorRangeDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_LAST_RANGE_CHANGE,
+          timestampInSec(),
         ),
       });
     }

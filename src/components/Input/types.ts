@@ -47,7 +47,7 @@ export type InputProps = {
   borderColor?: string;
   focusedBorderColor?: string;
   inputContainerStyle?: ViewStyle;
-  inputStyle?: ViewStyle;
+  inputStyle?: TextStyle;
   left?: JSX.Element;
   leftStyle?: ViewStyle;
   right?: JSX.Element;

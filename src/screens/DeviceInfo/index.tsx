@@ -350,12 +350,12 @@ const Index = ({navigation, route}: any) => {
 
       /**
        * For the date of installation, logic is this:
-        For “Date of Installation”, this one is calculated from the Today date and the “Hours of Operation (Operating hours since install)”.
-        For example: 
-        if current unix timestamp in the App is 1714752879, which means (Date and time (GMT): Friday, May 3, 2024 4:14:39 PM)
-        “Hours of Operation” = 100 hours, which means 100*60*60 = 360000 seconds.
-        Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879 
-        which means the “Date of Installation” is Monday, April 29, 2024  (GMT)
+       * For “Date of Installation”, this one is calculated from the Today date and the “Hours of Operation (Operating hours since install)”.
+       * For example:
+       * if current unix timestamp in the App is 1714752879, which means (Date and time (GMT): Friday, May 3, 2024 4:14:39 PM)
+       * “Hours of Operation” = 100 hours, which means 100*60*60 = 360000 seconds.
+       * Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879
+       * which means the “Date of Installation” is Monday, April 29, 2024  (GMT)
        * ACCUMULATED WATER USAGE -> Total water usage
        */
       const __mappingDeviceDataCollectionGen2 =
@@ -394,10 +394,10 @@ const Index = ({navigation, route}: any) => {
       const __mappingDeviceDataStringGen2 =
         BLEService.characteristicMonitorDeviceDataStringMapped;
       /**
-       * Control box manufacturing date -> AD Manufacturing Date
+       * Control box manufacturing date -> BD Manufacturing Date(AD Manufacturing Date)
        */
       const ADManufacturingDate =
-        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[2];
+        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[3];
       if (!isObjectEmpty(ADManufacturingDate)) {
         allData.push({
           name: 'Control box manufacturing date',
@@ -406,15 +406,15 @@ const Index = ({navigation, route}: any) => {
             ADManufacturingDate?.value,
             ADManufacturingDate?.value?.currentValue,
           ),
-          uuid: `${ADManufacturingDate?.name?.name}-${ADManufacturingDate?.value?.currentValue}`,
+          uuid: null,
         });
       }
 
       /**
-       * SENSOR MANUFACTURING DATE -> BD Manufacturing Date
+       * SENSOR MANUFACTURING DATE -> AD Manufacturing Date (BD Manufacturing Date)
        */
       const BDManufacturingDate =
-        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[3];
+        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[2];
       if (!isObjectEmpty(BDManufacturingDate)) {
         allData.push({
           name: 'Sensor manufacturing date',
@@ -428,10 +428,10 @@ const Index = ({navigation, route}: any) => {
       }
 
       /**
-       * SENSOR SERIAL NUMBER -> BD Serial Number
+       * SENSOR SERIAL NUMBER -> AD Serial Number (BD Serial Number)
        */
       const BDSerialNumber =
-        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[1];
+        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[0];
       if (!isObjectEmpty(BDSerialNumber)) {
         allData.push({
           name: 'Sensor Serial Number',

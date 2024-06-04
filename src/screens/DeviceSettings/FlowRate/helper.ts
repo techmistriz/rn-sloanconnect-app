@@ -90,15 +90,21 @@ export const getCalculatedValue = (
       return 'Other';
     }
   }
+
+  consoleLog('getCalculatedValue value==>', value);
   var result: number | string = 0;
-  const GMPFormula = BLE_CONSTANTS.COMMON.GMP_FORMULA;
+  const GPMFormula = BLE_CONSTANTS.COMMON.GMP_FORMULA;
   const valueInNumber = Number(value);
   result = valueInNumber / __flowRateTypeDivider;
 
   if (flowRateType == '0') {
-    result = result / GMPFormula;
+    result = result / GPMFormula;
   }
   result = result?.toFixed(2);
+  
+  if (flowRateType == '1') {
+    return toFixedWithoutZeros(parseFloat(result), 2);
+  }
   // result = Math.round(result * 10) / 10;
   // result = Math.round((result + Number.EPSILON) * 100) / 100;
   // result = Math.round( result * 100 + Number.EPSILON ) / 100
@@ -107,6 +113,7 @@ export const getCalculatedValue = (
   // return Math.round(3.4 * 10) / 10;
   const resultArr = result.split('.');
   const decimalPartArr = resultArr[1].split('');
+  // consoleLog('getCalculatedValue decimalPartArr==>', decimalPartArr);
   let difference = 0;
   if (parseInt(decimalPartArr[1]) > 2 && parseInt(decimalPartArr[1]) < 5) {
     difference = 1;
@@ -121,11 +128,11 @@ export const getCalculatedValue = (
   ) {
     difference = 1;
   }
-
+  // consoleLog('getCalculatedValue difference==>', difference);
   let final = parseFloat(
     `${resultArr[0]}.${parseInt(resultArr[1]) + difference}`,
   );
-
+  // consoleLog('getCalculatedValue final==>', final);
   return toFixedWithoutZeros(final, 2);
 };
 

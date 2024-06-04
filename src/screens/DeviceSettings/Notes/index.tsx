@@ -20,7 +20,7 @@ import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import {mapValueGen2, mapValueGenTextToHex} from 'src/utils/Helpers/project';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {cleanString} from 'src/utils/Helpers/encryption';
+import {cleanString, cleanString2} from 'src/utils/Helpers/encryption';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const Index = ({navigation, route}: any) => {
       __note = resultObj?.newValue;
     }
 
-    setNote(cleanString(__note));
+    setNote(cleanString2(cleanString(__note)));
   };
 
   const onDonePress = () => {
@@ -126,19 +126,19 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID:
           BLE_CONSTANTS.GEN2.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
         oldValue: settingsData?.sensorRange?.value,
-        newValue: note,
+        newValue: cleanString2(cleanString2(note)),
         modfiedNewValue: mapValueGenTextToHex(
           BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.NOTE,
-          note,
+          cleanString2(cleanString2(note)),
           120,
         ),
       });
 
       params.push({
         name: 'noteDate',
-        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_STRING_SERVICE_UUID,
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
         characteristicUUID:
-          BLE_CONSTANTS.GEN2.DEVICE_DATA_STRING_CHARACTERISTIC_UUID,
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,

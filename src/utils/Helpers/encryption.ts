@@ -296,3 +296,12 @@ export function cleanString(str: string) {
     })
     .join('');
 }
+
+/**
+ * Function to convert hex to string
+ * @param {any} hexString
+ * @return {string}
+ */
+export function cleanString2(str: string) {
+  return str.replace(/[^\x20-\x7E]/g, '');
+}
