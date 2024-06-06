@@ -747,6 +747,7 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: null,
+        displayInList: false
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c932': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c932',
