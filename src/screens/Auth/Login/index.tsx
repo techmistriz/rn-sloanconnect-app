@@ -34,13 +34,13 @@ const Index = ({route, navigation}: any) => {
 
   const [email, setEmail] = useState(__DEV__ ? 'pk836746+11@gmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? '123456' : '');
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
     consoleLog('AuthReducer Login Screen==>', {loading, settings});
     checkIfComeFromUnauthenticated();
   }, []);
 
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',

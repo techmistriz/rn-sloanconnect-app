@@ -168,6 +168,22 @@ export const BLE_DEVICE_MODELS = {
         },
       ],
     },
+    empty: {
+      name: 'Unknown Faucets',
+      fullNameAllModel: 'Unknown Faucet',
+      type: 'ADSKU',
+      version: '00',
+      generation: '01',
+      models: [
+        {
+          ETFModel: 'Unknown',
+          EBFModel: 'Unknown',
+          displayName: 'Unknown',
+          image: require('src/assets/images/products/empty/1.png'),
+          notes: '',
+        },
+      ],
+    },
   },
   gen2: {
     '01': {
@@ -338,6 +354,22 @@ export const BLE_DEVICE_MODELS = {
         },
       ],
     },
+    empty: {
+      name: 'Unknown Faucets',
+      fullNameAllModel: 'Unknown Faucet',
+      type: 'ADSKU',
+      version: '00',
+      generation: '01',
+      models: [
+        {
+          ETFModel: 'Unknown',
+          EBFModel: 'Unknown',
+          displayName: 'Unknown',
+          image: require('src/assets/images/products/empty/1.png'),
+          notes: '',
+        },
+      ],
+    },
   },
   gen22: {
     '20': {
@@ -439,6 +471,22 @@ export const BLE_DEVICE_MODELS = {
           EBFModel: '',
           displayName: 'EAF700 ',
           image: require('src/assets/images/products/gen2/aquis_eaf_700.png'),
+          notes: '',
+        },
+      ],
+    },
+    empty: {
+      name: 'Unknown Faucets',
+      fullNameAllModel: 'Unknown Faucet',
+      type: 'ADSKU',
+      version: '00',
+      generation: '01',
+      models: [
+        {
+          ETFModel: 'Unknown',
+          EBFModel: 'Unknown',
+          displayName: 'Unknown',
+          image: require('src/assets/images/products/empty/1.png'),
           notes: '',
         },
       ],

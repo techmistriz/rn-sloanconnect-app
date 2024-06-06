@@ -42,6 +42,27 @@ const Index = ({route, navigation}: any) => {
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
 
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   useEffect(() => {
     consoleLog('AuthReducer ResetPassword Screen==>', {
       email,
@@ -278,7 +299,7 @@ const Index = ({route, navigation}: any) => {
             </Wrap>
           </Wrap>
           <Wrap autoMargin={false} style={styles.section2}>
-            <Copyright />
+            {!isKeyboardVisible ? <Copyright /> : null}
           </Wrap>
         </Wrap>
       </Wrap>
