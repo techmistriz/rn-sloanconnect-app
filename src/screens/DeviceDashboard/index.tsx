@@ -85,6 +85,28 @@ const Index = ({navigation}: any) => {
   const [sensorSettings, setSensorSettings] = useState<any>();
   const [noteSettings, setNoteSettings] = useState<any>();
 
+  /** component hooks method for device disconnect checking */
+  useEffect(() => {
+    const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
+      (error, device) => {
+        consoleLog(
+          'DeviceDashboard useEffect BLEService.onDeviceDisconnected error==>',
+          error,
+        );
+        // consoleLog(
+        //   'DeviceDashboard useEffect BLEService.onDeviceDisconnected device==>',
+        //   device,
+        // );
+        if (error || error == null) {
+          showToastMessage('Your device was disconnected', 'danger');
+          NavigationService.resetAllAction('DeviceSearching');
+        }
+      },
+    );
+
+    return () => deviceDisconnectionListener?.remove();
+  }, []);
+
   /** component hooks method */
   useEffect(() => {
     const backAction = () => {

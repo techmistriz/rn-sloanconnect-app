@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   consoleLog,
   parseDateTimeInFormat,
+  showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap} from 'src/components/Common';
@@ -34,6 +35,28 @@ const Index = ({navigation, route}: any) => {
   const [flowRate, setFlowRate] = useState('');
   const [flowRateOld, setFlowRateOld] = useState('');
   const [other, setOther] = useState('');
+
+  /** component hooks method for device disconnect checking */
+  useEffect(() => {
+    const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
+      (error, device) => {
+        consoleLog(
+          'flowRate useEffect BLEService.onDeviceDisconnected error==>',
+          error,
+        );
+        // consoleLog(
+        //   'flowRate useEffect BLEService.onDeviceDisconnected device==>',
+        //   device,
+        // );
+        if (error || error == null) {
+          showToastMessage('Your device was disconnected', 'danger');
+          NavigationService.resetAllAction('DeviceSearching');
+        }
+      },
+    );
+
+    return () => deviceDisconnectionListener?.remove();
+  }, []);
 
   useEffect(() => {
     // consoleLog('SensorRange==>', {

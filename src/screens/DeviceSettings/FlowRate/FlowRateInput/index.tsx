@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {DeviceEventEmitter, FlatList, Keyboard} from 'react-native';
 import Theme from 'src/theme';
-import {consoleLog, showSimpleAlert} from 'src/utils/Helpers/HelperFunction';
+import {
+  consoleLog,
+  showSimpleAlert,
+  showToastMessage,
+} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap, Row, Col} from 'src/components/Common';
 import {Button} from 'src/components/Button';
@@ -11,6 +15,7 @@ import AppContainer from 'src/components/AppContainer';
 import Input from 'src/components/Input';
 import VectorIcon from 'src/components/VectorIcon';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {BLEService} from 'src/services';
 
 const NUMBER_PAD = [
   {
@@ -105,7 +110,27 @@ const Index = ({navigation, route}: any) => {
   const {title, subTitle, minValue, maxValue, flowRateType} = route?.params;
   const [flowRateInput, setFlowRateInput] = useState('');
 
-  useEffect(() => {}, []);
+  /** component hooks method for device disconnect checking */
+  useEffect(() => {
+    const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
+      (error, device) => {
+        consoleLog(
+          'flowRateInput useEffect BLEService.onDeviceDisconnected error==>',
+          error,
+        );
+        // consoleLog(
+        //   'flowRateInput useEffect BLEService.onDeviceDisconnected device==>',
+        //   device,
+        // );
+        if (error || error == null) {
+          showToastMessage('Your device was disconnected', 'danger');
+          NavigationService.resetAllAction('DeviceSearching');
+        }
+      },
+    );
+
+    return () => deviceDisconnectionListener?.remove();
+  }, []);
 
   const onDonePress = async () => {
     Keyboard.dismiss();

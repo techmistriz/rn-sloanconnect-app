@@ -6,6 +6,7 @@ import {
   consoleLog,
   parseDateTimeInFormat,
   showSimpleAlert,
+  showToastMessage,
   timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
@@ -59,6 +60,28 @@ const Index = ({navigation, route}: any) => {
     }
   };
   // const sliderOneValuesChangeFinish = () => setSliderOneChanging(false);
+
+  /** component hooks method for device disconnect checking */
+  useEffect(() => {
+    const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
+      (error, device) => {
+        consoleLog(
+          'sensorRange useEffect BLEService.onDeviceDisconnected error==>',
+          error,
+        );
+        // consoleLog(
+        //   'sensorRange useEffect BLEService.onDeviceDisconnected device==>',
+        //   device,
+        // );
+        if (error || error == null) {
+          showToastMessage('Your device was disconnected', 'danger');
+          NavigationService.resetAllAction('DeviceSearching');
+        }
+      },
+    );
+
+    return () => deviceDisconnectionListener?.remove();
+  }, []);
 
   useEffect(() => {
     // consoleLog('SensorRange==>', {

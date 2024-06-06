@@ -333,7 +333,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="First Name"
+                        placeholder="First Name*"
                         value={firstName}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -354,7 +354,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Last Name"
+                        placeholder="Last Name*"
                         value={lastName}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -375,7 +375,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Title"
+                        placeholder="Title*"
                         value={title}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -396,7 +396,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Company"
+                        placeholder="Company*"
                         value={company}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -404,7 +404,7 @@ const Index = ({route, navigation}: any) => {
                     </Wrap>
 
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
-                      <InputBase
+                      <Input
                         onRef={input => {
                           // @ts-ignore
                           industryTextInputRef = input;
@@ -417,10 +417,10 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Industry"
+                        placeholder="Industry*"
                         value={industry?.name}
                         inputContainerStyle={styles.inputContainer}
-                        inputStyle={styles.textInputBase}
+                        inputStyle={styles.textInput}
                         editable={false}
                         onPress={() => {
                           setIndustriesDropdownModal(true);
@@ -451,7 +451,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Phone Number"
+                        placeholder="Phone Number*"
                         value={phoneNumber}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -472,7 +472,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Email"
+                        placeholder="Email*"
                         value={email}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -493,7 +493,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Password"
+                        placeholder="Password*"
                         value={password}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -527,7 +527,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="done"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Confirm Password"
+                        placeholder="Confirm Password*"
                         value={passwordConfirmation}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -550,7 +550,7 @@ const Index = ({route, navigation}: any) => {
                     </Wrap>
 
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
-                      <InputBase
+                      <Input
                         onRef={input => {
                           // @ts-ignore
                           countryTextInputRef = input;
@@ -563,10 +563,10 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Country"
+                        placeholder="Country*"
                         value={country?.name}
                         inputContainerStyle={styles.inputContainer}
-                        inputStyle={styles.textInputBase}
+                        inputStyle={styles.textInput}
                         editable={false}
                         onPress={() => {
                           setCountriesDropdownModal(true);
@@ -585,7 +585,7 @@ const Index = ({route, navigation}: any) => {
 
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
                       {statesMaster?.length > 0 ? (
-                        <InputBase
+                        <Input
                           onRef={input => {
                             // @ts-ignore
                             stateTextInputRef = input;
@@ -598,10 +598,10 @@ const Index = ({route, navigation}: any) => {
                           returnKeyType="next"
                           blurOnSubmit={false}
                           keyboardType="default"
-                          placeholder="State/Province"
+                          placeholder="State/Province*"
                           value={state?.state_name}
                           inputContainerStyle={styles.inputContainer}
-                          inputStyle={styles.textInputBase}
+                          inputStyle={styles.textInput}
                           editable={false}
                           onPress={() => {
                             setStatesDropdownModal(true);
@@ -630,7 +630,7 @@ const Index = ({route, navigation}: any) => {
                           returnKeyType="next"
                           blurOnSubmit={false}
                           keyboardType="default"
-                          placeholder="State/Province"
+                          placeholder="State/Province*"
                           value={stateInput}
                           inputContainerStyle={styles.inputContainer}
                           inputStyle={styles.textInput}
@@ -652,7 +652,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="City"
+                        placeholder="City*"
                         value={city}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -673,7 +673,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Address"
+                        placeholder="Address*"
                         value={address}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -694,7 +694,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Zip/Postal"
+                        placeholder="Zip/Postal*"
                         value={zip}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -702,7 +702,7 @@ const Index = ({route, navigation}: any) => {
                     </Wrap>
 
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
-                      <InputBase
+                      <Input
                         onRef={input => {
                           // @ts-ignore
                           timezoneTextInputRef = input;
@@ -714,10 +714,10 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Timezone"
+                        placeholder="Timezone*"
                         value={timezone?.format}
                         inputContainerStyle={styles.inputContainer}
-                        inputStyle={styles.textInputBase}
+                        inputStyle={styles.textInput}
                         editable={false}
                         onPress={() => {
                           setTimezonesDropdownModal(true);

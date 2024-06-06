@@ -6,6 +6,7 @@ import {
   consoleLog,
   parseDateTimeInFormat,
   showSimpleAlert,
+  showToastMessage,
   timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
@@ -32,6 +33,28 @@ const Index = ({navigation, route}: any) => {
 
   const [note, setNote] = useState('');
   const [noteOld, setNoteOld] = useState('');
+
+  /** component hooks method for device disconnect checking */
+  useEffect(() => {
+    const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
+      (error, device) => {
+        consoleLog(
+          'note useEffect BLEService.onDeviceDisconnected error==>',
+          error,
+        );
+        // consoleLog(
+        //   'note useEffect BLEService.onDeviceDisconnected device==>',
+        //   device,
+        // );
+        if (error || error == null) {
+          showToastMessage('Your device was disconnected', 'danger');
+          NavigationService.resetAllAction('DeviceSearching');
+        }
+      },
+    );
+
+    return () => deviceDisconnectionListener?.remove();
+  }, []);
 
   useEffect(() => {
     // consoleLog('note==>', {

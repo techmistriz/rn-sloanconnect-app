@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {
   consoleLog,
   parseDateHumanFormat,
+  showToastMessage,
   timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty, findObject} from 'src/utils/Helpers/array';
@@ -24,6 +25,7 @@ import {constants} from 'src/common';
 import apiConfigs from 'src/network/apiConfig';
 import _ from 'lodash';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import NavigationService from 'src/services/NavigationService/NavigationService';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -32,6 +34,28 @@ const Index = ({navigation, route}: any) => {
   const [viewAdvanceDetails, setViewAdvanceDetails] = useState<boolean>(false);
   const connectedDevice = BLEService.getDevice();
   const [deviceDetails, setDeviceDetails] = useState<any>();
+
+  /** component hooks method for device disconnect checking */
+  useEffect(() => {
+    const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
+      (error, device) => {
+        consoleLog(
+          'DeviceInfo useEffect BLEService.onDeviceDisconnected error==>',
+          error,
+        );
+        // consoleLog(
+        //   'DeviceInfo useEffect BLEService.onDeviceDisconnected device==>',
+        //   device,
+        // );
+        if (error || error == null) {
+          showToastMessage('Your device was disconnected', 'danger');
+          NavigationService.resetAllAction('DeviceSearching');
+        }
+      },
+    );
+
+    return () => deviceDisconnectionListener?.remove();
+  }, []);
 
   /** Function comments */
   useEffect(() => {

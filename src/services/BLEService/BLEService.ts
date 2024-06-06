@@ -160,7 +160,7 @@ class BLEServiceInstance {
   disconnectDevice = (showToast: boolean = true) => {
     new Promise<boolean>((resolve, reject) => {
       if (!this.device?.id) {
-        this.showErrorToast(deviceNotConnectedErrorText);
+        // this.showErrorToast(deviceNotConnectedErrorText);
         return resolve(true);
         // throw new Error(deviceNotConnectedErrorText);
       }
@@ -170,7 +170,6 @@ class BLEServiceInstance {
           this.device = null;
           showToast && this.showSuccessToast('Device disconnected');
           resolve(true);
-          // NavigationService.resetAllAction('DeviceSearching');
         })
         .catch(error => {
           if (error?.code !== BleErrorCode.DeviceDisconnected) {
@@ -323,7 +322,7 @@ class BLEServiceInstance {
     new Promise<Characteristic | null>((resolve, reject) => {
       if (!this.device) {
         this.showErrorToast(deviceNotConnectedErrorText);
-        // reject(new Error(deviceNotConnectedErrorText));
+        navigateToDeviceSearch();
         return;
       }
       this.manager
@@ -336,7 +335,7 @@ class BLEServiceInstance {
           resolve(characteristic);
         })
         .catch(error => {
-          // this.onError(error);
+          this.onError(error);
           consoleLog('readCharacteristicForDevice error==>', error);
           resolve(null);
         });
@@ -711,8 +710,9 @@ class BLEServiceInstance {
     listener: (error: BleError | null, device: Device | null) => void,
   ) => {
     if (!this.device) {
-      return this.showErrorToast(deviceNotConnectedErrorText);
-      // throw new Error(deviceNotConnectedErrorText);
+      this.showErrorToast(deviceNotConnectedErrorText);
+      navigateToDeviceSearch();
+      return ;
     }
     return this.manager.onDeviceDisconnected(this.device.id, listener);
   };
@@ -808,10 +808,11 @@ class BLEServiceInstance {
         break;
       case BleErrorCode.DeviceDisconnected:
         this.showErrorToast('Device already disconnected');
+        navigateToDeviceSearch();
         this.device = null;
         break;
       default:
-        this.showErrorToast(JSON.stringify(error, null, 4));
+      // this.showErrorToast(JSON.stringify(error, null, 4));
     }
   };
 
@@ -1070,4 +1071,7 @@ class BLEServiceInstance {
   initDeviceDataGen4 = async () => {};
 }
 
+const navigateToDeviceSearch = () => {
+  NavigationService.resetAllAction('DeviceSearching');
+};
 export const BLEService = new BLEServiceInstance();
