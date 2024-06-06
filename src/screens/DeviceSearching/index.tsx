@@ -198,9 +198,9 @@ const Index = ({navigation, route}: any) => {
           foundDevices.length == 0 &&
           isScanning != ScanningProps.Connecting
         ) {
-          clearTimeout(timeoutID);
-          BLEService.manager.stopDeviceScan();
-          setScanning(ScanningProps.NoDevice);
+          // clearTimeout(timeoutID);
+          // BLEService.manager.stopDeviceScan();
+          // setScanning(ScanningProps.NoDevice);
         }
       }, WAITING_TIMEOUT_FOR_CHECKING_DEVICE);
     }

@@ -27,7 +27,7 @@ type HeaderProps = {
   headerContainerStyle?: ViewStyle;
   headerLeftStyle?: ViewStyle;
   headerRightStyle?: ViewStyle;
-  headerBackgroundType?: 'transparent' | 'solid';
+  headerBackgroundType?: 'transparent' | 'solid' | 'white';
 };
 
 // Header
@@ -71,7 +71,9 @@ const Header = ({
           backgroundColor:
             headerBackgroundType == 'solid'
               ? Theme.colors.gradientBg1
-              : Theme.colors.white,
+              : headerBackgroundType == 'white'
+              ? Theme.colors.white
+              : Theme.colors.transparent,
         },
       ]}>
       <Wrap
@@ -88,7 +90,8 @@ const Header = ({
               name={'logout'}
               size={22}
               color={
-                headerBackgroundType == 'solid'
+                headerBackgroundType == 'solid' ||
+                headerBackgroundType == 'transparent'
                   ? Theme.colors.white
                   : Theme.colors.black
               }
@@ -109,7 +112,8 @@ const Header = ({
               name={'arrow-back'}
               size={22}
               color={
-                headerBackgroundType == 'solid'
+                headerBackgroundType == 'solid' ||
+                headerBackgroundType == 'transparent'
                   ? Theme.colors.white
                   : Theme.colors.black
               }
@@ -124,7 +128,8 @@ const Header = ({
               name={'blur-on'}
               size={22}
               color={
-                headerBackgroundType == 'solid'
+                headerBackgroundType == 'solid' ||
+                headerBackgroundType == 'transparent'
                   ? Theme.colors.white
                   : Theme.colors.black
               }
@@ -143,7 +148,8 @@ const Header = ({
             text={title}
             style={{textAlign: 'center'}}
             color={
-              headerBackgroundType == 'solid'
+              headerBackgroundType == 'solid' ||
+              headerBackgroundType == 'transparent'
                 ? Theme.colors.white
                 : Theme.colors.black
             }
@@ -187,7 +193,8 @@ const Header = ({
               name={'user'}
               size={22}
               color={
-                headerBackgroundType == 'solid'
+                headerBackgroundType == 'solid' ||
+                headerBackgroundType == 'transparent'
                   ? Theme.colors.white
                   : Theme.colors.black
               }

@@ -1,7 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import DrawerNavigator from './DrawerNavigator';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import BottomTabNavigator from './BottomTabNavigator';
 
@@ -82,9 +81,7 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             title: 'Login',
-            header: () => (
-              <Header headerBackgroundType="transparent" title=" " />
-            ),
+            header: () => <Header headerBackgroundType="white" title=" " />,
           }}
         />
         <Stack.Screen
@@ -93,9 +90,7 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             title: 'Register',
-            header: () => (
-              <Header headerBackgroundType="transparent" title=" " />
-            ),
+            header: () => <Header headerBackgroundType="white" title=" " />,
           }}
         />
         <Stack.Screen
@@ -154,14 +149,6 @@ const MainNavigator = () => {
             title: '',
           }}
         />
-
-        <Stack.Screen
-          name="DrawerNavigator"
-          component={DrawerNavigator}
-          options={{
-            headerShown: false,
-          }}
-        />
         <Stack.Screen
           name="Settings"
           component={Settings}
@@ -203,9 +190,7 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             title: 'Help',
-            header: () => (
-              <Header headerBackgroundType="transparent" title=" " />
-            ),
+            header: () => <Header headerBackgroundType="white" title=" " />,
           }}
         />
         <Stack.Screen
