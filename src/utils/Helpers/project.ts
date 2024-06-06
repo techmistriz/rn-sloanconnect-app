@@ -102,7 +102,8 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
   var str = connectedDevice?.localName ?? connectedDevice?.name;
 
   if (!str) return '';
-  var result = '';
+  var result = 'empty';
+  // return result;
   if (gen == 'gen1') {
     var arr = str.split(' ');
 
@@ -113,7 +114,7 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
       }
     }
   } else if (gen == 'gen2') {
-    result = '20';
+    
     const __rawScanRecord = connectedDevice?.rawScanRecord;
     if (!__rawScanRecord) {
       return result;

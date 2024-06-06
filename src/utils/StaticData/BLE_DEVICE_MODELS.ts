@@ -169,16 +169,16 @@ export const BLE_DEVICE_MODELS = {
       ],
     },
     empty: {
-      name: 'Unknown Faucets',
+      name: 'Unknown Faucet',
       fullNameAllModel: 'Unknown Faucet',
       type: 'ADSKU',
       version: '00',
       generation: '01',
       models: [
         {
-          ETFModel: 'Unknown',
-          EBFModel: 'Unknown',
-          displayName: 'Unknown',
+          ETFModel: 'Unknown Faucet',
+          EBFModel: 'Unknown Faucet',
+          displayName: 'Unknown Faucet',
           image: require('src/assets/images/products/empty/1.png'),
           notes: '',
         },
@@ -355,16 +355,16 @@ export const BLE_DEVICE_MODELS = {
       ],
     },
     empty: {
-      name: 'Unknown Faucets',
+      name: 'Unknown Faucet',
       fullNameAllModel: 'Unknown Faucet',
       type: 'ADSKU',
       version: '00',
       generation: '01',
       models: [
         {
-          ETFModel: 'Unknown',
-          EBFModel: 'Unknown',
-          displayName: 'Unknown',
+          ETFModel: 'Unknown Faucet',
+          EBFModel: 'Unknown Faucet',
+          displayName: 'Unknown Faucet',
           image: require('src/assets/images/products/empty/1.png'),
           notes: '',
         },
@@ -476,16 +476,16 @@ export const BLE_DEVICE_MODELS = {
       ],
     },
     empty: {
-      name: 'Unknown Faucets',
+      name: 'Unknown Faucet',
       fullNameAllModel: 'Unknown Faucet',
       type: 'ADSKU',
       version: '00',
       generation: '01',
       models: [
         {
-          ETFModel: 'Unknown',
-          EBFModel: 'Unknown',
-          displayName: 'Unknown',
+          ETFModel: 'Unknown Faucet',
+          EBFModel: 'Unknown Faucet',
+          displayName: 'Unknown Faucet',
           image: require('src/assets/images/products/empty/1.png'),
           notes: '',
         },
