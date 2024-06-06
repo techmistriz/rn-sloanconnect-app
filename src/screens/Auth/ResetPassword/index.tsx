@@ -22,7 +22,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
-import Input from 'src/components/Input';
+import Input from 'src/components/InputPaper';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import VectorIcon from 'src/components/VectorIcon';
 

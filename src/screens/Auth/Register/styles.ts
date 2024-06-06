@@ -18,14 +18,16 @@ export const styles = StyleSheet.create({
     flex: 1, // enabled due to scroll view
     // justifyContent: 'flex-end',
     // borderWidth: 1,
-    // borderColor: 'red',
+    // borderColor: 'yellow',
   },
   section2: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingTop: 15,
     paddingBottom: 15,
+    // borderWidth: 1,
+    // borderColor: 'pink',
   },
   imageContainer: {
     // flex: 1,
@@ -71,8 +73,15 @@ export const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontSize: 17,
+    fontSize: 16,
+    paddingRight: 0,
+    paddingLeft: 0,
+  },
+  textInputBase: {
+    flex: 1,
+    fontSize: 16,
     paddingRight: 15,
     paddingLeft: 15,
+    height: 48,
   },
 });

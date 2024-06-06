@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import {Images} from 'src/assets';
 import {Button} from 'src/components/Button';
-import Input from 'src/components/Input';
+import Input from 'src/components/InputPaper';
+import InputBase from 'src/components/Input';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
@@ -286,7 +287,7 @@ const Index = ({route, navigation}: any) => {
 
   return (
     <AppContainer
-      scroll={true}
+      // scroll={true}
       loading={loading || __loading}
       scrollViewStyle={{}}
       hasHeader={false}>
@@ -313,9 +314,9 @@ const Index = ({route, navigation}: any) => {
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}
                 />
-                <Wrap autoMargin={false} style={{maxHeight: 300}}>
+                <Wrap autoMargin={false} style={{maxHeight: 250}}>
                   <ScrollView
-                    nestedScrollEnabled={true}
+                    // nestedScrollEnabled={true}
                     // style={{flex: 1}}
                     contentContainerStyle={{}}>
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
@@ -403,7 +404,7 @@ const Index = ({route, navigation}: any) => {
                     </Wrap>
 
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
-                      <Input
+                      <InputBase
                         onRef={input => {
                           // @ts-ignore
                           industryTextInputRef = input;
@@ -419,7 +420,7 @@ const Index = ({route, navigation}: any) => {
                         placeholder="Industry"
                         value={industry?.name}
                         inputContainerStyle={styles.inputContainer}
-                        inputStyle={styles.textInput}
+                        inputStyle={styles.textInputBase}
                         editable={false}
                         onPress={() => {
                           setIndustriesDropdownModal(true);
@@ -549,7 +550,7 @@ const Index = ({route, navigation}: any) => {
                     </Wrap>
 
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
-                      <Input
+                      <InputBase
                         onRef={input => {
                           // @ts-ignore
                           countryTextInputRef = input;
@@ -565,7 +566,7 @@ const Index = ({route, navigation}: any) => {
                         placeholder="Country"
                         value={country?.name}
                         inputContainerStyle={styles.inputContainer}
-                        inputStyle={styles.textInput}
+                        inputStyle={styles.textInputBase}
                         editable={false}
                         onPress={() => {
                           setCountriesDropdownModal(true);
@@ -584,7 +585,7 @@ const Index = ({route, navigation}: any) => {
 
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
                       {statesMaster?.length > 0 ? (
-                        <Input
+                        <InputBase
                           onRef={input => {
                             // @ts-ignore
                             stateTextInputRef = input;
@@ -600,7 +601,7 @@ const Index = ({route, navigation}: any) => {
                           placeholder="State/Province"
                           value={state?.state_name}
                           inputContainerStyle={styles.inputContainer}
-                          inputStyle={styles.textInput}
+                          inputStyle={styles.textInputBase}
                           editable={false}
                           onPress={() => {
                             setStatesDropdownModal(true);
@@ -701,7 +702,7 @@ const Index = ({route, navigation}: any) => {
                     </Wrap>
 
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
-                      <Input
+                      <InputBase
                         onRef={input => {
                           // @ts-ignore
                           timezoneTextInputRef = input;
@@ -716,7 +717,7 @@ const Index = ({route, navigation}: any) => {
                         placeholder="Timezone"
                         value={timezone?.format}
                         inputContainerStyle={styles.inputContainer}
-                        inputStyle={styles.textInput}
+                        inputStyle={styles.textInputBase}
                         editable={false}
                         onPress={() => {
                           setTimezonesDropdownModal(true);

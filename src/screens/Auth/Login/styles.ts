@@ -66,8 +66,8 @@ export const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontSize: 17,
-    paddingRight: 15,
-    paddingLeft: 15,
+    fontSize: 16,
+    paddingRight: 0,
+    paddingLeft: 0,
   },
 });

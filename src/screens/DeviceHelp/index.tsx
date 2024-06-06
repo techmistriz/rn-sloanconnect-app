@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {Images} from 'src/assets';
 import {Button} from 'src/components/Button';
-import Input from 'src/components/Input';
+import Input from 'src/components/InputPaper';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';

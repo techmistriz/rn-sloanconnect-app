@@ -58,7 +58,8 @@ export const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 14,
-    // paddingRight: 15,
+    paddingRight: 0,
+    paddingLeft: 0,
     color: Theme.colors.white,
     // textAlign: 'center',
     verticalAlign: 'top',
