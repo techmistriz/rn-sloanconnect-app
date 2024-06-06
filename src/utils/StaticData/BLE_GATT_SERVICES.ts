@@ -420,6 +420,7 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: null,
+        displayInList: false,
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c919': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c919',
@@ -435,6 +436,7 @@ export const BLE_GATT_SERVICES = {
         generation: 'all',
         prefix: null,
         postfix: null,
+        displayInList: false,
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c91A': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c91A',

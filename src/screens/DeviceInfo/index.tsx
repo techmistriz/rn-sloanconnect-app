@@ -569,7 +569,7 @@ const Index = ({navigation, route}: any) => {
 
       if (!isObjectEmpty(numberOfBLEConnections)) {
         allData.push({
-          name: 'Number of BLE connections',
+          name: 'BLE connections',
           position: 10,
           value: `${numberOfBLEConnections?.value?.currentValue}`,
           uuid: null,
