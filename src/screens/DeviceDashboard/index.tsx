@@ -796,9 +796,10 @@ const Index = ({navigation}: any) => {
       if (!isObjectEmpty(__LineFlush)) {
         const status1 = await saveSettings(__LineFlush);
         // consoleLog('status1', status1);
+      } else {
+        const shortBurstsStatus = await shortBursts(__deviceSettingsData);
       }
 
-      const shortBurstsStatus = await shortBursts(__deviceSettingsData);
       // consoleLog('shortBurstsStatus', shortBurstsStatus);
     }, timeout);
 
