@@ -14,7 +14,7 @@ import {styles} from './styles';
 import {Animated, Easing} from 'react-native';
 import {constants} from 'src/common';
 
-const SplashScreen = ({navigation, route}: any) => {
+const Welcome = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
   const {user, loading, token, message, media_storage, type} = useSelector(
     (state: any) => state?.AuthReducer,
@@ -172,4 +172,4 @@ const SplashScreen = ({navigation, route}: any) => {
   );
 };
 
-export default SplashScreen;
+export default Welcome;

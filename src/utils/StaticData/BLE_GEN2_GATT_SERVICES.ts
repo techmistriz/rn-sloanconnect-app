@@ -78,7 +78,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                position: 12,
+                position: 22,
                 name: {
                   name: 'Date of last range change',
                   size: 1,
@@ -176,7 +176,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 16,
                 name: {
-                  name: 'Date of last flush mode change',
+                  name: 'Date of last flush Enable change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -296,7 +296,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                position: 21,
+                position: 22,
                 name: {
                   name: 'Date of last BD note change',
                   size: 1,
@@ -386,8 +386,7 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 5,
-                displayInList: false,
-                position: 0,
+                position: 21,
                 name: {
                   name: 'Date of last Flow Rate change',
                   size: 1,
@@ -404,6 +403,9 @@ export const BLE_GEN2_GATT_SERVICES = {
                   remarks: '',
                   prefix: null,
                   postfix: null,
+                  valueFormat: 'YYMMDDHHmm',
+                  valueType: 'DateTime',
+                  dateFormat: 'YY/MM/DD HH:MM',
                 },
               },
               {

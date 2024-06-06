@@ -508,7 +508,7 @@ const Index = ({navigation, route}: any) => {
       }
 
       /**
-       * Activations since last change -> Duration of all line flushes
+       * Line flushes since day 1 -> Number of Line flushes
        */
       const numberOfAllLineFlushes =
         __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[7];
@@ -523,7 +523,7 @@ const Index = ({navigation, route}: any) => {
       }
 
       /**
-       * Activations since last change -> Duration of all line flushes
+       * Accumulated flush time -> Duration of all line flushes
        */
       const durationOfAllLineFlushes =
         __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[6];
@@ -533,6 +533,21 @@ const Index = ({navigation, route}: any) => {
           name: 'Accumulated flush time',
           position: 10,
           value: `${durationOfAllLineFlushes?.value?.currentValue} sec`,
+          uuid: null,
+        });
+      }
+
+      /**
+       * Number of BLE connections
+       */
+      const numberOfBLEConnections =
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[6];
+
+      if (!isObjectEmpty(numberOfBLEConnections)) {
+        allData.push({
+          name: 'Number of BLE connections',
+          position: 10,
+          value: `${numberOfBLEConnections?.value?.currentValue}`,
           uuid: null,
         });
       }

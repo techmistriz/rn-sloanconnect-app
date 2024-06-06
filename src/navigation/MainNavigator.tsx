@@ -80,15 +80,22 @@ const MainNavigator = () => {
           name="Login"
           component={Login}
           options={{
-            headerShown: false,
+            headerShown: true,
+            title: 'Login',
+            header: () => (
+              <Header headerBackgroundType="transparent" title=" " />
+            ),
           }}
         />
         <Stack.Screen
           name="Register"
           component={Register}
           options={{
-            headerShown: false,
-            title: '',
+            headerShown: true,
+            title: 'Register',
+            header: () => (
+              <Header headerBackgroundType="transparent" title=" " />
+            ),
           }}
         />
         <Stack.Screen
@@ -193,9 +200,13 @@ const MainNavigator = () => {
         <Stack.Screen
           name="Help"
           component={Help}
-          // options={{
-          //     headerShown: false,
-          // }}
+          options={{
+            headerShown: true,
+            title: 'Help',
+            header: () => (
+              <Header headerBackgroundType="transparent" title=" " />
+            ),
+          }}
         />
         <Stack.Screen
           name="Terms"

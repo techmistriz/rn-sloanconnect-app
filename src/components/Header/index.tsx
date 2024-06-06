@@ -67,8 +67,11 @@ const Header = ({
         styles.__headerContainerStyle,
         {...headerContainerStyle},
         // @ts-ignore
-        headerBackgroundType == 'solid' && {
-          backgroundColor: Theme.colors.gradientBg1,
+        {
+          backgroundColor:
+            headerBackgroundType == 'solid'
+              ? Theme.colors.gradientBg1
+              : Theme.colors.white,
         },
       ]}>
       <Wrap
@@ -84,7 +87,11 @@ const Header = ({
               iconPack="MaterialIcons"
               name={'logout'}
               size={22}
-              color={Theme.colors.white}
+              color={
+                headerBackgroundType == 'solid'
+                  ? Theme.colors.white
+                  : Theme.colors.black
+              }
               style={{
                 transform: [{rotateY: '180deg'}],
               }}
@@ -101,7 +108,11 @@ const Header = ({
               iconPack="MaterialIcons"
               name={'arrow-back'}
               size={22}
-              color={Theme.colors.white}
+              color={
+                headerBackgroundType == 'solid'
+                  ? Theme.colors.white
+                  : Theme.colors.black
+              }
               style={{}}
             />
           </TouchableItem>
@@ -112,7 +123,11 @@ const Header = ({
               iconPack="MaterialIcons"
               name={'blur-on'}
               size={22}
-              color={Theme.colors.white}
+              color={
+                headerBackgroundType == 'solid'
+                  ? Theme.colors.white
+                  : Theme.colors.black
+              }
               onPress={() => {}}
               style={{
                 display: 'none',
@@ -127,7 +142,11 @@ const Header = ({
             size={16}
             text={title}
             style={{textAlign: 'center'}}
-            color={Theme.colors.white}
+            color={
+              headerBackgroundType == 'solid'
+                ? Theme.colors.white
+                : Theme.colors.black
+            }
             ff={Theme.fonts.ThemeFontMedium}
           />
         ) : (
@@ -167,7 +186,11 @@ const Header = ({
               iconPack="SimpleLineIcons"
               name={'user'}
               size={22}
-              color={Theme.colors.white}
+              color={
+                headerBackgroundType == 'solid'
+                  ? Theme.colors.white
+                  : Theme.colors.black
+              }
             />
           </TouchableItem>
         )}

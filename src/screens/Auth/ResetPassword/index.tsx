@@ -24,6 +24,7 @@ import NavigationService from 'src/services/NavigationService/NavigationService'
 import Copyright from 'src/components/@ProjectComponent/Copyright';
 import Input from 'src/components/Input';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import VectorIcon from 'src/components/VectorIcon';
 
 const Index = ({route, navigation}: any) => {
   const {email, hash, otp} = route?.params;
@@ -36,6 +37,10 @@ const Index = ({route, navigation}: any) => {
   const [passwordConfirmation, setPasswordConfirmation] = useState(
     __DEV__ ? 'Test@12345' : '',
   );
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
 
   useEffect(() => {
     consoleLog('AuthReducer ResetPassword Screen==>', {
@@ -142,7 +147,19 @@ const Index = ({route, navigation}: any) => {
                   value={password}
                   inputContainerStyle={styles.inputContainer}
                   inputStyle={styles.textInput}
-                  secureTextEntry={true}
+                  secureTextEntry={!showPassword}
+                  right={
+                    <VectorIcon
+                      iconPack="Feather"
+                      name={showPassword ? 'eye-off' : 'eye'}
+                      size={20}
+                      color={Theme.colors.primaryColor}
+                      onPress={() => {
+                        setShowPassword(!showPassword);
+                      }}
+                    />
+                  }
+                  rightStyle={{right: 0}}
                 />
               </Wrap>
 
@@ -164,7 +181,19 @@ const Index = ({route, navigation}: any) => {
                   value={passwordConfirmation}
                   inputContainerStyle={styles.inputContainer}
                   inputStyle={styles.textInput}
-                  secureTextEntry={true}
+                  secureTextEntry={!showPasswordConfirmation}
+                  right={
+                    <VectorIcon
+                      iconPack="Feather"
+                      name={showPasswordConfirmation ? 'eye-off' : 'eye'}
+                      size={20}
+                      color={Theme.colors.primaryColor}
+                      onPress={() => {
+                        setShowPasswordConfirmation(!showPasswordConfirmation);
+                      }}
+                    />
+                  }
+                  rightStyle={{right: 0}}
                 />
               </Wrap>
 

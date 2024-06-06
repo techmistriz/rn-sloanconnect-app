@@ -739,6 +739,8 @@ const Index = ({navigation}: any) => {
         'Adaptive sensing in progress. Water may be dispensed. Please wait.',
       );
       timeout = 10000;
+    } else {
+      setApplyingLoadingText('Applying..');
     }
 
     const __hasLineFlushSetting = hasLineFlushSetting(__deviceSettingsData);

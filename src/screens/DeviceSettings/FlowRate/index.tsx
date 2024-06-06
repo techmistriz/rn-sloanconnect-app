@@ -91,10 +91,10 @@ const Index = ({navigation, route}: any) => {
     if (parseInt(val) == 0) {
       if (flowRateType == '1') {
         NavigationService.navigate('FlowRateInput', {
-          title: `Set flow rate to between 1.3 and 9.99\n liters per minute`,
+          title: `Set flow rate to between 1.3 and 9.9\n liters per minute`,
           subTitle: 'LPM',
           minValue: 1.3,
-          maxValue: 9.99,
+          maxValue: 9.9,
           flowRateType: flowRateType,
         });
       } else {

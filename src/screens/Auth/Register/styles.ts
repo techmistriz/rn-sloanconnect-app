@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {constants} from 'src/common';
 import Theme from 'src/theme';
 
 export const styles = StyleSheet.create({
@@ -23,15 +24,16 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingBottom: 20,
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   imageContainer: {
     // flex: 1,
     alignItems: 'center',
     // justifyContent: 'flex-end',
     // borderWidth: 1,
-    marginTop: 20,
-    marginBottom: 30,
+    // marginTop: 20,
+    marginBottom: 20,
   },
   formWrapper1: {
     backgroundColor: 'white',
@@ -48,7 +50,8 @@ export const styles = StyleSheet.create({
     borderColor: Theme.colors.midGray,
     backgroundColor: 'white',
     borderRadius: 15,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     shadowColor: '#171717',
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
