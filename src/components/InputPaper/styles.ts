@@ -36,6 +36,7 @@ export const styles = StyleSheet.create({
     // borderWidth: 1,
     // paddingBottom: 5,
     // paddingVertical: 5,
+    backgroundColor: Theme.colors.white,
   },
   left: {
     flex: 1,

@@ -81,6 +81,27 @@ const Index = ({route, navigation}: any) => {
   const [countriesMaster, setCountriesMaster] = useState([]);
   const [statesDropdownModal, setStatesDropdownModal] = useState(false);
   const [statesMaster, setStatesMaster] = useState([]);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   /**
    * Hooks method for TermsAccept Event
@@ -316,7 +337,7 @@ const Index = ({route, navigation}: any) => {
                 />
                 <Wrap autoMargin={false} style={{maxHeight: 250}}>
                   <ScrollView
-                    // nestedScrollEnabled={true}
+                    nestedScrollEnabled={true}
                     // style={{flex: 1}}
                     contentContainerStyle={{}}>
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
@@ -825,7 +846,7 @@ const Index = ({route, navigation}: any) => {
             </Wrap>
 
             <Wrap autoMargin={false} style={styles.section2}>
-              <Copyright />
+              {!isKeyboardVisible ? <Copyright /> : null}
             </Wrap>
 
             <DropdownPicker

@@ -34,10 +34,31 @@ const Index = ({route, navigation}: any) => {
 
   const [email, setEmail] = useState(__DEV__ ? 'pk836746+11@gmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? '123456' : '');
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
     consoleLog('AuthReducer Login Screen==>', {loading, settings});
     checkIfComeFromUnauthenticated();
+  }, []);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
   }, []);
 
   const checkIfComeFromUnauthenticated = () => {
@@ -245,8 +266,9 @@ const Index = ({route, navigation}: any) => {
               </Wrap> */}
               </Wrap>
             </Wrap>
+
             <Wrap autoMargin={false} style={styles.section2}>
-              <Copyright />
+              {!isKeyboardVisible ? <Copyright /> : null}
             </Wrap>
           </Wrap>
         </Wrap>

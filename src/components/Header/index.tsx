@@ -49,7 +49,7 @@ const Header = ({
   const onLogout = async () => {
     dispatch(loginResetDataAction());
     await checkDevice();
-    NavigationService.resetAllAction('Login');
+    NavigationService.resetAllAction('Welcome');
   };
 
   const checkDevice = async () => {

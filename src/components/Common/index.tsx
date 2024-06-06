@@ -101,8 +101,9 @@ export const KeyboardAvoidWrap = ({style, children}: KeyboardAvoidProps) => {
   return (
     <KeyboardAvoidingView
       style={{flex: 1, ...style}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 25}>
+      // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      // keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 25}
+      >
       {children}
     </KeyboardAvoidingView>
   );

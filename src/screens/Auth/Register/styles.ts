@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     // borderColor: 'yellow',
   },
   section2: {
-    // flex: 1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingTop: 15,
