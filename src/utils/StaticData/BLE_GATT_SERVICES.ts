@@ -493,7 +493,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         valueType: 'DateTime',
-        dateFormat: 'YY/MM/DD HH:MM',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c922': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c922',
@@ -511,7 +511,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         valueType: 'DateTime',
-        dateFormat: 'YY/MM/DD HH:MM',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92A': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92A',
@@ -544,7 +544,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         valueType: 'DateTime',
-        dateFormat: 'YY/MM/DD HH:MM',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92B': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92B',
@@ -576,7 +576,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         valueType: 'DateTime',
-        dateFormat: 'YY/MM/DD HH:MM',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92C': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92C',
@@ -608,7 +608,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         valueType: 'DateTime',
-        dateFormat: 'YY/MM/DD HH:MM',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92D': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92D',
@@ -640,7 +640,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         valueType: 'DateTime',
-        dateFormat: 'YY/MM/DD HH:MM',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92E': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92E',
@@ -672,7 +672,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         valueType: 'DateTime',
-        dateFormat: 'YY/MM/DD HH:MM',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92F': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92F',
@@ -704,7 +704,7 @@ export const BLE_GATT_SERVICES = {
         prefix: null,
         postfix: null,
         valueType: 'DateTime',
-        dateFormat: 'YY/MM/DD HH:MM',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c930': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c930',

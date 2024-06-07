@@ -73,7 +73,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -97,7 +97,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -121,7 +121,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -145,7 +145,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -169,7 +169,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -193,7 +193,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -218,7 +218,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -243,7 +243,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -267,7 +267,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -291,7 +291,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -315,7 +315,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
@@ -405,7 +405,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                   postfix: null,
                   valueFormat: 'YYMMDDHHmm',
                   valueType: 'DateTime',
-                  dateFormat: 'YY/MM/DD HH:MM',
+                  dateFormat: 'YY/MM/DD HH:mm',
                 },
               },
               {
