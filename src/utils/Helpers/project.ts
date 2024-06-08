@@ -114,7 +114,6 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
       }
     }
   } else if (gen == 'gen2') {
-    
     const __rawScanRecord = connectedDevice?.rawScanRecord;
     if (!__rawScanRecord) {
       return result;
@@ -150,6 +149,10 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
         result = __version.replace(/[^0-9]/g, '');
       }
     }
+  }
+
+  if (result == '00' || result == '0') {
+    result = 'empty';
   }
   return result;
 }
@@ -208,13 +211,13 @@ export function getDeviceModelData(
   if (deviceName) {
     if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] != 'undefined') {
       const deviceVersion = getBleDeviceVersion(connectedDevice, deviceGen);
-      consoleLog('getDeviceModelData deviceVersion==>', deviceVersion);
+      // consoleLog('getDeviceModelData deviceVersion==>', deviceVersion);
       const deviceModel = BLE_DEVICE_MODELS[deviceGen];
-      consoleLog('getDeviceModelData deviceModel==>', deviceModel);
+      // consoleLog('getDeviceModelData deviceModel==>', deviceModel);
 
       if (deviceModel && typeof deviceModel[deviceVersion] != 'undefined') {
         deviceStaticData = deviceModel[deviceVersion];
-        consoleLog('getDeviceModelData deviceStaticData==>', deviceStaticData);
+        // consoleLog('getDeviceModelData deviceStaticData==>', deviceStaticData);
       }
     }
   }
@@ -1019,7 +1022,7 @@ export const formatCharateristicValue = (
         .format(characteristicStaticProperties?.dateFormat);
     }
     const dateFormat = characteristicStaticProperties?.dateFormat;
-    const __dateFormat = dateFormat.replace(/[^A-Z]/g, '');
+    const __dateFormat = dateFormat.replace(/[^A-Za-z]/g, '');
 
     if (__dateFormat?.length != value?.length) {
       return 'N/A';
@@ -1048,7 +1051,7 @@ export const formatCharateristicValue = (
       var formattedDate = addSeparatorInString(datePart, 2, dateSeperator);
       var formattedTime = addSeparatorInString(timePart, 2, ':');
       result = `20${formattedDate} ${formattedTime}`;
-      // consoleLog('formattedDate', {formattedDate, formattedTime});
+      consoleLog('formattedDate', {formattedDate, formattedTime});
     }
   }
   return result;

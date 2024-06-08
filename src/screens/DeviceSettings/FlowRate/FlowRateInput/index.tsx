@@ -136,10 +136,13 @@ const Index = ({navigation, route}: any) => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
+
       DeviceEventEmitter.emit('FlowRateInputEvent', {
         flowRateInput:
           flowRateType == '0'
-            ? Number(flowRateInput) * BLE_CONSTANTS.COMMON.GMP_FORMULA
+            ? (
+                Number(flowRateInput) * BLE_CONSTANTS.COMMON.GMP_FORMULA
+              )?.toFixed(1)
             : Number(flowRateInput),
       });
       NavigationService.goBack();
@@ -170,7 +173,12 @@ const Index = ({navigation, route}: any) => {
       if (value == '.' && prevState.indexOf('.') > -1) {
         return prevState;
       }
-      return `${prevState}${value.toString()}`;
+
+      let result = `${prevState}${value.toString()}`;
+      if (prevState.indexOf('.') > -1 && prevState.length > 2) {
+        return result.slice(0, -1);
+      }
+      return result;
     });
   };
 

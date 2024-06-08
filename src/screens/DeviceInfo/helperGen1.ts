@@ -140,15 +140,6 @@ const getStatisticsInformationDataGen1 = () => {
 
         // *******Custom************
         if (data?.length == 2) {
-          const characteristicStaticADManufacturingDate =
-            await getCustomCharacteristic(
-              'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-              'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
-            );
-
-          if (!isObjectEmpty(characteristicStaticADManufacturingDate)) {
-            data.push(characteristicStaticADManufacturingDate);
-          }
 
           const characteristicStaticBDManufacturingDate =
             await getCustomCharacteristic(
@@ -158,6 +149,16 @@ const getStatisticsInformationDataGen1 = () => {
 
           if (!isObjectEmpty(characteristicStaticBDManufacturingDate)) {
             data.push(characteristicStaticBDManufacturingDate);
+          }
+          
+          const characteristicStaticADManufacturingDate =
+            await getCustomCharacteristic(
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+              'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
+            );
+
+          if (!isObjectEmpty(characteristicStaticADManufacturingDate)) {
+            data.push(characteristicStaticADManufacturingDate);
           }
           const characteristicStaticBDSerialNumber =
             await getCustomCharacteristic(

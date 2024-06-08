@@ -107,7 +107,7 @@ const Index = ({navigation}: any) => {
     return () => deviceDisconnectionListener?.remove();
   }, []);
 
-  /** component hooks method */
+  /** component hooks method for hardwareBackPress */
   useEffect(() => {
     const backAction = () => {
       if (navigation.isFocused()) {
@@ -122,7 +122,7 @@ const Index = ({navigation}: any) => {
     return () => backHandler.remove();
   }, []);
 
-  /** component hooks method */
+  /** component hooks method for focus*/
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // The screen is focused

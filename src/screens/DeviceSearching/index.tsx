@@ -42,7 +42,7 @@ import {
 } from 'src/utils/Permissions';
 import Header from 'src/components/Header';
 
-const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
+const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 2000000;
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
 
@@ -264,7 +264,7 @@ const Index = ({navigation, route}: any) => {
     consoleLog('addFoundDevice device names==>', {
       localName: device?.localName,
       deviceCustomName: device?.deviceCustomName,
-      rawScanRecord: __device?.rawScanRecord,
+      // rawScanRecord: __device?.rawScanRecord,
     });
     if (!device) {
       // refreshFoundDevices(foundDevices);

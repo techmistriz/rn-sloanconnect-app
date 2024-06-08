@@ -7,37 +7,36 @@ import {
 } from 'src/utils/Helpers/project';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {DeviceExtendedProps} from './types';
-import { consoleLog } from 'src/utils/Helpers/HelperFunction';
+import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 
 export const filterBLEDevices = (device: DeviceExtendedProps): any => {
   var filterDevice = null;
-  var deviceName = device?.localName ?? device?.name ?? 'Unknown';
+  var deviceName = device?.localName ?? device?.name ?? '';
   // deviceName = 'FAUCET ADSKU00 AYYSS';
 
-  if (device && !isObjectEmpty(device) && deviceName) {
+  if (device && !isObjectEmpty(device) && deviceName != '') {
     device.deviceCustomName = deviceName;
     if (
       // true
       deviceName?.toUpperCase()?.includes('FAUCET') ||
       deviceName?.toUpperCase()?.includes('SL')
     ) {
+      const deviceTmp = {...device};
+      deviceTmp.localName = deviceName;
       const deviceGen = getBleDeviceGeneration(deviceName);
       const deviceStaticData = getDeviceModelData(
-        device,
+        deviceTmp,
         BLE_DEVICE_MODELS,
         deviceGen,
       );
       const deviceSerialNumber = getBleDeviceSerialNumber(device, deviceGen);
-      // consoleLog('filterBLEDevices deviceGen==>', deviceGen);
+      consoleLog('filterBLEDevices deviceGen==>', deviceGen);
       // consoleLog('filterBLEDevices deviceSerialNumber==>', deviceSerialNumber);
       // consoleLog('filterBLEDevices deviceStaticData==>', deviceStaticData);
 
       var deviceNameArr = deviceName.split(' ');
       // consoleLog('deviceNameArr', deviceNameArr);
-      if (
-        Array.isArray(deviceNameArr) &&
-        deviceNameArr.length > 0
-      ) {
+      if (Array.isArray(deviceNameArr) && deviceNameArr.length > 0) {
         if (deviceNameArr[0] == 'SL') {
           deviceNameArr[0] = 'FAUCET';
         }

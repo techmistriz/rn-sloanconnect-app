@@ -32,10 +32,12 @@ const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
 
   const [modeSelection, setModeSelection] = useState<any>('');
-  const [metered, setMetered] = useState<any>('');
-  const [onDemand, setOnDemand] = useState<any>('');
-  const [activationModeSec, setActivationModeSec] = useState('');
-  const [activationModeSecOld, setActivationModeSecOld] = useState('');
+  // const [metered, setMetered] = useState<any>('');
+  // const [onDemand, setOnDemand] = useState<any>('');
+  const [activationOnDemandSec, setActivationOnDemandSec] = useState('');
+  const [activationOnDemandSecOld, setActivationOnDemandSecOld] = useState('');
+  const [activationMeteredSec, setActivationMeteredSec] = useState('');
+  const [activationMeteredSecOld, setActivationMeteredSecOld] = useState('');
 
   /** component hooks method for device disconnect checking */
   useEffect(() => {
@@ -87,53 +89,51 @@ const Index = ({navigation, route}: any) => {
       __modeSelection = resultObj?.newValue;
     }
 
-    if (__modeSelection == '0') {
-      const resultObj2 = findObject(
-        'onDemand',
-        deviceSettingsData?.ActivationMode,
-        {
-          searchKey: 'name',
-        },
-      );
+    const resultObj2 = findObject(
+      'onDemand',
+      deviceSettingsData?.ActivationMode,
+      {
+        searchKey: 'name',
+      },
+    );
 
-      if (!isObjectEmpty(resultObj)) {
-        __onDemand = resultObj2?.newValue;
-      }
-
-      setActivationModeSecOld(__onDemand);
-      setActivationModeSec(__onDemand);
-    } else if (__modeSelection == '1') {
-      const resultObj2 = findObject(
-        'metered',
-        deviceSettingsData?.ActivationMode,
-        {
-          searchKey: 'name',
-        },
-      );
-      // consoleLog('mapMeteredOnDemandValue resultobj==>', {resultObj, type});
-
-      if (!isObjectEmpty(resultObj)) {
-        __metered = resultObj2?.newValue;
-      }
-
-      setActivationModeSecOld(__metered);
-      setActivationModeSec(__metered);
+    if (!isObjectEmpty(resultObj)) {
+      __onDemand = resultObj2?.newValue;
     }
 
+    setActivationOnDemandSecOld(__onDemand);
+    setActivationOnDemandSec(__onDemand);
+
+    const resultObj3 = findObject(
+      'metered',
+      deviceSettingsData?.ActivationMode,
+      {
+        searchKey: 'name',
+      },
+    );
+    // consoleLog('mapMeteredOnDemandValue resultobj==>', {resultObj, type});
+
+    if (!isObjectEmpty(resultObj)) {
+      __metered = resultObj3?.newValue;
+    }
+
+    setActivationMeteredSecOld(__metered);
+    setActivationMeteredSec(__metered);
+
     setModeSelection(__modeSelection);
-    setOnDemand(__onDemand);
-    setMetered(__metered);
+    // setOnDemand(__onDemand);
+    // setMetered(__metered);
   };
 
   const handleModeSelection = async (val: string) => {
     // consoleLog('handleModeSelection val==>', {val, onDemand, metered});
     setModeSelection(val);
 
-    if (val == '0') {
-      setActivationModeSec(onDemand);
-    } else if (val == '1') {
-      setActivationModeSec(metered);
-    }
+    // if (val == '0') {
+    //   setActivationOnDemandSec(onDemand);
+    // } else if (val == '1') {
+    //   setActivationOnDemandSec(metered);
+    // }
   };
 
   const onDonePress = () => {
@@ -159,14 +159,14 @@ const Index = ({navigation, route}: any) => {
     // consoleLog('onDonePressGen1', {
     //   old: settingsData?.modeSelection?.value,
     //   modeSelection,
-    //   activationModeSecOld,
-    //   activationModeSec,
+    //   activationOnDemandSecOld,
+    //   activationOnDemandSec,
     // });
     // return false;
 
     if (
-      settingsData?.modeSelection?.value != modeSelection ||
-      activationModeSecOld != activationModeSec
+      settingsData?.modeSelection?.value != modeSelection
+      // || activationOnDemandSecOld != activationOnDemandSec
     ) {
       params.push({
         name: 'modeSelection',
@@ -198,66 +198,68 @@ const Index = ({navigation, route}: any) => {
     }
 
     if (
-      settingsData?.modeSelection?.value != modeSelection ||
-      activationModeSecOld != activationModeSec
+      // settingsData?.modeSelection?.value != modeSelection ||
+      activationOnDemandSecOld != activationOnDemandSec &&
+      modeSelection == '0'
     ) {
-      if (modeSelection == '0') {
-        params.push({
-          name: 'onDemand',
-          serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_CHARACTERISTIC_UUID,
-          oldValue: settingsData?.modeSelection?.value,
-          newValue: activationModeSec,
-        });
+      params.push({
+        name: 'onDemand',
+        serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.modeSelection?.value,
+        newValue: activationOnDemandSec,
+      });
 
-        params.push({
-          name: 'onDemandDate',
-          serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_DATE_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_DATE_CHARACTERISTIC_UUID,
-          oldValue: null,
-          newValue: parseDateTimeInFormat(new Date(), dateFormat),
-          allowedInPreviousSettings: false,
-        });
-        params.push({
-          name: 'onDemandPhone',
-          serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_CHARACTERISTIC_UUID,
-          oldValue: null,
-          newValue: user?.user_metadata?.phone_number ?? '0123456789',
-          allowedInPreviousSettings: false,
-        });
-      } else if (modeSelection == '1') {
-        params.push({
-          name: 'metered',
-          serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN1.METERED_RUNTIME_CHARACTERISTIC_UUID,
-          oldValue: settingsData?.modeSelection?.value,
-          newValue: activationModeSec,
-        });
+      params.push({
+        name: 'onDemandDate',
+        serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      params.push({
+        name: 'onDemandPhone',
+        serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
+        allowedInPreviousSettings: false,
+      });
+    } else if (
+      activationMeteredSecOld != activationMeteredSec &&
+      modeSelection == '1'
+    ) {
+      params.push({
+        name: 'metered',
+        serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.METERED_RUNTIME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.modeSelection?.value,
+        newValue: activationMeteredSec,
+      });
 
-        params.push({
-          name: 'meteredDate',
-          serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_DATE_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN1.METERED_RUNTIME_DATE_CHARACTERISTIC_UUID,
-          oldValue: null,
-          newValue: parseDateTimeInFormat(new Date(), dateFormat),
-          allowedInPreviousSettings: false,
-        });
-        params.push({
-          name: 'meteredPhone',
-          serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_CHARACTERISTIC_UUID,
-          oldValue: null,
-          newValue: user?.user_metadata?.phone_number ?? '0123456789',
-          allowedInPreviousSettings: false,
-        });
-      }
+      params.push({
+        name: 'meteredDate',
+        serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.METERED_RUNTIME_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      params.push({
+        name: 'meteredPhone',
+        serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
+        allowedInPreviousSettings: false,
+      });
     }
 
     if (params.length) {
@@ -281,17 +283,19 @@ const Index = ({navigation, route}: any) => {
     //   BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.MODE_SELECTION,
     //   modeSelection,
     // );
-    // consoleLog('onDonePressGen1', {
+    // consoleLog('onDonePressGen2', {
     //   old: settingsData?.modeSelection?.value,
     //   modeSelection,
-    //   activationModeSecOld,
-    //   activationModeSec,
+    //   activationOnDemandSecOld,
+    //   activationOnDemandSec,
+    //   activationMeteredSecOld,
+    //   activationMeteredSec,
     // });
     // return false;
 
     if (
-      settingsData?.modeSelection?.value != modeSelection ||
-      activationModeSecOld != activationModeSec
+      settingsData?.modeSelection?.value != modeSelection
+      // ||  activationOnDemandSecOld != activationOnDemandSec
     ) {
       params.push({
         name: 'modeSelection',
@@ -339,84 +343,86 @@ const Index = ({navigation, route}: any) => {
     }
 
     if (
-      settingsData?.modeSelection?.value != modeSelection ||
-      activationModeSecOld != activationModeSec
+      // settingsData?.modeSelection?.value != modeSelection ||
+      activationOnDemandSecOld != activationOnDemandSec &&
+      modeSelection == '0'
     ) {
-      if (modeSelection == '0') {
-        params.push({
-          name: 'onDemand',
-          serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-          oldValue: null,
-          newValue: activationModeSec,
-          modfiedNewValue: mapValueGen2(
-            BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.MAXIMUM_ON_DEMAND_RUN_TIME,
-            activationModeSec,
-          ),
-        });
+      params.push({
+        name: 'onDemand',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: activationOnDemandSec,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.MAXIMUM_ON_DEMAND_RUN_TIME,
+          activationOnDemandSec,
+        ),
+      });
 
-        params.push({
-          name: 'onDemandDate',
-          serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-          oldValue: null,
-          newValue: parseDateTimeInFormat(new Date(), dateFormat),
-          allowedInPreviousSettings: false,
-          modfiedNewValue: mapValueGen2(
-            BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_OD_RUNTIME_CHANGE,
-            timestampInSec(),
-          ),
-        });
+      params.push({
+        name: 'onDemandDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_OD_RUNTIME_CHANGE,
+          timestampInSec(),
+        ),
+      });
 
-        // params.push({
-        //   name: 'onDemandPhone',
-        //   serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-        //   characteristicUUID:
-        //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-        //   oldValue: null,
-        //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
-        //   allowedInPreviousSettings: false,
-        // });
-      } else if (modeSelection == '1') {
-        params.push({
-          name: 'metered',
-          serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-          oldValue: null,
-          newValue: activationModeSec,
-          modfiedNewValue: mapValueGen2(
-            BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.METERED_RUN_TIME,
-            activationModeSec,
-          ),
-        });
+      // params.push({
+      //   name: 'onDemandPhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
+    } else if (
+      activationMeteredSecOld != activationMeteredSec &&
+      modeSelection == '1'
+    ) {
+      params.push({
+        name: 'metered',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: activationMeteredSec,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.METERED_RUN_TIME,
+          activationMeteredSec,
+        ),
+      });
 
-        params.push({
-          name: 'meteredDate',
-          serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-          characteristicUUID:
-            BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-          oldValue: null,
-          newValue: parseDateTimeInFormat(new Date(), dateFormat),
-          allowedInPreviousSettings: false,
-          modfiedNewValue: mapValueGen2(
-            BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_METER_RUNTIME_CHANGE,
-            timestampInSec(),
-          ),
-        });
+      params.push({
+        name: 'meteredDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_METER_RUNTIME_CHANGE,
+          timestampInSec(),
+        ),
+      });
 
-        // params.push({
-        //   name: 'meteredPhone',
-        //   serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-        //   characteristicUUID:
-        //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-        //   oldValue: null,
-        //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
-        //   allowedInPreviousSettings: false,
-        // });
-      }
+      // params.push({
+      //   name: 'meteredPhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     }
 
     // consoleLog('onDonePressGen2 params==>', params);
@@ -439,13 +445,23 @@ const Index = ({navigation, route}: any) => {
   const checkValidation = () => {
     const min = 3;
     const max = modeSelection == '1' ? 120 : 1200;
-    if (activationModeSec.trim() === '') {
+    if (modeSelection == '0' && activationOnDemandSec?.trim() === '') {
       showSimpleAlert('Please enter timeout in seconds');
       return false;
-    } else if (Number(activationModeSec) < min) {
+    } else if (modeSelection == '0' && Number(activationOnDemandSec) < min) {
       showSimpleAlert('Timeout seconds can`t be less than ' + min);
       return false;
-    } else if (Number(activationModeSec) > max) {
+    } else if (modeSelection == '0' && Number(activationOnDemandSec) > max) {
+      showSimpleAlert('Timeout seconds can`t be greater than ' + max);
+      return false;
+    }
+    if (modeSelection == '1' && activationMeteredSec?.trim() === '') {
+      showSimpleAlert('Please enter timeout in seconds');
+      return false;
+    } else if (modeSelection == '1' && Number(activationMeteredSec) < min) {
+      showSimpleAlert('Timeout seconds can`t be less than ' + min);
+      return false;
+    } else if (modeSelection == '1' && Number(activationMeteredSec) > max) {
       showSimpleAlert('Timeout seconds can`t be greater than ' + max);
       return false;
     } else {
@@ -498,25 +514,48 @@ const Index = ({navigation, route}: any) => {
                 ff={Theme.fonts.ThemeFontLight}
               />
 
-              <Input
-                onRef={input => {
-                  // @ts-ignore
-                  activationModeSecTextInputRef = input;
-                }}
-                onChangeText={text => setActivationModeSec(text)}
-                onSubmitEditing={() => {
-                  // @ts-ignore
-                  Keyboard.dismiss();
-                }}
-                returnKeyType="done"
-                blurOnSubmit={false}
-                keyboardType="numeric"
-                placeholder=""
-                value={activationModeSec}
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={styles.textInput}
-                maxLength={4}
-              />
+              {modeSelection == '0' ? (
+                <Input
+                  onRef={input => {
+                    // @ts-ignore
+                    activationOnDemandSecTextInputRef = input;
+                  }}
+                  onChangeText={text => setActivationOnDemandSec(text)}
+                  onSubmitEditing={() => {
+                    // @ts-ignore
+                    Keyboard.dismiss();
+                  }}
+                  returnKeyType="done"
+                  blurOnSubmit={false}
+                  keyboardType="numeric"
+                  placeholder=""
+                  value={activationOnDemandSec}
+                  inputContainerStyle={styles.inputContainer}
+                  inputStyle={styles.textInput}
+                  maxLength={4}
+                />
+              ) : (
+                <Input
+                  onRef={input => {
+                    // @ts-ignore
+                    activationMeteredSecTextInputRef = input;
+                  }}
+                  onChangeText={text => setActivationMeteredSec(text)}
+                  onSubmitEditing={() => {
+                    // @ts-ignore
+                    Keyboard.dismiss();
+                  }}
+                  returnKeyType="done"
+                  blurOnSubmit={false}
+                  keyboardType="numeric"
+                  placeholder=""
+                  value={activationMeteredSec}
+                  inputContainerStyle={styles.inputContainer}
+                  inputStyle={styles.textInput}
+                  maxLength={4}
+                />
+              )}
+
               <Typography
                 size={12}
                 text={`Seconds`}

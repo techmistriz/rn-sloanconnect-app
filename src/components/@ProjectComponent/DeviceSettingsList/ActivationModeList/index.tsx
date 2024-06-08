@@ -21,7 +21,7 @@ const DeviceSettingList = ({
   style,
   navigation,
   applied = false,
-  showApplySettingButton
+  showApplySettingButton,
 }: FlowRateProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
@@ -54,6 +54,11 @@ const DeviceSettingList = ({
     let __onDemand = settingsData?.onDemand?.value ?? '';
     let __metered = settingsData?.metered?.value ?? '';
 
+    // consoleLog('__modeSelection', {
+    //   __modeSelection,
+    //   __onDemand,
+    //   __metered,
+    // });
     // Handle unsaved value which were changed
     const resultObj = findObject(
       'modeSelection',
@@ -76,83 +81,25 @@ const DeviceSettingList = ({
           searchKey: 'name',
         },
       );
-      if (!isObjectEmpty(resultObj)) {
+      if (!isObjectEmpty(resultObj2)) {
         __onDemand = resultObj2?.newValue;
       }
     } else if (__modeSelection == '1') {
-      const resultObj2 = findObject(
+      const resultObj3 = findObject(
         'metered',
         deviceSettingsData?.ActivationMode,
         {
           searchKey: 'name',
         },
       );
-      if (!isObjectEmpty(resultObj)) {
-        __metered = resultObj2?.newValue;
+      if (!isObjectEmpty(resultObj3)) {
+        __metered = resultObj3?.newValue;
       }
     }
 
     setModeSelection(__modeSelection);
     setOnDemand(__onDemand);
     setMetered(__metered);
-  };
-
-  /**
-   * Not in use
-   * modeSelectionTmp
-   * @returns value
-   */
-  const mapModeSelectionValue = () => {
-    var modeSelectionTmp = modeSelection;
-    // Check for new value if any changed occured
-    const resultObj = findObject(
-      'modeSelection',
-      deviceSettingsData?.ActivationMode,
-      {
-        searchKey: 'name',
-      },
-    );
-    // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
-
-    if (!isObjectEmpty(resultObj)) {
-      modeSelectionTmp = resultObj?.newValue;
-    }
-
-    return modeSelectionTmp == '0'
-      ? 'On Demand'
-      : modeSelectionTmp == '1'
-      ? 'Metered'
-      : '';
-  };
-
-  /**
-   * Not in use
-   * modeSelectionTmp
-   * @returns value
-   */
-  const mapMeteredOnDemandValue = () => {
-    // Check for new value if any changed occured
-    var value = '0';
-    var type = '';
-
-    if (modeSelection == '0') {
-      value = onDemand;
-      type = 'onDemand';
-    } else if (modeSelection == '1') {
-      value = metered;
-      type = 'metered';
-    }
-
-    const resultObj = findObject(type, deviceSettingsData?.ActivationMode, {
-      searchKey: 'name',
-    });
-    consoleLog('mapMeteredOnDemandValue resultobj==>', {resultObj, type});
-
-    if (!isObjectEmpty(resultObj)) {
-      value = resultObj?.newValue;
-    }
-
-    return value;
   };
 
   return (
@@ -216,7 +163,8 @@ const DeviceSettingList = ({
                 ff={Theme.fonts.ThemeFontLight}
               />
 
-              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) && showApplySettingButton ? (
+              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) &&
+              showApplySettingButton ? (
                 <>
                   {applied ? (
                     <VectorIcon
