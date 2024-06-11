@@ -155,18 +155,18 @@ const Index = ({navigation, route}: any) => {
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
-      params.push({
-        name: 'flushPhone',
-        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_SERVICE_UUID,
-        characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_CHARACTERISTIC_UUID,
-        oldValue: null,
-        newValue: user?.user_metadata?.phone_number ?? '0123456789',
-        allowedInPreviousSettings: false,
-      });
+      // params.push({
+      //   name: 'flushPhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_SERVICE_UUID,
+      //   characteristicUUID: BLE_CONSTANTS.GEN1.FLUSH_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     }
 
     if (
-      settingsData?.flush?.value != flush ||
+      // settingsData?.flush?.value != flush ||
       settingsData?.flushTime?.value != flushTime
     ) {
       params.push({
@@ -186,19 +186,19 @@ const Index = ({navigation, route}: any) => {
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
-      params.push({
-        name: 'flushTimePhone',
-        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_TIME_PHONE_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.GEN1.FLUSH_TIME_PHONE_CHARACTERISTIC_UUID,
-        oldValue: null,
-        newValue: user?.user_metadata?.phone_number ?? '0123456789',
-        allowedInPreviousSettings: false,
-      });
+      // params.push({
+      //   name: 'flushTimePhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_TIME_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN1.FLUSH_TIME_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     }
 
     if (
-      settingsData?.flush?.value != flush ||
+      // settingsData?.flush?.value != flush ||
       settingsData?.flushInterval?.value != flushInterval
     ) {
       params.push({
@@ -219,15 +219,15 @@ const Index = ({navigation, route}: any) => {
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
-      params.push({
-        name: 'flushIntervalPhone',
-        serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_PHONE_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_PHONE_CHARACTERISTIC_UUID,
-        oldValue: null,
-        newValue: user?.user_metadata?.phone_number ?? '0123456789',
-        allowedInPreviousSettings: false,
-      });
+      // params.push({
+      //   name: 'flushIntervalPhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     }
 
     if (params.length) {
@@ -285,7 +285,7 @@ const Index = ({navigation, route}: any) => {
     }
 
     if (
-      settingsData?.flush?.value != flush ||
+      // settingsData?.flush?.value != flush ||
       settingsData?.flushTime?.value != flushTime
     ) {
       params.push({
@@ -317,7 +317,7 @@ const Index = ({navigation, route}: any) => {
     }
 
     if (
-      settingsData?.flush?.value != flush ||
+      // settingsData?.flush?.value != flush ||
       settingsData?.flushInterval?.value != flushInterval
     ) {
       params.push({

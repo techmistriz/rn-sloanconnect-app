@@ -161,7 +161,7 @@ const Index = ({navigation, route}: any) => {
       });
 
       // params.push({
-      //   name: 'sensorRangeDate',
+      //   name: 'flowRateRangeDate',
       //   serviceUUID: BLE_CONSTANTS.GEN1.FLOW_RATE_DATE_SERVICE_UUID,
       //   characteristicUUID:
       //     BLE_CONSTANTS.GEN1.FLOW_RATE_DATE_CHARACTERISTIC_UUID,
@@ -169,8 +169,9 @@ const Index = ({navigation, route}: any) => {
       //   newValue: parseDateTimeInFormat(new Date(), dateFormat),
       //   allowedInPreviousSettings: false,
       // });
+
       // params.push({
-      //   name: 'sensorRangePhone',
+      //   name: 'flowRateRangePhone',
       //   serviceUUID: BLE_CONSTANTS.GEN1.FLOW_RATE_PHONE_SERVICE_UUID,
       //   characteristicUUID:
       //     BLE_CONSTANTS.GEN1.FLOW_RATE_PHONE_CHARACTERISTIC_UUID,
