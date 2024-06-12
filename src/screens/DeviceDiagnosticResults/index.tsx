@@ -1,19 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import Theme from 'src/theme';
 import {useSelector} from 'react-redux';
+import {cleanCharacteristic} from 'src/utils/Helpers/project';
 import {
-  cleanCharacteristic,
-} from 'src/utils/Helpers/project';
-import {
+  consoleLog,
   getTimezone,
   parseDateHumanFormat,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {
-  Row,
-  Col,
-  Wrap,
-} from 'src/components/Common';
+import {Row, Col, Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import VectorIcon from 'src/components/VectorIcon';
@@ -21,198 +16,44 @@ import {styles} from './styles';
 import AppContainer from 'src/components/AppContainer';
 import Divider from 'src/components/Divider';
 import {BLEService} from 'src/services';
-
 import DiagnosticResultsList from 'src/components/@ProjectComponent/DiagnosticResultsList';
 import InfoBox from 'src/components/InfoBox';
 import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
+import {readingDiagnostic} from '../DeviceDiagnostics/helperGen1';
 
 const Index = ({navigation, route}: any) => {
-  const {referrer} = route?.params || {referrer: undefined};
-  const {user, token} = useSelector((state: any) => state?.AuthReducer);
+  const {
+    referrer,
+    previousDiagnosticResults,
+    diagnosticResults,
+    waterDispensed,
+    sensorResult,
+    dateResult,
+  } = route?.params || {referrer: undefined};
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
-  const [infoModal, setInfoModal] = useState<boolean>(true);
-  const [deviceSensorDetails, setDeviceSensorDetails] = useState<any>();
-  const [deviceValveDetails, setDeviceValveDetails] = useState<any>();
-  const [deviceTurbineDetails, setDeviceTurbineDetails] = useState<any>();
-  const [deviceDispenseDetails, setDeviceDispenseDetails] = useState<any>();
-  const [deviceBatteryDetails, setDeviceBatteryDetails] = useState<any>();
-  const [deviceDTLastDiagnosticDetails, setDeviceDTLastDiagnosticDetails] =
-    useState<any>();
-  const [diagnosticResults, setDiagnosticResults] = useState<any>([]);
+  const [infoModal, setInfoModal] = useState<boolean>(false);
 
   useEffect(() => {
-    initialize();
+    initlizeApp();
   }, []);
 
-  const initialize = async () => {
-    setLoading(true);
-
-    var RESULTS = [];
-    const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c960';
-    const characteristicUUIDSensor = 'd0aba888-fb10-4dc9-9b17-bdd8f490c962';
-    const characteristicUUIDValve = 'd0aba888-fb10-4dc9-9b17-bdd8f490c963';
-    const characteristicUUIDTurbine = 'd0aba888-fb10-4dc9-9b17-bdd8f490c964';
-    const characteristicUUIDDispense = 'd0aba888-fb10-4dc9-9b17-bdd8f490c965';
-    const characteristicUUIDBattery = 'd0aba888-fb10-4dc9-9b17-bdd8f490c966';
-    const characteristicUUIDDTLastDiagnostic =
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c967';
-
-    //  Sensor result
-    const __characteristicSensor = await BLEService.readCharacteristicForDevice(
-      serviceUUID,
-      characteristicUUIDSensor,
-    );
-
-    // consoleLog(
-    //   'initialize __characteristicSensor==>',
-    //   JSON.stringify(__characteristicSensor),
-    // );
-
-    if (__characteristicSensor) {
-      const __characteristicSensor__ = cleanCharacteristic(
-        __characteristicSensor,
-      );
-      // setDeviceSensorDetails(__characteristicSensor__);
-      RESULTS.push({
-        ...__characteristicSensor__,
-        name: 'Sensor',
-        value: base64EncodeDecode(__characteristicSensor__?.value, 'decode'),
-      });
+  /** Function comments */
+  const initlizeApp = async () => {
+    if (BLEService.deviceGeneration == 'gen1') {
+      initlizeAppGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+    } else if (BLEService.deviceGeneration == 'gen3') {
+      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'gen4') {
+      // Code need to be implemented
     }
+  };
 
-    //  Valve result
-    const __characteristicValve = await BLEService.readCharacteristicForDevice(
-      serviceUUID,
-      characteristicUUIDValve,
-    );
-
-    // consoleLog(
-    //   'initialize __characteristicValve==>',
-    //   JSON.stringify(__characteristicValve),
-    // );
-
-    if (__characteristicValve) {
-      const __characteristicValve__ = cleanCharacteristic(
-        __characteristicValve,
-      );
-      // setDeviceValveDetails(__characteristicValve__);
-      RESULTS.push({
-        ...__characteristicValve__,
-        name: 'Valve',
-        value: base64EncodeDecode(__characteristicValve__?.value, 'decode'),
-      });
+  const initlizeAppGen1 = async () => {
+    if (waterDispensed == 1 && sensorResult?.value == '0') {
+      setInfoModal(true);
     }
-
-    //  Turbine result
-    const __characteristicTurbine =
-      await BLEService.readCharacteristicForDevice(
-        serviceUUID,
-        characteristicUUIDTurbine,
-      );
-
-    // consoleLog(
-    //   'initialize __characteristicTurbine==>',
-    //   JSON.stringify(__characteristicTurbine),
-    // );
-
-    if (__characteristicTurbine) {
-      const __characteristicTurbine__ = cleanCharacteristic(
-        __characteristicTurbine,
-      );
-      // setDeviceTurbineDetails(__characteristicTurbine__);
-      RESULTS.push({
-        ...__characteristicTurbine__,
-        name: 'Turbine',
-        value: base64EncodeDecode(__characteristicTurbine__?.value, 'decode'),
-      });
-    }
-
-    //  Dispense result
-    const __characteristicDispense =
-      await BLEService.readCharacteristicForDevice(
-        serviceUUID,
-        characteristicUUIDDispense,
-      );
-
-    // consoleLog(
-    //   'initialize __characteristicDispense==>',
-    //   JSON.stringify(__characteristicDispense),
-    // );
-
-    if (__characteristicDispense) {
-      const __characteristicDispense__ = cleanCharacteristic(
-        __characteristicDispense,
-      );
-      // setDeviceDispenseDetails(__characteristicDispense__);
-      RESULTS.push({
-        ...__characteristicDispense__,
-        name: 'Water Dispense',
-        value: base64EncodeDecode(__characteristicDispense__?.value, 'decode'),
-      });
-    }
-
-    //  Battery result
-    const __characteristicBattery =
-      await BLEService.readCharacteristicForDevice(
-        serviceUUID,
-        characteristicUUIDBattery,
-      );
-
-    // consoleLog(
-    //   'initialize __characteristicBattery==>',
-    //   JSON.stringify(__characteristicBattery),
-    // );
-
-    if (__characteristicBattery) {
-      const __characteristicBattery__ = cleanCharacteristic(
-        __characteristicBattery,
-      );
-
-      // consoleLog(
-      //   'initialize __characteristicBattery__==>',
-      //   JSON.stringify(__characteristicBattery__),
-      // );
-
-      // setDeviceBatteryDetails(__characteristicBattery__);
-      RESULTS.push({
-        ...__characteristicBattery__,
-        name: 'Battery Level at Diagnostic',
-        value: base64EncodeDecode(__characteristicBattery__?.value, 'decode'),
-        forceText: true,
-        prefix: null,
-        postfix: ' %',
-      });
-    }
-
-    //  DTLastDiagnostic result
-    const __characteristicDTLastDiagnostic =
-      await BLEService.readCharacteristicForDevice(
-        serviceUUID,
-        characteristicUUIDDTLastDiagnostic,
-      );
-
-    // consoleLog(
-    //   'initialize __characteristicDTLastDiagnostic==>',
-    //   JSON.stringify(__characteristicDTLastDiagnostic),
-    // );
-
-    if (__characteristicDTLastDiagnostic) {
-      const __characteristicDTLastDiagnostic__ = cleanCharacteristic(
-        __characteristicDTLastDiagnostic,
-      );
-      // setDeviceDTLastDiagnosticDetails(__characteristicDTLastDiagnostic__);
-      RESULTS.push({
-        ...__characteristicDTLastDiagnostic__,
-        name: 'D/T of last diagnostic',
-        value: base64EncodeDecode(
-          __characteristicDTLastDiagnostic__?.value,
-          'decode',
-        ),
-      });
-    }
-    setDiagnosticResults(RESULTS);
-    setLoading(false);
   };
 
   return (
@@ -254,6 +95,7 @@ const Index = ({navigation, route}: any) => {
               </Row>
             </Wrap>
 
+            {/* Current Diagnostic */}
             <Wrap autoMargin={false} style={styles.container}>
               <Row autoMargin={false} style={{}}>
                 <Col autoMargin={false} style={{flex: 1}}>
@@ -296,6 +138,61 @@ const Index = ({navigation, route}: any) => {
                 );
               })}
             </Wrap>
+
+            {/* Previous Diagnostic */}
+            {waterDispensed == 1 && sensorResult?.value == '0' && (
+              <>
+                <Wrap autoMargin={false} style={styles.container}>
+                  <Row autoMargin={false} style={{}}>
+                    <Col autoMargin={false} style={{flex: 1}}>
+                      <Wrap
+                        autoMargin={false}
+                        style={{
+                          backgroundColor: Theme.colors.lightGray,
+                        }}>
+                        <Typography
+                          size={10}
+                          text={`LAST DIAGNOSTIC RESULTS ${
+                            dateResult?.value
+                              ? parseDateHumanFormat(
+                                  dateResult?.value,
+                                  'ddd, DD MMMM YYYY HH:MM:SS',
+                                )
+                              : 'N/A'
+                          } ${getTimezone()}`}
+                          style={{
+                            textAlign: 'left',
+                            paddingVertical: 10,
+                            paddingLeft: 20,
+                          }}
+                          color={Theme.colors.midGray}
+                          ff={Theme.fonts.ThemeFontMedium}
+                        />
+                      </Wrap>
+                    </Col>
+                  </Row>
+                </Wrap>
+
+                <Wrap autoMargin={false} style={styles.container}>
+                  {previousDiagnosticResults &&
+                    previousDiagnosticResults.map(
+                      (item: any, index: number) => {
+                        return (
+                          <DiagnosticResultsList
+                            key={index.toString()}
+                            item={item}
+                            borderBottom={
+                              index >= 0 ? (
+                                <Divider color={Theme.colors.lightGray} />
+                              ) : null
+                            }
+                          />
+                        );
+                      },
+                    )}
+                </Wrap>
+              </>
+            )}
 
             <Wrap
               autoMargin={true}
@@ -369,7 +266,11 @@ const Index = ({navigation, route}: any) => {
 
             <Wrap
               autoMargin={true}
-              style={[styles.container, styles.screenMargin]}>
+              style={[
+                styles.container,
+                styles.screenMargin,
+                {paddingBottom: 10},
+              ]}>
               <Button
                 title={'DONE'}
                 onPress={() => {

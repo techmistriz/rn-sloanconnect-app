@@ -22,7 +22,7 @@ const DiagnosticResultsList = ({
         <Wrap autoMargin={false} style={styles.leftStyle}>
           <Typography
             size={14}
-            text={item?.name}
+            text={item?.name ?? 'N/A'}
             style={{
               textAlign: 'left',
             }}
@@ -50,7 +50,7 @@ const DiagnosticResultsList = ({
             ) : (
               <Typography
                 size={12}
-                text={`${item?.prefix ?? ''}${item?.value}${
+                text={`${item?.prefix ?? ''}${item?.value ?? 'N/A'}${
                   item?.postfix ?? ''
                 }`}
                 style={{

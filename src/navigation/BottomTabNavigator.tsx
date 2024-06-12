@@ -147,7 +147,7 @@ const CustomTabBar = ({state, descriptors, navigation}: any) => {
             if (route?.name == 'DeviceDisconnectStack') {
               setDisconnectModal(true);
             } else if (route?.name == 'DeviceDiagnosticsStack') {
-              // navigation.navigate('DeviceDiagnostics');
+              navigation.navigate('DeviceDiagnostics');
             } else {
               navigation.navigate(route.name);
             }
