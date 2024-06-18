@@ -383,10 +383,17 @@ export const getBatteryLevel = async (
     serviceUUID,
     characteristicUUID,
   );
-  // consoleLog('__batteryLevelResponse __batteryLevelResponse==>', JSON.stringify(__batteryLevelResponse));
+  consoleLog(
+    'getBatteryLevel __batteryLevelResponse==>',
+    __batteryLevelResponse?.value,
+  );
   //  ZA== => d => 64 => 100
   if (__batteryLevelResponse?.value) {
-    const hexEncodeValue = base64ToDecimal(__batteryLevelResponse?.value);
+    // const hexEncodeValue = base64ToDecimal(__batteryLevelResponse?.value);
+    const __base64ToHex = base64ToHex(__batteryLevelResponse?.value);
+    const hexEncodeValue = hexToDecimal(__base64ToHex);
+    // consoleLog('getBatteryLevel __base64ToHex==>', __base64ToHex);
+    // consoleLog('getBatteryLevel hexEncodeValue==>', hexEncodeValue);
     // const decodedValue = base64EncodeDecode(__batteryLevelResponse?.value, 'decode');
     // const hexEncodeValue = hexToDecimal(
     //   hexEncodeDecode(decodedValue, 'encode'),

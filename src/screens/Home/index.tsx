@@ -11,7 +11,7 @@ import {Wrap, Row} from 'src/components/Common';
 import Typography from 'src/components/Typography';
 import {
   getImgSource,
-  getNameByType,
+  // getNameByType,
   showConfirmAlert,
   showToastMessage,
   assetsBaseUrl,
