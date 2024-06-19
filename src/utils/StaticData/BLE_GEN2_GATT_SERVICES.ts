@@ -152,7 +152,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 size: 5,
                 position: 15,
                 name: {
-                  name: 'Date of last OD timeout change',
+                  name: 'Date of last On-Demand timeout change',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -1140,10 +1140,10 @@ export const BLE_GEN2_GATT_SERVICES = {
             uuidData: [
               {
                 size: 13,
-                displayInList: false,
-                position: 0,
+                position: 2,
                 name: {
-                  name: 'AD Serial Number',
+                  name: 'Sensor Serial Number',
+                  nameOG: 'AD Serial Number',
                   size: 3,
                   type: 'String',
                 },
@@ -1162,9 +1162,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 13,
-                position: 2,
+                position: 7,
                 name: {
-                  name: 'BD Serial Number',
+                  name: 'Control Box Serial Number',
+                  nameOG: 'BD Serial Number',
                   size: 3,
                   type: 'String',
                 },
@@ -1183,10 +1184,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 9,
-                displayInList: false,
-                position: 0,
+                position: 3,
                 name: {
-                  name: 'AD Manufacturing Date',
+                  name: 'Sensor Manufacturing Date',
+                  nameOG: 'AD Manufacturing Date',
                   size: 3,
                   type: 'String',
                 },
@@ -1208,10 +1209,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 9,
-                displayInList: false,
-                position: 0,
+                position: 8,
                 name: {
-                  name: 'BD Manufacturing Date',
+                  name: 'Control Box Manufacturing Date',
+                  nameOG: 'BD Manufacturing Date',
                   size: 3,
                   type: 'String',
                 },
@@ -1233,9 +1234,9 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 7,
-                position: 0,
+                position: 4,
                 name: {
-                  name: 'AD Hardware Version',
+                  name: 'Sensor Hardware Version',
                   size: 3,
                   type: 'String',
                 },
@@ -1254,9 +1255,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 7,
-                position: 1,
+                position: 5,
                 name: {
-                  name: 'AD Firmware Version',
+                  name: 'Sensor Firmware Version',
+                  nameOG: 'AD Firmware Version',
                   size: 3,
                   type: 'String',
                 },
@@ -1275,9 +1277,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 7,
-                position: 3,
+                position: 9,
                 name: {
-                  name: 'BD Hardware Version',
+                  name: 'Control Box Hardware Version',
+                  nameOG: 'BD Hardware Version',
                   size: 3,
                   type: 'String',
                 },
@@ -1296,9 +1299,10 @@ export const BLE_GEN2_GATT_SERVICES = {
               },
               {
                 size: 7,
-                position: 4,
+                position: 10,
                 name: {
-                  name: 'BD Firmware Version',
+                  name: 'Control Box Firmware Version',
+                  nameOG: 'BD Firmware Version',
                   size: 3,
                   type: 'String',
                 },

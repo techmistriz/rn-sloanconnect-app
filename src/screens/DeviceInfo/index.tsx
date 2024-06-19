@@ -323,6 +323,23 @@ const Index = ({navigation, route}: any) => {
         );
       }
 
+      const __mappingDeviceDataCollectionGen2 =
+        BLEService.characteristicMonitorDataCollectionMapped;
+      const controlBoxModel =
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[0];
+
+      if (!isObjectEmpty(controlBoxModel)) {
+        /**
+         * AD SKU -> Control Box Model
+         */
+        allData.push({
+          name: 'Control Box Model',
+          position: 6,
+          value: controlBoxModel?.value?.currentValue,
+          uuid: null,
+        });
+      }
+
       var sortedObjs = _.sortBy(allData, 'position');
 
       var sloanModel: any = [];
@@ -331,7 +348,8 @@ const Index = ({navigation, route}: any) => {
           {
             name: 'SLOAN MODEL',
             value: deviceStaticData?.fullNameAllModel,
-            uuid: '111111',
+            uuid: null,
+            position: 1,
           },
         ];
       }
@@ -340,7 +358,8 @@ const Index = ({navigation, route}: any) => {
         {
           name: 'Battery Status',
           value: `${BLEService.batteryLevel}%`,
-          uuid: '0000000',
+          uuid: null,
+          position: 11,
         },
       ];
 
@@ -424,59 +443,6 @@ const Index = ({navigation, route}: any) => {
           name: 'Date of installation',
           position: 0,
           value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
-          uuid: null,
-        });
-      }
-
-      const __mappingDeviceDataStringGen2 =
-        BLEService.characteristicMonitorDeviceDataStringMapped;
-      /**
-       * Control box manufacturing date -> BD Manufacturing Date(AD Manufacturing Date)
-       */
-      const ADManufacturingDate =
-        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[3];
-      if (!isObjectEmpty(ADManufacturingDate)) {
-        allData.push({
-          name: 'Control box manufacturing date',
-          position: 2,
-          value: formatCharateristicValue(
-            ADManufacturingDate?.value,
-            ADManufacturingDate?.value?.currentValue,
-          ),
-          uuid: null,
-        });
-      }
-
-      /**
-       * SENSOR MANUFACTURING DATE -> AD Manufacturing Date (BD Manufacturing Date)
-       */
-      const BDManufacturingDate =
-        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[2];
-      if (!isObjectEmpty(BDManufacturingDate)) {
-        allData.push({
-          name: 'Sensor manufacturing date',
-          position: 3,
-          value: formatCharateristicValue(
-            BDManufacturingDate?.value,
-            BDManufacturingDate?.value?.currentValue,
-          ),
-          uuid: null,
-        });
-      }
-
-      /**
-       * SENSOR SERIAL NUMBER -> AD Serial Number (BD Serial Number)
-       */
-      const BDSerialNumber =
-        __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[0];
-      if (!isObjectEmpty(BDSerialNumber)) {
-        allData.push({
-          name: 'Sensor Serial Number',
-          position: 4,
-          value: formatCharateristicValue(
-            BDSerialNumber?.value,
-            BDSerialNumber?.value?.currentValue,
-          ),
           uuid: null,
         });
       }
@@ -582,7 +548,7 @@ const Index = ({navigation, route}: any) => {
 
       if (!isObjectEmpty(numberOfBLEConnections)) {
         allData.push({
-          name: 'BLE connections',
+          name: 'Number Of BLE connections',
           position: 10,
           value: `${numberOfBLEConnections?.value?.currentValue}`,
           uuid: null,
