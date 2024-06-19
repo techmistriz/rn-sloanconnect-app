@@ -64,6 +64,7 @@ const getBDInformationDataGen1 = () => {
           data.push({
             name: value?.name,
             uuid: value?.uuid,
+            position: value?.position,
             value: formatCharateristicValue(value, decodeValue),
           });
         }
@@ -127,11 +128,28 @@ const getStatisticsInformationDataGen1 = () => {
           name: 'Date of Installation',
           prefix: null,
           postfix: null,
-          uuid: 'DateofInstallation',
+          uuid: null,
+          position: 1,
           value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
         });
       }
     }
+
+    /**
+     * ACCUMULATED WATER USAGE -> Total water usage
+     */
+    const totalWaterUsage = BLEService.totalWaterUsase;
+    const __totalWaterUsage = `${
+      totalWaterUsage
+        ? (totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA).toFixed(2)
+        : 0
+    } Gal`;
+    data.push({
+      name: 'Accumulated water usage',
+      uuid: null,
+      position: 5,
+      value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
+    });
 
     // consoleLog('allServices', allServices);
     if (typeof allServices != 'undefined' && Object.entries(allServices)) {
@@ -139,55 +157,36 @@ const getStatisticsInformationDataGen1 = () => {
         // console.log(`Key: ${key}, Value: ${JSON.stringify(value)}`);
 
         // *******Custom************
-        if (data?.length == 2) {
+        // if (data?.length == 2) {
+        //   const characteristicStaticBDManufacturingDate =
+        //     await getCustomCharacteristic(
+        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
+        //     );
 
-          const characteristicStaticBDManufacturingDate =
-            await getCustomCharacteristic(
-              'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-              'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
-            );
+        //   if (!isObjectEmpty(characteristicStaticBDManufacturingDate)) {
+        //     data.push(characteristicStaticBDManufacturingDate);
+        //   }
 
-          if (!isObjectEmpty(characteristicStaticBDManufacturingDate)) {
-            data.push(characteristicStaticBDManufacturingDate);
-          }
-          
-          const characteristicStaticADManufacturingDate =
-            await getCustomCharacteristic(
-              'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-              'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
-            );
+        //   const characteristicStaticADManufacturingDate =
+        //     await getCustomCharacteristic(
+        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
+        //     );
 
-          if (!isObjectEmpty(characteristicStaticADManufacturingDate)) {
-            data.push(characteristicStaticADManufacturingDate);
-          }
-          const characteristicStaticBDSerialNumber =
-            await getCustomCharacteristic(
-              'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-              'd0aba888-fb10-4dc9-9b17-bdd8f490c902',
-            );
+        //   if (!isObjectEmpty(characteristicStaticADManufacturingDate)) {
+        //     data.push(characteristicStaticADManufacturingDate);
+        //   }
+        //   const characteristicStaticBDSerialNumber =
+        //     await getCustomCharacteristic(
+        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c902',
+        //     );
 
-          if (!isObjectEmpty(characteristicStaticBDSerialNumber)) {
-            data.push(characteristicStaticBDSerialNumber);
-          }
-        }
-
-        if (data?.length == 7) {
-          /**
-           * ACCUMULATED WATER USAGE -> Total water usage
-           */
-          const totalWaterUsage = BLEService.totalWaterUsase;
-          const __totalWaterUsage = `${
-            totalWaterUsage
-              ? (totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA).toFixed(2)
-              : 0
-          } Gal`;
-          data.push({
-            name: 'Accumulated water usage',
-            position: 7,
-            value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
-            uuid: null,
-          });
-        }
+        //   if (!isObjectEmpty(characteristicStaticBDSerialNumber)) {
+        //     data.push(characteristicStaticBDSerialNumber);
+        //   }
+        // }
 
         if (
           typeof value?.uuid != 'undefined' &&
@@ -205,6 +204,7 @@ const getStatisticsInformationDataGen1 = () => {
               prefix: value?.prefix,
               postfix: value?.postfix,
               uuid: value?.uuid,
+              position: value?.position,
               value: hexToDecimal(
                 base64EncodeDecode(characteristic?.value, 'decode'),
               ),
@@ -301,9 +301,8 @@ const getSettingLogsDataGen1 = () => {
             data.push({
               name: value?.name,
               uuid: value?.uuid,
-              // extra: extra,
+              position: value?.position,
               value: formatCharateristicValue(value, decodeValue),
-              // value: decodeValue,
             });
           }
         } catch (error) {

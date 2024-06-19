@@ -97,6 +97,7 @@ const Index = ({navigation, route}: any) => {
       // setDeviceData(deviceStaticData);
       const deviceInfoNormal = await getDeviceInfoNormal();
       // consoleLog('ADBDInformationARR', ADBDInformationARR);
+      const sortedDeviceInfoNormal = _.sortBy(deviceInfoNormal, 'position');
 
       var sloanModel: any = [];
       if (deviceStaticData) {
@@ -104,7 +105,7 @@ const Index = ({navigation, route}: any) => {
           {
             name: 'SLOAN MODEL',
             value: deviceStaticData?.fullNameAllModel,
-            uuid: '111111',
+            uuid: null,
           },
         ];
       }
@@ -113,11 +114,15 @@ const Index = ({navigation, route}: any) => {
         {
           name: 'Battery Status',
           value: `${BLEService.batteryLevel}%`,
-          uuid: '0000000',
+          uuid: null,
         },
       ];
 
-      setDeviceDetails([...sloanModel, ...deviceInfoNormal, ...batteryStatus]);
+      setDeviceDetails([
+        ...sloanModel,
+        ...sortedDeviceInfoNormal,
+        ...batteryStatus,
+      ]);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -142,14 +147,22 @@ const Index = ({navigation, route}: any) => {
       );
       consoleLog('initializeAdvance resultObj==>', resultObj);
 
+      const sortedDeviceInfoAdvancel = _.sortBy(deviceInfoAdvance, 'position');
+
       if (!isObjectEmpty(resultObj) && resultObj?.value == 'MANUAL') {
-        const resultObj2 = findObject('Hours Of Operation', deviceInfoAdvance, {
-          searchKey: 'name',
-        });
+        // Hours Of Operation -> d0aba888-fb10-4dc9-9b17-bdd8f490c911
+        const resultObj2 = findObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+          },
+        );
         consoleLog('initializeAdvance resultObj2==>', resultObj2);
 
+        // Date of last factory reset -> d0aba888-fb10-4dc9-9b17-bdd8f490c921
         const resultObj3 = deviceInfoAdvance.findIndex((item: any) => {
-          return item?.name == 'Date of last factory reset';
+          return item?.uuid == 'd0aba888-fb10-4dc9-9b17-bdd8f490c921';
         });
 
         consoleLog('initializeAdvance resultObj3==>', resultObj3);
@@ -171,7 +184,7 @@ const Index = ({navigation, route}: any) => {
         }
       }
 
-      setDeviceDetails([...deviceInfoAdvance, ...appInfo, ...userData]);
+      setDeviceDetails([...sortedDeviceInfoAdvancel, ...appInfo, ...userData]);
     } catch (error) {
       //
     } finally {
