@@ -66,7 +66,14 @@ const Index = ({navigation, route}: any) => {
 
   const finishDiagnostics = (waterDispensed: number) => {
     if (BLEService.deviceGeneration == 'gen1') {
-      finishDiagnosticsGen1(waterDispensed);
+      if (waterDispensed) {
+        setLoading(true);
+        setTimeout(() => {
+          finishDiagnosticsGen1(waterDispensed);
+        }, 1000);
+      } else {
+        NavigationService.navigate('DeviceHelpStack');
+      }
     } else if (BLEService.deviceGeneration == 'gen2') {
     } else if (BLEService.deviceGeneration == 'gen3') {
       // Code need to be implemented
@@ -76,36 +83,22 @@ const Index = ({navigation, route}: any) => {
   };
 
   const finishDiagnosticsGen1 = async (waterDispensed: number) => {
-    setLoading(true);
-    const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c960';
-    const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c961';
-
-    const initDiagnosticResponse =
-      await BLEService.writeCharacteristicWithResponseForDevice(
-        serviceUUID,
-        characteristicUUID,
-        '0',
-      );
-
-    const __initDiagnosticResponse = cleanCharacteristic(
-      initDiagnosticResponse,
-    );
-
-    // consoleLog(
-    //   'finishDiagnosticsGen1 __initDiagnosticResponse==>',
-    //   __initDiagnosticResponse,
-    // );
-
     // consoleLog("BLEService.batteryLevel==>", BLEService.batteryLevel);
     // return ;
 
     // Battery Level at Diagnostic
     // const batteryLevelResponse =
-      await BLEService.writeCharacteristicWithoutResponseForDevice(
-        'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
-        'd0aba888-fb10-4dc9-9b17-bdd8f490c966',
-        BLEService.batteryLevel?.toString(),
-      );
+    await BLEService.writeCharacteristicWithResponseForDevice(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c966',
+      '80',
+    );
+
+    // await BLEService.writeCharacteristicWithResponseForDevice2(
+    //   'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
+    //   'd0aba888-fb10-4dc9-9b17-bdd8f490c966',
+    //   new Uint8Array([BLEService.batteryLevel]),
+    // );
 
     // consoleLog(
     //   'finishDiagnosticsGen1 batteryLevelResponse==>',
@@ -128,6 +121,25 @@ const Index = ({navigation, route}: any) => {
       const dateResult = findObject('D/T of last diagnostic', RESULTS, {
         searchKey: 'name',
       });
+
+      const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c960';
+      const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c961';
+
+      const initDiagnosticResponse =
+        await BLEService.writeCharacteristicWithResponseForDevice(
+          serviceUUID,
+          characteristicUUID,
+          '0',
+        );
+
+      // const __initDiagnosticResponse = cleanCharacteristic(
+      //   initDiagnosticResponse,
+      // );
+
+      // consoleLog(
+      //   'finishDiagnosticsGen1 __initDiagnosticResponse==>',
+      //   __initDiagnosticResponse,
+      // );
 
       // consoleLog("sensorResult==>", sensorResult);
       setLoading(false);

@@ -92,7 +92,7 @@ export const readingDiagnostic = async () => {
 
   // consoleLog(
   //   'initialize __characteristicDispense==>',
-  //   JSON.stringify(__characteristicDispense),
+  //   JSON.stringify(cleanCharacteristic(__characteristicDispense)),
   // );
 
   if (__characteristicDispense) {
