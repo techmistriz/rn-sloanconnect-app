@@ -72,6 +72,10 @@ class BLEServiceInstance {
 
   characteristicMonitorRealTimeDataMapped: any;
 
+  characteristicMonitorDiagnostic: any;
+
+  characteristicMonitorDiagnosticMapped: any;
+
   characteristicMonitor: Subscription | null;
 
   characteristicMonitorDeviceDataIntegersSubscriprion: Subscription | null;
@@ -712,7 +716,7 @@ class BLEServiceInstance {
     if (!this.device) {
       this.showErrorToast(deviceNotConnectedErrorText);
       navigateToDeviceSearch();
-      return ;
+      return;
     }
     return this.manager.onDeviceDisconnected(this.device.id, listener);
   };

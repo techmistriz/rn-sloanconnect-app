@@ -15,10 +15,13 @@ import {styles} from './styles';
 import Header from 'src/components/Header';
 import {BLEService} from 'src/services';
 import AppContainer from 'src/components/AppContainer';
-import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
+import {base64EncodeDecode, base64ToHex} from 'src/utils/Helpers/encryption';
 import {cleanCharacteristic} from 'src/utils/Helpers/project';
 import {readingDiagnostic} from './helperGen1';
 import {findObject} from 'src/utils/Helpers/array';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {mappingDiagnosticGen2, readingDiagnosticGen2} from './helperGen2';
+import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
 
 const Index = ({navigation, route}: any) => {
   const connectedDevice = BLEService.getDevice();
@@ -34,6 +37,7 @@ const Index = ({navigation, route}: any) => {
     if (BLEService.deviceGeneration == 'gen1') {
       initlizeAppGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
+      initlizeAppGen2();
     } else if (BLEService.deviceGeneration == 'gen3') {
       // Code need to be implemented
     } else if (BLEService.deviceGeneration == 'gen4') {
@@ -62,6 +66,10 @@ const Index = ({navigation, route}: any) => {
     //   cleanCharacteristic(initDiagnosticResponse),
     // );
     setLoading(false);
+  };
+
+  const initlizeAppGen2 = () => {
+    __mappingDiagnosticGen2SetupMonitor();
   };
 
   const finishDiagnostics = (waterDispensed: number) => {
@@ -151,6 +159,59 @@ const Index = ({navigation, route}: any) => {
         dateResult: dateResult,
       });
     }, 2000);
+  };
+
+  /** Function comments */
+  const __mappingDiagnosticGen2SetupMonitor = async () => {
+    consoleLog('__mappingDiagnosticGen2SetupMonitor called');
+    var __characteristicMonitorDiagnostic: string[] = [];
+
+    const characteristic = await BLEService.readCharacteristicForDevice(
+      BLE_CONSTANTS?.GEN2?.DIAGNOSTIC_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.DIAGNOSTIC_CHARACTERISTIC_UUID,
+    );
+    consoleLog(
+      '__mappingDiagnosticGen2SetupMonitor characteristic==>',
+      characteristic,
+    );
+    if (characteristic?.value) {
+      var deviceDataIntegerHex = base64ToHex(characteristic?.value);
+      consoleLog(
+        '__mappingDiagnosticGen2SetupMonitor deviceDataIntegerHex==>',
+        deviceDataIntegerHex,
+      );
+
+      __characteristicMonitorDiagnostic.push(deviceDataIntegerHex);
+      BLEService.characteristicMonitorDiagnostic =
+        __characteristicMonitorDiagnostic;
+      __mappingDiagnosticGen2();
+    }
+  };
+
+  /** Function comments */
+  const __mappingDiagnosticGen2 = async () => {
+    const mappingDiagnosticGen2Response = await mappingDiagnosticGen2(
+      BLE_GEN2_GATT_SERVICES,
+      BLE_CONSTANTS?.GEN2?.DIAGNOSTIC_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.DIAGNOSTIC_CHARACTERISTIC_UUID,
+      BLEService.characteristicMonitorDiagnostic,
+    );
+
+    consoleLog(
+      '__mappingDiagnosticGen2 mappingDiagnosticGen2Response==>',
+      JSON.stringify(mappingDiagnosticGen2Response),
+    );
+
+    BLEService.characteristicMonitorDiagnosticMapped =
+      mappingDiagnosticGen2Response;
+    const RESULTS = await readingDiagnosticGen2(
+      BLEService.characteristicMonitorDiagnosticMapped,
+    );
+    consoleLog(
+      '__mappingDiagnosticGen2 readingDiagnosticGen2 RESULTS==>',
+      RESULTS,
+    );
+    // setDiagnosticResults(RESULTS);
   };
 
   return (
