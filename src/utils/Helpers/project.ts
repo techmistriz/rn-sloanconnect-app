@@ -931,7 +931,7 @@ export const shortBursts = async (__deviceSettingsData: any) => {
   if (BLEService.deviceGeneration == 'gen1') {
     shortBurstsGen1(__deviceSettingsData);
   } else if (BLEService.deviceGeneration == 'gen2') {
-    // shortBurstsGen2(__deviceSettingsData);
+    shortBurstsGen2(__deviceSettingsData);
   }
 };
 
@@ -992,10 +992,7 @@ const shortBurstsGen1 = async (__deviceSettingsData: any) => {
  * @returns result
  */
 const shortBurstsGen2 = async (__deviceSettingsData: any) => {
-  if (BLEService.deviceGeneration == 'gen1') {
-    shortBurstsGen1(__deviceSettingsData);
-  } else if (BLEService.deviceGeneration == 'gen1') {
-  }
+  // code
 };
 
 /**
