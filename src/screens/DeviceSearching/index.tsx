@@ -42,7 +42,7 @@ import {
 } from 'src/utils/Permissions';
 import Header from 'src/components/Header';
 
-const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 2000000;
+const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
 
@@ -163,7 +163,7 @@ const Index = ({navigation, route}: any) => {
     }
   };
 
-  /** component hooks method */
+  /** component hooks method for focus */
   useEffect(() => {
     // consoleLog('useEffect DeviceSearching focused==>', {
     //   requirePermissionAllowed,
@@ -189,16 +189,16 @@ const Index = ({navigation, route}: any) => {
     }
   }, [navigation, requirePermissionAllowed]);
 
-  /** Function comments */
+  /** component hooks method for searching timeout */
   useEffect(() => {
     consoleLog('useEffect setTimeout NoDevice==>', {requirePermissionAllowed});
     if (requirePermissionAllowed) {
-      timeoutID = setTimeout(() => {
+      timeoutID = setInterval(() => {
         if (
           foundDevices.length == 0 &&
           isScanning != ScanningProps.Connecting
         ) {
-          clearTimeout(timeoutID);
+          clearInterval(timeoutID);
           BLEService.manager.stopDeviceScan();
           setScanning(ScanningProps.NoDevice);
         }
@@ -206,11 +206,11 @@ const Index = ({navigation, route}: any) => {
     }
     return () => {
       consoleLog('Unmounting clearTimeout');
-      clearTimeout(timeoutID);
+      clearInterval(timeoutID);
     };
   }, [requirePermissionAllowed]);
 
-  /** Function comments */
+  /** component hooks method for refresh search list timeout */
   useEffect(() => {
     consoleLog('useEffect setInterval refreshFoundDevices==>', {
       requirePermissionAllowed,
@@ -271,7 +271,10 @@ const Index = ({navigation, route}: any) => {
       return false;
     }
 
-    setScanning(ScanningProps.DeviceFound);
+    if (ScanningProps.DeviceFound != isScanning) {
+      setScanning(ScanningProps.DeviceFound);
+    }
+
     setFoundDevices(prevState => {
       const __isFoundDeviceUpdateNecessary = isFoundDeviceUpdateNecessary(
         prevState,
@@ -337,14 +340,26 @@ const Index = ({navigation, route}: any) => {
         });
         // consoleLog('nextState==>', nextState);
       }
+      checkIfNoFoundDevices(nextState);
       return nextState;
     });
   };
 
   /** Function comments */
+  const checkIfNoFoundDevices = (__foundDevices: any) => {
+    if (
+      __foundDevices?.length == 0 &&
+      isScanning == ScanningProps.DeviceFound
+    ) {
+      setScanning(ScanningProps.Scanning);
+      // initlizeApp();
+    }
+  };
+
+  /** Function comments */
   const onDeviceConnectingPress = (item: any) => {
     clearInterval(intervalID);
-    clearTimeout(timeoutID);
+    clearInterval(timeoutID);
     setScanning(ScanningProps.Connecting);
     BLEService.connectToDevice(item?.id, item)
       .then(onConnectSuccess)
@@ -459,6 +474,10 @@ const Index = ({navigation, route}: any) => {
     return (
       <NoDeviceFound
         onSearchAgainPress={() => {
+          setScanning(ScanningProps.Scanning);
+          initlizeApp();
+        }}
+        onBackButtonPress={() => {
           setScanning(ScanningProps.Scanning);
           initlizeApp();
         }}

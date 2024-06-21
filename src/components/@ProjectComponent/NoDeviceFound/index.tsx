@@ -6,18 +6,24 @@ import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {styles} from './styles';
 import AppContainer from 'src/components/AppContainer';
+import Header from 'src/components/Header';
 
-const Index = ({onSearchAgainPress}: any) => {
+const Index = ({onSearchAgainPress, onBackButtonPress}: any) => {
   return (
     <AppContainer
       scroll={false}
       scrollViewStyle={{}}
       backgroundType="gradient"
-      hasHeader={true}
-      hasProfileButton={true}
+      hasHeader={false}
+      // hasProfileButton={true}
       hasBackButton
       headerBackgroundType="solid">
       <Wrap autoMargin={false} style={styles.container}>
+        <Header
+          hasProfileButton
+          headerBackgroundType="transparent"
+          onBackButtonPress={() => onBackButtonPress()}
+        />
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
             <Typography

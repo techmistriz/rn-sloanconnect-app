@@ -4,7 +4,7 @@ import Theme, {hexToRGBA} from 'src/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: Theme.Layout.MEDIUM_PADDING,
+    
     // alignItems: 'center',
     // justifyContent: 'center',
     // backgroundColor: Theme.colors.black,
@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
   },
   sectionContainer: {
     flex: 1,
+    paddingHorizontal: Theme.Layout.MEDIUM_PADDING,
     // width: '100%',
     // padding: 20,
     // justifyContent: 'center',

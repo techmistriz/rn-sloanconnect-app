@@ -25,9 +25,7 @@ function setTopLevelNavigator(navigatorRef: any) {
  * provide navigation to given routename
  */
 function navigate(routeName: string, params?: any) {
-  if (
-    routeName == ''
-  ) {
+  if (routeName == '') {
     // return false;
   }
   _navigator.dispatch(
@@ -96,7 +94,9 @@ function setParams(params: any) {
 
 /** goback method */
 function goBack() {
-  _navigator.dispatch(NavigationActions?.back({}));
+  try {
+    _navigator.dispatch(NavigationActions?.back({}));
+  } catch (error) {}
 }
 
 /**

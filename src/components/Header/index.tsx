@@ -23,6 +23,10 @@ type HeaderProps = {
   hasBackButton?: boolean;
   hasDeviceSearchButton?: boolean;
   hasProfileButton?: boolean;
+  onLogOutButtonPress?: (params?: any) => void;
+  onBackButtonPress?: (params?: any) => void;
+  onDeviceSearchButtonPress?: (params?: any) => void;
+  onProfileButtonPress?: (params?: any) => void;
   title?: string;
   headerContainerStyle?: ViewStyle;
   headerLeftStyle?: ViewStyle;
@@ -36,6 +40,10 @@ const Header = ({
   hasLogOutButton = false,
   hasDeviceSearchButton = false,
   hasProfileButton = false,
+  onLogOutButtonPress,
+  onBackButtonPress,
+  onDeviceSearchButtonPress,
+  onProfileButtonPress,
   title = '',
   headerContainerStyle,
   headerLeftStyle,
@@ -54,10 +62,14 @@ const Header = ({
 
   const checkDevice = async () => {
     dispatch(deviceSettingsResetDataAction());
-    if (BLEService?.deviceGeneration == 'gen2') {
-      BLEService?.finishMonitor();
-    }
-    BLEService?.disconnectDevice(false);
+    // if (BLEService?.deviceGeneration == 'gen2') {
+    //   BLEService?.finishMonitor();
+    // }
+
+    try {
+      BLEService.manager.stopDeviceScan();
+      BLEService?.disconnectDevice(false);
+    } catch (error) {}
   };
 
   return (
@@ -105,6 +117,7 @@ const Header = ({
             borderless={true}
             onPress={() => {
               NavigationService.goBack();
+              onBackButtonPress && onBackButtonPress();
             }}
             style={{}}>
             <VectorIcon
