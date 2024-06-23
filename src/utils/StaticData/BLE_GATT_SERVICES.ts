@@ -420,7 +420,7 @@ export const BLE_GATT_SERVICES = {
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c915': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c915',
-        name: 'Accumulated flushe time',
+        name: 'Accumulated flush time',
         nameOG: 'Duration of all flushes',
         size: '8 bytes',
         type: 'Hexa String',

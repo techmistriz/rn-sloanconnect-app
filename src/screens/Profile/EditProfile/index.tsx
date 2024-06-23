@@ -203,15 +203,53 @@ const Index = ({route, navigation}: any) => {
     if (firstName.trim() === '') {
       showSimpleAlert('Please enter your first name');
       return false;
-    } else if (password && password.trim().length < 6) {
+    } else if (lastName.trim() === '') {
+      showSimpleAlert('Please enter your last name');
+      return false;
+    } else if (title.trim() === '') {
+      showSimpleAlert('Please enter your job title');
+      return false;
+    } else if (company.trim() === '') {
+      showSimpleAlert('Please enter your company');
+      return false;
+    } else if (industry?.name === '') {
+      showSimpleAlert('Please select your industry');
+      return false;
+    } else if (phoneNumber.trim() === '') {
+      showSimpleAlert('Please enter your phone number');
+      return false;
+    } else if (password.trim() == '') {
+      showSimpleAlert('Please enter your password');
+      return false;
+    } else if (password.trim().length < 6) {
       showSimpleAlert('Password must contain at least minimum 6 characters');
       return false;
-    } else if (
-      password &&
-      passwordConfirmation &&
-      password.trim() !== passwordConfirmation.trim()
-    ) {
+    } else if (passwordConfirmation.trim() == '') {
+      showSimpleAlert('Please enter your confirm password');
+      return false;
+    } else if (password.trim() !== passwordConfirmation.trim()) {
       showSimpleAlert('Password and confirm password should same');
+      return false;
+    } else if (country?.name === '') {
+      showSimpleAlert('Please select your country');
+      return false;
+    } else if (statesMaster?.length > 0 && state?.name === '') {
+      showSimpleAlert('Please select your state');
+      return false;
+    } else if (statesMaster?.length == 0 && stateInput?.trim() === '') {
+      showSimpleAlert('Please select your state');
+      return false;
+    } else if (city.trim() === '') {
+      showSimpleAlert('Please enter your city');
+      return false;
+    } else if (address.trim() === '') {
+      showSimpleAlert('Please enter your address');
+      return false;
+    } else if (zip.trim() === '') {
+      showSimpleAlert('Please enter your zipcode');
+      return false;
+    } else if (timezone?.format === '') {
+      showSimpleAlert('Please enter your address');
       return false;
     } else {
       return true;
@@ -343,7 +381,7 @@ const Index = ({route, navigation}: any) => {
                     returnKeyType="next"
                     blurOnSubmit={false}
                     keyboardType="default"
-                    placeholder="Title"
+                    placeholder="Job Title"
                     value={title}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}

@@ -992,7 +992,25 @@ const shortBurstsGen1 = async (__deviceSettingsData: any) => {
  * @returns result
  */
 const shortBurstsGen2 = async (__deviceSettingsData: any) => {
-  // code
+  // For Line flush
+  const mappingDeviceDataIntegersGen2Response =
+    BLEService.characteristicMonitorDeviceDataIntegersMapped;
+
+  if (!isObjectEmpty(mappingDeviceDataIntegersGen2Response)) {
+    if (mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[31]) {
+      const flushInterval =
+        mappingDeviceDataIntegersGen2Response?.chunks?.[0]?.uuidData?.[31]?.value?.currentValue?.toString();
+
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.FLUSH_INTERVAL_TEMP_Z1,
+          flushInterval,
+        ),
+      );
+    }
+  }
 };
 
 /**

@@ -45,7 +45,7 @@ const DeviceSettingList = ({
             {item?.name?.toUpperCase() == 'CONTROL BOX MODEL' ? (
               <Typography
                 size={14}
-                text={BDSKU_LIST?.[item?.value] ?? 'N/A'}
+                text={BDSKU_LIST?.[item?.value] ?? item?.value}
                 style={{
                   textAlign: 'left',
                 }}

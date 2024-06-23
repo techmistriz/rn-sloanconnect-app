@@ -767,7 +767,11 @@ const Index = ({navigation}: any) => {
 
     const __hasLineFlushSetting = hasLineFlushSetting(__deviceSettingsData);
 
-    if (__hasLineFlushSetting && __hasSensorRangeSetting) {
+    if (
+      !isObjectEmpty(__hasLineFlushSetting) &&
+      !isObjectEmpty(__hasSensorRangeSetting) &&
+      BLEService.deviceGeneration == 'gen1'
+    ) {
       __LineFlush.LineFlush = __deviceSettingsDataTmp?.LineFlush;
       delete __deviceSettingsDataTmp?.LineFlush;
       // consoleLog('__deviceSettingsDataTmp', __deviceSettingsDataTmp);
@@ -797,7 +801,16 @@ const Index = ({navigation}: any) => {
         const status1 = await saveSettings(__LineFlush);
         // consoleLog('status1', status1);
       } else {
-        const shortBurstsStatus = await shortBursts(__deviceSettingsData);
+        const __hasSensorRangeSettingTMP =
+          hasSensorRangeSetting(__deviceSettingsData);
+        if (
+          isObjectEmpty(__hasSensorRangeSettingTMP) &&
+          BLEService.deviceGeneration == 'gen2'
+        ) {
+          const shortBurstsStatus = await shortBursts(__deviceSettingsData);
+        } else {
+          const shortBurstsStatus = await shortBursts(__deviceSettingsData);
+        }
       }
 
       // consoleLog('shortBurstsStatus', shortBurstsStatus);

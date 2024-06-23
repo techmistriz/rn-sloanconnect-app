@@ -210,7 +210,7 @@ const Index = ({route, navigation}: any) => {
       showSimpleAlert('Please enter your last name');
       return false;
     } else if (title.trim() === '') {
-      showSimpleAlert('Please enter your title');
+      showSimpleAlert('Please enter your job title');
       return false;
     } else if (company.trim() === '') {
       showSimpleAlert('Please enter your company');
@@ -396,7 +396,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Title*"
+                        placeholder="Job Title*"
                         value={title}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}

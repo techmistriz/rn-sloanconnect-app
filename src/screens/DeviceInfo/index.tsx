@@ -103,7 +103,7 @@ const Index = ({navigation, route}: any) => {
       if (deviceStaticData) {
         sloanModel = [
           {
-            name: 'SLOAN MODEL',
+            name: 'FAUCET MODEL',
             value: deviceStaticData?.fullNameAllModel,
             uuid: null,
           },
@@ -346,7 +346,7 @@ const Index = ({navigation, route}: any) => {
       if (deviceStaticData) {
         sloanModel = [
           {
-            name: 'SLOAN MODEL',
+            name: 'FAUCET MODEL',
             value: deviceStaticData?.fullNameAllModel,
             uuid: null,
             position: 1,
@@ -544,7 +544,7 @@ const Index = ({navigation, route}: any) => {
        * Number of BLE connections
        */
       const numberOfBLEConnections =
-        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[6];
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[9];
 
       if (!isObjectEmpty(numberOfBLEConnections)) {
         allData.push({
