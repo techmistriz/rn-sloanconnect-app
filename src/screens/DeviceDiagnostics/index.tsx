@@ -15,8 +15,6 @@ import {styles} from './styles';
 import Header from 'src/components/Header';
 import {BLEService} from 'src/services';
 import AppContainer from 'src/components/AppContainer';
-import {base64EncodeDecode, base64ToHex} from 'src/utils/Helpers/encryption';
-import {cleanCharacteristic, mapValueGen2} from 'src/utils/Helpers/project';
 import {readingDiagnostic} from './helperGen1';
 import {findObject} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
@@ -192,12 +190,11 @@ const Index = ({navigation, route}: any) => {
         searchKey: 'name',
       });
 
-      const initDiagnosticResponse =
-        await BLEService.writeCharacteristicWithResponseForDevice(
-          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
-          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-          '0',
-        );
+      await BLEService.writeCharacteristicWithResponseForDevice(
+        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
+        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+        '0',
+      );
 
       // const __initDiagnosticResponse = cleanCharacteristic(
       //   initDiagnosticResponse,
@@ -226,7 +223,10 @@ const Index = ({navigation, route}: any) => {
       const RESULTS = await readingDiagnosticGen2(
         BLEService.characteristicMonitorDiagnosticMapped,
       );
-      consoleLog('finishDiagnosticsGen2 readingDiagnostic RESULTS==>', RESULTS);
+      consoleLog(
+        'finishDiagnosticsGen2 finishDiagnosticsGen2 RESULTS==>',
+        RESULTS,
+      );
       const sensorResult = findObject('Sensor', RESULTS, {searchKey: 'name'});
       const dateResult = findObject('D/T of last diagnostic', RESULTS, {
         searchKey: 'name',
@@ -241,7 +241,7 @@ const Index = ({navigation, route}: any) => {
         ),
       );
 
-      consoleLog('finishDiagnosticsGen2==>', {diagnosticResults, RESULTS});
+      // consoleLog('finishDiagnosticsGen2==>', {diagnosticResults, RESULTS});
       setLoading(false);
       // return false; 76 0f 00 00 00 00 00 00 00 00 ff 00 00 00 00 ff
 
