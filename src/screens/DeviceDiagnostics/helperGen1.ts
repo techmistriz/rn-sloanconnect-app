@@ -8,19 +8,11 @@ import {base64EncodeDecode, base64ToText} from 'src/utils/Helpers/encryption';
 /** Function comments */
 export const readingDiagnostic = async () => {
   let RESULTS = [];
-  const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c960';
-  const characteristicUUIDSensor = 'd0aba888-fb10-4dc9-9b17-bdd8f490c962';
-  const characteristicUUIDValve = 'd0aba888-fb10-4dc9-9b17-bdd8f490c963';
-  const characteristicUUIDTurbine = 'd0aba888-fb10-4dc9-9b17-bdd8f490c964';
-  const characteristicUUIDDispense = 'd0aba888-fb10-4dc9-9b17-bdd8f490c965';
-  const characteristicUUIDBattery = 'd0aba888-fb10-4dc9-9b17-bdd8f490c966';
-  const characteristicUUIDDTLastDiagnostic =
-    'd0aba888-fb10-4dc9-9b17-bdd8f490c967';
 
   //  Sensor result
   const __characteristicSensor = await BLEService.readCharacteristicForDevice(
-    serviceUUID,
-    characteristicUUIDSensor,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_SENSOR_RESULT_SERVICE_UUID,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_SENSOR_RESULT_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -42,8 +34,8 @@ export const readingDiagnostic = async () => {
 
   //  Valve result
   const __characteristicValve = await BLEService.readCharacteristicForDevice(
-    serviceUUID,
-    characteristicUUIDValve,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_VALVE_RESULT_SERVICE_UUID,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -63,8 +55,8 @@ export const readingDiagnostic = async () => {
 
   //  Turbine result
   const __characteristicTurbine = await BLEService.readCharacteristicForDevice(
-    serviceUUID,
-    characteristicUUIDTurbine,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_TURBINE_SERVICE_UUID,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_TURBINE_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -86,8 +78,8 @@ export const readingDiagnostic = async () => {
 
   //  Dispense result
   const __characteristicDispense = await BLEService.readCharacteristicForDevice(
-    serviceUUID,
-    characteristicUUIDDispense,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_SERVICE_UUID,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_SERVICE_UUID,
   );
 
   // consoleLog(
@@ -109,8 +101,9 @@ export const readingDiagnostic = async () => {
 
   //  Battery result
   const __characteristicBattery = await BLEService.readCharacteristicForDevice(
-    serviceUUID,
-    characteristicUUIDBattery,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
+    BLE_CONSTANTS.GEN1
+      .DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -142,8 +135,9 @@ export const readingDiagnostic = async () => {
   //  DTLastDiagnostic result
   const __characteristicDTLastDiagnostic =
     await BLEService.readCharacteristicForDevice(
-      serviceUUID,
-      characteristicUUIDDTLastDiagnostic,
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1
+        .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
     );
 
   // consoleLog(

@@ -1408,7 +1408,7 @@ export const mapValueGen2 = (
   const hex = decimalToHex(value, 16, padding);
   var hexReplaced = WRITE_DATA_MAPPING.replace(/ACTUAL_VALUE/gi, hex);
   hexReplaced = hexReplaced.replace(/\|/gi, '');
-  consoleLog('mapValueGen2 hexReplaced==>', hexReplaced);
+  consoleLog('mapValueGen2 hexReplaced==>', hexReplaced); // 720a01321500000001CF
 
   return hexReplaced;
 };

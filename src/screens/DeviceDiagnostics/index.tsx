@@ -16,7 +16,7 @@ import Header from 'src/components/Header';
 import {BLEService} from 'src/services';
 import AppContainer from 'src/components/AppContainer';
 import {base64EncodeDecode, base64ToHex} from 'src/utils/Helpers/encryption';
-import {cleanCharacteristic} from 'src/utils/Helpers/project';
+import {cleanCharacteristic, mapValueGen2} from 'src/utils/Helpers/project';
 import {readingDiagnostic} from './helperGen1';
 import {findObject} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
@@ -28,6 +28,7 @@ const Index = ({navigation, route}: any) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [diagnosticResults, setDiagnosticResults] = useState<any>([]);
 
+  /** Function comments */
   useEffect(() => {
     initlizeApp();
   }, []);
@@ -45,19 +46,17 @@ const Index = ({navigation, route}: any) => {
     }
   };
 
+  /** Function comments */
   const initlizeAppGen1 = async () => {
     setLoading(true);
     const RESULTS = await readingDiagnostic();
     consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
     setDiagnosticResults(RESULTS);
 
-    const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c960';
-    const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c961';
-
     const initDiagnosticResponse =
       await BLEService.writeCharacteristicWithResponseForDevice(
-        serviceUUID,
-        characteristicUUID,
+        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
+        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
         '1',
       );
 
@@ -66,99 +65,6 @@ const Index = ({navigation, route}: any) => {
     //   cleanCharacteristic(initDiagnosticResponse),
     // );
     setLoading(false);
-  };
-
-  const initlizeAppGen2 = () => {
-    __mappingDiagnosticGen2SetupMonitor();
-  };
-
-  const finishDiagnostics = (waterDispensed: number) => {
-    if (BLEService.deviceGeneration == 'gen1') {
-      if (waterDispensed) {
-        setLoading(true);
-        setTimeout(() => {
-          finishDiagnosticsGen1(waterDispensed);
-        }, 1000);
-      } else {
-        NavigationService.navigate('DeviceHelpStack');
-      }
-    } else if (BLEService.deviceGeneration == 'gen2') {
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
-    } else if (BLEService.deviceGeneration == 'gen4') {
-      // Code need to be implemented
-    }
-  };
-
-  const finishDiagnosticsGen1 = async (waterDispensed: number) => {
-    // consoleLog("BLEService.batteryLevel==>", BLEService.batteryLevel);
-    // return ;
-
-    // Battery Level at Diagnostic
-    // const batteryLevelResponse =
-    await BLEService.writeCharacteristicWithResponseForDevice(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c966',
-      '80',
-    );
-
-    // await BLEService.writeCharacteristicWithResponseForDevice2(
-    //   'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
-    //   'd0aba888-fb10-4dc9-9b17-bdd8f490c966',
-    //   new Uint8Array([BLEService.batteryLevel]),
-    // );
-
-    // consoleLog(
-    //   'finishDiagnosticsGen1 batteryLevelResponse==>',
-    //   cleanCharacteristic(batteryLevelResponse),
-    // );
-    // setLoading(false);
-    // return;
-
-    // D/T of last diagnostic
-    await BLEService.writeCharacteristicWithoutResponseForDevice(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c960',
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c967',
-      parseDateHumanFormat(new Date(), 'ddd, DD MMMM YYYY HH:MM:SS'),
-    );
-
-    setTimeout(async () => {
-      const RESULTS = await readingDiagnostic();
-      consoleLog('finishDiagnosticsGen1 readingDiagnostic RESULTS==>', RESULTS);
-      const sensorResult = findObject('Sensor', RESULTS, {searchKey: 'name'});
-      const dateResult = findObject('D/T of last diagnostic', RESULTS, {
-        searchKey: 'name',
-      });
-
-      const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c960';
-      const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c961';
-
-      const initDiagnosticResponse =
-        await BLEService.writeCharacteristicWithResponseForDevice(
-          serviceUUID,
-          characteristicUUID,
-          '0',
-        );
-
-      // const __initDiagnosticResponse = cleanCharacteristic(
-      //   initDiagnosticResponse,
-      // );
-
-      // consoleLog(
-      //   'finishDiagnosticsGen1 __initDiagnosticResponse==>',
-      //   __initDiagnosticResponse,
-      // );
-
-      // consoleLog("sensorResult==>", sensorResult);
-      setLoading(false);
-      NavigationService.navigate('DeviceDiagnosticResults', {
-        previousDiagnosticResults: diagnosticResults,
-        diagnosticResults: RESULTS,
-        waterDispensed: waterDispensed,
-        sensorResult: sensorResult,
-        dateResult: dateResult,
-      });
-    }, 2000);
   };
 
   /** Function comments */
@@ -184,12 +90,17 @@ const Index = ({navigation, route}: any) => {
       __characteristicMonitorDiagnostic.push(deviceDataIntegerHex);
       BLEService.characteristicMonitorDiagnostic =
         __characteristicMonitorDiagnostic;
-      __mappingDiagnosticGen2();
     }
   };
 
   /** Function comments */
-  const __mappingDiagnosticGen2 = async () => {
+  const initlizeAppGen2 = async () => {
+    setLoading(true);
+
+    // Read raw data
+    await __mappingDiagnosticGen2SetupMonitor();
+
+    // Map data
     const mappingDiagnosticGen2Response = await mappingDiagnosticGen2(
       BLE_GEN2_GATT_SERVICES,
       BLE_CONSTANTS?.GEN2?.DIAGNOSTIC_SERVICE_UUID,
@@ -198,20 +109,150 @@ const Index = ({navigation, route}: any) => {
     );
 
     consoleLog(
-      '__mappingDiagnosticGen2 mappingDiagnosticGen2Response==>',
+      'initlizeAppGen2 mappingDiagnosticGen2Response==>',
       JSON.stringify(mappingDiagnosticGen2Response),
     );
 
     BLEService.characteristicMonitorDiagnosticMapped =
       mappingDiagnosticGen2Response;
+
     const RESULTS = await readingDiagnosticGen2(
       BLEService.characteristicMonitorDiagnosticMapped,
     );
+    setDiagnosticResults(RESULTS);
+
     consoleLog(
-      '__mappingDiagnosticGen2 readingDiagnosticGen2 RESULTS==>',
+      'initlizeAppGen1 readingDiagnosticGen2 PREVIOUS RESULTS==>',
       RESULTS,
     );
-    // setDiagnosticResults(RESULTS);
+
+    await BLEService.writeCharacteristicWithResponseForDevice2(
+      BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+      BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+      mapValueGen2(BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DIAGNOSTIC_INIT, '1'),
+    );
+    setLoading(false);
+  };
+
+  /** Function comments */
+  const finishDiagnostics = async (waterDispensed: number) => {
+    if (BLEService.deviceGeneration == 'gen1') {
+      if (waterDispensed) {
+        setLoading(true);
+        setTimeout(() => {
+          finishDiagnosticsGen1(waterDispensed);
+        }, 1000);
+      } else {
+        await BLEService.writeCharacteristicWithResponseForDevice(
+          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
+          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+          '0',
+        );
+
+        NavigationService.navigate('DeviceHelpStack');
+      }
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      if (waterDispensed) {
+        setLoading(true);
+        setTimeout(() => {
+          finishDiagnosticsGen2(waterDispensed);
+        }, 1000);
+      } else {
+        NavigationService.navigate('DeviceHelpStack');
+      }
+    } else if (BLEService.deviceGeneration == 'gen3') {
+      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'gen4') {
+      // Code need to be implemented
+    }
+  };
+
+  /** Function comments */
+  const finishDiagnosticsGen1 = async (waterDispensed: number) => {
+    await BLEService.writeCharacteristicWithResponseForDevice(
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1
+        .DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_CHARACTERISTIC_UUID,
+      BLEService.batteryLevel?.toString(),
+    );
+
+    // D/T of last diagnostic
+    await BLEService.writeCharacteristicWithoutResponseForDevice(
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1
+        .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
+      parseDateHumanFormat(new Date(), 'ddd, DD MMMM YYYY HH:MM:SS'),
+    );
+
+    setTimeout(async () => {
+      const RESULTS = await readingDiagnostic();
+      consoleLog('finishDiagnosticsGen1 readingDiagnostic RESULTS==>', RESULTS);
+      const sensorResult = findObject('Sensor', RESULTS, {searchKey: 'name'});
+      const dateResult = findObject('D/T of last diagnostic', RESULTS, {
+        searchKey: 'name',
+      });
+
+      const initDiagnosticResponse =
+        await BLEService.writeCharacteristicWithResponseForDevice(
+          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
+          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+          '0',
+        );
+
+      // const __initDiagnosticResponse = cleanCharacteristic(
+      //   initDiagnosticResponse,
+      // );
+
+      // consoleLog(
+      //   'finishDiagnosticsGen1 __initDiagnosticResponse==>',
+      //   __initDiagnosticResponse,
+      // );
+
+      // consoleLog("sensorResult==>", sensorResult);
+      setLoading(false);
+      NavigationService.navigate('DeviceDiagnosticResults', {
+        previousDiagnosticResults: diagnosticResults,
+        diagnosticResults: RESULTS,
+        waterDispensed: waterDispensed,
+        sensorResult: sensorResult,
+        dateResult: dateResult,
+      });
+    }, 2000);
+  };
+
+  /** Function comments */
+  const finishDiagnosticsGen2 = async (waterDispensed: number) => {
+    setTimeout(async () => {
+      const RESULTS = await readingDiagnosticGen2(
+        BLEService.characteristicMonitorDiagnosticMapped,
+      );
+      consoleLog('finishDiagnosticsGen2 readingDiagnostic RESULTS==>', RESULTS);
+      const sensorResult = findObject('Sensor', RESULTS, {searchKey: 'name'});
+      const dateResult = findObject('D/T of last diagnostic', RESULTS, {
+        searchKey: 'name',
+      });
+
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DIAGNOSTIC_INIT,
+          '0',
+        ),
+      );
+
+      consoleLog('finishDiagnosticsGen2==>', {diagnosticResults, RESULTS});
+      setLoading(false);
+      // return false; 76 0f 00 00 00 00 00 00 00 00 ff 00 00 00 00 ff
+
+      NavigationService.navigate('DeviceDiagnosticResults', {
+        previousDiagnosticResults: diagnosticResults,
+        diagnosticResults: RESULTS,
+        waterDispensed: waterDispensed,
+        sensorResult: sensorResult,
+        dateResult: dateResult,
+      });
+    }, 2000);
   };
 
   return (

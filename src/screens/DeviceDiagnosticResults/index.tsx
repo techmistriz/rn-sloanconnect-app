@@ -153,7 +153,7 @@ const Index = ({navigation, route}: any) => {
                         <Typography
                           size={10}
                           text={`LAST DIAGNOSTIC RESULTS ${
-                            dateResult?.value
+                            dateResult?.value && dateResult?.value > 0
                               ? parseDateHumanFormat(
                                   dateResult?.value,
                                   'ddd, DD MMMM YYYY HH:MM:SS',

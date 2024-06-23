@@ -138,7 +138,7 @@ export const readingDiagnosticGen2 = async (
 
   //  Sensor result
   const __characteristicSensor =
-    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[1];
+    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[3];
 
   // consoleLog(
   //   'initialize __characteristicSensor==>',
@@ -147,15 +147,12 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Sensor',
-    value: base64EncodeDecode(
-      __characteristicSensor?.value?.currentValue,
-      'decode',
-    ),
+    value: __characteristicSensor?.value?.currentValue,
   });
 
   //  Valve result
   const __characteristicValve =
-    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[2];
+    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[4];
 
   // consoleLog(
   //   'initialize __characteristicValve==>',
@@ -164,15 +161,12 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Valve',
-    value: base64EncodeDecode(
-      __characteristicValve?.value?.currentValue,
-      'decode',
-    ),
+    value: __characteristicValve?.value?.currentValue,
   });
 
   //  Turbine result
   const __characteristicTurbine =
-    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[3];
+    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[5];
 
   // consoleLog(
   //   'initialize __characteristicTurbine==>',
@@ -181,15 +175,12 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Turbine',
-    value: base64EncodeDecode(
-      __characteristicTurbine?.value?.currentValue,
-      'decode',
-    ),
+    value: __characteristicTurbine?.value?.currentValue,
   });
 
   //  Dispense result
   const __characteristicDispense =
-    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[1];
+    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[3];
 
   // consoleLog(
   //   'initialize __characteristicDispense==>',
@@ -198,15 +189,12 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Water Dispense',
-    value: base64EncodeDecode(
-      __characteristicDispense?.value?.currentValue,
-      'decode',
-    ),
+    value: __characteristicDispense?.value?.currentValue,
   });
 
   //  Battery result
   const __characteristicBattery =
-    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[5];
+    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[7];
   // consoleLog(
   //   'initialize __characteristicBattery==>',
   //   JSON.stringify(__characteristicBattery),
@@ -214,10 +202,7 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Battery Level at Diagnostic',
-    value: base64EncodeDecode(
-      __characteristicBattery?.value?.currentValue,
-      'decode',
-    ),
+    value: __characteristicBattery?.value?.currentValue,
     forceText: true,
     prefix: null,
     postfix: ' %',
@@ -225,7 +210,7 @@ export const readingDiagnosticGen2 = async (
 
   //  DTLastDiagnostic result
   const __characteristicDTLastDiagnostic =
-    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[7];
+    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[9];
 
   // consoleLog(
   //   'initialize __characteristicDTLastDiagnostic==>',
@@ -234,10 +219,7 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'D/T of last diagnostic',
-    value: base64EncodeDecode(
-      __characteristicDTLastDiagnostic?.value?.currentValue,
-      'decode',
-    ),
+    value: __characteristicDTLastDiagnostic?.value?.currentValue,
   });
 
   return RESULTS;
