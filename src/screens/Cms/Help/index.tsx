@@ -29,7 +29,6 @@ import {
 import {constants} from 'src/common';
 import {
   loginRequestAction,
-  boimetricLoginRequestAction,
 } from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';

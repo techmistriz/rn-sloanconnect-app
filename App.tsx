@@ -20,6 +20,8 @@ import FlashMessage from 'react-native-flash-message';
 import NetworkLost from 'src/components/NetworkLost';
 import crashlytics from '@react-native-firebase/crashlytics';
 import MainNavigator from 'src/navigation/MainNavigator';
+import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {constants} from 'src/common';
 
 enableScreens();
 // TODO: Remove when fixed
@@ -40,10 +42,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statusBar: {
-    height: STATUSBAR_HEIGHT ?? 0,
+    height:
+      STATUSBAR_HEIGHT ?? (constants.HAS_NOTCH && constants.isIOS) ? 60 : 0,
   },
 });
 
+// consoleLog('STATUSBAR_HEIGHT==>', STATUSBAR_HEIGHT);
 const MyStatusBar = ({backgroundColor, ...props}: any) => (
   <View style={[styles.statusBar, {backgroundColor}]}>
     <SafeAreaView>

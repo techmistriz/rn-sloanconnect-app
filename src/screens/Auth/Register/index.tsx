@@ -335,7 +335,9 @@ const Index = ({route, navigation}: any) => {
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}
                 />
-                <Wrap autoMargin={false} style={{maxHeight: 250}}>
+                <Wrap
+                  autoMargin={false}
+                  style={{maxHeight: constants.screenHeightCalc / 2.15}}>
                   <ScrollView
                     nestedScrollEnabled={true}
                     // style={{flex: 1}}

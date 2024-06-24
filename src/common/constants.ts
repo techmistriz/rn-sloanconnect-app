@@ -1,11 +1,17 @@
 import {Platform, Dimensions, StatusBar} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
-
+const HAS_NOTCH = DeviceInfo.hasNotch();
+const NOTCH_HEIGHT = 60;
 const isIOS = Platform.OS === 'ios';
 const isAndroid = Platform.OS === 'android';
 const {width, height} = Dimensions.get('window');
 const statusBarHeight = isAndroid ? StatusBar?.currentHeight || 0 : 0;
-const screenHeightCalc = isAndroid ? height - statusBarHeight : height;
+const screenHeightCalc = isAndroid
+  ? height - statusBarHeight
+  : HAS_NOTCH
+  ? height - NOTCH_HEIGHT
+  : height;
 const isLandscape = width > height;
 const isPortrait = width < height;
 const screenWidth = width;
@@ -85,7 +91,9 @@ const common = {
   COMPANY_NAME,
   COPYRIGHT_TEXT,
   RELEASE_TEXT,
-  RELEASE_DATE
+  RELEASE_DATE,
+  HAS_NOTCH,
+  NOTCH_HEIGHT,
 };
 
 /**constants used in app */
