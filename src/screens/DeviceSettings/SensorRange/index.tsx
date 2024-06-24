@@ -138,15 +138,15 @@ const Index = ({navigation, route}: any) => {
         newValue: sensorRange,
       });
 
-      // params.push({
-      //   name: 'sensorRangeDate',
-      //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_SERVICE_UUID,
-      //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_CHARACTERISTIC_UUID,
-      //   oldValue: null,
-      //   newValue: parseDateTimeInFormat(new Date(), dateFormat),
-      //   allowedInPreviousSettings: false,
+      params.push({
+        name: 'sensorRangeDate',
+        serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
 
-      // });
       // params.push({
       //   name: 'sensorRangePhone',
       //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_SERVICE_UUID,

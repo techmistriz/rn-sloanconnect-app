@@ -6,6 +6,8 @@ import {
   consoleLog,
   getImgSource,
   parseDateHumanFormat,
+  parseDateTimeInFormat,
+  timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Row, Col, Wrap} from 'src/components/Common';
@@ -51,12 +53,12 @@ const Index = ({navigation, route}: any) => {
     consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
     setDiagnosticResults(RESULTS);
 
-    const initDiagnosticResponse =
-      await BLEService.writeCharacteristicWithResponseForDevice(
-        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
-        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-        '1',
-      );
+    // const initDiagnosticResponse =
+    await BLEService.writeCharacteristicWithResponseForDevice(
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+      '1',
+    );
 
     // consoleLog(
     //   'initialize __initDiagnosticResponse==>',
@@ -179,7 +181,7 @@ const Index = ({navigation, route}: any) => {
       BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
       BLE_CONSTANTS.GEN1
         .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
-      parseDateHumanFormat(new Date(), 'ddd, DD MMMM YYYY HH:MM:SS'),
+      parseDateTimeInFormat(new Date(), 'YYMMDDHHmm'),
     );
 
     setTimeout(async () => {

@@ -3,7 +3,12 @@ import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {cleanCharacteristic} from 'src/utils/Helpers/project';
-import {base64EncodeDecode, base64ToText} from 'src/utils/Helpers/encryption';
+import {
+  base64EncodeDecode,
+  base64ToHex,
+  base64ToText,
+  hexToDecimal,
+} from 'src/utils/Helpers/encryption';
 
 /** Function comments */
 export const readingDiagnostic = async () => {
@@ -79,7 +84,7 @@ export const readingDiagnostic = async () => {
   //  Dispense result
   const __characteristicDispense = await BLEService.readCharacteristicForDevice(
     BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_SERVICE_UUID,
+    BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -112,9 +117,9 @@ export const readingDiagnostic = async () => {
   // );
 
   if (__characteristicBattery) {
-    const __characteristicBattery__ = cleanCharacteristic(
-      __characteristicBattery,
-    );
+    // const __characteristicBattery__ = cleanCharacteristic(
+    //   __characteristicBattery,
+    // );
 
     // consoleLog(
     //   'initialize __characteristicBattery__==>',
@@ -122,10 +127,14 @@ export const readingDiagnostic = async () => {
     // );
 
     // setDeviceBatteryDetails(__characteristicBattery__);
+
+    const __base64ToHex = base64ToHex(__characteristicBattery?.value);
+    const hexEncodeValue = hexToDecimal(__base64ToHex);
+
     RESULTS.push({
       // ...__characteristicBattery__,
       name: 'Battery Level at Diagnostic',
-      value: base64EncodeDecode(__characteristicBattery__?.value, 'decode'),
+      value: Number(hexEncodeValue),
       forceText: true,
       prefix: null,
       postfix: ' %',
@@ -133,32 +142,48 @@ export const readingDiagnostic = async () => {
   }
 
   //  DTLastDiagnostic result
-  const __characteristicDTLastDiagnostic =
-    await BLEService.readCharacteristicForDevice(
-      BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
-      BLE_CONSTANTS.GEN1
-        .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
-    );
+  try {
+    const __characteristicDTLastDiagnostic =
+      await BLEService.readCharacteristicForDevice(
+        BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
+        BLE_CONSTANTS.GEN1
+          .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
+      );
+    if (__characteristicDTLastDiagnostic) {
+      consoleLog(
+        'initialize __characteristicDTLastDiagnostic==>',
+        cleanCharacteristic(__characteristicDTLastDiagnostic),
+      );
+
+      RESULTS.push({
+        name: 'D/T of last diagnostic',
+        // value: base64ToHex(
+        //   __characteristicDTLastDiagnostic?.value,
+        // ),
+        value: base64EncodeDecode(
+          __characteristicDTLastDiagnostic?.value,
+          'decode',
+        ),
+      });
+    }
+  } catch (error) {
+    // await BLEService.writeCharacteristicWithResponseForDevice(
+    //   BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
+    //   BLE_CONSTANTS.GEN1
+    //     .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
+    //   'AA',
+    // );
+
+    RESULTS.push({
+      name: 'D/T of last diagnostic',
+      value: null,
+    });
+  }
 
   // consoleLog(
   //   'initialize __characteristicDTLastDiagnostic==>',
   //   JSON.stringify(__characteristicDTLastDiagnostic),
   // );
-
-  if (__characteristicDTLastDiagnostic) {
-    const __characteristicDTLastDiagnostic__ = cleanCharacteristic(
-      __characteristicDTLastDiagnostic,
-    );
-    // setDeviceDTLastDiagnosticDetails(__characteristicDTLastDiagnostic__);
-    RESULTS.push({
-      // ...__characteristicDTLastDiagnostic__,
-      name: 'D/T of last diagnostic',
-      value: base64EncodeDecode(
-        __characteristicDTLastDiagnostic__?.value,
-        'decode',
-      ),
-    });
-  }
 
   return RESULTS;
 };

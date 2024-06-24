@@ -186,15 +186,15 @@ const Index = ({navigation, route}: any) => {
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
-      params.push({
-        name: 'modeSelectionPhone',
-        serviceUUID: BLE_CONSTANTS.GEN1.MODE_SELECTION_PHONE_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.GEN1.MODE_SELECTION_PHONE_CHARACTERISTIC_UUID,
-        oldValue: null,
-        newValue: user?.user_metadata?.phone_number ?? '0123456789',
-        allowedInPreviousSettings: false,
-      });
+      // params.push({
+      //   name: 'modeSelectionPhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.MODE_SELECTION_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN1.MODE_SELECTION_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     }
 
     if (
@@ -220,15 +220,15 @@ const Index = ({navigation, route}: any) => {
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
-      params.push({
-        name: 'onDemandPhone',
-        serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_CHARACTERISTIC_UUID,
-        oldValue: null,
-        newValue: user?.user_metadata?.phone_number ?? '0123456789',
-        allowedInPreviousSettings: false,
-      });
+      // params.push({
+      //   name: 'onDemandPhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     } else if (
       activationMeteredSecOld != activationMeteredSec &&
       modeSelection == '1'
@@ -251,15 +251,15 @@ const Index = ({navigation, route}: any) => {
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
-      params.push({
-        name: 'meteredPhone',
-        serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_CHARACTERISTIC_UUID,
-        oldValue: null,
-        newValue: user?.user_metadata?.phone_number ?? '0123456789',
-        allowedInPreviousSettings: false,
-      });
+      // params.push({
+      //   name: 'meteredPhone',
+      //   serviceUUID: BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.GEN1.METERED_RUNTIME_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     }
 
     if (params.length) {
