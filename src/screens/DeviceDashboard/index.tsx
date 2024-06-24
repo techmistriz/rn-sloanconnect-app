@@ -792,7 +792,7 @@ const Index = ({navigation}: any) => {
 
     setTimeout(async () => {
       // consoleLog('status2', status2);
-      setApplying(false);
+      // setApplying(false);
       // consoleLog('status3');
       setApplied(true);
       // consoleLog('status4');
@@ -834,6 +834,10 @@ const Index = ({navigation}: any) => {
         );
       }
     }, timeout + 3000);
+
+    setTimeout(() => {
+      setApplying(false);
+    }, timeout + 5000);
 
     setTimeout(() => {
       dispatch(deviceSettingsResetDataAction());
