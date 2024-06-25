@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   statusBar: {
     height:
-      STATUSBAR_HEIGHT ?? (constants.HAS_NOTCH && constants.isIOS) ? 60 : 0,
+      STATUSBAR_HEIGHT ?? ((constants.HAS_NOTCH && constants.isIOS) ? 60 : 0),
   },
 });
 
