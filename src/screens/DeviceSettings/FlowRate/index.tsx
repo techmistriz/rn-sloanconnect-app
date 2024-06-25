@@ -6,6 +6,7 @@ import {
   consoleLog,
   parseDateTimeInFormat,
   showToastMessage,
+  timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap} from 'src/components/Common';
@@ -208,6 +209,20 @@ const Index = ({navigation, route}: any) => {
         modfiedNewValue: mapValueGen2(
           BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.FLOW_RATE_AD,
           flowRate,
+        ),
+      });
+
+      params.push({
+        name: 'flowRateDate',
+        serviceUUID: BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+        modfiedNewValue: mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_LAST_FLOW_RATE_CHANGE,
+          timestampInSec(),
         ),
       });
     }

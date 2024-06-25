@@ -92,6 +92,8 @@ const Index = ({navigation, route}: any) => {
   /** This is for gen1 */
   const initializeNormal = async () => {
     try {
+
+      setLoading(true);
       const deviceStaticData = BLEService.connectedDeviceStaticData;
       consoleLog('initializeNormal deviceStaticData==>', deviceStaticData);
       // setDeviceData(deviceStaticData);
