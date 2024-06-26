@@ -1,6 +1,7 @@
 import {Alert, Linking, Platform, Share, ToastAndroid} from 'react-native';
 import {constants} from '../../common';
 import moment from 'moment';
+import momentTZ from 'moment-timezone';
 import {
   showMessage,
   hideMessage,
@@ -611,7 +612,8 @@ export const parseDateTimeInFormat = (
 
 /**
  *
- * @param {*} password
+ * @param {*} date
+ * @param {*} format
  * @returns password contains a special char or not
  * @returns true if contains a special char else false
  */
@@ -619,7 +621,7 @@ export const parseDateHumanFormat = (
   date: any,
   format = constants.BASE_DATE_TO_FORMAT,
 ) => {
-  // consoleLog("parseDateHumanFormat date==>", date);
+  // consoleLog('parseDateHumanFormat date==>', {date, format});
   var m = '';
   if (!date) return '';
   if (date instanceof Date) {
@@ -632,12 +634,31 @@ export const parseDateHumanFormat = (
 
 /**
  *
- * @param {*} password
+ * @param {*} date
+ * @param {*} format
  * @returns password contains a special char or not
  * @returns true if contains a special char else false
  */
+export const parseDateHumanFormatFromUnix = (
+  unixTimestamp: any,
+  format = constants.BASE_DATE_TO_FORMAT,
+) => {
+  var m = '';
+  if (!unixTimestamp) return '';
+  try {
+    return moment.unix(unixTimestamp).tz(getTimezone()).format(format);
+  } catch (error) {
+    return 'N/A';
+  }
+};
+
+/**
+ *
+ * @returns timezone
+ */
 export const getTimezone = () => {
-  return 'EST';
+  // return 'EST';
+  return momentTZ?.tz?.guess();
 };
 
 /**

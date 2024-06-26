@@ -26,6 +26,8 @@ import apiConfigs from 'src/network/apiConfig';
 import _ from 'lodash';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
+import LoaderOverlay2 from 'src/components/LoaderOverlay2';
+import LoaderOverlay from 'src/components/LoaderOverlay';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -92,7 +94,6 @@ const Index = ({navigation, route}: any) => {
   /** This is for gen1 */
   const initializeNormal = async () => {
     try {
-
       setLoading(true);
       const deviceStaticData = BLEService.connectedDeviceStaticData;
       consoleLog('initializeNormal deviceStaticData==>', deviceStaticData);
@@ -657,7 +658,7 @@ const Index = ({navigation, route}: any) => {
         backgroundType="solid"
         haslogOutButton={false}
         hasBackButton={true}
-        loading={loading}
+        // loading={loading}
         headerContainerStyle={{
           backgroundColor: Theme.colors.primaryColor,
         }}>
@@ -725,6 +726,7 @@ const Index = ({navigation, route}: any) => {
           bottom: 70,
           width: '100%',
           paddingHorizontal: 20,
+          zIndex: 1,
         }}>
         <Button
           // type={'link'}
@@ -742,7 +744,8 @@ const Index = ({navigation, route}: any) => {
           }}
         />
       </Wrap>
-      <DeviceBottomTab tabs={TABS} />
+      <LoaderOverlay loading={loading} />
+      {/* <DeviceBottomTab tabs={TABS} /> */}
     </>
   );
 };

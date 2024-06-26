@@ -11,10 +11,11 @@ const Index = ({
   loading: boolean;
   loadingText?: string;
 }) => {
-  // const [_loading, _setLoading] = useState(false);
+  const [_loading, _setLoading] = useState(false);
+
   return (
     <>
-      {loading && (
+      {_loading && (
         <View style={styles.container}>
           <View style={styles.overlayContainer}>
             <View style={styles.loaderContainer}>

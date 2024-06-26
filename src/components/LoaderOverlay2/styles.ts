@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#00000097',
-    zIndex: 999,
+    zIndex: 999999999,
   },
   overlayContainer: {
     width: '100%',

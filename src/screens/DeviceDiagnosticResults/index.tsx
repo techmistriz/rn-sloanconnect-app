@@ -6,6 +6,7 @@ import {
   consoleLog,
   getTimezone,
   parseDateHumanFormat,
+  parseDateHumanFormatFromUnix,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Row, Col, Wrap} from 'src/components/Common';
@@ -29,12 +30,20 @@ const Index = ({navigation, route}: any) => {
     waterDispensed,
     sensorResult,
     dateResult,
+    dateLastResult,
   } = route?.params || {referrer: undefined};
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
   const [infoModal, setInfoModal] = useState<boolean>(false);
 
   useEffect(() => {
+    consoleLog('DeviceDiagnosticResults useEffect==>', {
+      dateResult,
+      waterDispensed,
+      sensorResult,
+      previousDiagnosticResults,
+      diagnosticResults,
+    });
     initlizeApp();
   }, []);
 
@@ -106,10 +115,14 @@ const Index = ({navigation, route}: any) => {
                     }}>
                     <Typography
                       size={10}
-                      text={`DIAGNOSTIC RESULTS ${parseDateHumanFormat(
-                        new Date(),
-                        'ddd, DD MMMM YYYY HH:MM:SS',
-                      )} ${getTimezone()}`}
+                      text={`DIAGNOSTIC RESULTS ${
+                        dateResult?.value && dateResult?.value > 0
+                          ? parseDateHumanFormatFromUnix(
+                              dateResult?.value,
+                              'ddd, DD MMMM YYYY HH:MM:SS a z',
+                            )
+                          : 'N/A'
+                      }`}
                       style={{
                         textAlign: 'left',
                         paddingVertical: 10,
@@ -125,17 +138,19 @@ const Index = ({navigation, route}: any) => {
 
             <Wrap autoMargin={false} style={styles.container}>
               {diagnosticResults.map((item: any, index: number) => {
-                return (
-                  <DiagnosticResultsList
-                    key={index.toString()}
-                    item={item}
-                    borderBottom={
-                      index >= 0 ? (
-                        <Divider color={Theme.colors.lightGray} />
-                      ) : null
-                    }
-                  />
-                );
+                if (item?.showInList) {
+                  return (
+                    <DiagnosticResultsList
+                      key={index.toString()}
+                      item={item}
+                      borderBottom={
+                        index >= 0 ? (
+                          <Divider color={Theme.colors.lightGray} />
+                        ) : null
+                      }
+                    />
+                  );
+                }
               })}
             </Wrap>
 
@@ -153,13 +168,13 @@ const Index = ({navigation, route}: any) => {
                         <Typography
                           size={10}
                           text={`LAST DIAGNOSTIC RESULTS ${
-                            dateResult?.value && dateResult?.value > 0
-                              ? parseDateHumanFormat(
-                                  dateResult?.value,
-                                  'ddd, DD MMMM YYYY HH:MM:SS',
+                            dateLastResult?.value && dateLastResult?.value > 0
+                              ? parseDateHumanFormatFromUnix(
+                                  dateLastResult?.value,
+                                  'ddd, DD MMMM YYYY HH:MM:SS a z',
                                 )
                               : 'N/A'
-                          } ${getTimezone()}`}
+                          }`}
                           style={{
                             textAlign: 'left',
                             paddingVertical: 10,
@@ -177,17 +192,19 @@ const Index = ({navigation, route}: any) => {
                   {previousDiagnosticResults &&
                     previousDiagnosticResults.map(
                       (item: any, index: number) => {
-                        return (
-                          <DiagnosticResultsList
-                            key={index.toString()}
-                            item={item}
-                            borderBottom={
-                              index >= 0 ? (
-                                <Divider color={Theme.colors.lightGray} />
-                              ) : null
-                            }
-                          />
-                        );
+                        if (item?.showInList) {
+                          return (
+                            <DiagnosticResultsList
+                              key={index.toString()}
+                              item={item}
+                              borderBottom={
+                                index >= 0 ? (
+                                  <Divider color={Theme.colors.lightGray} />
+                                ) : null
+                              }
+                            />
+                          );
+                        }
                       },
                     )}
                 </Wrap>

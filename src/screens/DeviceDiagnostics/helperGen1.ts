@@ -20,20 +20,16 @@ export const readingDiagnostic = async () => {
     BLE_CONSTANTS.GEN1.DIAGNOSTIC_SENSOR_RESULT_CHARACTERISTIC_UUID,
   );
 
-  // consoleLog(
-  //   'initialize __characteristicSensor==>',
-  //   JSON.stringify(__characteristicSensor),
-  // );
+  consoleLog(
+    'initialize __characteristicSensor==>',
+    JSON.stringify(cleanCharacteristic(__characteristicSensor)),
+  );
 
   if (__characteristicSensor) {
-    const __characteristicSensor__ = cleanCharacteristic(
-      __characteristicSensor,
-    );
-    // setDeviceSensorDetails(__characteristicSensor__);
     RESULTS.push({
-      // ...__characteristicSensor__,
       name: 'Sensor',
-      value: base64EncodeDecode(__characteristicSensor__?.value, 'decode'),
+      value: base64EncodeDecode(__characteristicSensor?.value, 'decode'),
+      showInList: true,
     });
   }
 
@@ -43,18 +39,16 @@ export const readingDiagnostic = async () => {
     BLE_CONSTANTS.GEN1.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
   );
 
-  // consoleLog(
-  //   'initialize __characteristicValve==>',
-  //   JSON.stringify(__characteristicValve),
-  // );
+  consoleLog(
+    'initialize __characteristicValve==>',
+    JSON.stringify(cleanCharacteristic(__characteristicValve)),
+  );
 
   if (__characteristicValve) {
-    const __characteristicValve__ = cleanCharacteristic(__characteristicValve);
-    // setDeviceValveDetails(__characteristicValve__);
     RESULTS.push({
-      // ...__characteristicValve__,
       name: 'Valve',
-      value: base64EncodeDecode(__characteristicValve__?.value, 'decode'),
+      value: base64EncodeDecode(__characteristicValve?.value, 'decode'),
+      showInList: true,
     });
   }
 
@@ -64,20 +58,19 @@ export const readingDiagnostic = async () => {
     BLE_CONSTANTS.GEN1.DIAGNOSTIC_TURBINE_CHARACTERISTIC_UUID,
   );
 
-  // consoleLog(
-  //   'initialize __characteristicTurbine==>',
-  //   JSON.stringify(__characteristicTurbine),
-  // );
+  consoleLog(
+    'initialize __characteristicTurbine==>',
+    JSON.stringify(cleanCharacteristic(__characteristicTurbine)),
+  );
 
   if (__characteristicTurbine) {
     const __characteristicTurbine__ = cleanCharacteristic(
       __characteristicTurbine,
     );
-    // setDeviceTurbineDetails(__characteristicTurbine__);
     RESULTS.push({
-      // ...__characteristicTurbine__,
       name: 'Turbine',
       value: base64EncodeDecode(__characteristicTurbine__?.value, 'decode'),
+      showInList: true,
     });
   }
 
@@ -87,20 +80,19 @@ export const readingDiagnostic = async () => {
     BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_CHARACTERISTIC_UUID,
   );
 
-  // consoleLog(
-  //   'initialize __characteristicDispense==>',
-  //   JSON.stringify(cleanCharacteristic(__characteristicDispense)),
-  // );
+  consoleLog(
+    'initialize __characteristicDispense==>',
+    JSON.stringify(cleanCharacteristic(__characteristicDispense)),
+  );
 
   if (__characteristicDispense) {
     const __characteristicDispense__ = cleanCharacteristic(
       __characteristicDispense,
     );
-    // setDeviceDispenseDetails(__characteristicDispense__);
     RESULTS.push({
-      // ...__characteristicDispense__,
       name: 'Water Dispense',
       value: base64EncodeDecode(__characteristicDispense__?.value, 'decode'),
+      showInList: true,
     });
   }
 
@@ -113,21 +105,11 @@ export const readingDiagnostic = async () => {
 
   // consoleLog(
   //   'initialize __characteristicBattery==>',
-  //   JSON.stringify(__characteristicBattery),
+  //   JSON.stringify(cleanCharacteristic(__characteristicBattery)),
   // );
 
   if (__characteristicBattery) {
-    // const __characteristicBattery__ = cleanCharacteristic(
-    //   __characteristicBattery,
-    // );
-
-    // consoleLog(
-    //   'initialize __characteristicBattery__==>',
-    //   JSON.stringify(__characteristicBattery__),
-    // );
-
     // setDeviceBatteryDetails(__characteristicBattery__);
-
     const __base64ToHex = base64ToHex(__characteristicBattery?.value);
     const hexEncodeValue = hexToDecimal(__base64ToHex);
 
@@ -138,6 +120,7 @@ export const readingDiagnostic = async () => {
       forceText: true,
       prefix: null,
       postfix: ' %',
+      showInList: true,
     });
   }
 
@@ -150,20 +133,20 @@ export const readingDiagnostic = async () => {
           .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
       );
     if (__characteristicDTLastDiagnostic) {
-      consoleLog(
-        'initialize __characteristicDTLastDiagnostic==>',
-        cleanCharacteristic(__characteristicDTLastDiagnostic),
+      // consoleLog(
+      //   'initialize __characteristicDTLastDiagnostic==>',
+      //   cleanCharacteristic(__characteristicDTLastDiagnostic),
+      // );
+
+      const __base64ToHex = base64ToHex(
+        __characteristicDTLastDiagnostic?.value,
       );
+      const hexEncodeValue = hexToDecimal(__base64ToHex);
 
       RESULTS.push({
         name: 'D/T of last diagnostic',
-        // value: base64ToHex(
-        //   __characteristicDTLastDiagnostic?.value,
-        // ),
-        value: base64EncodeDecode(
-          __characteristicDTLastDiagnostic?.value,
-          'decode',
-        ),
+        value: hexEncodeValue,
+        showInList: false,
       });
     }
   } catch (error) {
@@ -177,6 +160,7 @@ export const readingDiagnostic = async () => {
     RESULTS.push({
       name: 'D/T of last diagnostic',
       value: null,
+      showInList: false,
     });
   }
 

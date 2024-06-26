@@ -22,6 +22,9 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import MainNavigator from 'src/navigation/MainNavigator';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {constants} from 'src/common';
+import LoaderOverlay from 'src/components/LoaderOverlay';
+import LoaderOverlay3 from 'src/components/LoaderOverlay3';
+import HelperService from 'src/components/LoaderOverlay3/helper';
 
 enableScreens();
 // TODO: Remove when fixed
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
   },
   statusBar: {
     height:
-      STATUSBAR_HEIGHT ?? ((constants.HAS_NOTCH && constants.isIOS) ? 60 : 0),
+      STATUSBAR_HEIGHT ?? (constants.HAS_NOTCH && constants.isIOS ? 60 : 0),
   },
 });
 
@@ -77,6 +80,9 @@ function App() {
             /> */}
             <MainNavigator />
             <FlashMessage position="bottom" />
+            {/* <LoaderOverlay3
+              ref={(reff: any) => HelperService.setLoaderRef(reff)}
+            /> */}
             <NetworkLost
               isInternet={isInternet}
               setIsInternet={setIsInternet}

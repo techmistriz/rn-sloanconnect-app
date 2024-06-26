@@ -22,6 +22,10 @@ import {findObject} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {mappingDiagnosticGen2, readingDiagnosticGen2} from './helperGen2';
 import {BLE_GEN2_GATT_SERVICES} from 'src/utils/StaticData/BLE_GEN2_GATT_SERVICES';
+import {
+  decimalToHex,
+  fromHexStringUint8Array,
+} from 'src/utils/Helpers/encryption';
 
 const Index = ({navigation, route}: any) => {
   const connectedDevice = BLEService.getDevice();
@@ -35,6 +39,37 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const initlizeApp = async () => {
+    // consoleLog('BLEService.batteryLevel==>', BLEService.batteryLevel);
+
+    // // D/T of last diagnostic
+    // const diagnosticDateTimestampInHex = fromHexStringUint8Array(
+    //   decimalToHex(timestampInSec()),
+    // );
+
+    // consoleLog(
+    //   'initlizeApp diagnosticDateTimestampInHex==>',
+    //   diagnosticDateTimestampInHex,
+    // );
+    // await BLEService.writeCharacteristicWithResponseForDevice2(
+    //   BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
+    //   BLE_CONSTANTS.GEN1
+    //     .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
+    //   diagnosticDateTimestampInHex,
+    // );
+
+    // const batteryLevelInHex = fromHexStringUint8Array(
+    //   decimalToHex(BLEService.batteryLevel?.toString()),
+    // );
+
+    // consoleLog('initlizeApp batteryLevelInHex==>', batteryLevelInHex);
+
+    // await BLEService.writeCharacteristicWithResponseForDevice2(
+    //   BLE_CONSTANTS.GEN1.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
+    //   BLE_CONSTANTS.GEN1
+    //     .DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_CHARACTERISTIC_UUID,
+    //   batteryLevelInHex,
+    // );
+
     if (BLEService.deviceGeneration == 'gen1') {
       initlizeAppGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
@@ -169,23 +204,40 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const finishDiagnosticsGen1 = async (waterDispensed: number) => {
-    await BLEService.writeCharacteristicWithResponseForDevice(
+    // Battery level at diagnostic
+    const batteryLevelInHex = fromHexStringUint8Array(
+      decimalToHex(BLEService.batteryLevel?.toString()),
+    );
+
+    await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.GEN1.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
       BLE_CONSTANTS.GEN1
         .DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_CHARACTERISTIC_UUID,
-      BLEService.batteryLevel?.toString(),
+      batteryLevelInHex,
     );
 
     // D/T of last diagnostic
-    await BLEService.writeCharacteristicWithoutResponseForDevice(
+    const diagnosticDateTimestampInHex = fromHexStringUint8Array(
+      decimalToHex(timestampInSec()),
+    );
+
+    await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
       BLE_CONSTANTS.GEN1
         .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
-      parseDateTimeInFormat(new Date(), 'YYMMDDHHmm'),
+      diagnosticDateTimestampInHex,
     );
 
     setTimeout(async () => {
       const RESULTS = await readingDiagnostic();
+      const dateLastResult = findObject(
+        'D/T of last diagnostic',
+        diagnosticResults,
+        {
+          searchKey: 'name',
+        },
+      );
+
       consoleLog('finishDiagnosticsGen1 readingDiagnostic RESULTS==>', RESULTS);
       const sensorResult = findObject('Sensor', RESULTS, {searchKey: 'name'});
       const dateResult = findObject('D/T of last diagnostic', RESULTS, {
@@ -215,6 +267,7 @@ const Index = ({navigation, route}: any) => {
         waterDispensed: waterDispensed,
         sensorResult: sensorResult,
         dateResult: dateResult,
+        dateLastResult: dateLastResult,
       });
     }, 2000);
   };
