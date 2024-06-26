@@ -55,6 +55,7 @@ import {
   getSensorSettings,
 } from './helperGen1';
 import NotesList from 'src/components/@ProjectComponent/DeviceSettingsList/NotesList';
+import LoaderOverlayController from 'src/components/LoaderOverlay3/LoaderOverlayController';
 
 const Index = ({navigation}: any) => {
   const dispatch = useDispatch();
@@ -753,7 +754,7 @@ const Index = ({navigation}: any) => {
     // return;
 
     var timeout = 2000;
-    setApplying(true);
+    
     const __hasSensorRangeSetting = hasSensorRangeSetting(__deviceSettingsData);
 
     if (__hasSensorRangeSetting) {
@@ -764,6 +765,9 @@ const Index = ({navigation}: any) => {
     } else {
       setApplyingLoadingText('Applying..');
     }
+
+    setApplying(true);
+    LoaderOverlayController.showLoaderOverlay(applyingLoadingText);
 
     const __hasLineFlushSetting = hasLineFlushSetting(__deviceSettingsData);
 
@@ -837,6 +841,7 @@ const Index = ({navigation}: any) => {
 
     setTimeout(() => {
       setApplying(false);
+      LoaderOverlayController.hideLoaderOverlay();
     }, timeout + 5000);
 
     setTimeout(() => {
@@ -1366,7 +1371,7 @@ const Index = ({navigation}: any) => {
           NavigationService.resetAllAction('DeviceDisconnectStack');
         }}
       />
-      <LoaderOverlay2 loading={applying} loadingText={applyingLoadingText} />
+      {/* <LoaderOverlay2 loading={applying} loadingText={applyingLoadingText} /> */}
     </AppContainer>
   );
 };

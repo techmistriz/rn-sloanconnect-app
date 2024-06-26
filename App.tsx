@@ -24,7 +24,6 @@ import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {constants} from 'src/common';
 import LoaderOverlay from 'src/components/LoaderOverlay';
 import LoaderOverlay3 from 'src/components/LoaderOverlay3';
-import HelperService from 'src/components/LoaderOverlay3/helper';
 
 enableScreens();
 // TODO: Remove when fixed
@@ -80,9 +79,7 @@ function App() {
             /> */}
             <MainNavigator />
             <FlashMessage position="bottom" />
-            {/* <LoaderOverlay3
-              ref={(reff: any) => HelperService.setLoaderRef(reff)}
-            /> */}
+            <LoaderOverlay3 />
             <NetworkLost
               isInternet={isInternet}
               setIsInternet={setIsInternet}
