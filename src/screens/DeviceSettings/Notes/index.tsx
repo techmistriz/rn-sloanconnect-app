@@ -222,7 +222,7 @@ const Index = ({navigation, route}: any) => {
                   Keyboard.dismiss();
                 }}
                 returnKeyType="done"
-                blurOnSubmit={false}
+                blurOnSubmit={true}
                 keyboardType="default"
                 placeholder="Please add full description here"
                 placeholderTextColor={Theme.colors.black}
