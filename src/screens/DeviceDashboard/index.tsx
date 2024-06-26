@@ -754,20 +754,17 @@ const Index = ({navigation}: any) => {
     // return;
 
     var timeout = 2000;
-    
+
     const __hasSensorRangeSetting = hasSensorRangeSetting(__deviceSettingsData);
-
+    let __applyingLoadingText = 'Applying...';
     if (__hasSensorRangeSetting) {
-      setApplyingLoadingText(
-        'Adaptive sensing in progress. Water may be dispensed. Please wait.',
-      );
+      __applyingLoadingText =
+        'Adaptive sensing in progress. Water may be dispensed. Please wait.';
       timeout = 10000;
-    } else {
-      setApplyingLoadingText('Applying..');
     }
-
+    setApplyingLoadingText(__applyingLoadingText);
     setApplying(true);
-    LoaderOverlayController.showLoaderOverlay(applyingLoadingText);
+    LoaderOverlayController.showLoaderOverlay(__applyingLoadingText);
 
     const __hasLineFlushSetting = hasLineFlushSetting(__deviceSettingsData);
 
