@@ -48,6 +48,10 @@ export const useDebounce = (
   return debouncedFunction;
 };
 
+export const sleep = (ms: number) => {
+  return new Promise<void>(resolve => setTimeout(resolve, ms));
+};
+
 /**
  *
  * @returns random number

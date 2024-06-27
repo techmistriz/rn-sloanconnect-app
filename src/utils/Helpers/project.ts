@@ -114,21 +114,21 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
       }
     }
   } else if (gen == 'gen2') {
-    const __rawScanRecord = connectedDevice?.rawScanRecord;
-    if (!__rawScanRecord) {
+    const __manufacturerData = connectedDevice?.manufacturerData;
+    if (!__manufacturerData) {
       return result;
     }
-    const __rawScanRecordHex = base64ToHex(__rawScanRecord);
-    // consoleLog('__rawScanRecordHex==>', __rawScanRecordHex);
-    const __rawScanRecordHexSpace = addSeparatorInString(
-      __rawScanRecordHex,
+    const __manufacturerDataHex = base64ToHex(__manufacturerData);
+    // consoleLog('__manufacturerDataHex==>', __manufacturerDataHex);
+    const __manufacturerDataHexSpace = addSeparatorInString(
+      __manufacturerDataHex,
       2,
       ' ',
     );
-    // consoleLog('__rawScanRecordHex==>', __rawScanRecordHex);
-    const __rawScanRecordHexArr = __rawScanRecordHexSpace.split(' ');
-    // consoleLog('__rawScanRecordHexArr==>', __rawScanRecordHexArr);
-    const modelNumber = __rawScanRecordHexArr?.[12];
+    // consoleLog('__manufacturerDataHex==>', __manufacturerDataHex);
+    const __manufacturerDataHexArr = __manufacturerDataHexSpace.split(' ');
+    // consoleLog('__manufacturerDataHexArr==>', __manufacturerDataHexArr);
+    const modelNumber = __manufacturerDataHexArr?.[3];
     result = modelNumber ?? result;
     // consoleLog('modelNumber==>', modelNumber);
   } else if (gen == 'gen3') {
@@ -171,22 +171,22 @@ export function getBleDeviceSerialNumber(
   if (!str) return '';
   var result = '';
   if (gen == 'gen2') {
-    const __rawScanRecord = connectedDevice?.rawScanRecord;
-    if (!__rawScanRecord) {
+    const __manufacturerData = connectedDevice?.manufacturerData;
+    if (!__manufacturerData) {
       return result;
     }
-    const __rawScanRecordHex = base64ToHex(__rawScanRecord);
-    // consoleLog('__rawScanRecordHex==>', __rawScanRecordHex);
-    const __rawScanRecordHexSpace = addSeparatorInString(
-      __rawScanRecordHex,
+    const __manufacturerDataHex = base64ToHex(__manufacturerData);
+    // consoleLog('__manufacturerDataHex==>', __manufacturerDataHex);
+    const __manufacturerDataHexSpace = addSeparatorInString(
+      __manufacturerDataHex,
       2,
       ' ',
     );
-    // consoleLog('__rawScanRecordHex==>', __rawScanRecordHex);
-    const __rawScanRecordHexArr = __rawScanRecordHexSpace.split(' ');
-    // consoleLog('__rawScanRecordHexArr==>', __rawScanRecordHexArr);
-    const __rawScanRecordHexArrTmp = [...__rawScanRecordHexArr];
-    const serialNumber = __rawScanRecordHexArrTmp.splice(13, 4);
+    // consoleLog('__manufacturerDataHex==>', __manufacturerDataHex);
+    const __manufacturerDataHexArr = __manufacturerDataHexSpace.split(' ');
+    // consoleLog('__manufacturerDataHexArr==>', __manufacturerDataHexArr);
+    const __manufacturerDataHexArrTmp = [...__manufacturerDataHexArr];
+    const serialNumber = __manufacturerDataHexArrTmp.splice(4, 4);
     result = serialNumber.join('');
     // consoleLog('modelNumber==>', modelNumber);
     // consoleLog('mappingDeviceDataStringGen2 serialNumber==>', serialNumber);
@@ -212,7 +212,7 @@ export function getDeviceModelData(
     if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] != 'undefined') {
       const deviceVersion = getBleDeviceVersion(connectedDevice, deviceGen);
       // consoleLog('getDeviceModelData deviceVersion==>', deviceVersion);
-      const deviceModel = BLE_DEVICE_MODELS[deviceGen];
+      const deviceModel = BLE_DEVICE_MODELS?.[deviceGen];
       // consoleLog('getDeviceModelData deviceModel==>', deviceModel);
 
       if (deviceModel && typeof deviceModel[deviceVersion] != 'undefined') {

@@ -265,6 +265,7 @@ const Index = ({navigation, route}: any) => {
       localName: device?.localName,
       deviceCustomName: device?.deviceCustomName,
       rawScanRecord: __device?.rawScanRecord,
+      manufacturerData: __device?.manufacturerData,
     });
     if (!device) {
       // refreshFoundDevices(foundDevices);
