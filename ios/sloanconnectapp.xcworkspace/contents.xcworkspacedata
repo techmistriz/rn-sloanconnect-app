@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:sloanconnectapp.xcodeproj">
+      location = "group:/Users/deepakmaurya/Projects/rn-sloanconnect-app/ios/SloanConnect.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
