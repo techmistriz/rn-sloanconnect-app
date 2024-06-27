@@ -37,13 +37,13 @@ const Index = ({navigation, route}: any) => {
   const [infoModal, setInfoModal] = useState<boolean>(false);
 
   useEffect(() => {
-    consoleLog('DeviceDiagnosticResults useEffect==>', {
-      dateResult,
-      waterDispensed,
-      sensorResult,
-      previousDiagnosticResults,
-      diagnosticResults,
-    });
+    // consoleLog('DeviceDiagnosticResults useEffect==>', {
+    //   dateResult,
+    //   waterDispensed,
+    //   sensorResult,
+    //   previousDiagnosticResults,
+    //   diagnosticResults,
+    // });
     initlizeApp();
   }, []);
 

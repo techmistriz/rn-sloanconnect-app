@@ -8,6 +8,7 @@ import {
   hexToDecimal,
   addSeparatorInString,
   hexToString,
+  base64ToHex,
 } from 'src/utils/Helpers/encryption';
 
 /** Function comments */
@@ -134,6 +135,8 @@ export const mappingDiagnosticGen2 = async (
 export const readingDiagnosticGen2 = async (
   characteristicMonitorDiagnosticMapped: any,
 ) => {
+  const characteristicMonitorDeviceDataIntegersMapped =
+    BLEService?.characteristicMonitorDeviceDataIntegersMapped;
   let RESULTS = [];
 
   //  Sensor result
@@ -148,6 +151,7 @@ export const readingDiagnosticGen2 = async (
   RESULTS.push({
     name: 'Sensor',
     value: __characteristicSensor?.value?.currentValue,
+    showInList: true,
   });
 
   //  Valve result
@@ -162,6 +166,7 @@ export const readingDiagnosticGen2 = async (
   RESULTS.push({
     name: 'Valve',
     value: __characteristicValve?.value?.currentValue,
+    showInList: true,
   });
 
   //  Turbine result
@@ -176,6 +181,7 @@ export const readingDiagnosticGen2 = async (
   RESULTS.push({
     name: 'Turbine',
     value: __characteristicTurbine?.value?.currentValue,
+    showInList: true,
   });
 
   //  Dispense result
@@ -190,6 +196,7 @@ export const readingDiagnosticGen2 = async (
   RESULTS.push({
     name: 'Water Dispense',
     value: __characteristicDispense?.value?.currentValue,
+    showInList: true,
   });
 
   //  Battery result
@@ -206,20 +213,22 @@ export const readingDiagnosticGen2 = async (
     forceText: true,
     prefix: null,
     postfix: ' %',
+    showInList: true,
   });
 
   //  DTLastDiagnostic result
   const __characteristicDTLastDiagnostic =
-    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[9];
+    characteristicMonitorDeviceDataIntegersMapped?.chunks?.[0]?.uuidData?.[13];
 
-  // consoleLog(
-  //   'initialize __characteristicDTLastDiagnostic==>',
-  //   JSON.stringify(__characteristicDTLastDiagnostic),
-  // );
+  consoleLog(
+    'initialize __characteristicDTLastDiagnostic==>',
+    JSON.stringify(__characteristicDTLastDiagnostic),
+  );
 
   RESULTS.push({
     name: 'D/T of last diagnostic',
     value: __characteristicDTLastDiagnostic?.value?.currentValue,
+    showInList: false,
   });
 
   return RESULTS;

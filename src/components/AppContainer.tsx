@@ -56,6 +56,7 @@ const AppContainer = ({
           {backgroundType == 'solid' ? (
             <View style={styles.linearGradient}>
               <ScrollView
+                keyboardShouldPersistTaps={false}
                 style={[styles.__scrollViewStyle, scrollViewStyle]}
                 contentContainerStyle={[
                   styles.__scrollViewContentContainerStyle,
@@ -80,6 +81,7 @@ const AppContainer = ({
               ]}
               style={styles.linearGradient}>
               <ScrollView
+                keyboardShouldPersistTaps={false}
                 style={[styles.__scrollViewStyle, scrollViewStyle]}
                 contentContainerStyle={[
                   styles.__scrollViewContentContainerStyle,

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard} from 'react-native';
+import {Keyboard, TouchableWithoutFeedback, View} from 'react-native';
 import Theme from 'src/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -195,8 +195,27 @@ const Index = ({navigation, route}: any) => {
     }
   };
 
+  // const DismissKeyboardHOC = Comp => {
+  //   return ({children, ...props}) => (
+  //     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+  //       <Comp style={{flex: 1}} {...props}>
+  //         {children}
+  //       </Comp>
+  //     </TouchableWithoutFeedback>
+  //   );
+  // };
+  // const DismissKeyboardView = DismissKeyboardHOC(View);
+
+  // const DismissKeyboard = ({children}: any) => (
+  //   <TouchableWithoutFeedback
+  //     onPress={() => Keyboard.dismiss()}
+  //     accessible={false}>
+  //     {children}
+  //   </TouchableWithoutFeedback>
+  // );
+
   return (
-    <AppContainer scroll={false} scrollViewStyle={{}} backgroundType="gradient">
+    <AppContainer scroll={true} scrollViewStyle={{}} backgroundType="gradient">
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
@@ -222,7 +241,7 @@ const Index = ({navigation, route}: any) => {
                   Keyboard.dismiss();
                 }}
                 returnKeyType="done"
-                blurOnSubmit={false}
+                blurOnSubmit={true}
                 keyboardType="default"
                 placeholder="Please add full description here"
                 placeholderTextColor={Theme.colors.black}
