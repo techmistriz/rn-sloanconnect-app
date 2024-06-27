@@ -45,10 +45,11 @@ import Header from 'src/components/Header';
 const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
 const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
+let timeoutID: any = null;
+let intervalID: any = null;
 
 const Index = ({navigation, route}: any) => {
-  var timeoutID: any = null;
-  var intervalID: any = null;
+
   const dispatch = useDispatch();
   const [isScanning, setScanning] = useState<ScanningProps>(
     ScanningProps.Pending,
@@ -384,8 +385,8 @@ const Index = ({navigation, route}: any) => {
       intervalID,
     });
     // clearTimeout(timeoutID);
-    clearInterval(timeoutID);
-    clearInterval(intervalID);
+    // clearInterval(timeoutID);
+    // clearInterval(intervalID);
     setScanning(ScanningProps.Connecting);
     BLEService.connectToDevice(item?.id, item)
       .then(onConnectSuccess)
