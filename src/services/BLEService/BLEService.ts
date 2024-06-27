@@ -811,7 +811,7 @@ class BLEServiceInstance {
         this.showErrorToast('Location services are disabled');
         break;
       case BleErrorCode.DeviceDisconnected:
-        this.showErrorToast('Device already disconnected');
+        // this.showErrorToast('Device already disconnected');
         navigateToDeviceSearch();
         this.device = null;
         break;
