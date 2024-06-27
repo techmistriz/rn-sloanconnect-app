@@ -33,15 +33,14 @@ const Index = ({navigation, route}: any) => {
   }, []);
 
   const initlizeApp = async () => {
-    // if (BLEService?.deviceGeneration == 'gen2') {
-    //   BLEService?.finishMonitor();
-    // }
-
-    BLEService?.disconnectDevice(false);
     setTimeout(() => {
+      // if (BLEService?.deviceGeneration == 'gen2') {
+      //   BLEService?.finishMonitor();
+      // }
       dispatch(deviceSettingsResetDataAction());
+      BLEService?.disconnectDevice(false);
       NavigationService.resetAllAction('DeviceSearching');
-    }, 1);
+    }, 1000);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Image, FlatList, Platform} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
@@ -53,10 +53,20 @@ const Index = ({navigation, route}: any) => {
   const [isScanning, setScanning] = useState<ScanningProps>(
     ScanningProps.Pending,
   );
+  const foundDevicesRef = useRef<DeviceExtendedProps[]>([]);
   const [foundDevices, setFoundDevices] = useState<DeviceExtendedProps[]>([]);
   const connectedDevice: any = BLEService.getDevice();
   const [requirePermissionAllowed, setRequirePermissionAllowed] =
     useState(false);
+
+  const [searchAgainFlag, setSearchAgain] = useState(0);
+
+  /** component hooks method for checking and setting foundDevicesRef */
+  useEffect(() => {
+    consoleLog('useEffect foundDevicesRef called');
+    // THIS IS THE MAGIC PART
+    foundDevicesRef.current = foundDevices;
+  }, [foundDevices]);
 
   /** Function comments */
   useEffect(() => {
@@ -187,18 +197,28 @@ const Index = ({navigation, route}: any) => {
       // Return the function to unsubscribe from the event so it gets removed on unmount
       return unsubscribe;
     }
-  }, [navigation, requirePermissionAllowed]);
+  }, [navigation, requirePermissionAllowed, searchAgainFlag]);
 
   /** component hooks method for searching timeout */
   useEffect(() => {
-    consoleLog('useEffect setTimeout NoDevice==>', {requirePermissionAllowed});
+    consoleLog('useEffect setTimeout called');
     if (requirePermissionAllowed) {
+      // Clear timeout callback if previously set before creating new one
+      // timeoutID && clearTimeout(timeoutID);
+      timeoutID && clearInterval(timeoutID);
       timeoutID = setInterval(() => {
+        consoleLog(
+          'useEffect setTimeout foundDevicesRef?.current?.length',
+          foundDevicesRef?.current?.length,
+        );
+
         if (
-          foundDevices.length == 0 &&
-          isScanning != ScanningProps.Connecting
+          !foundDevicesRef?.current?.length ||
+          foundDevicesRef?.current?.length == 0
         ) {
+          // clearTimeout(timeoutID);
           clearInterval(timeoutID);
+          clearInterval(intervalID);
           BLEService.manager.stopDeviceScan();
           setScanning(ScanningProps.NoDevice);
         }
@@ -206,17 +226,17 @@ const Index = ({navigation, route}: any) => {
     }
     return () => {
       consoleLog('Unmounting clearTimeout');
+      // clearTimeout(timeoutID);
       clearInterval(timeoutID);
     };
-  }, [requirePermissionAllowed]);
+  }, [requirePermissionAllowed, searchAgainFlag]);
 
   /** component hooks method for refresh search list timeout */
   useEffect(() => {
-    consoleLog('useEffect setInterval refreshFoundDevices==>', {
-      requirePermissionAllowed,
-    });
-
+    consoleLog('useEffect setInterval called');
     if (requirePermissionAllowed) {
+      // Clear interval callback if previously set before creating new one
+      intervalID && clearInterval(intervalID);
       intervalID = setInterval(() => {
         refreshFoundDevices();
       }, WAITING_TIMEOUT_FOR_REFRESH_LIST);
@@ -226,7 +246,7 @@ const Index = ({navigation, route}: any) => {
       consoleLog('Unmounting clearInterval');
       clearInterval(intervalID);
     };
-  }, [requirePermissionAllowed]);
+  }, [requirePermissionAllowed, searchAgainFlag]);
 
   /** Function comments */
   const initlizeApp = async () => {
@@ -261,12 +281,12 @@ const Index = ({navigation, route}: any) => {
     const device = filterBLEDevices(__device);
     // const device = __device;
     // device.deviceCustomName = device?.localName ?? 'Unknown';
-    consoleLog('addFoundDevice device names==>', {
-      localName: device?.localName,
-      deviceCustomName: device?.deviceCustomName,
-      rawScanRecord: __device?.rawScanRecord,
-      manufacturerData: __device?.manufacturerData,
-    });
+    // consoleLog('addFoundDevice device names==>', {
+    //   localName: device?.localName,
+    //   deviceCustomName: device?.deviceCustomName,
+    //   // rawScanRecord: __device?.rawScanRecord,
+    //   // manufacturerData: __device?.manufacturerData,
+    // });
     if (!device) {
       // refreshFoundDevices(foundDevices);
       return false;
@@ -321,7 +341,10 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const refreshFoundDevices = () => {
-    // consoleLog('refreshFoundDevices init==>');
+    consoleLog('refreshFoundDevices init intervalID==>', {
+      intervalID,
+      timeoutID,
+    });
     setFoundDevices(prevState => {
       var nextState = prevState;
       // consoleLog('refreshFoundDevices prevState==>', prevState);
@@ -348,10 +371,7 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const checkIfNoFoundDevices = (__foundDevices: any) => {
-    if (
-      __foundDevices?.length == 0 &&
-      isScanning == ScanningProps.DeviceFound
-    ) {
+    if (!__foundDevices?.length && isScanning == ScanningProps.DeviceFound) {
       setScanning(ScanningProps.Scanning);
       // initlizeApp();
     }
@@ -359,8 +379,13 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const onDeviceConnectingPress = (item: any) => {
-    clearInterval(intervalID);
+    consoleLog('onDeviceConnectingPress intervalID & timeoutID==>', {
+      timeoutID,
+      intervalID,
+    });
+    // clearTimeout(timeoutID);
     clearInterval(timeoutID);
+    clearInterval(intervalID);
     setScanning(ScanningProps.Connecting);
     BLEService.connectToDevice(item?.id, item)
       .then(onConnectSuccess)
@@ -476,15 +501,20 @@ const Index = ({navigation, route}: any) => {
       <NoDeviceFound
         onSearchAgainPress={() => {
           setScanning(ScanningProps.Scanning);
+          setSearchAgain(searchAgainFlag + 1);
           initlizeApp();
         }}
         onBackButtonPress={() => {
           setScanning(ScanningProps.Scanning);
+          setSearchAgain(searchAgainFlag + 1);
           initlizeApp();
         }}
       />
     );
-  } else if (isScanning == ScanningProps.DeviceFound) {
+  } else if (
+    isScanning == ScanningProps.DeviceFound &&
+    foundDevices?.length > 0
+  ) {
     return (
       <AppContainer
         scroll={false}
