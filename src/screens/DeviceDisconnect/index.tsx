@@ -33,9 +33,9 @@ const Index = ({navigation, route}: any) => {
   }, []);
 
   const initlizeApp = async () => {
-    if (BLEService?.deviceGeneration == 'gen2') {
-      BLEService?.finishMonitor();
-    }
+    // if (BLEService?.deviceGeneration == 'gen2') {
+    //   BLEService?.finishMonitor();
+    // }
 
     BLEService?.disconnectDevice(false);
     setTimeout(() => {

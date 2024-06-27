@@ -264,7 +264,7 @@ const Index = ({navigation, route}: any) => {
     consoleLog('addFoundDevice device names==>', {
       localName: device?.localName,
       deviceCustomName: device?.deviceCustomName,
-      // rawScanRecord: __device?.rawScanRecord,
+      rawScanRecord: __device?.rawScanRecord,
     });
     if (!device) {
       // refreshFoundDevices(foundDevices);

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "617953227846",
-    "project_id": "sloan-ee4af",
-    "storage_bucket": "sloan-ee4af.appspot.com"
+    "project_number": "523820135695",
+    "project_id": "sloan-2dad7",
+    "storage_bucket": "sloan-2dad7.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:617953227846:android:59280377734700a379c647",
+        "mobilesdk_app_id": "1:523820135695:android:842e6cb65d6d15eaf1fa7a",
         "android_client_info": {
           "package_name": "com.sloanconnectapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB99bLGBZi7IjkWcfnS4zhweUGzaAUXwwg"
+          "current_key": "AIzaSyBfgw1lRcSBICJvj7ew2Uix7T2GI_9XYnM"
         }
       ],
       "services": {
