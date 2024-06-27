@@ -41,7 +41,7 @@ const Index = ({navigation, route}: any) => {
     setTimeout(() => {
       dispatch(deviceSettingsResetDataAction());
       NavigationService.resetAllAction('DeviceSearching');
-    }, 1000);
+    }, 1);
   };
 
   return (

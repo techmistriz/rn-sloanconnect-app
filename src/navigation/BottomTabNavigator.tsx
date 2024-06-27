@@ -204,7 +204,7 @@ const CustomTabBar = ({state, descriptors, navigation}: any) => {
         }}
         onOkayPress={() => {
           setDisconnectModal(false);
-          NavigationService.resetAllAction('DeviceDisconnect');
+          NavigationService.navigate('DeviceDisconnect');
         }}
       />
     </View>

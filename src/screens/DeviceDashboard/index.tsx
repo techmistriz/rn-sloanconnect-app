@@ -1356,7 +1356,7 @@ const Index = ({navigation}: any) => {
           applyLoadPreviosSettings();
         }}
       />
-      <AlertBox
+      {/* <AlertBox
         visible={disconnectModal}
         title="Disconnect"
         message={'Are you sure you want to disconnect?'}
@@ -1367,7 +1367,7 @@ const Index = ({navigation}: any) => {
           setDisconnectModal(false);
           NavigationService.resetAllAction('DeviceDisconnectStack');
         }}
-      />
+      /> */}
       {/* <LoaderOverlay2 loading={applying} loadingText={applyingLoadingText} /> */}
     </AppContainer>
   );
