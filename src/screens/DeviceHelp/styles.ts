@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     // paddingHorizontal: 20,
     // marginTop: 20,
-    // marginBottom: 70,
+    marginBottom: 40,
   },
   sectionContainer: {
     flex: 1,
