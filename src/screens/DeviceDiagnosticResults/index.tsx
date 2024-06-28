@@ -155,7 +155,7 @@ const Index = ({navigation, route}: any) => {
             </Wrap>
 
             {/* Previous Diagnostic */}
-            {waterDispensed == 1 && sensorResult?.value == '0' && (
+            {waterDispensed == 1 && (
               <>
                 <Wrap autoMargin={false} style={styles.container}>
                   <Row autoMargin={false} style={{}}>
@@ -211,7 +211,7 @@ const Index = ({navigation, route}: any) => {
               </>
             )}
 
-            <Wrap
+            {/* <Wrap
               autoMargin={true}
               style={[styles.container, styles.screenMargin]}>
               <Row autoMargin={false} style={{}}>
@@ -240,9 +240,9 @@ const Index = ({navigation, route}: any) => {
                   />
                 </Col>
               </Row>
-            </Wrap>
+            </Wrap> */}
 
-            <Wrap
+            {/* <Wrap
               autoMargin={true}
               style={[styles.container, styles.screenMargin]}>
               <Row autoMargin={false} style={{}}>
@@ -279,6 +279,29 @@ const Index = ({navigation, route}: any) => {
                   />
                 </Col>
               </Row>
+            </Wrap> */}
+
+            <Wrap
+              autoMargin={true}
+              style={[
+                styles.container,
+                styles.screenMargin,
+                {paddingBottom: 10},
+              ]}>
+              <Button
+                type={'link'}
+                title={'TROUBLESHOOT'}
+                onPress={() => {
+                  NavigationService.navigate('DeviceDiagnosticTroubleshoot');
+                }}
+                textStyle={{
+                  fontSize: 12,
+                  fontFamily: Theme.fonts.ThemeFontMedium,
+                }}
+                style={{
+                  borderColor: Theme.colors.primaryColor,
+                }}
+              />
             </Wrap>
 
             <Wrap

@@ -4,8 +4,8 @@ import Theme from 'src/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    marginTop: 20,
+    // paddingHorizontal: 20,
+    // marginTop: 20,
     // marginBottom: 70,
   },
   sectionContainer: {
@@ -40,5 +40,10 @@ export const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'green'
     // marginBottom: 90,
+  },
+
+  a: {
+    fontWeight: '300',
+    color: '#FF3366', // make links coloured pink
   },
 });

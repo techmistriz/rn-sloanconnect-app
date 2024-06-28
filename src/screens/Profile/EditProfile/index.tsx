@@ -67,8 +67,11 @@ const Index = ({route, navigation}: any) => {
   const [countriesMaster, setCountriesMaster] = useState([]);
   const [statesDropdownModal, setStatesDropdownModal] = useState(false);
   const [statesMaster, setStatesMaster] = useState([]);
-
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  /**
+   * Hooks method for keyboard listner
+   */
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -218,22 +221,19 @@ const Index = ({route, navigation}: any) => {
     } else if (phoneNumber.trim() === '') {
       showSimpleAlert('Please enter your phone number');
       return false;
-    } else if (password.trim() == '') {
-      showSimpleAlert('Please enter your password');
-      return false;
-    } else if (password.trim().length < 6) {
+    } else if (password.trim() && password.trim().length < 6) {
       showSimpleAlert('Password must contain at least minimum 6 characters');
       return false;
-    } else if (passwordConfirmation.trim() == '') {
+    } else if (password.trim() && passwordConfirmation.trim() == '') {
       showSimpleAlert('Please enter your confirm password');
       return false;
     } else if (password.trim() !== passwordConfirmation.trim()) {
       showSimpleAlert('Password and confirm password should same');
       return false;
-    } else if (country?.name === '') {
+    } else if (!country?.name) {
       showSimpleAlert('Please select your country');
       return false;
-    } else if (statesMaster?.length > 0 && state?.name === '') {
+    } else if (statesMaster?.length > 0 && !state?.name) {
       showSimpleAlert('Please select your state');
       return false;
     } else if (statesMaster?.length == 0 && stateInput?.trim() === '') {
@@ -651,7 +651,26 @@ const Index = ({route, navigation}: any) => {
                     rightStyle={{right: 0}}
                   />
                 </Wrap>
+
+                {/* <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Typography
+                    size={13}
+                    text="If you want to change the password please fill it, otherwise leave it blank"
+                    style={{}}
+                    // color={Theme.colors.primaryColor}
+                    ff={Theme.fonts.ThemeFontMedium}
+                  />
+                </Wrap> */}
+
                 <Wrap autoMargin={false} style={styles.inputWrapper}>
+                  <Typography
+                    size={13}
+                    text="If you want to change the password please fill it, otherwise leave it blank"
+                    style={{}}
+                    // color={Theme.colors.primaryColor}
+                    ff={Theme.fonts.ThemeFontMedium}
+                  />
+
                   <Input
                     onRef={input => {
                       // @ts-ignore

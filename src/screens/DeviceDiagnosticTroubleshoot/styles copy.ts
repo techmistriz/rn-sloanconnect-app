@@ -4,7 +4,9 @@ import Theme from 'src/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingHorizontal: 20,
+    paddingHorizontal: 20,
+    marginTop: 20,
+    // marginBottom: 70,
   },
   sectionContainer: {
     flex: 1,
@@ -15,22 +17,22 @@ export const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 30,
+    // marginBottom: 30,
   },
   formWrapper: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: Theme.colors.midGray,
-    backgroundColor: 'white',
-    borderRadius: 15,
+    // borderWidth: 1,
+    // borderColor: Theme.colors.midGray,
+    // backgroundColor: 'white',
+    // borderRadius: 15,
     padding: 20,
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
+    // shadowColor: '#171717',
+    // shadowOffset: {width: -2, height: 4},
+    // shadowOpacity: 0.2,
+    // shadowRadius: 3,
+    // elevation: 3,
     overflow: 'hidden',
-    marginBottom: 40,
+    // marginBottom: 40,
   },
   inputWrapper: {
     paddingBottom: 10,
@@ -38,5 +40,10 @@ export const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'green'
     // marginBottom: 90,
+  },
+
+  a: {
+    fontWeight: '300',
+    color: '#FF3366', // make links coloured pink
   },
 });

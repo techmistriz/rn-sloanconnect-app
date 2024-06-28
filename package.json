@@ -16,6 +16,7 @@
     "release-bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/ && rm -rf android/app/src/main/res/raw/* && cd android && ./gradlew bundleRelease && cd .."
   },
   "dependencies": {
+    "@jtreact/react-native-render-html": "^6.3.6",
     "@notifee/react-native": "^7.8.2",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-async-storage/async-storage": "^1.21.0",
@@ -33,6 +34,7 @@
     "@react-navigation/native-stack": "^6.9.18",
     "@shopify/flash-list": "^1.6.3",
     "@twotalltotems/react-native-otp-input": "^1.3.11",
+    "@types/react-native-htmlview": "^0.16.5",
     "axios": "^1.6.7",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
