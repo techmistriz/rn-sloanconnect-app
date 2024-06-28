@@ -1,42 +1,18 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
-  StyleSheet,
-  View,
   Image,
-  Text,
-  Alert,
-  Platform,
-  Keyboard,
   ScrollView,
 } from 'react-native';
 import {Images} from 'src/assets';
-import {Button} from 'src/components/Button';
-import Input from 'src/components/InputPaper';
 import Typography from 'src/components/Typography';
 import Theme from 'src/theme';
 import AppContainer from 'src/components/AppContainer';
-import {Wrap, Row} from 'src/components/Common';
-import TouchableItem from 'src/components/TouchableItem';
+import {Wrap} from 'src/components/Common';
 import {styles} from './styles';
 import {
-  showToastMessage,
-  consoleLog,
-  showSimpleAlert,
-  isValidEmail,
-  showConfirmAlert,
   getImgSource,
 } from 'src/utils/Helpers/HelperFunction';
-import {constants} from 'src/common';
-import {
-  loginRequestAction,
-} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
-import NavigationService from 'src/services/NavigationService/NavigationService';
-import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
-import VectorIcon from 'src/components/VectorIcon';
-import Copyright from 'src/components/@ProjectComponent/Copyright';
-import {helpData} from 'src/utils/StaticData/StaticData';
 import Divider from 'src/components/Divider';
 import AppInfo from 'src/components/@ProjectComponent/AppInfo';
 

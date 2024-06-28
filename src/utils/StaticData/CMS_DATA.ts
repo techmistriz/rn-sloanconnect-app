@@ -437,7 +437,7 @@ export const FAQS_HTML = {
           <div class="feature-txt">
               <img
                   src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAACtklEQVR4Ae3ZAUdrYRzH8YeFhrj0FgIIUO4llrDuqxjj3nurpXRL1RV2Z+wA2IzeQBAIMGeEMAiQMXBhrMBUwBzb7vfSOI7nnP/OOc/moB+fQ+08Tz/Vtud5prwZj8cLyKGBLgZ4go0C0mqO4eeto4mSdKMFv/SQnUPZVdzCHbF4GX4ZIj+jsiu4xhC6iMWL8IuDjOHCX+AgKE3FZUGY6BJ+aSNlsHQTUtYVlxwsYbJz+GXbUOENSLmd3NzA/5SFSSvQpWao9B2CMsTq5OYuJikGTLqIV3hjGyi8CSnX7gEDuHMZMPkjvOkYKH2PoDhYcQ94hjfnmomX8QJvWjEL7yEoTXz2DrKhSwWL7/cs4Qa6VGMULsAvd9iIMrCPB7zBL/WIhQ+gyz02pcFp9BAnpZCFj+DNCHthJsliOI/i3HcCXQpR/lx5OLMszuNn0OUgzjM5g/YsivP939DlyMQ7UwrbqMFGBy1UUY9SnK+3oMvxvBblpYjFLbhzqoQkrfiFEpK04ltKSHKKJyAfxT+KCyUvYCWzuPB2nIzicuFTEJLE4sIKLfnFmfwYQiIXr6OKFjqwUcM2UkqOtGg3X1xIG5mwhQ8RJheKGC7uIB95HyfkLPrruJghslLhfQgRlprmi/eQDr9D1+dETRlhI/GGB/Thl4Ju0l2Eya+Qz5EqdLnBkusIrgJdbO+EOxhBSPT9HWNa8OYFy1Oe1j65b/gZsvBhxJfPDrx5DHE+Ppg88F0uHG/LLxzDvWIxYMwfTNJVXNZCnnfsx3xnrUGXypSfATXkjwykZ2740l/hl3NhrIWc4tKHlBF2Da1hUsKB0KUwfkFx+SsVxo7hxVdG+JcsShNcCYV/zGjVmBcOPctBgz/5/LYdfJvx+jwrHDNbUvGr9/J9NLE2p51QGgXYeMYAXTSQ033O+Q8l3AlHMjOkFwAAAABJRU5ErkJggg==">
-              <h1 style="text-align:center; color:white">Troubleshooting</h1>
+              <h1 style="text-align:center; color:white">Help</h1>
           </div>
       </div>
         <div class="faqs" style="padding:30px">

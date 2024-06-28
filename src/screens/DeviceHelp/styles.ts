@@ -4,9 +4,9 @@ import Theme from 'src/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 70,
+    // paddingHorizontal: 20,
+    // marginTop: 20,
+    // marginBottom: 70,
   },
   sectionContainer: {
     flex: 1,

@@ -8,10 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import RenderHtml from '@jtreact/react-native-render-html';
 import {constants} from 'src/common';
-import {
-  EULA_HTML,
-} from 'src/utils/StaticData/CMS_DATA';
-
+import {EULA_HTML} from 'src/utils/StaticData/CMS_DATA';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -31,17 +28,12 @@ const Index = ({route, navigation}: any) => {
 
   return (
     <AppContainer
-      scroll={false}
+      scroll={true}
       loading={loading}
       scrollViewStyle={{}}
       hasHeader={false}>
       <Wrap autoMargin={false} style={styles.container}>
-      <Wrap autoMargin={false} style={styles.container}>
-        <RenderHtml
-          contentWidth={constants.screenWidth}
-          source={EULA_HTML}
-        />
-      </Wrap>
+        <RenderHtml contentWidth={constants.screenWidth} source={EULA_HTML} />
       </Wrap>
     </AppContainer>
   );
