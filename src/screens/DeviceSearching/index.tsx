@@ -544,7 +544,7 @@ const Index = ({navigation, route}: any) => {
                 ListHeaderComponent={flatListHeader}
                 ListFooterComponent={() => null}
                 contentContainerStyle={[
-                  {paddingBottom: 10},
+                  {paddingBottom: 60},
                   foundDevices.length == 0 && {flex: 1},
                 ]}
                 ListEmptyComponent={() => (
