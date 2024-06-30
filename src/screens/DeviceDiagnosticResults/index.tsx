@@ -21,6 +21,8 @@ import DiagnosticResultsList from 'src/components/@ProjectComponent/DiagnosticRe
 import InfoBox from 'src/components/InfoBox';
 import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import {readingDiagnostic} from '../DeviceDiagnostics/helperGen1';
+import {BackHandler} from 'react-native';
+import Header from 'src/components/Header';
 
 const Index = ({navigation, route}: any) => {
   const {
@@ -35,6 +37,34 @@ const Index = ({navigation, route}: any) => {
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
   const [infoModal, setInfoModal] = useState<boolean>(false);
+
+  /** component hooks method for hardwareBackPress */
+  useEffect(() => {
+    const backAction = () => {
+      if (navigation.isFocused()) {
+        NavigationService.pop(2);
+        return true;
+      }
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
+
+  /** component hooks method for dynamic header for back button */
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <Header
+          onBackButtonPress={() => {
+            NavigationService.pop(2);
+          }}
+        />
+      ),
+    });
+  }, []);
 
   useEffect(() => {
     // consoleLog('DeviceDiagnosticResults useEffect==>', {
@@ -52,6 +82,7 @@ const Index = ({navigation, route}: any) => {
     if (BLEService.deviceGeneration == 'gen1') {
       initlizeAppGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
+      initlizeAppGen2();
     } else if (BLEService.deviceGeneration == 'gen3') {
       // Code need to be implemented
     } else if (BLEService.deviceGeneration == 'gen4') {
@@ -65,12 +96,17 @@ const Index = ({navigation, route}: any) => {
     }
   };
 
+  const initlizeAppGen2 = async () => {
+    if (waterDispensed == 1 && sensorResult?.value == '0') {
+      setInfoModal(true);
+    }
+  };
+
   return (
     <AppContainer
       scroll={true}
       scrollViewStyle={{}}
       backgroundType="solid"
-      hasBackButton={true}
       loading={loading}
       headerContainerStyle={{
         backgroundColor: Theme.colors.primaryColor,
@@ -116,7 +152,9 @@ const Index = ({navigation, route}: any) => {
                     <Typography
                       size={10}
                       text={`DIAGNOSTIC RESULTS ${
-                        dateResult?.value && dateResult?.value > 0
+                        dateResult?.value &&
+                        dateResult?.value > 0 &&
+                        dateResult?.value?.toString()?.length > 6
                           ? parseDateHumanFormatFromUnix(
                               dateResult?.value,
                               'ddd, DD MMMM YYYY HH:MM:SS a z',
@@ -168,7 +206,9 @@ const Index = ({navigation, route}: any) => {
                         <Typography
                           size={10}
                           text={`LAST DIAGNOSTIC RESULTS ${
-                            dateLastResult?.value && dateLastResult?.value > 0
+                            dateLastResult?.value &&
+                            dateLastResult?.value > 0 &&
+                            dateLastResult?.value?.toString()?.length > 6
                               ? parseDateHumanFormatFromUnix(
                                   dateLastResult?.value,
                                   'ddd, DD MMMM YYYY HH:MM:SS a z',
@@ -305,7 +345,7 @@ const Index = ({navigation, route}: any) => {
             </Wrap>
 
             <Wrap
-              autoMargin={true}
+              autoMargin={false}
               style={[
                 styles.container,
                 styles.screenMargin,
@@ -333,6 +373,7 @@ const Index = ({navigation, route}: any) => {
         visible={infoModal}
         title="Hint"
         message={`If water was dispensed continously\nbefore running diagnostic, the\nsolenoid is probably faulty.`}
+        messageStyle={{textAlign: 'center'}}
         onOkayPress={() => {
           setInfoModal(false);
         }}

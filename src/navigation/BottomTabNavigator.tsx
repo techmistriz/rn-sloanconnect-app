@@ -45,6 +45,8 @@ const DeviceDashboardStack = (props: any) => {
 const DeviceDiagnosticsStack = (props: any) => {
   return (
     <Stack.Navigator>
+
+      {/* Create fake screen for bottom tabs  */}
       <Stack.Screen
         name="DeviceDiagnostics"
         component={DeviceDiagnostics}
@@ -53,7 +55,7 @@ const DeviceDiagnosticsStack = (props: any) => {
           header: () => <Header />,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="DeviceDiagnosticResults"
         component={DeviceDiagnosticResults}
         options={{
@@ -68,7 +70,7 @@ const DeviceDiagnosticsStack = (props: any) => {
           headerShown: true,
           header: () => <Header />,
         }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };

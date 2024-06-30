@@ -33,7 +33,19 @@ const DiagnosticResultsList = ({
 
         <Wrap autoMargin={false} style={styles.rightStyle}>
           <Row autoMargin={false} style={styles.innerRow}>
-            {!item?.forceText && item?.value == '1' ? (
+            {!item?.forceText &&
+            item?.value == '2' &&
+            item?.name == 'Turbine' ? (
+              <Typography
+                size={12}
+                text={`N/A`}
+                style={{
+                  textAlign: 'right',
+                }}
+                color={Theme.colors.midGray}
+                ff={Theme.fonts.ThemeFontMedium}
+              />
+            ) : !item?.forceText && item?.value == '1' ? (
               <VectorIcon
                 iconPack="MaterialCommunityIcons"
                 name={'check'}

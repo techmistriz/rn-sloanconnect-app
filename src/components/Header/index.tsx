@@ -7,7 +7,11 @@ import {Icons, Images} from 'src/assets';
 import {Wrap, Row} from 'src/components/Common';
 import Typography from 'src/components/Typography';
 import TouchableItem from 'src/components/TouchableItem';
-import {getImgSource, showConfirmAlert} from 'src/utils/Helpers/HelperFunction';
+import {
+  consoleLog,
+  getImgSource,
+  showConfirmAlert,
+} from 'src/utils/Helpers/HelperFunction';
 import {
   deviceSettingsResetDataAction,
   loginResetDataAction,
@@ -72,6 +76,8 @@ const Header = ({
     } catch (error) {}
   };
 
+  consoleLog('Header onBackButtonPress==>', onBackButtonPress);
+
   return (
     <Row
       autoMargin={false}
@@ -116,8 +122,9 @@ const Header = ({
           <TouchableItem
             borderless={true}
             onPress={() => {
-              NavigationService.goBack();
-              onBackButtonPress && onBackButtonPress();
+              onBackButtonPress
+                ? onBackButtonPress()
+                : NavigationService.goBack();
             }}
             style={{}}>
             <VectorIcon

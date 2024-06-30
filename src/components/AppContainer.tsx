@@ -7,6 +7,7 @@ import LoaderOverlay from './LoaderOverlay';
 import LinearGradient from 'react-native-linear-gradient';
 import Header from 'src/components/Header';
 import {Wrap, Row} from 'src/components/Common';
+import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 
 // AppContainer Props
 type AppContainerProps = {
@@ -22,31 +23,34 @@ type AppContainerProps = {
   headerContainerStyle?: ViewStyle;
   headerLeftStyle?: ViewStyle;
   headerRightStyle?: ViewStyle;
-  haslogOutButton?: boolean;
-  hasBackButton?: boolean;
-  hasLeftButton?: boolean;
-  hasRightButton?: boolean;
   hasHeader?: boolean;
-  onLeftPress?: any;
-  onRightPress?: any;
-  onLogoutPress?: any;
-  onBackPress?: any;
+  // haslogOutButton?: boolean;
+  // hasBackButton?: boolean;
+  // hasLeftButton?: boolean;
+  // hasRightButton?: boolean;
+  // onLeftPress?: any;
+  // onRightPress?: any;
+  // onLogoutPress?: any;
+  // onBackPress?: any;
 };
 
 // AppContainer
-const AppContainer = ({
-  children,
-  safeAreaViewStyle = {},
-  scrollViewStyle = {},
-  scrollViewContentContainerStyle = {},
-  bottomGutter = 0,
-  scroll = true,
-  loading = false,
-  loadingText = 'Loading...',
-  backgroundType = 'solid',
-  hasHeader = false,
-  ...rest
-}: AppContainerProps) => {
+const AppContainer = (props: AppContainerProps) => {
+  const {
+    children,
+    safeAreaViewStyle = {},
+    scrollViewStyle = {},
+    scrollViewContentContainerStyle = {},
+    bottomGutter = 0,
+    scroll = true,
+    loading = false,
+    loadingText = 'Loading...',
+    backgroundType = 'solid',
+    hasHeader = false,
+    ...rest
+  } = props;
+  // consoleLog('AppContainer props==>', props);
+
   return (
     <SafeAreaView
       edges={['left', 'right']}
@@ -56,13 +60,13 @@ const AppContainer = ({
           {backgroundType == 'solid' ? (
             <View style={styles.linearGradient}>
               <ScrollView
-                keyboardShouldPersistTaps={"never"}
+                keyboardShouldPersistTaps={'never'}
                 style={[styles.__scrollViewStyle, scrollViewStyle]}
                 contentContainerStyle={[
                   styles.__scrollViewContentContainerStyle,
                   scrollViewContentContainerStyle,
                 ]}>
-                {hasHeader && <Header {...rest} />}
+                {hasHeader && <Header {...props} />}
 
                 {children}
                 {bottomGutter > 0 && (
@@ -81,13 +85,13 @@ const AppContainer = ({
               ]}
               style={styles.linearGradient}>
               <ScrollView
-                keyboardShouldPersistTaps={"never"}
+                keyboardShouldPersistTaps={'never'}
                 style={[styles.__scrollViewStyle, scrollViewStyle]}
                 contentContainerStyle={[
                   styles.__scrollViewContentContainerStyle,
                   scrollViewContentContainerStyle,
                 ]}>
-                {hasHeader && <Header {...rest} />}
+                {hasHeader && <Header {...props} />}
                 {children}
                 {bottomGutter > 0 && (
                   <View style={{height: bottomGutter}}></View>
@@ -101,7 +105,7 @@ const AppContainer = ({
           {backgroundType == 'solid' ? (
             <View style={styles.linearGradient}>
               <View style={[styles.__scrollViewStyle, scrollViewStyle]}>
-                {hasHeader && <Header {...rest} />}
+                {hasHeader && <Header {...props} />}
                 {children}
                 {bottomGutter > 0 && (
                   <View style={{height: bottomGutter}}></View>
@@ -119,7 +123,7 @@ const AppContainer = ({
               ]}
               style={styles.linearGradient}>
               <View style={[styles.__scrollViewStyle, scrollViewStyle]}>
-                {hasHeader && <Header {...rest} />}
+                {hasHeader && <Header {...props} />}
                 {children}
                 {bottomGutter > 0 && (
                   <View style={{height: bottomGutter}}></View>

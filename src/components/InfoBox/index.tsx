@@ -26,6 +26,7 @@ const Index = ({
   message,
   okayText = 'OK',
   onOkayPress,
+  messageStyle,
 }: any) => {
   /**component render method */
   return (
@@ -55,7 +56,7 @@ const Index = ({
                 },
               ]}>
               <Text style={styles.title}>{title || constants.APP_NAME}</Text>
-              <Text style={styles.message}>{message}</Text>
+              <Text style={[styles.message, messageStyle]}>{message}</Text>
             </View>
             <View style={styles.btnWrap}>
               <Button

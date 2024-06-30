@@ -203,7 +203,9 @@ const Index = ({navigation, route}: any) => {
           '0',
         );
 
-        NavigationService.navigate('DeviceHelpStack');
+        NavigationService.navigate('DeviceDiagnosticTroubleshoot', {
+          referrer: 'DeviceDiagnostics',
+        });
       }
     } else if (BLEService.deviceGeneration == 'gen2') {
       if (waterDispensed) {
@@ -212,7 +214,9 @@ const Index = ({navigation, route}: any) => {
           finishDiagnosticsGen2(waterDispensed);
         }, 1000);
       } else {
-        NavigationService.navigate('DeviceHelpStack');
+        NavigationService.navigate('DeviceDiagnosticTroubleshoot', {
+          referrer: 'DeviceDiagnostics',
+        });
       }
     } else if (BLEService.deviceGeneration == 'gen3') {
       // Code need to be implemented
