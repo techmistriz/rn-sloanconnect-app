@@ -28,6 +28,7 @@ function* __userProfileRequestSaga({
           user: response,
         }),
       );
+      showToastMessage("Profile updated successfully");
       NavigationService.goBack();
     } else {
       yield put(userProfileFailureAction({}));

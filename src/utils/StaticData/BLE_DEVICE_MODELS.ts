@@ -359,7 +359,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'UNKNOWN',
       type: 'ADSKU',
       version: '00',
-      generation: '01',
+      generation: '02',
       models: [
         {
           ETFModel: 'UNKNOWN FAUCET',
