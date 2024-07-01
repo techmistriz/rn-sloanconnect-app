@@ -221,15 +221,6 @@ const Index = ({route, navigation}: any) => {
     } else if (phoneNumber.trim() === '') {
       showSimpleAlert('Please enter your phone number');
       return false;
-    } else if (password.trim() && password.trim().length < 6) {
-      showSimpleAlert('Password must contain at least minimum 6 characters');
-      return false;
-    } else if (password.trim() && passwordConfirmation.trim() == '') {
-      showSimpleAlert('Please enter your confirm password');
-      return false;
-    } else if (password.trim() !== passwordConfirmation.trim()) {
-      showSimpleAlert('Password and confirm password should same');
-      return false;
     } else if (!country?.name) {
       showSimpleAlert('Please select your country');
       return false;
@@ -251,9 +242,23 @@ const Index = ({route, navigation}: any) => {
     } else if (timezone?.format === '') {
       showSimpleAlert('Please enter your address');
       return false;
-    } else {
-      return true;
     }
+
+    let isPasswordFilled = password.trim().length;
+    if (isPasswordFilled > 0) {
+      if (password.trim() && password.trim().length < 6) {
+        showSimpleAlert('Password must contain at least minimum 6 characters');
+        return false;
+      } else if (password.trim() && passwordConfirmation.trim() == '') {
+        showSimpleAlert('Please enter your confirm password');
+        return false;
+      } else if (password.trim() !== passwordConfirmation.trim()) {
+        showSimpleAlert('Password and confirm password should same');
+        return false;
+      }
+    }
+
+    return true;
   };
 
   /**
@@ -665,9 +670,9 @@ const Index = ({route, navigation}: any) => {
                 <Wrap autoMargin={false} style={styles.inputWrapper}>
                   <Typography
                     size={13}
-                    text="If you want to change the password please fill it, otherwise leave it blank"
-                    style={{}}
-                    // color={Theme.colors.primaryColor}
+                    text="If you wish to change the password, please fill in the below field; otherwise, leave it empty."
+                    style={{paddingLeft: 5}}
+                    color={Theme.colors.darkGray}
                     ff={Theme.fonts.ThemeFontMedium}
                   />
 
@@ -745,7 +750,7 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 20}]}>
                 <Button
-                  title="Update"
+                  title="Update Profile"
                   onPress={() => {
                     onUpdateProfilePress();
                   }}
