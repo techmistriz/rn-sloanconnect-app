@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {constants} from 'src/common';
 import Theme from 'src/theme';
 
 export const styles = StyleSheet.create({
@@ -14,24 +15,27 @@ export const styles = StyleSheet.create({
     // borderColor: 'green',
   },
   section1: {
-    flex: 2.5, // enabled due to scroll view
+    flex: 1, // enabled due to scroll view
     // justifyContent: 'flex-end',
     // borderWidth: 1,
-    // borderColor: 'red',
+    // borderColor: 'yellow',
   },
   section2: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingBottom: 20,
+    paddingTop: 15,
+    paddingBottom: 15,
+    // borderWidth: 1,
+    // borderColor: 'pink',
   },
   imageContainer: {
     // flex: 1,
     alignItems: 'center',
     // justifyContent: 'flex-end',
     // borderWidth: 1,
-    marginTop: 20,
-    marginBottom: 30,
+    // marginTop: 20,
+    marginBottom: 20,
   },
   formWrapper1: {
     backgroundColor: 'white',
@@ -48,7 +52,8 @@ export const styles = StyleSheet.create({
     borderColor: Theme.colors.midGray,
     backgroundColor: 'white',
     borderRadius: 15,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     shadowColor: '#171717',
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
@@ -71,5 +76,12 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     paddingRight: 0,
     paddingLeft: 0,
+  },
+  textInputBase: {
+    flex: 1,
+    fontSize: 16,
+    paddingRight: 15,
+    paddingLeft: 15,
+    height: 48,
   },
 });
