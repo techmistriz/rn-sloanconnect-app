@@ -3,7 +3,11 @@ import {Image, FlatList} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch} from 'react-redux';
-import {consoleLog, getImgSource} from 'src/utils/Helpers/HelperFunction';
+import {
+  consoleLog,
+  getImgSource,
+  showToastMessage,
+} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import TouchableItem from 'src/components/TouchableItem';
@@ -195,7 +199,7 @@ const Index = ({navigation, route}: any) => {
   const addFoundDevice = (__device: DeviceExtendedProps) => {
     // {"deviceCustomName": "FAUCET ETF610 / EBF615, ETF600 / EBF650 T0224 ", "localName": "FAUCET ADSKU02 T0224"}
     const device = filterBLEDevices(__device);
-    // consoleLog('addFoundDevice device==>', device);
+    consoleLog('addFoundDevice device==>', device);
     // const device = __device;
     // device.deviceCustomName = device?.localName ?? 'Unknown';
     // consoleLog('addFoundDevice device names==>', {
@@ -322,7 +326,10 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const onConnectFail = (error: any) => {
     consoleLog('onConnectFail error==>', error);
-    // NavigationService.navigate('BottomTabNavigator');
+    showToastMessage(
+      'Looks like BD closed the bluetooth connection, please retry',
+    );
+    initlizeApp();
   };
 
   /**Child flatlist render method */
