@@ -650,7 +650,7 @@ const requestLocationPermissions = () => {
         }
         if (PERM_STATUS === PERMISSIONS_RESULTS.BLOCKED) {
           resolve(PERM_STATUS);
-          permissionDeniedBlockedAlert();
+          // permissionDeniedBlockedAlert();
         } else {
           resolve(PERM_STATUS);
         }
@@ -864,7 +864,7 @@ const requestBluetoothPermissions = () => {
         }
         if (PERM_STATUS === PERMISSIONS_RESULTS.BLOCKED) {
           resolve(PERM_STATUS);
-          permissionDeniedBlockedAlert();
+          // permissionDeniedBlockedAlert();
         } else {
           resolve(PERM_STATUS);
         }
@@ -968,6 +968,7 @@ const resolvePermision = (permissions: Array<any>) => {
 
 export {
   PERMISSIONS_RESULTS,
+  openSettings,
   requestGeoLocationPermission,
   checkCameraPermissions,
   requestCameraPermissions,

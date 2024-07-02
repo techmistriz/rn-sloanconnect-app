@@ -723,13 +723,12 @@ const Index = ({navigation, route}: any) => {
         autoMargin={false}
         style={{
           position: 'absolute',
-          bottom: 70,
+          bottom: constants.BOTTOM_TAB_HEIGHT + 10,
           width: '100%',
           paddingHorizontal: 20,
           zIndex: 1,
         }}>
         <Button
-          // type={'link'}
           title={viewAdvanceDetails ? 'DONE' : 'VIEW ADVANCE DETAILS'}
           onPress={() => {
             setViewAdvanceDetails(!viewAdvanceDetails);
@@ -745,7 +744,6 @@ const Index = ({navigation, route}: any) => {
         />
       </Wrap>
       <LoaderOverlay loading={loading} />
-      {/* <DeviceBottomTab tabs={TABS} /> */}
     </>
   );
 };

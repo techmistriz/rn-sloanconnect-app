@@ -86,6 +86,21 @@ const Index = ({navigation}: any) => {
   const [sensorSettings, setSensorSettings] = useState<any>();
   const [noteSettings, setNoteSettings] = useState<any>();
 
+  /** component hooks method for hardwareBackPress */
+  useEffect(() => {
+    const backAction = () => {
+      if (navigation.isFocused()) {
+        setDisconnectModal(true);
+        return true;
+      }
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
+
   /** component hooks method for device disconnect checking */
   useEffect(() => {
     const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
@@ -106,21 +121,6 @@ const Index = ({navigation}: any) => {
     );
 
     return () => deviceDisconnectionListener?.remove();
-  }, []);
-
-  /** component hooks method for hardwareBackPress */
-  useEffect(() => {
-    const backAction = () => {
-      if (navigation.isFocused()) {
-        setDisconnectModal(true);
-        return true;
-      }
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-    return () => backHandler.remove();
   }, []);
 
   /** component hooks method for focus*/
@@ -1356,7 +1356,7 @@ const Index = ({navigation}: any) => {
           applyLoadPreviosSettings();
         }}
       />
-      {/* <AlertBox
+      <AlertBox
         visible={disconnectModal}
         title="Disconnect"
         message={'Are you sure you want to disconnect?'}
@@ -1365,9 +1365,9 @@ const Index = ({navigation}: any) => {
         }}
         onOkayPress={() => {
           setDisconnectModal(false);
-          NavigationService.resetAllAction('DeviceDisconnectStack');
+          NavigationService.navigate('DeviceDisconnect');
         }}
-      /> */}
+      />
       {/* <LoaderOverlay2 loading={applying} loadingText={applyingLoadingText} /> */}
     </AppContainer>
   );

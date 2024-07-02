@@ -16,6 +16,7 @@ import Typography from 'src/components/Typography';
 import AlertBox from 'src/components/AlertBox';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Header from 'src/components/Header';
+import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,7 +46,6 @@ const DeviceDashboardStack = (props: any) => {
 const DeviceDiagnosticsStack = (props: any) => {
   return (
     <Stack.Navigator>
-
       {/* Create fake screen for bottom tabs  */}
       <Stack.Screen
         name="DeviceDiagnostics"
@@ -143,13 +143,17 @@ const CustomTabBar = ({state, descriptors, navigation}: any) => {
             target: route.key,
           });
 
+          const currentRoute = NavigationService?.getCurrentRoute();
+
           if (!isFocused && !event.defaultPrevented) {
-            // We are not using DeviceDiagnosticsStack & DeviceDisconnectStack due to bottom tabs
+            // We are not using DeviceDiagnosticsStack & DeviceDisconnectStack due to bottom tabs UI
             // We don't use bottom tab on DeviceDiagnostics & DeviceDisconnect
             if (route?.name == 'DeviceDisconnectStack') {
               setDisconnectModal(true);
             } else if (route?.name == 'DeviceDiagnosticsStack') {
-              navigation.navigate('DeviceDiagnostics');
+              navigation.navigate('DeviceDiagnostics', {
+                previousScreen: currentRoute?.name ?? undefined,
+              });
             } else {
               navigation.navigate(route.name);
             }
@@ -167,6 +171,7 @@ const CustomTabBar = ({state, descriptors, navigation}: any) => {
               style={{
                 flex: 1,
                 width: '100%',
+                paddingBottom: 20,
                 backgroundColor: isFocused
                   ? Theme.colors.tabActiveBGColor
                   : Theme.colors.tabBGColor,
@@ -277,7 +282,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignSelf: 'center',
     position: 'absolute',
-    height: 60,
+    height: constants.BOTTOM_TAB_HEIGHT,
     width: constants.screenWidth,
     bottom: 0,
     backgroundColor: Theme.colors.tabContainerBGColor,

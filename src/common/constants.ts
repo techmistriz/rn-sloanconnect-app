@@ -3,6 +3,7 @@ import DeviceInfo from 'react-native-device-info';
 
 const HAS_NOTCH = DeviceInfo.hasNotch();
 const NOTCH_HEIGHT = 60;
+const BOTTOM_TAB_HEIGHT = 80;
 const isIOS = Platform.OS === 'ios';
 const isAndroid = Platform.OS === 'android';
 const {width, height} = Dimensions.get('window');
@@ -94,6 +95,7 @@ const common = {
   RELEASE_DATE,
   HAS_NOTCH,
   NOTCH_HEIGHT,
+  BOTTOM_TAB_HEIGHT
 };
 
 /**constants used in app */

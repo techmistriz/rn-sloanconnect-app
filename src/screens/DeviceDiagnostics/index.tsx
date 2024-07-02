@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image} from 'react-native';
+import {BackHandler, Image} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {
@@ -34,6 +34,39 @@ const Index = ({navigation, route}: any) => {
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
   const [diagnosticResults, setDiagnosticResults] = useState<any>([]);
+  const {referrer, previousScreen} = route?.params || {
+    referrer: undefined,
+    previousScreen: undefined,
+  };
+
+  /** component hooks method for hardwareBackPress */
+  useEffect(() => {
+    // consoleLog('previousScreen==>', previousScreen);
+    // const navigationState = NavigationService?.getState();
+    // const currentRouteNested =
+    //   NavigationService?.getCurrentRouteNested(navigationState);
+    // consoleLog('NavigationService navigationState==>', JSON.stringify(navigationState));
+    // consoleLog(
+    //   'NavigationService currentRouteNested==> ',
+    //   JSON.stringify(currentRouteNested),
+    // );
+
+    const backAction = () => {
+      if (navigation.isFocused()) {
+        if (previousScreen != 'DeviceDashboard') {
+          NavigationService.replace('BottomTabNavigator');
+        } else {
+          NavigationService.goBack();
+        }
+        return true;
+      }
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
 
   /** Function comments */
   useEffect(() => {
@@ -285,6 +318,8 @@ const Index = ({navigation, route}: any) => {
       // consoleLog("sensorResult==>", sensorResult);
       setLoading(false);
       NavigationService.navigate('DeviceDiagnosticResults', {
+        referrer: 'DeviceDiagnostic',
+        previousScreen: previousScreen,
         previousDiagnosticResults: diagnosticResults,
         diagnosticResults: RESULTS,
         waterDispensed: waterDispensed,
@@ -352,6 +387,8 @@ const Index = ({navigation, route}: any) => {
       // return false;
 
       NavigationService.navigate('DeviceDiagnosticResults', {
+        referrer: 'DeviceDiagnostic',
+        previousScreen: previousScreen,
         previousDiagnosticResults: diagnosticResults,
         diagnosticResults: RESULTS,
         waterDispensed: waterDispensed,

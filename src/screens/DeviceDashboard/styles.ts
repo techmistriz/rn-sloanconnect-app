@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { constants } from 'src/common';
 import Theme, {hexToRGBA} from 'src/theme';
 
 export const styles = StyleSheet.create({
@@ -7,7 +8,7 @@ export const styles = StyleSheet.create({
     // paddingHorizontal: Theme.Layout.MEDIUM_PADDING,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 70,
+    marginBottom: constants.BOTTOM_TAB_HEIGHT,
     // borderWidth: 1,
     // borderColor: 'red',
     overflow: 'hidden',

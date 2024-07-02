@@ -51,7 +51,7 @@ function replace(routeName: string, params?: any) {
  * @returns navigation state
  */
 function getState() {
-  return _navigator.state.nav;
+  return _navigator?.getState();
 }
 
 /**
@@ -60,6 +60,14 @@ function getState() {
  */
 function getCurrentRoute() {
   return _navigator?.getCurrentRoute();
+}
+
+/**
+ *
+ * @returns get current route name
+ */
+function getRoutes() {
+  return _navigator?.getState()?.routes;
 }
 
 /**
@@ -185,6 +193,7 @@ export default {
   resetAction,
   resetAllAction,
   getCurrentRoute,
+  getRoutes,
   getCurrentRouteNested,
   setTopLevelNavigator,
   resetActionForNotification,

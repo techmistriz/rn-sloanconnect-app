@@ -26,6 +26,7 @@ import Header from 'src/components/Header';
 
 const Index = ({navigation, route}: any) => {
   const {
+    previousScreen,
     referrer,
     previousDiagnosticResults,
     diagnosticResults,
@@ -42,7 +43,12 @@ const Index = ({navigation, route}: any) => {
   useEffect(() => {
     const backAction = () => {
       if (navigation.isFocused()) {
-        NavigationService.pop(2);
+        if (previousScreen != 'DeviceDashboard') {
+          NavigationService.replace('BottomTabNavigator');
+        } else {
+          NavigationService.pop(2);
+        }
+
         return true;
       }
     };
@@ -332,7 +338,9 @@ const Index = ({navigation, route}: any) => {
                 type={'link'}
                 title={'TROUBLESHOOT'}
                 onPress={() => {
-                  NavigationService.navigate('DeviceDiagnosticTroubleshoot');
+                  NavigationService.navigate('DeviceDiagnosticTroubleshoot', {
+                    referrer: 'DeviceDiagnosticResults',
+                  });
                 }}
                 textStyle={{
                   fontSize: 12,

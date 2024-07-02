@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { constants } from 'src/common';
 import Theme from 'src/theme';
 
 export const styles = StyleSheet.create({
@@ -6,7 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     // paddingHorizontal: 20,
     // marginTop: 20,
-    marginBottom: 40,
+    marginBottom: constants.BOTTOM_TAB_HEIGHT,
   },
   sectionContainer: {
     flex: 1,
