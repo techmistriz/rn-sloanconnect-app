@@ -6,6 +6,7 @@ import {
   PERMISSIONS_RESULTS,
   checkLocationPermissions,
   requestGeoLocationPermission,
+  checkGeoLocationPermission,
 } from 'src/utils/Permissions';
 
 /** Function for manage permissions using in this screen */
@@ -32,10 +33,13 @@ export const checkAllRequiredPermissions = async () => {
     status++;
   }
 
-  const locationService = await requestGeoLocationPermission();
-  consoleLog('checkAllRequiredPermissions locationService==>', locationService);
+  const __checkGeoLocationPermission = await checkGeoLocationPermission();
+  consoleLog(
+    'checkAllRequiredPermissions __checkGeoLocationPermission==>',
+    __checkGeoLocationPermission,
+  );
 
-  if (locationService) {
+  if (__checkGeoLocationPermission) {
     status++;
   }
 
@@ -46,6 +50,5 @@ export const checkAllRequiredPermissions = async () => {
   }
 
   consoleLog('checkAllRequiredPermissions status==>', status);
-
   return status;
 };

@@ -230,19 +230,19 @@ const Permission = ({navigation, route}: any) => {
       return false;
     }
 
-    const locationService = await requestGeoLocationPermission();
+    const __requestGeoLocationPermission = await requestGeoLocationPermission();
     consoleLog(
-      'requestAllRequiredPermissions locationService==>',
-      locationService,
+      'requestAllRequiredPermissions __requestGeoLocationPermission==>',
+      __requestGeoLocationPermission,
     );
 
-    if (locationService) {
+    if (__requestGeoLocationPermission) {
       status++;
     }
 
     consoleLog(
-      'requestAllRequiredPermissions requestGeoLocationPermission locationService==>',
-      locationService,
+      'requestAllRequiredPermissions requestGeoLocationPermission __requestGeoLocationPermission==>',
+      __requestGeoLocationPermission,
     );
     if (status > 0) {
       setPermissionStatus(status);

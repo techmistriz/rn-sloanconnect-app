@@ -25,17 +25,51 @@ const PERMISSIONS_RESULTS = Object({
 });
 
 /**
+ * Check GeoLocation permission
+ */
+const checkGeoLocationPermission = async () => {
+  if (
+    Platform.OS === 'android' &&
+    parseInt(Platform?.constants?.Release) <= 12
+  ) {
+    try {
+      const enableResult = await isLocationEnabled();
+      // consoleLog('checkGeoLocationPermission enableResult', enableResult);
+      return enableResult;
+      // The user has accepted to enable the location services
+      // data can be :
+      //  - "already-enabled" if the location services has been already enabled
+      //  - "enabled" if user has clicked on OK button in the popup
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        // consoleLog('requestGeoLocationPermission error==>', error?.message);
+        return false;
+        // The user has not accepted to enable the location services or something went wrong during the process
+        // "err" : { "code" : "ERR00|ERR01|ERR02|ERR03", "message" : "message"}
+        // codes :
+        //  - ERR00 : The user has clicked on Cancel button in the popup
+        //  - ERR01 : If the Settings change are unavailable
+        //  - ERR02 : If the popup has failed to open
+        //  - ERR03 : Internal error
+      }
+    }
+  } else {
+    return true;
+  }
+};
+
+/**
  * Request GeoLocation permission
  */
 const requestGeoLocationPermission = async () => {
   if (
     Platform.OS === 'android' &&
-    parseInt(Platform?.Version?.toString, 10) <= 12
+    parseInt(Platform?.constants?.Release) <= 12
   ) {
     try {
       const enableResult = await promptForEnableLocationIfNeeded();
-      // consoleLog('requestGeoLocationPermission enableResult', enableResult);
-      return true;
+      consoleLog('requestGeoLocationPermission enableResult', enableResult);
+      return enableResult;
       // The user has accepted to enable the location services
       // data can be :
       //  - "already-enabled" if the location services has been already enabled
@@ -969,6 +1003,7 @@ const resolvePermision = (permissions: Array<any>) => {
 export {
   PERMISSIONS_RESULTS,
   openSettings,
+  checkGeoLocationPermission,
   requestGeoLocationPermission,
   checkCameraPermissions,
   requestCameraPermissions,
