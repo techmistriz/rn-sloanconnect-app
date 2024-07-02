@@ -61,7 +61,7 @@ const Permission = ({navigation, route}: any) => {
       permissionStatus,
     );
 
-    if (permissionStatus == TOTAL_PERMISSION_REQUIRED) {
+    if (permissionStatus == constants.TOTAL_PERMISSION_REQUIRED) {
       BLEService.manager.state().then(bleState => {
         consoleLog('PermissionScreen useEffect bleState==>', bleState);
         if (bleState === BluetoothState.PoweredOn) {
