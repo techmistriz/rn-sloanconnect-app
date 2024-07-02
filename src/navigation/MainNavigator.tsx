@@ -7,6 +7,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 // Screens
 import SplashScreen from 'src/screens/SplashScreen';
 import Welcome from 'src/screens/Welcome';
+import Permission from 'src/screens/Permission';
 import Login from 'src/screens/Auth/Login';
 import Register from 'src/screens/Auth/Register';
 import RegisterInvitation from 'src/screens/Auth/RegisterInvitation';
@@ -71,6 +72,13 @@ const MainNavigator = () => {
         <Stack.Screen
           name="Welcome"
           component={Welcome}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Permission"
+          component={Permission}
           options={{
             headerShown: false,
           }}

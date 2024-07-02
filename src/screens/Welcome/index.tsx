@@ -13,6 +13,7 @@ import VectorIcon from 'src/components/VectorIcon';
 import {styles} from './styles';
 import {Animated, Easing} from 'react-native';
 import {constants} from 'src/common';
+import {checkAllRequiredPermissions} from 'src/screens/Permission/helper';
 
 const Welcome = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -27,12 +28,26 @@ const Welcome = ({navigation, route}: any) => {
   const spinValue = new Animated.Value(0);
 
   useEffect(() => {
-    if (referrer == 'Login') {
-      setTimeout(() => {
-        NavigationService.replace('DeviceSearching');
-      }, 2000);
-    }
+    __checkAllRequiredPermissions();
   }, [referrer]);
+
+  /** Function for manage permissions using in this screen */
+  const __checkAllRequiredPermissions = async () => {
+    if (referrer == 'Login') {
+      const __checkAllRequiredPermissions = await checkAllRequiredPermissions();
+      if (
+        __checkAllRequiredPermissions == constants.TOTAL_PERMISSION_REQUIRED
+      ) {
+        setTimeout(() => {
+          NavigationService.replace('DeviceSearching');
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          NavigationService.replace('Permission');
+        }, 2000);
+      }
+    }
+  };
 
   Animated.sequence([
     Animated.delay(buttonWidthDelay),

@@ -16,8 +16,9 @@ const Index = ({onSearchAgainPress, onBackButtonPress}: any) => {
       backgroundType="gradient"
       hasHeader={false}
       // hasProfileButton={true}
-      hasBackButton
-      headerBackgroundType="solid">
+      // hasBackButton
+      // headerBackgroundType="solid"
+    >
       <Wrap autoMargin={false} style={styles.container}>
         <Header
           hasProfileButton

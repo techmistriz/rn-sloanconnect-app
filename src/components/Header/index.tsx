@@ -76,7 +76,7 @@ const Header = ({
     } catch (error) {}
   };
 
-  consoleLog('Header onBackButtonPress==>', onBackButtonPress);
+  // consoleLog('Header onBackButtonPress==>', onBackButtonPress);
 
   return (
     <Row

@@ -1,13 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Image, FlatList, Platform} from 'react-native';
+import {Image, FlatList} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  consoleLog,
-  getImgSource,
-  showConfirmAlert,
-} from 'src/utils/Helpers/HelperFunction';
+import {useDispatch} from 'react-redux';
+import {consoleLog, getImgSource} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
 import TouchableItem from 'src/components/TouchableItem';
@@ -22,433 +18,64 @@ import {BLEService} from 'src/services';
 import {cloneDeep} from 'src/services/BLEService/cloneDeep';
 import DeviceConnecting from 'src/components/@ProjectComponent/DeviceConnecting';
 import NoDeviceFound from 'src/components/@ProjectComponent/NoDeviceFound';
-import {
-  BleError,
-  BleErrorCode,
-  Device,
-  State as BluetoothState,
-} from 'react-native-ble-plx';
-import {loginResetDataAction} from 'src/redux/actions';
+import {Device} from 'react-native-ble-plx';
 import {filterBLEDevices} from './helper';
 import {DeviceExtendedProps, ScanningProps} from './types';
 import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
-import {
-  checkBluetoothPermissions,
-  PERMISSIONS_RESULTS,
-  requestBluetoothPermissions,
-  checkLocationPermissions,
-  requestLocationPermissions,
-  requestGeoLocationPermission,
-  openSettings,
-} from 'src/utils/Permissions';
-import Header from 'src/components/Header';
-import AlertBox from 'src/components/AlertBox';
-import RNExitApp from 'react-native-exit-app';
+import {checkAllRequiredPermissions} from 'src/screens/Permission/helper';
+import {constants} from 'src/common';
 
-const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
-const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
-const WAITING_TIMEOUT_FOR_REFRESH_LIST = 10000;
+const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 10000;
+const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 2500;
+const WAITING_TIMEOUT_FOR_REFRESH_LIST = 5000;
 let timeoutID: any = null;
 let intervalID: any = null;
-const REQUIRED_PERMISION_STATUS = 4;
 
 const Index = ({navigation, route}: any) => {
-  const dispatch = useDispatch();
   const [isScanning, setScanning] = useState<ScanningProps>(
     ScanningProps.Pending,
   );
   const foundDevicesRef = useRef<DeviceExtendedProps[]>([]);
   const [foundDevices, setFoundDevices] = useState<DeviceExtendedProps[]>([]);
   const connectedDevice: any = BLEService.getDevice();
-  const [requirePermissionAllowed, setRequirePermissionAllowed] =
+  const [requiredPermissionAllowed, setRequiredPermissionAllowed] =
     useState(false);
-
   const [searchAgainFlag, setSearchAgain] = useState(0);
-  const [permissionStatus, setPermissionStatus] = useState(0);
-  const [settingModal, setSettingModal] = useState<any>({
-    status: false,
-    title: '',
-    message: '',
-  });
-
-  const [permissionModal, setPermissionModal] = useState<any>({
-    status: false,
-    title: '',
-    message: '',
-    permission: '',
-    result: '',
-  });
-
-  /** component hooks method for checking and setting foundDevicesRef */
-  useEffect(() => {
-    consoleLog('useEffect foundDevicesRef called');
-    // THIS IS THE MAGIC PART
-    foundDevicesRef.current = foundDevices;
-  }, [foundDevices]);
 
   /** Function comments */
   useEffect(() => {
     consoleLog('useEffect manageRequirePermissions==>', {
-      requirePermissionAllowed,
+      requiredPermissionAllowed,
     });
-    manageRequirePermissions();
+    __checkAllRequiredPermissions();
   }, []);
 
   /** Function for manage permissions using in this screen */
-  useEffect(() => {
-    consoleLog('SplashScreen useEffect permissionStatus==>', {
-      permissionStatus,
-      REQUIRED_PERMISION_STATUS,
-    });
-
-    if (permissionStatus == REQUIRED_PERMISION_STATUS) {
-      setRequirePermissionAllowed(true);
-    }
-  }, [permissionStatus]);
-
-  /** Function for manage permissions using in this screen */
-  useEffect(() => {
-    const subscription = BLEService.manager.onStateChange(state => {
-      if (state === BluetoothState.PoweredOn) {
-        subscription.remove();
-        permissionStatus >= 3 && setRequirePermissionAllowed(true);
-      } else if (state === BluetoothState.PoweredOff) {
-        permissionStatus >= 3 &&
-          setPermissionModal({
-            status: true,
-            title: 'Bluetooth Disabled',
-            message: 'Please enable Bluetooth',
-            permission: 'BluetoothEnable',
-            result: 'denied',
-          });
-      } else if (state === BluetoothState.Unsupported) {
-        permissionStatus >= 3 &&
-          setPermissionModal({
-            status: true,
-            title: 'Bluetooth Disabled',
-            message: 'Please enable Bluetooth',
-            permission: 'BluetoothUnsupported',
-            result: 'denied',
-          });
-      } else if (state === BluetoothState.Unauthorized) {
-        permissionStatus >= 3 &&
-          setPermissionModal({
-            status: true,
-            title: 'Bluetooth Permission',
-            message: 'We need Bluetooth Permission for searching devices.',
-            permission: 'Bluetooth',
-            result: 'denied',
-          });
-      }
-    }, true);
-  }, [permissionStatus]);
-
-  /** Function for manage permissions using in this screen */
-  const manageRequirePermissions = async () => {
-    consoleLog('manageRequirePermissions called==>');
-    let status = 0;
-    const __checkBluetoothPermissions = await checkBluetoothPermissions();
-    consoleLog(
-      'manageRequirePermissions __checkBluetoothPermissions==>',
-      __checkBluetoothPermissions,
-    );
-
-    if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.GRANTED) {
-      status++;
-    } else if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.DENIED) {
-      const __requestBluetoothPermissions = await requestBluetoothPermissions();
-      if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.GRANTED) {
-        status++;
-      } else if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.DENIED) {
-        setPermissionModal({
-          status: true,
-          title: 'Bluetooth Permission',
-          message: 'We need Bluetooth Permission for searching devices.',
-          permission: 'Bluetooth',
-          result: 'denied',
-        });
-      } else if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-        setSettingModal({
-          status: true,
-          title: 'Permission Blocked',
-          message: `We need Bluetooth Permission for searching devices\n You have previously denied these permissions, so you have to manually allow these permissions.`,
-        });
-      }
-      consoleLog(
-        'manageRequirePermissions __requestBluetoothPermissions==>',
-        __requestBluetoothPermissions,
-      );
-    } else if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-      setSettingModal({
-        status: true,
-        title: 'Bluetooth Permission Blocked',
-        message: `We need Bluetooth Permission for searching devices\n You have previously denied these permissions, so you have to manually allow these permissions.`,
-      });
-    }
-
-    if (status > 0) {
-      setPermissionStatus(status);
+  const __checkAllRequiredPermissions = async () => {
+    const __checkAllRequiredPermissions = await checkAllRequiredPermissions();
+    if (__checkAllRequiredPermissions == constants.TOTAL_PERMISSION_REQUIRED) {
+      setRequiredPermissionAllowed(true);
     } else {
-      return false;
-    }
-
-    const __checkLocationPermissions = await checkLocationPermissions();
-    consoleLog(
-      'manageRequirePermissions __checkLocationPermissions==>',
-      __checkLocationPermissions,
-    );
-
-    if (__checkLocationPermissions == PERMISSIONS_RESULTS.GRANTED) {
-      status++;
-    } else if (__checkLocationPermissions == PERMISSIONS_RESULTS.DENIED) {
-      const __requestLocationPermissions = await requestLocationPermissions();
-      if (__requestLocationPermissions == PERMISSIONS_RESULTS.GRANTED) {
-        status++;
-      } else if (__requestLocationPermissions == PERMISSIONS_RESULTS.DENIED) {
-        setPermissionModal({
-          status: true,
-          title: 'Location Permission',
-          message: 'We need Location Permission for searching devices.',
-          permission: 'Location',
-          result: 'denied',
-        });
-      } else if (__requestLocationPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-        setSettingModal({
-          status: true,
-          title: 'Location Permission Blocked',
-          message: `We need Location Permission for searching devices\n You have previously denied these permissions, so you have to manually allow these permissions.`,
-        });
-      }
-      consoleLog(
-        'manageRequirePermissions __requestLocationPermissions==>',
-        __requestLocationPermissions,
-      );
-    } else if (__checkLocationPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-      setSettingModal({
-        status: true,
-        title: 'Location Permission Blocked',
-        message: `We need Location Permission for searching devices\n You have previously denied these permissions, so you have to manually allow these permissions.`,
-      });
-    }
-
-    if (status > 0) {
-      setPermissionStatus(status);
-    } else {
-      return false;
-    }
-
-    const locationService = await requestGeoLocationPermission();
-    consoleLog('manageRequirePermissions locationService==>', locationService);
-
-    if (locationService) {
-      status++;
-    }
-
-    consoleLog(
-      'manageRequirePermissions requestGeoLocationPermission locationService==>',
-      locationService,
-    );
-    if (status > 0) {
-      setPermissionStatus(status);
-    } else {
-      return false;
-    }
-
-    const bleState = await BLEService.manager.state();
-    consoleLog('manageRequirePermissions bleState==>', bleState);
-
-    if (bleState === BluetoothState.PoweredOn) {
-      status++;
-    } else if (bleState === BluetoothState.PoweredOff) {
-      try {
-        // await BLEService.manager.enable();
-        consoleLog('manageRequirePermissions enabled==>');
-        status++;
-      } catch (error: any) {
-        consoleLog('manageRequirePermissions enable error==>', error);
-        status++;
-        if (error?.errorCode === BleErrorCode?.BluetoothUnauthorized) {
-          setPermissionModal({
-            status: true,
-            title: 'Bluetooth Disabled',
-            message: 'Please enable Bluetooth',
-            permission: 'BluetoothEnable',
-            result: 'denied',
-          });
-        }
-      }
-    }
-
-    if (status > 0) {
-      setPermissionStatus(status);
-    } else {
-      return false;
+      NavigationService.replace('Permission');
     }
   };
-
-  /** Function for manage permissions using in this screen */
-  const requireBluetoothPermissions = async () => {
-    consoleLog('requireBluetoothPermissions called==>');
-    let status = 0;
-    const __checkBluetoothPermissions = await checkBluetoothPermissions();
-    consoleLog(
-      'requireBluetoothPermissions __checkBluetoothPermissions==>',
-      __checkBluetoothPermissions,
-    );
-
-    if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.GRANTED) {
-      await requireLocationPermissions();
-    } else if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.DENIED) {
-      const __requestBluetoothPermissions = await requestBluetoothPermissions();
-      if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.GRANTED) {
-        await requireLocationPermissions();
-      } else if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.DENIED) {
-        setPermissionModal({
-          status: true,
-          title: 'Bluetooth Permission',
-          message: 'We need Bluetooth Permission for searching devices.',
-          permission: 'Bluetooth',
-          result: 'denied',
-        });
-        return false;
-      } else if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-        status++;
-
-        setSettingModal({
-          status: true,
-          title: 'Permission Blocked',
-          message: `We need Bluetooth Permission for searching devices\n You have previously denied this permission, So you have to manually allow this permission.`,
-        });
-        return false;
-      }
-      consoleLog(
-        'requireBluetoothPermissions __requestBluetoothPermissions==>',
-        __requestBluetoothPermissions,
-      );
-    } else if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-      status++;
-      setSettingModal({
-        status: true,
-        title: 'Permission Blocked',
-        message: `We need Bluetooth Permission for searching devices\n You have previously denied this permission, So you have to manually allow this permission.`,
-      });
-
-      return false;
-    }
-  };
-
-  /** Function for manage permissions using in this screen */
-  const requireLocationPermissions = async () => {
-    consoleLog('requireLocationPermissions called==>');
-    let status = 0;
-    const __checkLocationPermissions = await checkLocationPermissions();
-    consoleLog(
-      'requireLocationPermissions __checkLocationPermissions==>',
-      __checkLocationPermissions,
-    );
-
-    if (__checkLocationPermissions == PERMISSIONS_RESULTS.GRANTED) {
-      await requireBluetoothEnablePermissions();
-    } else if (__checkLocationPermissions == PERMISSIONS_RESULTS.DENIED) {
-      const __requestLocationPermissions = await requestLocationPermissions();
-      if (__requestLocationPermissions == PERMISSIONS_RESULTS.GRANTED) {
-        await requireBluetoothEnablePermissions();
-      } else if (__requestLocationPermissions == PERMISSIONS_RESULTS.DENIED) {
-        setPermissionModal({
-          status: true,
-          title: 'Location Permission',
-          message: 'We need Location Permission for searching devices.',
-          permission: 'Location',
-          result: 'denied',
-        });
-      } else if (__requestLocationPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-        status++;
-        setSettingModal({
-          status: true,
-          title: 'Location Permission Blocked',
-          message: `We need Location Permission for searching devices\n You have previously denied these permissions, so you have to manually allow these permissions.`,
-        });
-      }
-      consoleLog(
-        'manageRequirePermissions __requestLocationPermissions==>',
-        __requestLocationPermissions,
-      );
-    } else if (__checkLocationPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-      status++;
-      setSettingModal({
-        status: true,
-        title: 'Location Permission Blocked',
-        message: `We need Location Permission for searching devices\n You have previously denied these permissions, so you have to manually allow these permissions.`,
-      });
-    }
-  };
-
-  /** Function for manage permissions using in this screen */
-  const requireBluetoothEnablePermissions = async () => {
-    try {
-      await BLEService.manager.enable();
-      consoleLog('requireBluetoothEnablePermissions enabled==>');
-    } catch (error: any) {
-      consoleLog(
-        'requireBluetoothEnablePermissions enable error==>',
-        error?.errorCode,
-      );
-
-      if (
-        // error?.errorCode === BleErrorCode?.OperationCancelled ||
-        error?.errorCode === BleErrorCode?.BluetoothUnauthorized
-      ) {
-        setPermissionModal({
-          status: true,
-          title: 'Bluetooth Disabled',
-          message: 'Please enable Bluetooth',
-          permission: 'BluetoothEnable',
-          result: 'denied',
-        });
-      }
-    }
-  };
-
-  /** Function for manage permissions using in this screen */
-  const handlePermissionPopup = async () => {
-    const __permissionModal = {...permissionModal};
-    setPermissionModal({
-      ...permissionModal,
-      status: false,
-      permission: '',
-      result: '',
-    });
-
-    consoleLog('__permissionModal==>', __permissionModal);
-
-    if (__permissionModal?.result == 'denied') {
-      if (__permissionModal?.permission == 'Bluetooth') {
-        await requireBluetoothPermissions();
-      } else if (__permissionModal?.permission == 'Location') {
-        await requireLocationPermissions();
-      } else if (__permissionModal?.permission == 'BluetoothEnable') {
-        await requireBluetoothEnablePermissions();
-      }
-    }
-  };
-
   /** component hooks method for focus */
   useEffect(() => {
-    // consoleLog('useEffect DeviceSearching focused==>', {
-    //   requirePermissionAllowed,
-    // });
-    if (requirePermissionAllowed) {
+    // // consoleLog('useEffect DeviceSearching focused==>', {
+    // //   requiredPermissionAllowed,
+    // // });
+    if (requiredPermissionAllowed) {
       // consoleLog('useEffect initlizeApp called==>', {
-      //   requirePermissionAllowed,
+      //   requiredPermissionAllowed,
       // });
       initlizeApp();
     }
-    if (requirePermissionAllowed) {
+    if (requiredPermissionAllowed) {
       const unsubscribe = navigation.addListener('focus', () => {
         // The screen is focused
         // Call any action
-        consoleLog('DeviceSearching focused');
-        if (requirePermissionAllowed) {
+        consoleLog('DeviceSearching useEffect addListener focused');
+        if (requiredPermissionAllowed) {
           initlizeApp();
         }
       });
@@ -456,12 +83,43 @@ const Index = ({navigation, route}: any) => {
       // Return the function to unsubscribe from the event so it gets removed on unmount
       return unsubscribe;
     }
-  }, [navigation, requirePermissionAllowed, searchAgainFlag]);
+  }, [navigation, requiredPermissionAllowed, searchAgainFlag]);
+
+  /** component hooks method for checking and setting foundDevicesRef */
+  useEffect(() => {
+    consoleLog('useEffect foundDevicesRef called');
+    // THIS IS THE MAGIC PART
+    foundDevicesRef.current = foundDevices;
+    if (foundDevices.length) {
+      clearTimeout(timeoutID);
+      // clearInterval(intervalID);
+    } else {
+      reInitIntervals();
+    }
+  }, [foundDevices]);
+
+  const reInitIntervals = () => {
+    consoleLog('reInitIntervals called');
+
+    // NoDevice
+    timeoutID && clearInterval(timeoutID);
+    timeoutID = setInterval(() => {
+      if (
+        !foundDevicesRef?.current?.length ||
+        foundDevicesRef?.current?.length == 0
+      ) {
+        clearInterval(timeoutID);
+        clearInterval(intervalID);
+        BLEService.manager.stopDeviceScan();
+        setScanning(ScanningProps.NoDevice);
+      }
+    }, WAITING_TIMEOUT_FOR_CHECKING_DEVICE);
+  };
 
   /** component hooks method for searching timeout */
   useEffect(() => {
     consoleLog('useEffect setTimeout called');
-    if (requirePermissionAllowed) {
+    if (requiredPermissionAllowed) {
       // Clear timeout callback if previously set before creating new one
       // timeoutID && clearTimeout(timeoutID);
       timeoutID && clearInterval(timeoutID);
@@ -488,12 +146,12 @@ const Index = ({navigation, route}: any) => {
       // clearTimeout(timeoutID);
       clearInterval(timeoutID);
     };
-  }, [requirePermissionAllowed, searchAgainFlag]);
+  }, [requiredPermissionAllowed, searchAgainFlag]);
 
   /** component hooks method for refresh search list timeout */
   useEffect(() => {
-    consoleLog('useEffect setInterval called', requirePermissionAllowed);
-    if (requirePermissionAllowed) {
+    consoleLog('useEffect setInterval called', requiredPermissionAllowed);
+    if (requiredPermissionAllowed) {
       // Clear interval callback if previously set before creating new one
       intervalID && clearInterval(intervalID);
       intervalID = setInterval(() => {
@@ -505,12 +163,12 @@ const Index = ({navigation, route}: any) => {
       consoleLog('Unmounting clearInterval');
       clearInterval(intervalID);
     };
-  }, [requirePermissionAllowed, searchAgainFlag]);
+  }, [requiredPermissionAllowed, searchAgainFlag]);
 
   /** Function comments */
   const initlizeApp = async () => {
-    consoleLog('initlizeApp called', {requirePermissionAllowed});
-    if (!requirePermissionAllowed) {
+    consoleLog('initlizeApp called', {requiredPermissionAllowed});
+    if (!requiredPermissionAllowed) {
       return false;
     }
     if (connectedDevice?.id) {
@@ -536,8 +194,8 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const addFoundDevice = (__device: DeviceExtendedProps) => {
     // {"deviceCustomName": "FAUCET ETF610 / EBF615, ETF600 / EBF650 T0224 ", "localName": "FAUCET ADSKU02 T0224"}
-    // consoleLog('addFoundDevice __device==>', __device);
     const device = filterBLEDevices(__device);
+    // consoleLog('addFoundDevice device==>', device);
     // const device = __device;
     // device.deviceCustomName = device?.localName ?? 'Unknown';
     // consoleLog('addFoundDevice device names==>', {
@@ -547,7 +205,6 @@ const Index = ({navigation, route}: any) => {
     //   // manufacturerData: __device?.manufacturerData,
     // });
     if (!device) {
-      // refreshFoundDevices(foundDevices);
       return false;
     }
 
@@ -630,6 +287,7 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const checkIfNoFoundDevices = (__foundDevices: any) => {
+    consoleLog('checkIfNoFoundDevices called');
     if (!__foundDevices?.length && isScanning == ScanningProps.DeviceFound) {
       setScanning(ScanningProps.Scanning);
       // initlizeApp();
@@ -642,9 +300,8 @@ const Index = ({navigation, route}: any) => {
       timeoutID,
       intervalID,
     });
-    // clearTimeout(timeoutID);
-    // clearInterval(timeoutID);
-    // clearInterval(intervalID);
+    clearTimeout(timeoutID);
+    clearInterval(intervalID);
     setScanning(ScanningProps.Connecting);
     BLEService.connectToDevice(item?.id, item)
       .then(onConnectSuccess)
@@ -875,43 +532,6 @@ const Index = ({navigation, route}: any) => {
     return (
       <>
         <ActivateDevice />
-        <AlertBox
-          visible={permissionModal?.status}
-          title={permissionModal?.title}
-          message={permissionModal?.message}
-          onCancelPress={() => {
-            setPermissionModal({
-              ...permissionModal,
-              status: false,
-            });
-            RNExitApp.exitApp();
-          }}
-          cancelText="Exit App"
-          onOkayPress={() => {
-            handlePermissionPopup();
-          }}
-          okayText="AGREE"
-        />
-
-        <AlertBox
-          visible={settingModal?.status}
-          title={settingModal?.title}
-          message={settingModal?.message}
-          onCancelPress={() => {
-            setSettingModal(false);
-            RNExitApp.exitApp();
-          }}
-          cancelText="Exit App"
-          onOkayPress={() => {
-            setSettingModal({
-              status: false,
-              title: '',
-              message: '',
-            });
-            openSettings();
-          }}
-          okayText="Open Settings"
-        />
       </>
     );
   }
