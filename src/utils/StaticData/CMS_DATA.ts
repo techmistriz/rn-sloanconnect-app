@@ -1,12 +1,13 @@
 const STYLE = ` <style>
         html {
-            color: #222;
+            color: #222222;
             font-size: 1em;
             line-height: 1.4;
         }
         body {
             margin: 0;
             padding: 0;
+            color: #222222;
         }
         ::-moz-selection {
             background: #b3d4fc;
@@ -240,7 +241,7 @@ const STYLE = ` <style>
 
 export const TROUBLESHOOTING_HTML = {
   html: ` ${STYLE} 
-  <body>
+  <body style="color: #666">
       <div class="feature" style="background-color: rgb(0, 107, 182)">
           <div class="feature-txt">
               <img
@@ -259,32 +260,32 @@ export const TROUBLESHOOTING_HTML = {
                   instructions.</strong></p>
           <h3>LED indicator light in the IR (infrared) sensor is red.</h3>
           <ol>
-              <li>Battery power is low.</li>
+              <li>Battery power is low.
               <p>Install four (4) new AA sized alkaline batteries. Check that the orientation of each battery matches the
                   positive (+) and negative (–) symbols shown in the bottom of the battery compartment. Re-attach battery
                   compartment to control module. Green LED will illuminate. If the Green LED does not illuminate, remove
-                  battery compartment for 10 seconds and return into place.</p>
+                  battery compartment for 10 seconds and return into place.</p></li>
           </ol>
           <h3>Faucet DOES NOT function.</h3>
           <ol>
-              <li>Batteries not installed or are exhausted.</li>
+              <li>Batteries not installed or are exhausted.
               <p>Install four (4) AA sized alkaline batteries. Check that the orientation of each battery matches the
                   positive (+) and negative (–) symbols shown in the bottom of the battery compartment. Reattach battery
                   compartment to control module. Green LED will illuminate. If the Green LED does not illuminate, remove
-                  battery compartment for 10 seconds and return into place.</p>
-              <li>Power Cable not installed (Hardwire models).</li>
-              <p>Install power cable and check connection.</p>
-              <li>Sensor Cable not installed.</li>
-              <p>Install sensor cable and check connection. Confirm connection guide markings are aligned.</p>
-              <li>Sensor range is set too short and is not detecting the target.</li>
-              <p>Increase sensor detection range.</p>
+                  battery compartment for 10 seconds and return into place.</p></li>
+              <li>Power Cable not installed (Hardwire models).
+              <p>Install power cable and check connection.</p></li>
+              <li>Sensor Cable not installed. 
+              <p>Install sensor cable and check connection. Confirm connection guide markings are aligned.</p></li>
+              <li>Sensor range is set too short and is not detecting the target. 
+              <p>Increase sensor detection range.</p></li>
           </ol>
           <h3>Sensor is activated but faucet DOES NOT deliver water.</h3>
           <ol>
-              <li>Faucet has initiated its adaptive sensing calibration program.</li>
-              <p>Wait 60 seconds before activating faucet.</p>
-              <li>Solenoid Cable not connected.</li>
-              <p>Check solenoid cable connection. Confirm connection guide markings are aligned.</p>
+              <li>Faucet has initiated its adaptive sensing calibration program. 
+              <p>Wait 60 seconds before activating faucet.</p></li>
+              <li>Solenoid Cable not connected. 
+              <p>Check solenoid cable connection. Confirm connection guide markings are aligned.</p></li>
           </ol>
           <h3>Sensor Range Requires Manual Adjustment</h3>
           <p>Sensor Range is measured in units from 1 to 5, with 1 being closest to the faucet and 5 being farthest from
@@ -311,43 +312,43 @@ export const TROUBLESHOOTING_HTML = {
           <h3>Solenoid produces an audible <q>CLICK</q>? when an object is placed in the detection zone of the sensor but
               NO water flows.</h3>
           <ol>
-              <li>Water supply to faucet is not open.</li>
-              <p>Open supply stop(s).</p>
-              <li>Inlet fitting filter is clogged.</li>
-              <p>Remove, clean, and reinsert. Replace with EFP101A replacement filter kit if necessary.</p>
-              <li>Aerator or spray head is clogged.</li>
-              <p>Remove, clean, and reinsert.</p>
+              <li>Water supply to faucet is not open. 
+              <p>Open supply stop(s).</p></li>
+              <li>Inlet fitting filter is clogged. 
+              <p>Remove, clean, and reinsert. Replace with EFP101A replacement filter kit if necessary.</p></li>
+              <li>Aerator or spray head is clogged. 
+              <p>Remove, clean, and reinsert.</p></li>
           </ol>
           <h3>Solenoid valve DOES NOT produce an audible <q>CLICK</q>? and NO water flows. Green LED illuminates when
               batteries installed.</h3>
           <ol>
-              <li>Solenoid valve module is not working properly.</li>
-              <p>Replace EFP103A solenoid valve module.</p>
+              <li>Solenoid valve module is not working properly. 
+              <p>Replace EFP103A solenoid valve module.</p></li>
           </ol>
           <h3>Faucet delivers only a slow flow or dribble when sensor is activated.</h3>
           <ol>
-              <li>Water supply valve is partially closed.</li>
-              <p>Open the supply stop(s) completely.</p>
-              <li>Inlet fitting filter is clogged.</li>
-              <p>Remove, clean, and reinsert. Replace with EFP101A replacement filter kit if necessary.</p>
-              <li>Aerator or spray head is clogged.</li>
-              <p>Remove, clean, and reinsert.</p>
+              <li>Water supply valve is partially closed. 
+              <p>Open the supply stop(s) completely.</p></li>
+              <li>Inlet fitting filter is clogged. 
+              <p>Remove, clean, and reinsert. Replace with EFP101A replacement filter kit if necessary.</p></li>
+              <li>Aerator or spray head is clogged. 
+              <p>Remove, clean, and reinsert.</p></li>
           </ol>
           <h3>Faucet DOES NOT stop delivering water or continues to drip after user is no longer detected (automatic
               shut-off fails even when batteries are removed).</h3>
           <ol>
-              <li>Solenoid valve seat is dirty.</li>
-              <p>Remove, clean, and reinsert solenoid filter. Activate faucet several times to flush out dirt.</p>
-              <li>Sensor range is set too long and is detecting the sink or some other object.</li>
-              <p>Reduce sensor detection range.</p>
-              <li>Solenoid valve module is not working properly.</li>
-              <p>Replace EFP103A solenoid valve module.</p>
+              <li>Solenoid valve seat is dirty. 
+              <p>Remove, clean, and reinsert solenoid filter. Activate faucet several times to flush out dirt.</p></li>
+              <li>Sensor range is set too long and is detecting the sink or some other object. 
+              <p>Reduce sensor detection range.</p></li>
+              <li>Solenoid valve module is not working properly. 
+              <p>Replace EFP103A solenoid valve module.</p></li>
           </ol>
           <h3>The water temperature is too hot or too cold on a faucet connected to hot and cold supply lines with inlet
               filter fitting.</h3>
           <ol>
-              <li>Supply stops are not adjusted properly.</li>
-              <p>Adjust supply stops.</p>
+              <li>Supply stops are not adjusted properly. 
+              <p>Adjust supply stops.</p></li>
           </ol>
   
           <p class="note">NOTE: For some systems, a thermostatic mixing valve may be required</p>
@@ -432,7 +433,7 @@ export const TROUBLESHOOTING_HTML = {
 
 export const FAQS_HTML = {
   html: `${STYLE} 
-    <body>
+    <body style="color: #666">
        <div class="feature" style="background-color: rgb(0, 107, 182)">
           <div class="feature-txt">
               <img
@@ -466,7 +467,7 @@ export const FAQS_HTML = {
 
 export const EULA_HTML = {
   html: `${STYLE} 
-     <body>
+     <body style="color: #666">
         <div class="eula" style="padding:30px">
             <h2>SLOAN VALVE COMPANY—ELECTRONIC PRODUCT AND PRODUCT APP END USER LICENSE AGREEMENT AND TERMS OF USE</h2>
             <h2>END USER LICENSE AGREEMENT</h2>
