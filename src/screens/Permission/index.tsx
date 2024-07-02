@@ -133,7 +133,7 @@ const Permission = ({navigation, route}: any) => {
   /** Function for manage permissions using in this screen */
   const requestAllRequiredPermissions = async () => {
     const __checkAllRequiredPermissions = await checkAllRequiredPermissions();
-    if (__checkAllRequiredPermissions == TOTAL_PERMISSION_REQUIRED) {
+    if (__checkAllRequiredPermissions == constants.TOTAL_PERMISSION_REQUIRED) {
       allPermissionGivenAndRedirect(true);
       return false;
     }
