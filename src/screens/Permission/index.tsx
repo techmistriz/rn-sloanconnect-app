@@ -257,12 +257,10 @@ const Permission = ({navigation, route}: any) => {
       status++;
     } else if (bleState === BluetoothState.PoweredOff) {
       try {
-        // await BLEService.manager.enable();
+        await BLEService.manager.enable();
         consoleLog('requestAllRequiredPermissions enabled==>');
-        status++;
       } catch (error: any) {
         consoleLog('requestAllRequiredPermissions enable error==>', error);
-        status++;
         if (error?.errorCode === BleErrorCode?.BluetoothUnauthorized) {
           setPermissionModal({
             status: true,
