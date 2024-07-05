@@ -29,8 +29,8 @@ import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
 import {checkAllRequiredPermissions} from 'src/screens/Permission/helper';
 import {constants} from 'src/common';
 
-const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 10000;
-const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 2500;
+const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
+const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
 const WAITING_TIMEOUT_FOR_REFRESH_LIST = 5000;
 let timeoutID: any = null;
 let intervalID: any = null;
@@ -73,8 +73,7 @@ const Index = ({navigation, route}: any) => {
       //   requiredPermissionAllowed,
       // });
       initlizeApp();
-    }
-    if (requiredPermissionAllowed) {
+
       const unsubscribe = navigation.addListener('focus', () => {
         // The screen is focused
         // Call any action
@@ -126,24 +125,7 @@ const Index = ({navigation, route}: any) => {
     if (requiredPermissionAllowed) {
       // Clear timeout callback if previously set before creating new one
       // timeoutID && clearTimeout(timeoutID);
-      timeoutID && clearInterval(timeoutID);
-      timeoutID = setInterval(() => {
-        consoleLog(
-          'useEffect setTimeout foundDevicesRef?.current?.length',
-          foundDevicesRef?.current?.length,
-        );
-
-        if (
-          !foundDevicesRef?.current?.length ||
-          foundDevicesRef?.current?.length == 0
-        ) {
-          // clearTimeout(timeoutID);
-          clearInterval(timeoutID);
-          clearInterval(intervalID);
-          // BLEService.manager.stopDeviceScan();
-          // setScanning(ScanningProps.NoDevice);
-        }
-      }, WAITING_TIMEOUT_FOR_CHECKING_DEVICE);
+      reInitIntervals();
     }
     return () => {
       consoleLog('Unmounting clearTimeout');
@@ -324,12 +306,12 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** Function comments */
-  const onConnectFail = (error: any) => {
+  const onConnectFail = async (error: any) => {
     consoleLog('onConnectFail error==>', error);
     showToastMessage(
       'Looks like BD closed the bluetooth connection, please retry',
     );
-    initlizeApp();
+    await initlizeApp();
   };
 
   /**Child flatlist render method */
