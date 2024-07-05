@@ -399,12 +399,6 @@ const Index = ({navigation, route}: any) => {
     );
   };
 
-  return (
-    <>
-      <ActivateDevice />
-    </>
-  );
-
   if (isScanning == ScanningProps.Connecting) {
     return <DeviceConnecting />;
   } else if (isScanning == ScanningProps.NoDevice) {
