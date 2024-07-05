@@ -56,6 +56,24 @@ const Permission = ({navigation, route}: any) => {
 
   /** Function for manage permissions using in this screen */
   useEffect(() => {
+    __checkAllRequiredPermissions();
+  }, []);
+
+  /** Function for manage permissions using in this screen */
+  useEffect(() => {
+    consoleLog('setInterval called');
+    const intervalID = setInterval(() => {
+      __checkAllRequiredPermissions();
+    }, 2000);
+
+    return () => {
+      consoleLog('Unmounting setInterval');
+      clearInterval(intervalID);
+    };
+  }, []);
+
+  /** Function for manage permissions using in this screen */
+  useEffect(() => {
     consoleLog(
       'PermissionScreen useEffect permissionStatus==>',
       permissionStatus,
@@ -70,11 +88,6 @@ const Permission = ({navigation, route}: any) => {
       });
     }
   }, [permissionStatus]);
-
-  /** Function for manage permissions using in this screen */
-  useEffect(() => {
-    __checkAllRequiredPermissions();
-  }, []);
 
   /** Function for manage permissions using in this screen */
   // useEffect(() => {
