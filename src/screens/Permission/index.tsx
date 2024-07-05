@@ -64,7 +64,7 @@ const Permission = ({navigation, route}: any) => {
     consoleLog('setInterval called');
     const intervalID = setInterval(() => {
       __checkAllRequiredPermissions();
-    }, 2000);
+    }, 3000);
 
     return () => {
       consoleLog('Unmounting setInterval');

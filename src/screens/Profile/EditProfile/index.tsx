@@ -26,6 +26,7 @@ import Copyright from 'src/components/@ProjectComponent/Copyright';
 import DropdownPicker from 'src/components/DropdownPicker';
 import Network from 'src/network/Network';
 import constants from 'src/common/constants';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -312,228 +313,137 @@ const Index = ({route, navigation}: any) => {
 
   return (
     <AppContainer
-      scroll={true}
+      scroll={false}
       loading={loading || __loading}
       scrollViewStyle={{}}
       hasHeader={false}>
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
-          <Wrap autoMargin={false} style={styles.section1}>
-            <Wrap autoMargin={true} style={styles.formWrapper}>
-              <Typography
-                size={20}
-                text="Edit Profile"
-                style={{
-                  textAlign: 'center',
-                  marginBottom: 20,
-                }}
-                color={Theme.colors.primaryColor}
-                ff={Theme.fonts.ThemeFontMedium}
-              />
-              <Wrap
-                autoMargin={false}
-                style={{maxHeight: constants.screenHeightCalc / 1.75}}>
-                <ScrollView
-                  nestedScrollEnabled={true}
-                  style={{flexGrow: 1}}
-                  contentContainerStyle={{}}>
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        firstNameTextInputRef = input;
-                      }}
-                      onChangeText={text => setFirstName(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        lastNameTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="First Name"
-                      value={firstName}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        lastNameTextInputRef = input;
-                      }}
-                      onChangeText={text => setLastName(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        titleTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Last Name"
-                      value={lastName}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        titleTextInputRef = input;
-                      }}
-                      onChangeText={text => setTitle(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        companyTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Job Title"
-                      value={title}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        companyTextInputRef = input;
-                      }}
-                      onChangeText={text => setCompany(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        industryTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Company"
-                      value={company}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        industryTextInputRef = input;
-                      }}
-                      onChangeText={text => setIndustry(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        phoneNumberTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Industry"
-                      value={industry?.name}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                      editable={false}
-                      onPress={() => {
-                        setIndustriesDropdownModal(true);
-                      }}
-                      right={
-                        <VectorIcon
-                          iconPack="Feather"
-                          name={'chevron-down'}
-                          size={15}
-                          color={Theme.colors.primaryColor}
-                        />
-                      }
-                      rightStyle={{right: 0}}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        phoneNumberTextInputRef = input;
-                      }}
-                      onChangeText={text => setPhoneNumber(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        countryTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Phone Number"
-                      value={phoneNumber}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        countryTextInputRef = input;
-                      }}
-                      onChangeText={text => setCountry(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        statesMaster?.length > 0
-                          ? stateTextInputRef.focus()
-                          : stateInputTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Country"
-                      value={country?.name}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                      editable={false}
-                      onPress={() => {
-                        setCountriesDropdownModal(true);
-                      }}
-                      right={
-                        <VectorIcon
-                          iconPack="Feather"
-                          name={'chevron-down'}
-                          size={15}
-                          color={Theme.colors.primaryColor}
-                        />
-                      }
-                      rightStyle={{right: 0}}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    {statesMaster?.length > 0 ? (
+          <KeyboardAwareScrollView>
+            <Wrap autoMargin={false} style={styles.section1}>
+              <Wrap autoMargin={true} style={styles.formWrapper}>
+                <Typography
+                  size={20}
+                  text="Edit Profile"
+                  style={{
+                    textAlign: 'center',
+                    marginBottom: 20,
+                  }}
+                  color={Theme.colors.primaryColor}
+                  ff={Theme.fonts.ThemeFontMedium}
+                />
+                <Wrap
+                  autoMargin={false}
+                  style={{maxHeight: constants.screenHeightCalc / 1.75}}>
+                  <ScrollView
+                    nestedScrollEnabled={true}
+                    style={{flexGrow: 1}}
+                    contentContainerStyle={{}}>
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
                       <Input
                         onRef={input => {
                           // @ts-ignore
-                          stateTextInputRef = input;
+                          firstNameTextInputRef = input;
                         }}
-                        onChangeText={text => setState(text)}
+                        onChangeText={text => setFirstName(text)}
                         onSubmitEditing={() => {
                           // @ts-ignore
-                          cityTextInputRef.focus();
+                          lastNameTextInputRef.focus();
                         }}
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="State/Province"
-                        value={state?.state_name}
+                        placeholder="First Name"
+                        value={firstName}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                      />
+                    </Wrap>
+
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          lastNameTextInputRef = input;
+                        }}
+                        onChangeText={text => setLastName(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          titleTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Last Name"
+                        value={lastName}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                      />
+                    </Wrap>
+
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          titleTextInputRef = input;
+                        }}
+                        onChangeText={text => setTitle(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          companyTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Job Title"
+                        value={title}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                      />
+                    </Wrap>
+
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          companyTextInputRef = input;
+                        }}
+                        onChangeText={text => setCompany(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          industryTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Company"
+                        value={company}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                      />
+                    </Wrap>
+
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          industryTextInputRef = input;
+                        }}
+                        onChangeText={text => setIndustry(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          phoneNumberTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Industry"
+                        value={industry?.name}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
                         editable={false}
                         onPress={() => {
-                          setStatesDropdownModal(true);
+                          setIndustriesDropdownModal(true);
                         }}
                         right={
                           <VectorIcon
@@ -545,126 +455,218 @@ const Index = ({route, navigation}: any) => {
                         }
                         rightStyle={{right: 0}}
                       />
-                    ) : (
+                    </Wrap>
+
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
                       <Input
                         onRef={input => {
                           // @ts-ignore
-                          stateInputTextInputRef = input;
+                          phoneNumberTextInputRef = input;
                         }}
-                        onChangeText={text => setStateInput(text)}
+                        onChangeText={text => setPhoneNumber(text)}
                         onSubmitEditing={() => {
                           // @ts-ignore
-                          cityTextInputRef.focus();
+                          countryTextInputRef.focus();
                         }}
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="State/Province"
-                        value={stateInput}
+                        placeholder="Phone Number"
+                        value={phoneNumber}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
                       />
-                    )}
-                  </Wrap>
+                    </Wrap>
 
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        cityTextInputRef = input;
-                      }}
-                      onChangeText={text => setCity(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        addressTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="City"
-                      value={city}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                    />
-                  </Wrap>
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          countryTextInputRef = input;
+                        }}
+                        onChangeText={text => setCountry(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          statesMaster?.length > 0
+                            ? stateTextInputRef.focus()
+                            : stateInputTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Country"
+                        value={country?.name}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                        editable={false}
+                        onPress={() => {
+                          setCountriesDropdownModal(true);
+                        }}
+                        right={
+                          <VectorIcon
+                            iconPack="Feather"
+                            name={'chevron-down'}
+                            size={15}
+                            color={Theme.colors.primaryColor}
+                          />
+                        }
+                        rightStyle={{right: 0}}
+                      />
+                    </Wrap>
 
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        addressTextInputRef = input;
-                      }}
-                      onChangeText={text => setAddress(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        zipTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Address"
-                      value={address}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        zipTextInputRef = input;
-                      }}
-                      onChangeText={text => setZip(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        timezoneTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Zip/Postal"
-                      value={zip}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                    />
-                  </Wrap>
-
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        timezoneTextInputRef = input;
-                      }}
-                      onChangeText={text => setTimezone(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        passwordTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Timezone"
-                      value={timezone?.format}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                      editable={false}
-                      onPress={() => {
-                        setTimezonesDropdownModal(true);
-                      }}
-                      right={
-                        <VectorIcon
-                          iconPack="Feather"
-                          name={'chevron-down'}
-                          size={15}
-                          color={Theme.colors.primaryColor}
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      {statesMaster?.length > 0 ? (
+                        <Input
+                          onRef={input => {
+                            // @ts-ignore
+                            stateTextInputRef = input;
+                          }}
+                          onChangeText={text => setState(text)}
+                          onSubmitEditing={() => {
+                            // @ts-ignore
+                            cityTextInputRef.focus();
+                          }}
+                          returnKeyType="next"
+                          blurOnSubmit={false}
+                          keyboardType="default"
+                          placeholder="State/Province"
+                          value={state?.state_name}
+                          inputContainerStyle={styles.inputContainer}
+                          inputStyle={styles.textInput}
+                          editable={false}
+                          onPress={() => {
+                            setStatesDropdownModal(true);
+                          }}
+                          right={
+                            <VectorIcon
+                              iconPack="Feather"
+                              name={'chevron-down'}
+                              size={15}
+                              color={Theme.colors.primaryColor}
+                            />
+                          }
+                          rightStyle={{right: 0}}
                         />
-                      }
-                      rightStyle={{right: 0}}
-                    />
-                  </Wrap>
+                      ) : (
+                        <Input
+                          onRef={input => {
+                            // @ts-ignore
+                            stateInputTextInputRef = input;
+                          }}
+                          onChangeText={text => setStateInput(text)}
+                          onSubmitEditing={() => {
+                            // @ts-ignore
+                            cityTextInputRef.focus();
+                          }}
+                          returnKeyType="next"
+                          blurOnSubmit={false}
+                          keyboardType="default"
+                          placeholder="State/Province"
+                          value={stateInput}
+                          inputContainerStyle={styles.inputContainer}
+                          inputStyle={styles.textInput}
+                        />
+                      )}
+                    </Wrap>
 
-                  {/* <Wrap autoMargin={false} style={styles.inputWrapper}>
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          cityTextInputRef = input;
+                        }}
+                        onChangeText={text => setCity(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          addressTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="City"
+                        value={city}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                      />
+                    </Wrap>
+
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          addressTextInputRef = input;
+                        }}
+                        onChangeText={text => setAddress(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          zipTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Address"
+                        value={address}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                      />
+                    </Wrap>
+
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          zipTextInputRef = input;
+                        }}
+                        onChangeText={text => setZip(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          timezoneTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Zip/Postal"
+                        value={zip}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                      />
+                    </Wrap>
+
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          timezoneTextInputRef = input;
+                        }}
+                        onChangeText={text => setTimezone(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          passwordTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Timezone"
+                        value={timezone?.format}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                        editable={false}
+                        onPress={() => {
+                          setTimezonesDropdownModal(true);
+                        }}
+                        right={
+                          <VectorIcon
+                            iconPack="Feather"
+                            name={'chevron-down'}
+                            size={15}
+                            color={Theme.colors.primaryColor}
+                          />
+                        }
+                        rightStyle={{right: 0}}
+                      />
+                    </Wrap>
+
+                    {/* <Wrap autoMargin={false} style={styles.inputWrapper}>
                   <Typography
                     size={13}
                     text="If you want to change the password please fill it, otherwise leave it blank"
@@ -674,99 +676,99 @@ const Index = ({route, navigation}: any) => {
                   />
                 </Wrap> */}
 
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Typography
-                      size={13}
-                      text="If you wish to change the password, please fill in the below field; otherwise, leave it empty."
-                      style={{paddingLeft: 5}}
-                      color={Theme.colors.darkGray}
-                      ff={Theme.fonts.ThemeFontMedium}
-                    />
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Typography
+                        size={13}
+                        text="If you wish to change the password, please fill in the below field; otherwise, leave it empty."
+                        style={{paddingLeft: 5}}
+                        color={Theme.colors.darkGray}
+                        ff={Theme.fonts.ThemeFontMedium}
+                      />
 
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        passwordTextInputRef = input;
-                      }}
-                      onChangeText={text => setPassword(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        passwordConfirmationTextInputRef.focus();
-                      }}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Password"
-                      value={password}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                      secureTextEntry={!showPassword}
-                      right={
-                        <VectorIcon
-                          iconPack="Feather"
-                          name={showPassword ? 'eye-off' : 'eye'}
-                          size={20}
-                          color={Theme.colors.primaryColor}
-                          onPress={() => {
-                            setShowPassword(!showPassword);
-                          }}
-                        />
-                      }
-                      rightStyle={{right: 0}}
-                    />
-                  </Wrap>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          passwordTextInputRef = input;
+                        }}
+                        onChangeText={text => setPassword(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          passwordConfirmationTextInputRef.focus();
+                        }}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Password"
+                        value={password}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                        secureTextEntry={!showPassword}
+                        right={
+                          <VectorIcon
+                            iconPack="Feather"
+                            name={showPassword ? 'eye-off' : 'eye'}
+                            size={20}
+                            color={Theme.colors.primaryColor}
+                            onPress={() => {
+                              setShowPassword(!showPassword);
+                            }}
+                          />
+                        }
+                        rightStyle={{right: 0}}
+                      />
+                    </Wrap>
 
-                  <Wrap autoMargin={false} style={styles.inputWrapper}>
-                    <Input
-                      onRef={input => {
-                        // @ts-ignore
-                        passwordConfirmationTextInputRef = input;
-                      }}
-                      onChangeText={text => setPasswordConfirmation(text)}
-                      onSubmitEditing={() => {
-                        // @ts-ignore
-                        onUpdateProfilePress();
-                      }}
-                      returnKeyType="done"
-                      blurOnSubmit={false}
-                      keyboardType="default"
-                      placeholder="Confirm Password"
-                      value={passwordConfirmation}
-                      inputContainerStyle={styles.inputContainer}
-                      inputStyle={styles.textInput}
-                      secureTextEntry={!showPasswordConfirmation}
-                      right={
-                        <VectorIcon
-                          iconPack="Feather"
-                          name={showPasswordConfirmation ? 'eye-off' : 'eye'}
-                          size={20}
-                          color={Theme.colors.primaryColor}
-                          onPress={() => {
-                            setShowPasswordConfirmation(
-                              !showPasswordConfirmation,
-                            );
-                          }}
-                        />
-                      }
-                      rightStyle={{right: 0}}
-                    />
-                  </Wrap>
-                </ScrollView>
-              </Wrap>
+                    <Wrap autoMargin={false} style={styles.inputWrapper}>
+                      <Input
+                        onRef={input => {
+                          // @ts-ignore
+                          passwordConfirmationTextInputRef = input;
+                        }}
+                        onChangeText={text => setPasswordConfirmation(text)}
+                        onSubmitEditing={() => {
+                          // @ts-ignore
+                          onUpdateProfilePress();
+                        }}
+                        returnKeyType="done"
+                        blurOnSubmit={false}
+                        keyboardType="default"
+                        placeholder="Confirm Password"
+                        value={passwordConfirmation}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.textInput}
+                        secureTextEntry={!showPasswordConfirmation}
+                        right={
+                          <VectorIcon
+                            iconPack="Feather"
+                            name={showPasswordConfirmation ? 'eye-off' : 'eye'}
+                            size={20}
+                            color={Theme.colors.primaryColor}
+                            onPress={() => {
+                              setShowPasswordConfirmation(
+                                !showPasswordConfirmation,
+                              );
+                            }}
+                          />
+                        }
+                        rightStyle={{right: 0}}
+                      />
+                    </Wrap>
+                  </ScrollView>
+                </Wrap>
 
-              <Wrap
-                autoMargin={false}
-                style={[styles.inputWrapper, {marginTop: 20}]}>
-                <Button
-                  title="Update Profile"
-                  onPress={() => {
-                    onUpdateProfilePress();
-                  }}
-                />
+                <Wrap
+                  autoMargin={false}
+                  style={[styles.inputWrapper, {marginTop: 20}]}>
+                  <Button
+                    title="Update Profile"
+                    onPress={() => {
+                      onUpdateProfilePress();
+                    }}
+                  />
+                </Wrap>
               </Wrap>
             </Wrap>
-          </Wrap>
-
+          </KeyboardAwareScrollView>
           <Wrap autoMargin={false} style={styles.section2}>
             {!isKeyboardVisible ? <Copyright /> : null}
           </Wrap>
