@@ -345,6 +345,11 @@ const Index = ({navigation}: any) => {
       // );
       if (__activationModeSettings) {
         setActivationModeSettings(__activationModeSettings);
+        BLEReport.mapFaucetSettings(
+          'ActivationMode',
+          __activationModeSettings,
+          hasSettingsChanged,
+        );
       }
 
       // For Line flush
@@ -377,6 +382,14 @@ const Index = ({navigation}: any) => {
       // consoleLog('settingsMappingGen2 __flushSettings==>', __flushSettings);
       if (__flushSettings) {
         setFlushSettings(__flushSettings);
+        if (__activationModeSettings) {
+          setActivationModeSettings(__activationModeSettings);
+          BLEReport.mapFaucetSettings(
+            'LineFlush',
+            __activationModeSettings,
+            hasSettingsChanged,
+          );
+        }
       }
 
       // For flowRateSettings
@@ -397,6 +410,11 @@ const Index = ({navigation}: any) => {
       // );
       if (__flowRateSettings) {
         setFlowRateSettings(__flowRateSettings);
+        BLEReport.mapFaucetSettings(
+          'FlowRate',
+          __activationModeSettings,
+          hasSettingsChanged,
+        );
       }
 
       // For sensorSettings
@@ -414,6 +432,11 @@ const Index = ({navigation}: any) => {
       // consoleLog('settingsMappingGen2 __sensorSettings==>', __sensorSettings);
       if (__sensorSettings) {
         setSensorSettings(__sensorSettings);
+        BLEReport.mapFaucetSettings(
+          'SensorRange',
+          __activationModeSettings,
+          hasSettingsChanged,
+        );
       }
     }
   };
@@ -501,6 +524,7 @@ const Index = ({navigation}: any) => {
       // );
       if (__noteSettings) {
         setNoteSettings(__noteSettings);
+        BLEReport.mapFaucetSettings('Note', __noteSettings, hasSettingsChanged);
       }
     }
   };
@@ -838,7 +862,7 @@ const Index = ({navigation}: any) => {
       // dispatch(deviceSettingsResetDataAction());
       // consoleLog('status5');
     }, timeout + 2000);
-    
+
     // Mark true if settings changed for reporing
     hasSettingsChanged = true;
 

@@ -189,8 +189,8 @@ class BLEReportInstance {
     consoleLog('mapFaucetDeviceDetails called');
     if (BLEService.deviceGeneration == 'gen1') {
       await this.mapFaucetDeviceDetailsGen1();
-    } else {
-      // await this.mapFaucetDeviceDetailsGen2();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      await this.mapFaucetDeviceDetailsGen2();
     }
   }
 
@@ -316,116 +316,31 @@ class BLEReportInstance {
   }
 
   async mapFaucetDeviceDetailsGen2() {
-    const deviceInfoNormal = await getDeviceInfoNormal();
-    console.log('deviceInfoNormal==>', deviceInfoNormal);
+    const __mappingDeviceDataStringGen2 =
+      BLEService.characteristicMonitorDeviceDataStringMapped;
 
-    // Sensor Serial Number
-    const resultObj1 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c901',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj1==>', resultObj1);
+    const __mappingDeviceDataCollectionGen2 =
+      BLEService.characteristicMonitorDataCollectionMapped;
 
-    // Sensor Manufacturing Date
-    const resultObj2 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj2==>', resultObj2);
-
-    // Sensor Hardware Version
-    const resultObj3 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c905',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj3==>', resultObj3);
-
-    // Sensor Firmware Version
-    const resultObj4 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c906',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj4==>', resultObj4);
-
-    // Control box....
-    // Control Box Model
-    const resultObj5 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c90A',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj5==>', resultObj5);
-
-    // Control Box Serial Number
-    const resultObj6 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c902',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj6==>', resultObj6);
-
-    // Control Box Manufacturing Date
-    const resultObj7 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj7==>', resultObj7);
-
-    // Control Box Hardware Version
-    const resultObj8 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c907',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj8==>', resultObj8);
-
-    // Control Box Firmware Version
-    const resultObj9 = findObject(
-      'd0aba888-fb10-4dc9-9b17-bdd8f490c908',
-      deviceInfoNormal,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj9==>', resultObj9);
+    const controlBoxModel =
+      __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[1];
 
     const deviceStaticData = BLEService.connectedDeviceStaticData;
     let __FAUCET_DEVICE_DETAILS = {
-      faucet_sensor_details: {
-        faucet_model: deviceStaticData?.fullNameAllModel,
-        sensor_serial_number: resultObj1?.value ?? null,
-        sensor_manufacturing_date: resultObj2?.value ?? null,
-        sensor_hardware_ver: resultObj3?.value ?? null,
-        sensor_firmware_ver: resultObj4?.value ?? null,
-      },
-      control_box_details: {
-        control_box_model: resultObj5?.value ?? null,
-        control_box_serial_number: resultObj6?.value ?? null,
-        control_box_manuf_date: resultObj7?.value ?? null,
-        control_box_hardware_ver: resultObj8?.value ?? null,
-        control_box_firmware_ver: resultObj9?.value ?? null,
-      },
+      // faucet_sensor_details: {
+      //   faucet_model: deviceStaticData?.fullNameAllModel,
+      //   sensor_serial_number: resultObj1?.value ?? null,
+      //   sensor_manufacturing_date: resultObj2?.value ?? null,
+      //   sensor_hardware_ver: resultObj3?.value ?? null,
+      //   sensor_firmware_ver: resultObj4?.value ?? null,
+      // },
+      // control_box_details: {
+      //   control_box_model: resultObj5?.value ?? null,
+      //   control_box_serial_number: resultObj6?.value ?? null,
+      //   control_box_manuf_date: resultObj7?.value ?? null,
+      //   control_box_hardware_ver: resultObj8?.value ?? null,
+      //   control_box_firmware_ver: resultObj9?.value ?? null,
+      // },
     };
 
     this.reportMappingStats.faucet_device_details = __FAUCET_DEVICE_DETAILS;
@@ -549,6 +464,15 @@ class BLEReportInstance {
   }
 
   async mapAdvanceDeviceDetails() {
+    consoleLog('mapFaucetDeviceDetails called');
+    if (BLEService.deviceGeneration == 'gen1') {
+      await this.mapAdvanceDeviceDetailsGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      await this.mapAdvanceDeviceDetailsGen2();
+    }
+  }
+
+  async mapAdvanceDeviceDetailsGen1() {
     consoleLog('mapAdvanceDeviceDetails called');
 
     try {
@@ -706,6 +630,8 @@ class BLEReportInstance {
       consoleLog('deviceInfoAdvance error==>', error);
     }
   }
+
+  async mapAdvanceDeviceDetailsGen2() {}
 
   async prepareReport(user: any) {
     this.mapUserInfo(user);

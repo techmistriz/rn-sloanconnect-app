@@ -329,11 +329,11 @@ const Index = ({navigation, route}: any) => {
       const __mappingDeviceDataCollectionGen2 =
         BLEService.characteristicMonitorDataCollectionMapped;
       const controlBoxModel =
-        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[0];
+        __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[1];
 
       if (!isObjectEmpty(controlBoxModel)) {
         /**
-         * AD SKU -> Control Box Model
+         * BD SKU -> Control Box Model
          */
         allData.push({
           name: 'Control Box Model',
