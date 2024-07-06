@@ -661,8 +661,16 @@ export const parseDateHumanFormatFromUnix = (
  * @returns timezone
  */
 export const getTimezone = () => {
-  // return 'EST';
+  // return 'Asia/Kolkata';
   return momentTZ?.tz?.guess();
+};
+
+/**
+ *
+ * @returns timezone Abbreviation
+ */
+export const getTimezoneAbbreviation = () => {
+  return moment.unix(timestampInSec()).tz(getTimezone()).format('z');
 };
 
 /**

@@ -9,6 +9,7 @@ import DeviceBottomTab from 'src/components/@ProjectComponent/DeviceBottomTab';
 import {constants} from 'src/common';
 import {FAQS_HTML} from 'src/utils/StaticData/CMS_DATA';
 import RenderHtml from '@jtreact/react-native-render-html';
+import {BLEReport} from 'src/services/BLEService/BLEReport';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -16,7 +17,9 @@ const Index = ({route, navigation}: any) => {
   const {loading} = useSelector((state: any) => state?.AuthReducer);
   const {settings} = useSelector((state: any) => state?.SettingsReducer);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // BLEReport.mapFaucetSettings();
+  }, []);
 
   return (
     <>

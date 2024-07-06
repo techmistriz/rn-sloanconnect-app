@@ -56,6 +56,9 @@ import {
 } from './helperGen1';
 import NotesList from 'src/components/@ProjectComponent/DeviceSettingsList/NotesList';
 import LoaderOverlayController from 'src/components/LoaderOverlay3/LoaderOverlayController';
+import {BLEReport} from 'src/services/BLEService/BLEReport';
+
+let hasSettingsChanged: boolean = false;
 
 const Index = ({navigation}: any) => {
   const dispatch = useDispatch();
@@ -85,6 +88,7 @@ const Index = ({navigation}: any) => {
   const [flowRateSettings, setFlowRateSettings] = useState<any>();
   const [sensorSettings, setSensorSettings] = useState<any>();
   const [noteSettings, setNoteSettings] = useState<any>();
+  // const [hasSettingsChanged, setHasSettingsChanged] = useState<boolean>(false);
 
   /** component hooks method for hardwareBackPress */
   useEffect(() => {
@@ -190,6 +194,11 @@ const Index = ({navigation}: any) => {
 
         // if (JSON.stringify(activationModeSettings) != JSON.stringify(response)) {
         setActivationModeSettings(response);
+        BLEReport.mapFaucetSettings(
+          'ActivationMode',
+          response,
+          hasSettingsChanged,
+        );
         // }
       })
       .catch(error => {
@@ -200,6 +209,7 @@ const Index = ({navigation}: any) => {
       .then(response => {
         // consoleLog('initlizeAppGen1 getFlushSettings response==>', response);
         setFlushSettings(response);
+        BLEReport.mapFaucetSettings('LineFlush', response, hasSettingsChanged);
       })
       .catch(error => {
         consoleLog('initlizeAppGen1 getFlushSettings error==>', error);
@@ -208,6 +218,11 @@ const Index = ({navigation}: any) => {
       .then(response => {
         // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
         setSensorSettings(response);
+        BLEReport.mapFaucetSettings(
+          'SensorRange',
+          response,
+          hasSettingsChanged,
+        );
       })
       .catch(error => {
         consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
@@ -216,6 +231,7 @@ const Index = ({navigation}: any) => {
       .then(response => {
         // consoleLog('initlizeAppGen1 getFlowSettings response==>', response);
         setFlowRateSettings(response);
+        BLEReport.mapFaucetSettings('FlowRate', response, hasSettingsChanged);
       })
       .catch(error => {
         consoleLog('initlizeAppGen1 getFlowSettings error==>', error);

@@ -1,0 +1,186 @@
+
+[
+  {
+    "name": "Sensor Hardware Version",
+    "position": 4,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c905",
+    "value": "0109"
+  },
+  {
+    "name": "Sensor Firmware Version",
+    "position": 5,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c906",
+    "value": "0175"
+  },
+  {
+    "name": "Control Box Serial Number",
+    "position": 7,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c902",
+    "value": "T011810023"
+  },
+  {
+    "name": "Control Box Hardware Version",
+    "position": 9,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c907",
+    "value": "0506"
+  },
+  {
+    "name": "Control Box Firmware Version",
+    "position": 10,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c908",
+    "value": "0243"
+  },
+  {
+    "name": "Control Box Manufacturing Date",
+    "position": 8,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c904",
+    "value": "2023/12/07"
+  },
+  {
+    "name": "Sensor Manufacturing Date",
+    "position": 3,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c903",
+    "value": "2020/12/02"
+  },
+  {
+    "name": "Sensor Serial Number",
+    "position": 2,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c901",
+    "value": "à"
+  },
+  {
+    "name": "Control Box Model",
+    "position": 6,
+    "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c90A",
+    "value": "1"
+  }
+]
+
+
+{
+    "metered": {
+      "deviceID": "00:0B:57:6E:84:84",
+      "id": 95,
+      "isIndicatable": false,
+      "isNotifiable": false,
+      "isNotifying": false,
+      "isReadable": true,
+      "isWritableWithResponse": true,
+      "isWritableWithoutResponse": false,
+      "serviceID": 88,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c944",
+      "value": "31"
+    },
+    "modeSelection": {
+      "deviceID": "00:0B:57:6E:84:84",
+      "id": 93,
+      "isIndicatable": false,
+      "isNotifiable": false,
+      "isNotifying": false,
+      "isReadable": true,
+      "isWritableWithResponse": true,
+      "isWritableWithoutResponse": false,
+      "serviceID": 88,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c943",
+      "value": "1"
+    },
+    "onDemand": {
+      "deviceID": "00:0B:57:6E:84:84",
+      "id": 97,
+      "isIndicatable": false,
+      "isNotifiable": false,
+      "isNotifying": false,
+      "isReadable": true,
+      "isWritableWithResponse": true,
+      "isWritableWithoutResponse": false,
+      "serviceID": 88,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c945",
+      "value": "37"
+    }
+  }
+  
+
+  {
+    "flush": {
+      "deviceID": "00:0B:57:6E:84:84",
+      "id": 99,
+      "isIndicatable": false,
+      "isNotifiable": false,
+      "isNotifying": false,
+      "isReadable": true,
+      "isWritableWithResponse": true,
+      "isWritableWithoutResponse": false,
+      "serviceID": 88,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c946",
+      "value": "1"
+    },
+    "flushInterval": {
+      "deviceID": "00:0B:57:6E:84:84",
+      "id": 103,
+      "isIndicatable": false,
+      "isNotifiable": false,
+      "isNotifying": false,
+      "isReadable": true,
+      "isWritableWithResponse": true,
+      "isWritableWithoutResponse": false,
+      "serviceID": 88,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c948",
+      "value": "13"
+    },
+    "flushTime": {
+      "deviceID": "00:0B:57:6E:84:84",
+      "id": 101,
+      "isIndicatable": false,
+      "isNotifiable": false,
+      "isNotifying": false,
+      "isReadable": true,
+      "isWritableWithResponse": true,
+      "isWritableWithoutResponse": false,
+      "serviceID": 88,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c947",
+      "value": "40"
+    }
+  }
+  
+
+  {
+    "sensorRange": {
+      "deviceID": "00:0B:57:6E:84:84",
+      "id": 91,
+      "isIndicatable": false,
+      "isNotifiable": false,
+      "isNotifying": false,
+      "isReadable": true,
+      "isWritableWithResponse": true,
+      "isWritableWithoutResponse": false,
+      "serviceID": 88,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c942",
+      "value": "5"
+    }
+  }
+  
+
+  {
+    "flowRate": {
+      "deviceID": "00:0B:57:6E:84:84",
+      "id": 105,
+      "isIndicatable": false,
+      "isNotifiable": false,
+      "isNotifying": false,
+      "isReadable": true,
+      "isWritableWithResponse": true,
+      "isWritableWithoutResponse": false,
+      "serviceID": 88,
+      "serviceUUID": "d0aba888-fb10-4dc9-9b17-bdd8f490c940",
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c949",
+      "value": "57"
+    }
+  }
+  

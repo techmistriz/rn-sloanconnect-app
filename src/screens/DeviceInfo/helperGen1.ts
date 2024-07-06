@@ -56,6 +56,10 @@ const getBDInformationDataGen1 = () => {
             value?.uuid,
           );
 
+          // consoleLog('getBDInformationDataGen1 characteristic==>', {
+          //   value: characteristic?.value,
+          //   uuid: characteristic?.uuid,
+          // });
           var decodeValue = 'N/A';
           if (!isObjectEmpty(characteristic) && characteristic?.value) {
             decodeValue = base64EncodeDecode(characteristic?.value, 'decode');
