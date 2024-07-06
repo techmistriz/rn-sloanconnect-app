@@ -838,6 +838,9 @@ const Index = ({navigation}: any) => {
       // dispatch(deviceSettingsResetDataAction());
       // consoleLog('status5');
     }, timeout + 2000);
+    
+    // Mark true if settings changed for reporing
+    hasSettingsChanged = true;
 
     setTimeout(() => {
       setApplied(false);

@@ -79,6 +79,34 @@ export function findObject(
  * @param {*} value
  * @param {Array<Object>} data
  * @param {any} options
+ * @returns find value object
+ */
+export function findValueObject(
+  value: any,
+  data: Array<Object>, //object[],
+  options: any,
+) {
+  var result: any = undefined;
+  if (
+    value &&
+    data &&
+    options &&
+    Array.isArray(data) &&
+    data?.length &&
+    typeof options?.searchKey !== 'undefined'
+  ) {
+    result = data.find((item: any) => {
+      return item[options?.searchKey] == value;
+    });
+  }
+  return result?.[options?.valueKey ?? 'N/A'] ?? null;
+}
+
+/**
+ *
+ * @param {*} value
+ * @param {Array<Object>} data
+ * @param {any} options
  * @returns find object
  */
 export function findIndexObject(

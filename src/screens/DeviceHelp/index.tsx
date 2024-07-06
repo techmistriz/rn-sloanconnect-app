@@ -10,16 +10,27 @@ import {constants} from 'src/common';
 import {FAQS_HTML} from 'src/utils/StaticData/CMS_DATA';
 import RenderHtml from '@jtreact/react-native-render-html';
 import {BLEReport} from 'src/services/BLEService/BLEReport';
+import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import DeviceInfo from 'react-native-device-info';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const {referrer} = route?.params || {referrer: undefined};
-  const {loading} = useSelector((state: any) => state?.AuthReducer);
+  const {loading, user} = useSelector((state: any) => state?.AuthReducer);
   const {settings} = useSelector((state: any) => state?.SettingsReducer);
 
   useEffect(() => {
-    // BLEReport.mapFaucetSettings();
+    // consoleLog('user==>', user);
+    initlizeApp();
   }, []);
+
+  const initlizeApp = async () => {
+    // await BLEReport.mapUserInfo(user);
+    // await BLEReport.mapDeviceInfo();
+    // await BLEReport.mapUserPreference();
+    // await BLEReport.mapFaucetDeviceDetails();
+    // await BLEReport.mapAdvanceDeviceDetails();
+  };
 
   return (
     <>

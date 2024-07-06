@@ -1,15 +1,23 @@
-import {isObjectEmpty, findObject} from 'src/utils/Helpers/array';
+import {
+  isObjectEmpty,
+  findObject,
+  findValueObject,
+} from 'src/utils/Helpers/array';
 import DeviceInfo from 'react-native-device-info';
 import {constants} from 'src/common';
 import {
   consoleLog,
   getTimezone,
   getTimezoneAbbreviation,
+  parseDateHumanFormatFromUnix,
 } from 'src/utils/Helpers/HelperFunction';
 import {BLEService} from 'src/services';
-import {getDeviceInfoNormal} from 'src/screens/DeviceInfo/helperGen1';
+import {
+  getDeviceInfoAdvance,
+  getDeviceInfoNormal,
+} from 'src/screens/DeviceInfo/helperGen1';
+import {readingDiagnostic} from 'src/screens/DeviceDiagnostics/helperGen1';
 
-//
 const __reportMappingStats = {
   report_created_at: '',
   user_info: {
@@ -63,7 +71,7 @@ const __reportMappingStats = {
       sensor_range: '',
       bd_note: '',
     },
-    next: {
+    current: {
       mode_selection: '',
       on_demand_time_out: '',
       metered_run_time: '',
@@ -80,15 +88,17 @@ const __reportMappingStats = {
       sensor: '',
       valve: '',
       turbine: '',
+      water_dispence: '',
       battery: '',
-      date_of_diagnostic: '2024-01-01 22:22:00',
+      date_of_diagnostic: '',
     },
     current: {
       sensor: '',
       valve: '',
       turbine: '',
+      water_dispence: '',
       battery: '',
-      date_of_diagnostic: '2024-01-01 22:22:00',
+      date_of_diagnostic: '',
     },
   },
   advanced_device_details: {
@@ -146,14 +156,18 @@ class BLEReportInstance {
 
   mapDeviceInfo() {
     let __MOBILE_DEVICE_INFO = {
-      os: DeviceInfo.getBaseOsSync(),
+      os: constants.isIOS ? 'ios' : 'android',
       model: DeviceInfo.getModel(),
       bluetooth_ver: '',
       // app_version: DeviceInfo.getVersion(),
       app_version: constants.APP_VERSION,
       app_release_date: constants.RELEASE_DATE,
-      app_install_date: DeviceInfo.getFirstInstallTimeSync(),
-      phone_battery: DeviceInfo.getBatteryLevelSync(),
+      app_install_date: parseDateHumanFormatFromUnix(
+        DeviceInfo.getFirstInstallTimeSync() / 1000,
+      ),
+      phone_battery: parseInt(
+        (DeviceInfo.getBatteryLevelSync() * 100).toString(),
+      ),
     };
 
     this.reportMappingStats.mobile_device_info = __MOBILE_DEVICE_INFO;
@@ -172,6 +186,7 @@ class BLEReportInstance {
   }
 
   async mapFaucetDeviceDetails() {
+    consoleLog('mapFaucetDeviceDetails called');
     if (BLEService.deviceGeneration == 'gen1') {
       await this.mapFaucetDeviceDetailsGen1();
     } else {
@@ -427,7 +442,7 @@ class BLEReportInstance {
 
     let __FAUCET_SETTINGS_ALL = this.reportMappingStats.faucet_settings;
     let __FAUCET_SETTINGS = hasSettingsChanged
-      ? __FAUCET_SETTINGS_ALL?.next
+      ? __FAUCET_SETTINGS_ALL?.current
       : __FAUCET_SETTINGS_ALL?.prev;
 
     switch (settingName) {
@@ -462,10 +477,10 @@ class BLEReportInstance {
         break;
     }
 
-    if (type == 'prev') {
-      __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS;
+    if (hasSettingsChanged) {
+      __FAUCET_SETTINGS_ALL.current = __FAUCET_SETTINGS;
     } else {
-      __FAUCET_SETTINGS_ALL.next = __FAUCET_SETTINGS;
+      __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS;
     }
     this.reportMappingStats.faucet_settings = __FAUCET_SETTINGS_ALL;
 
@@ -475,52 +490,230 @@ class BLEReportInstance {
     // );
   }
 
-  mapDiagnosticReport() {
-    let __DIAGNOSTIC_REPORT = {
-      prev: {
-        sensor: '',
-        valve: '',
-        turbine: '',
-        battery: '',
-        date_of_diagnostic: '2024-01-01 22:22:00',
-      },
-      current: {
-        sensor: '',
-        valve: '',
-        turbine: '',
-        battery: '',
-        date_of_diagnostic: '2024-01-01 22:22:00',
-      },
-    };
+  async mapDiagnosticReport(hasSettingsChanged: boolean = false) {
+    const RESULTS = await readingDiagnostic();
+    consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
 
-    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT;
+    let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
+    let __DIAGNOSTIC_REPORT = hasSettingsChanged
+      ? __DIAGNOSTIC_REPORT_ALL?.current
+      : __DIAGNOSTIC_REPORT_ALL?.prev;
+
+    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.valve = findValueObject('Valve', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.turbine = findValueObject('Turbine', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
+      'Water Dispense',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT.battery = findValueObject(
+      'Battery Level at Diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    if (hasSettingsChanged) {
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+    } else {
+      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
+    }
+
+    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
   }
 
-  mapAdvanceDeviceDetails() {
-    let __ADVANCED_DEVICE_DETAILS = {
-      battery_status: '',
-      date_of_installation: '',
-      hours_of_operation: '',
-      activations_since_day_1: '',
-      accumulated_activation_time: '',
-      accumulated_water_usage: '',
-      activations_since_last_change: '',
-      line_flushes_since_day1: '',
-      accumulated_flush_time: '',
-      number_of_ble_connections: '',
-      date_of_last_factory: '',
-      date_of_last_mode_change: '',
-      date_of_last_metered_run_time_change: '',
-      date_of_last_ondemand_timeout_change: '',
-      date_of_last_flush_enable_change: '',
-      date_of_last_flush_time_change: '',
-      date_of_last_flush_interval_change: '',
-      date_of_last_flow_rate_change: '',
-      date_of_last_range_change: '',
-      date_of_last_bd_note_change: '',
-    };
+  async mapAdvanceDeviceDetails() {
+    consoleLog('mapAdvanceDeviceDetails called');
 
-    this.reportMappingStats.advanced_device_details = __ADVANCED_DEVICE_DETAILS;
+    try {
+      var deviceInfoAdvance = await getDeviceInfoAdvance();
+
+      // consoleLog('deviceInfoAdvance==>', deviceInfoAdvance);
+
+      let __ADVANCED_DEVICE_DETAILS = {
+        battery_status: BLEService.batteryLevel,
+        date_of_installation: findValueObject(
+          'Date of Installation',
+          deviceInfoAdvance,
+          {
+            searchKey: 'name',
+            valueKey: 'value',
+          },
+        ),
+        hours_of_operation: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        activations_since_day_1: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c912',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_activation_time: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c914',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_water_usage: findValueObject(
+          'Accumulated water usage',
+          deviceInfoAdvance,
+          {
+            searchKey: 'name',
+            valueKey: 'value',
+          },
+        ),
+        activations_since_last_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c913',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        line_flushes_since_day1: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c916',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_flush_time: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c915',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        number_of_ble_connections: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c91A',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_factory: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c921',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_mode_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c923',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_metered_run_time_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c924',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_ondemand_timeout_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c925',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_enable_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c926',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_time_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c927',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_interval_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c928',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flow_rate_change: '',
+        date_of_last_range_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c922',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_bd_note_change: '',
+      };
+
+      this.reportMappingStats.advanced_device_details =
+        __ADVANCED_DEVICE_DETAILS;
+
+      consoleLog('this.reportMappingStats==>', this.reportMappingStats);
+    } catch (error) {
+      consoleLog('deviceInfoAdvance error==>', error);
+    }
+  }
+
+  async prepareReport(user: any) {
+    this.mapUserInfo(user);
+    this.mapDeviceInfo();
+    this.mapUserPreference();
+    await this.mapFaucetDeviceDetails();
+    await this.mapDiagnosticReport();
+    await this.mapAdvanceDeviceDetails();
   }
 }
 

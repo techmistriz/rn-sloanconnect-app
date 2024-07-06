@@ -184,3 +184,125 @@
     }
   }
   
+
+  [
+    {
+      "name": "Date of Installation",
+      "position": 1,
+      "postfix": null,
+      "prefix": null,
+      "uuid": null,
+      "value": "Jul 2024"
+    },
+    {
+      "name": "Accumulated water usage",
+      "position": 5,
+      "uuid": null,
+      "value": "67.36 Gal (254.98 L)"
+    },
+    {
+      "name": "Hours of Operation",
+      "position": 2,
+      "postfix": null,
+      "prefix": null,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c911",
+      "value": 390
+    },
+    {
+      "name": "Activations since day 1",
+      "position": 3,
+      "postfix": null,
+      "prefix": null,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c912",
+      "value": 354
+    },
+    {
+      "name": "accumulated activation time",
+      "position": 4,
+      "postfix": " sec",
+      "prefix": null,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c914",
+      "value": 2684
+    },
+    {
+      "name": "Activations since last change",
+      "position": 6,
+      "postfix": null,
+      "prefix": null,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c913",
+      "value": 8
+    },
+    {
+      "name": "Line flushes since day 1",
+      "position": 7,
+      "postfix": null,
+      "prefix": null,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c916",
+      "value": 21
+    },
+    {
+      "name": "Accumulated flush time",
+      "position": 8,
+      "postfix": "sec",
+      "prefix": null,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c915",
+      "value": 790
+    },
+    {
+      "name": "Number of BLE connections ",
+      "position": 9,
+      "postfix": null,
+      "prefix": null,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c91A",
+      "value": 93
+    },
+    {
+      "name": "Date of last factory reset",
+      "position": 10,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c921",
+      "value": "N/A"
+    },
+    {
+      "name": "Date of last mode change",
+      "position": 11,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c923",
+      "value": "2024/06/24 16:40"
+    },
+    {
+      "name": "Date of last metered run time change",
+      "position": 12,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c924",
+      "value": "2024/06/24 16:40"
+    },
+    {
+      "name": "Date of last On-Demand timeout change",
+      "position": 13,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c925",
+      "value": "2024/06/24 16:39"
+    },
+    {
+      "name": "Date of last flush enable change",
+      "position": 14,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c926",
+      "value": "2024/06/18 10:42"
+    },
+    {
+      "name": "Date of last flush time change",
+      "position": 15,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c927",
+      "value": "2024/06/01 07:43"
+    },
+    {
+      "name": "Date of last flush interval change",
+      "position": 16,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c928",
+      "value": "2024/06/18 10:42"
+    },
+    {
+      "name": "Date of last range change",
+      "position": 17,
+      "uuid": "d0aba888-fb10-4dc9-9b17-bdd8f490c922",
+      "value": "2024/06/26 12:11"
+    }
+  ]
+  
