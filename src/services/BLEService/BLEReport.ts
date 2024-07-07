@@ -149,12 +149,12 @@ class BLEReportInstance {
       user_title: '',
     };
 
-    __USER_INFO.user_email = user?.email ?? 'N/A';
-    __USER_INFO.first_name = user?.first_name ?? 'N/A';
-    __USER_INFO.last_name = user?.last_name ?? 'N/A';
-    __USER_INFO.user_id = user?.id;
-    __USER_INFO.user_phone = user?.user_metadata?.phone_number ?? 'N/A';
-    __USER_INFO.user_title = user?.user_metadata?.title ?? 'N/A';
+    __USER_INFO.user_email = user?.email ?? null;
+    __USER_INFO.first_name = user?.first_name ?? null;
+    __USER_INFO.last_name = user?.last_name ?? null;
+    __USER_INFO.user_id = user?.id ?? null;
+    __USER_INFO.user_phone = user?.user_metadata?.phone_number ?? null;
+    __USER_INFO.user_title = user?.user_metadata?.title ?? null;
     this.reportMappingStats.user_info = __USER_INFO;
   }
 
@@ -808,18 +808,17 @@ class BLEReportInstance {
     };
 
     this.reportMappingStats.advanced_device_details = __ADVANCED_DEVICE_DETAILS;
-
-    consoleLog(
-      'this.reportMappingStats?.advanced_device_details==>',
-      this.reportMappingStats,
-    );
+    // consoleLog(
+    //   'this.reportMappingStats?.advanced_device_details==>',
+    //   this.reportMappingStats,
+    // );
   }
 
   async prepareReport(user: any) {
     const currentTimestamp = timestampInSec();
     this.reportMappingStats.report_created_at = moment
       .unix(currentTimestamp)
-      .format('YY-MM-DD-HH mm');
+      .format('YY-MM-DD HH:mm');
     this.mapUserInfo(user);
     this.mapDeviceInfo();
     this.mapUserPreference();

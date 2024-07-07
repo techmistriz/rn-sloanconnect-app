@@ -382,14 +382,12 @@ const Index = ({navigation}: any) => {
       // consoleLog('settingsMappingGen2 __flushSettings==>', __flushSettings);
       if (__flushSettings) {
         setFlushSettings(__flushSettings);
-        if (__activationModeSettings) {
-          setActivationModeSettings(__activationModeSettings);
-          BLEReport.mapFaucetSettings(
-            'LineFlush',
-            __activationModeSettings,
-            hasSettingsChanged,
-          );
-        }
+
+        BLEReport.mapFaucetSettings(
+          'LineFlush',
+          __flushSettings,
+          hasSettingsChanged,
+        );
       }
 
       // For flowRateSettings
@@ -412,7 +410,7 @@ const Index = ({navigation}: any) => {
         setFlowRateSettings(__flowRateSettings);
         BLEReport.mapFaucetSettings(
           'FlowRate',
-          __activationModeSettings,
+          __flowRateSettings,
           hasSettingsChanged,
         );
       }
@@ -434,7 +432,7 @@ const Index = ({navigation}: any) => {
         setSensorSettings(__sensorSettings);
         BLEReport.mapFaucetSettings(
           'SensorRange',
-          __activationModeSettings,
+          __sensorSettings,
           hasSettingsChanged,
         );
       }

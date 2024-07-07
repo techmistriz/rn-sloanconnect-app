@@ -23,6 +23,7 @@ import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import {readingDiagnostic} from '../DeviceDiagnostics/helperGen1';
 import {BackHandler} from 'react-native';
 import Header from 'src/components/Header';
+import {BLEReport} from 'src/services/BLEService/BLEReport';
 
 const Index = ({navigation, route}: any) => {
   const {
@@ -35,6 +36,7 @@ const Index = ({navigation, route}: any) => {
     dateResult,
     dateLastResult,
   } = route?.params || {referrer: undefined};
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
   const [infoModal, setInfoModal] = useState<boolean>(false);
@@ -85,6 +87,9 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const initlizeApp = async () => {
+    // const allReports = await BLEReport.prepareReport(user);
+    // consoleLog('allReports==>', allReports);
+
     if (BLEService.deviceGeneration == 'gen1') {
       initlizeAppGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
