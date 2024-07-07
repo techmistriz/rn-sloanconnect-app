@@ -8,16 +8,7 @@ import {Wrap, Row, TochableWrap} from 'src/components/Common';
 import TouchableItem from 'src/components/TouchableItem';
 import VectorIcon from 'src/components/VectorIcon';
 import Divider from 'src/components/Divider';
-
-const BDSKU_LIST = {
-  '1': 'EFP-39-A-1',
-  '2': 'EFP-11-A-1',
-  '3': 'EFP-40-A-1',
-  '4': 'EFP-39-A-2',
-  '5': 'EFP-11-A-2',
-  '6': 'EFP-40-A-2',
-  '7': 'EFP-39-A-SMT-2',
-};
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
 // DeviceSettingList
 const DeviceSettingList = ({
@@ -45,7 +36,9 @@ const DeviceSettingList = ({
             {item?.name?.toUpperCase() == 'CONTROL BOX MODEL' ? (
               <Typography
                 size={14}
-                text={BDSKU_LIST?.[item?.value] ?? item?.value}
+                text={
+                  BLE_CONSTANTS.COMMON.BDSKU_LIST?.[item?.value] ?? item?.value
+                }
                 style={{
                   textAlign: 'left',
                 }}

@@ -10,6 +10,7 @@ import {
   getTimezone,
   getTimezoneAbbreviation,
   parseDateHumanFormatFromUnix,
+  timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import {BLEService} from 'src/services';
 import {
@@ -17,6 +18,9 @@ import {
   getDeviceInfoNormal,
 } from 'src/screens/DeviceInfo/helperGen1';
 import {readingDiagnostic} from 'src/screens/DeviceDiagnostics/helperGen1';
+import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import {formatCharateristicValue} from 'src/utils/Helpers/project';
+import moment from 'moment';
 
 const __reportMappingStats = {
   report_created_at: '',
@@ -318,32 +322,83 @@ class BLEReportInstance {
   async mapFaucetDeviceDetailsGen2() {
     const __mappingDeviceDataStringGen2 =
       BLEService.characteristicMonitorDeviceDataStringMapped;
-
+    // consoleLog(
+    //   'mapFaucetDeviceDetailsGen2 __mappingDeviceDataStringGen2==>',
+    //   JSON.stringify(__mappingDeviceDataStringGen2),
+    // );
     const __mappingDeviceDataCollectionGen2 =
       BLEService.characteristicMonitorDataCollectionMapped;
-
     const controlBoxModel =
       __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[1];
 
     const deviceStaticData = BLEService.connectedDeviceStaticData;
+    // formatCharateristicValue(element2?.value, element2?.value?.currentValue);
+
     let __FAUCET_DEVICE_DETAILS = {
-      // faucet_sensor_details: {
-      //   faucet_model: deviceStaticData?.fullNameAllModel,
-      //   sensor_serial_number: resultObj1?.value ?? null,
-      //   sensor_manufacturing_date: resultObj2?.value ?? null,
-      //   sensor_hardware_ver: resultObj3?.value ?? null,
-      //   sensor_firmware_ver: resultObj4?.value ?? null,
-      // },
-      // control_box_details: {
-      //   control_box_model: resultObj5?.value ?? null,
-      //   control_box_serial_number: resultObj6?.value ?? null,
-      //   control_box_manuf_date: resultObj7?.value ?? null,
-      //   control_box_hardware_ver: resultObj8?.value ?? null,
-      //   control_box_firmware_ver: resultObj9?.value ?? null,
-      // },
+      faucet_sensor_details: {
+        faucet_model: deviceStaticData?.fullNameAllModel,
+        sensor_serial_number: formatCharateristicValue(
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[0]?.value ??
+            null,
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[0]?.value
+            ?.currentValue ?? null,
+        ),
+        sensor_manufacturing_date: formatCharateristicValue(
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[2]?.value ??
+            null,
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[2]?.value
+            ?.currentValue ?? null,
+        ),
+        sensor_hardware_ver: formatCharateristicValue(
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[4]?.value ??
+            null,
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[4]?.value
+            ?.currentValue ?? null,
+        ),
+        sensor_firmware_ver: formatCharateristicValue(
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[5]?.value ??
+            null,
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[5]?.value
+            ?.currentValue ?? null,
+        ),
+      },
+      control_box_details: {
+        control_box_model:
+          BLE_CONSTANTS?.COMMON?.BDSKU_LIST?.[
+            controlBoxModel?.value?.currentValue
+          ] ?? controlBoxModel?.value?.currentValue,
+        control_box_serial_number: formatCharateristicValue(
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[1]?.value ??
+            null,
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[1]?.value
+            ?.currentValue ?? null,
+        ),
+        control_box_manuf_date: formatCharateristicValue(
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[3]?.value ??
+            null,
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[3]?.value
+            ?.currentValue ?? null,
+        ),
+        control_box_hardware_ver: formatCharateristicValue(
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[6]?.value ??
+            null,
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[6]?.value
+            ?.currentValue ?? null,
+        ),
+        control_box_firmware_ver: formatCharateristicValue(
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[7]?.value ??
+            null,
+          __mappingDeviceDataStringGen2?.chunks?.[0]?.uuidData?.[7]?.value
+            ?.currentValue ?? null,
+        ),
+      },
     };
 
     this.reportMappingStats.faucet_device_details = __FAUCET_DEVICE_DETAILS;
+    // consoleLog(
+    //   'mapFaucetDeviceDetailsGen2 this.reportMappingStats.faucet_device_details==>',
+    //   this.reportMappingStats.faucet_device_details,
+    // );
   }
 
   mapFaucetSettings(
@@ -631,15 +686,148 @@ class BLEReportInstance {
     }
   }
 
-  async mapAdvanceDeviceDetailsGen2() {}
+  async mapAdvanceDeviceDetailsGen2() {
+    const __mappingDeviceDataIntegersGen2 =
+      BLEService.characteristicMonitorDeviceDataIntegersMapped;
+
+    // consoleLog(
+    //   '__mappingDeviceDataIntegersGen2Data __mappingDeviceDataIntegersGen2==>',
+    //   JSON.stringify(__mappingDeviceDataIntegersGen2),
+    // );
+
+    const __mappingDeviceDataCollectionGen2 =
+      BLEService.characteristicMonitorDataCollectionMapped;
+
+    /**
+     * Hours of Operation -> Operating hours since install
+     */
+    const operatingHoursSinceInstall =
+      __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[2];
+
+    /**
+     * ACTIVATION SINCE DAY 1 -> Activations since install
+     */
+    const activationsSinceInstall =
+      __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[3];
+
+    const __operatingHoursSinceInstall = operatingHoursSinceInstall
+      ? parseInt(operatingHoursSinceInstall?.value?.currentValue)
+      : 0;
+
+    const __operatingHoursSinceInstallInSecs =
+      __operatingHoursSinceInstall * 60 * 60;
+    const currentTimestamp = timestampInSec();
+    const dateOfInstallTimestamp =
+      currentTimestamp - __operatingHoursSinceInstallInSecs;
+
+    /**
+     * Accumulated activation time usage -> Duration of all activations
+     */
+    const durationOfAllActivations =
+      __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[5];
+
+    /**
+     * ACCUMULATED WATER USAGE -> Total water usage
+     */
+    const totalWaterUsage = BLEService.totalWaterUsase;
+    const __totalWaterUsage = `${
+      totalWaterUsage
+        ? (totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA).toFixed(2)
+        : 0
+    } Gal`;
+
+    /**
+     * Activations since last change
+     */
+    const activationsSinceLastChange =
+      __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[4];
+
+    /**
+     * Line flushes since day 1 -> Number of Line flushes
+     */
+    const numberOfAllLineFlushes =
+      __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[7];
+
+    /**
+     * Accumulated flush time -> Duration of all line flushes
+     */
+    const durationOfAllLineFlushes =
+      __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[6];
+
+    /**
+     * Number of BLE connections
+     */
+    const numberOfBLEConnections =
+      __mappingDeviceDataCollectionGen2?.chunks?.[0]?.uuidData?.[9];
+
+    let __ADVANCED_DEVICE_DETAILS = {
+      battery_status: BLEService.batteryLevel,
+      date_of_installation: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
+      hours_of_operation: operatingHoursSinceInstall?.value?.currentValue,
+      activations_since_day_1: formatCharateristicValue(
+        activationsSinceInstall?.value,
+        activationsSinceInstall?.value?.currentValue,
+      ),
+      accumulated_activation_time: `${durationOfAllActivations?.value?.currentValue} sec`,
+      accumulated_water_usage: `${__totalWaterUsage} (${totalWaterUsage} L)`,
+      activations_since_last_change:
+        activationsSinceLastChange?.value?.currentValue,
+      line_flushes_since_day1: `${numberOfAllLineFlushes?.value?.currentValue}`,
+      accumulated_flush_time: `${durationOfAllLineFlushes?.value?.currentValue} sec`,
+      number_of_ble_connections: `${numberOfBLEConnections?.value?.currentValue}`,
+      date_of_last_factory:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[0]?.value
+          ?.currentValue ?? null,
+      date_of_last_mode_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[2]?.value
+          ?.currentValue ?? null,
+      date_of_last_metered_run_time_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[3]?.value
+          ?.currentValue ?? null,
+      date_of_last_ondemand_timeout_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[4]?.value
+          ?.currentValue ?? null,
+      date_of_last_flush_enable_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[5]?.value
+          ?.currentValue ?? null,
+      date_of_last_flush_time_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[8]?.value
+          ?.currentValue ?? null,
+      date_of_last_flush_interval_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[9]?.value
+          ?.currentValue ?? null,
+      date_of_last_flow_rate_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[14]?.value
+          ?.currentValue ?? null,
+      date_of_last_range_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[1]?.value
+          ?.currentValue ?? null,
+      date_of_last_bd_note_change:
+        __mappingDeviceDataIntegersGen2?.chunks?.[0]?.uuidData?.[10]?.value
+          ?.currentValue ?? null,
+    };
+
+    this.reportMappingStats.advanced_device_details = __ADVANCED_DEVICE_DETAILS;
+
+    consoleLog(
+      'this.reportMappingStats?.advanced_device_details==>',
+      this.reportMappingStats,
+    );
+  }
 
   async prepareReport(user: any) {
+    const currentTimestamp = timestampInSec();
+    this.reportMappingStats.report_created_at = moment
+      .unix(currentTimestamp)
+      .format('YY-MM-DD-HH mm');
     this.mapUserInfo(user);
     this.mapDeviceInfo();
     this.mapUserPreference();
     await this.mapFaucetDeviceDetails();
+    // this.mapFaucetSettings(); this is called from dashboarc for gen1 and gen2 both for filling values
     await this.mapDiagnosticReport();
     await this.mapAdvanceDeviceDetails();
+    return this.reportMappingStats;
   }
 }
 

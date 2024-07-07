@@ -1,5 +1,14 @@
 const COMMON = {
   GMP_FORMULA: 3.78541,
+  BDSKU_LIST: {
+    '1': 'EFP-39-A-1',
+    '2': 'EFP-11-A-1',
+    '3': 'EFP-40-A-1',
+    '4': 'EFP-39-A-2',
+    '5': 'EFP-11-A-2',
+    '6': 'EFP-40-A-2',
+    '7': 'EFP-39-A-SMT-2',
+  },
 };
 const GEN1 = {
   WATER_DISPENCE_SERVICE_UUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c960',

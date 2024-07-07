@@ -102,3 +102,22 @@
     "user_title": "Mr"
   }
 }
+
+
+{
+  "control_box_details": {
+    "control_box_firmware_ver": "0108",
+    "control_box_hardware_ver": "0407",
+    "control_box_manuf_date": "231207",
+    "control_box_model": "EFP-39-A-2",
+    "control_box_serial_number": "T041810036"
+  },
+  "faucet_sensor_details": {
+    "faucet_model": "ETF500 / EBF550, ETF500S / EBF550S, ETF800 / EBF850",
+    "sensor_firmware_ver": "0175",
+    "sensor_hardware_ver": "0109",
+    "sensor_manufacturing_date": "",
+    "sensor_serial_number": ""
+  }
+}
+
