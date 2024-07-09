@@ -127,7 +127,10 @@ const Permission = ({navigation, route}: any) => {
 
     if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.GRANTED) {
       setNearbyDevicesPermissionStatus(1);
-    } else if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.DENIED) {
+    } else if (
+      __checkBluetoothPermissions == PERMISSIONS_RESULTS.DENIED ||
+      __checkBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED
+    ) {
       const __requestBluetoothPermissions = await requestBluetoothPermissions();
       if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.GRANTED) {
         setNearbyDevicesPermissionStatus(1);
@@ -153,11 +156,11 @@ const Permission = ({navigation, route}: any) => {
         __requestBluetoothPermissions,
       );
     } else if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.BLOCKED) {
-      setSettingModal({
-        status: true,
-        title: 'Permission Blocked',
-        message: `We need Bluetooth Permission for searching devices\n You have previously denied this permission, So you have to manually allow this permission.`,
-      });
+      // setSettingModal({
+      //   status: true,
+      //   title: 'Permission Blocked',
+      //   message: `We need Bluetooth Permission for searching devices\n You have previously denied this permission, So you have to manually allow this permission.`,
+      // });
 
       return false;
     }
@@ -176,7 +179,13 @@ const Permission = ({navigation, route}: any) => {
       } catch (error: any) {
         consoleLog('requireBluetoothEnablePermissions enable error==>', error);
         if (error?.errorCode === BleErrorCode?.BluetoothUnauthorized) {
-          showToastMessage('Please allowe Nearby Device Permission first.');
+          showToastMessage('Please allow Nearby Device Permission first.');
+        } else if (
+          error?.errorCode === BleErrorCode?.BluetoothStateChangeFailed
+        ) {
+          showToastMessage(
+            'Bluetooth enabling failed, Please enable manually.',
+          );
         }
       }
     } else if (bleState === BluetoothState.PoweredOn) {

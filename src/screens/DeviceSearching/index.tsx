@@ -48,6 +48,17 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   useEffect(() => {
+    const subscription = BLEService.manager.onStateChange(state => {
+      consoleLog('DeviceSearching useEffect state==>', state);
+      if (state === 'PoweredOff') {
+        NavigationService.replace('Permission');
+      }
+    }, true);
+    return () => subscription.remove();
+  }, [BLEService.manager]);
+
+  /** Function comments */
+  useEffect(() => {
     consoleLog('useEffect manageRequirePermissions==>', {
       requiredPermissionAllowed,
     });
