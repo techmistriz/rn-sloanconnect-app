@@ -186,10 +186,14 @@ const Permission = ({navigation, route}: any) => {
           showToastMessage(
             'Bluetooth enabling failed, Please enable manually.',
           );
+        } else {
+          showToastMessage(error?.message);
         }
       }
     } else if (bleState === BluetoothState.PoweredOn) {
       setBluetoothStateStatus(1);
+    } else if (bleState === BluetoothState.Unsupported) {
+      showToastMessage('Unsupported device for Bluetooth');
     }
   };
 
