@@ -10,9 +10,15 @@ import {
 } from 'src/utils/Permissions';
 
 /** Function for manage permissions using in this screen */
-export const checkAllRequiredPermissions = async () => {
+export const checkAllRequiredPermissions = async (returnType: number = 1) => {
   consoleLog('checkAllRequiredPermissions called==>');
   let status = 0;
+  let permissionsStatus = {
+    NearbyDevices: false,
+    Location: false,
+    GeoLocation: false,
+    BluetoothState: false,
+  };
   const __checkBluetoothPermissions = await checkBluetoothPermissions();
   consoleLog(
     'checkAllRequiredPermissions __checkBluetoothPermissions==>',
@@ -21,6 +27,7 @@ export const checkAllRequiredPermissions = async () => {
 
   if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.GRANTED) {
     status++;
+    permissionsStatus.NearbyDevices = true;
   }
 
   const __checkLocationPermissions = await checkLocationPermissions();
@@ -31,6 +38,7 @@ export const checkAllRequiredPermissions = async () => {
 
   if (__checkLocationPermissions == PERMISSIONS_RESULTS.GRANTED) {
     status++;
+    permissionsStatus.Location = true;
   }
 
   const __checkGeoLocationPermission = await checkGeoLocationPermission();
@@ -41,14 +49,20 @@ export const checkAllRequiredPermissions = async () => {
 
   if (__checkGeoLocationPermission) {
     status++;
+    permissionsStatus.GeoLocation = true;
   }
 
   const bleState = await BLEService.manager.state();
   consoleLog('checkAllRequiredPermissions bleState==>', bleState);
   if (bleState === BluetoothState.PoweredOn) {
     status++;
+    permissionsStatus.BluetoothState = true;
   }
 
   consoleLog('checkAllRequiredPermissions status==>', status);
+
+  if (returnType == 2) {
+    return permissionsStatus;
+  }
   return status;
 };

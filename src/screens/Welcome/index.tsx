@@ -39,7 +39,8 @@ const Welcome = ({navigation, route}: any) => {
         __checkAllRequiredPermissions == constants.TOTAL_PERMISSION_REQUIRED
       ) {
         setTimeout(() => {
-          NavigationService.replace('DeviceSearching');
+          // NavigationService.replace('DeviceSearching');
+          NavigationService.replace('Permission');
         }, 2000);
       } else {
         setTimeout(() => {

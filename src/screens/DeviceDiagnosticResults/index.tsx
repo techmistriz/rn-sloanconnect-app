@@ -74,6 +74,7 @@ const Index = ({navigation, route}: any) => {
     });
   }, []);
 
+  /** Function comments */
   useEffect(() => {
     // consoleLog('DeviceDiagnosticResults useEffect==>', {
     //   dateResult,

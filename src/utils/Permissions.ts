@@ -826,8 +826,8 @@ const checkBluetoothPermissions = () => {
     ];
     if (parseInt(Platform.Version + '') <= 30) {
       permReqArr = [
-        PERMISSIONS.ANDROID.BLUETOOTH,
-        PERMISSIONS.ANDROID.BLUETOOTH_ADMIN,
+        PERMISSIONS.ANDROID?.BLUETOOTH,
+        PERMISSIONS.ANDROID?.BLUETOOTH_ADMIN,
         PERMISSIONS.IOS.BLUETOOTH,
       ];
     }
@@ -842,8 +842,8 @@ const checkBluetoothPermissions = () => {
           ];
           if (parseInt(Platform.Version + '') <= 30) {
             permStatusAndroidArr = [
-              statuses[PERMISSIONS.ANDROID.BLUETOOTH],
-              statuses[PERMISSIONS.ANDROID.BLUETOOTH_ADMIN],
+              statuses[PERMISSIONS.ANDROID?.BLUETOOTH],
+              statuses[PERMISSIONS.ANDROID?.BLUETOOTH_ADMIN],
             ];
           }
 
