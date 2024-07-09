@@ -56,8 +56,9 @@ const Index = ({navigation, route}: any) => {
 
   /** Function for manage permissions using in this screen */
   const __checkAllRequiredPermissions = async () => {
-    const __checkAllRequiredPermissions = await checkAllRequiredPermissions();
-    if (__checkAllRequiredPermissions == constants.TOTAL_PERMISSION_REQUIRED) {
+    const __checkAllRequiredPermissions: any =
+      await checkAllRequiredPermissions();
+    if (__checkAllRequiredPermissions >= constants.TOTAL_PERMISSION_REQUIRED) {
       setRequiredPermissionAllowed(true);
     } else {
       NavigationService.replace('Permission');

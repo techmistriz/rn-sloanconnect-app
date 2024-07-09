@@ -34,13 +34,13 @@ const Welcome = ({navigation, route}: any) => {
   /** Function for manage permissions using in this screen */
   const __checkAllRequiredPermissions = async () => {
     if (referrer == 'Login') {
-      const __checkAllRequiredPermissions = await checkAllRequiredPermissions();
+      const __checkAllRequiredPermissions: any =
+        await checkAllRequiredPermissions();
       if (
-        __checkAllRequiredPermissions == constants.TOTAL_PERMISSION_REQUIRED
+        __checkAllRequiredPermissions >= constants.TOTAL_PERMISSION_REQUIRED
       ) {
         setTimeout(() => {
-          // NavigationService.replace('DeviceSearching');
-          NavigationService.replace('Permission');
+          NavigationService.replace('DeviceSearching');
         }, 2000);
       } else {
         setTimeout(() => {

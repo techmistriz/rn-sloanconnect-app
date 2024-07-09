@@ -30,9 +30,6 @@ import {checkAllRequiredPermissions} from './helper';
 import PermissionList from 'src/components/@ProjectComponent/PermissionList';
 
 const Permission = ({navigation, route}: any) => {
-  const [permissionStatus, setPermissionStatus] = useState(0);
-
-  //
   const [nearbyDevicesPermissionStatus, setNearbyDevicesPermissionStatus] =
     useState(0);
   const [bluetoothStateStatus, setBluetoothStateStatus] = useState(0);
@@ -55,9 +52,9 @@ const Permission = ({navigation, route}: any) => {
   /** Function for manage permissions using in this screen */
   useEffect(() => {
     __checkAllRequiredPermissions();
-    const apiLevel = parseInt(Platform.Version.toString(), 10);
+
     consoleLog('apiLevel==>', {
-      apiLevel,
+      apiLevel: constants.API_LEVEL,
       TOTAL_PERMISSION_REQUIRED: constants.TOTAL_PERMISSION_REQUIRED,
     });
   }, []);
@@ -104,8 +101,10 @@ const Permission = ({navigation, route}: any) => {
     const __checkAllRequiredPermissions: any =
       await checkAllRequiredPermissions();
 
-    if (__checkAllRequiredPermissions == constants.TOTAL_PERMISSION_REQUIRED) {
+    if (__checkAllRequiredPermissions >= constants.TOTAL_PERMISSION_REQUIRED) {
       allPermissionGivenAndRedirect();
+    } else {
+      showToastMessage('Please allow required permissions.');
     }
   };
 
@@ -145,7 +144,7 @@ const Permission = ({navigation, route}: any) => {
         setSettingModal({
           status: true,
           title: 'Permission Blocked',
-          message: `We need Bluetooth Permission for searching devices\n You have previously denied this permission, So you have to manually allow this permission.`,
+          message: `We need Bluetooth Permission for searching devices\nYou have previously denied this permission, So you have to manually allow this permission.`,
         });
         return false;
       }
@@ -347,35 +346,41 @@ const Permission = ({navigation, route}: any) => {
               // borderBottom={<Divider color={Theme.colors.lightGray} />}
             />
 
-            <PermissionList
-              item={{
-                title: 'Location',
-                description:
-                  'App needed Location permission to search nearby devices',
-                allowed: locationPermissionStatus,
-              }}
-              onAllowedPress={() => {
-                requireLocationPermissions();
-              }}
-              style={{
-                marginTop: 10,
-              }}
-            />
+            {constants.isAndroid &&
+              constants.TOTAL_PERMISSION_REQUIRED == 4 && (
+                <PermissionList
+                  item={{
+                    title: 'Location',
+                    description:
+                      'App needed Location permission to search nearby devices',
+                    allowed: locationPermissionStatus,
+                  }}
+                  onAllowedPress={() => {
+                    requireLocationPermissions();
+                  }}
+                  style={{
+                    marginTop: 10,
+                  }}
+                />
+              )}
 
-            <PermissionList
-              item={{
-                title: 'GEO Location',
-                description:
-                  'App needed GEO Location permission to search nearby devices',
-                allowed: geoPermissionStatus,
-              }}
-              onAllowedPress={() => {
-                requireGeoLocationPermissions();
-              }}
-              style={{
-                marginTop: 10,
-              }}
-            />
+            {constants.isAndroid &&
+              constants.TOTAL_PERMISSION_REQUIRED == 4 && (
+                <PermissionList
+                  item={{
+                    title: 'GEO Location',
+                    description:
+                      'App needed GEO Location permission to search nearby devices',
+                    allowed: geoPermissionStatus,
+                  }}
+                  onAllowedPress={() => {
+                    requireGeoLocationPermissions();
+                  }}
+                  style={{
+                    marginTop: 10,
+                  }}
+                />
+              )}
           </Wrap>
 
           <Wrap autoMargin={false} style={styles.section3}>
