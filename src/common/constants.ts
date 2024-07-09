@@ -1,7 +1,8 @@
 import {Platform, Dimensions, StatusBar} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
-const TOTAL_PERMISSION_REQUIRED = 4;
+const TOTAL_PERMISSION_REQUIRED =
+  parseInt(Platform.Version.toString(), 10) <= 30 ? 4 : 2;
 const HAS_NOTCH = DeviceInfo.hasNotch();
 const NOTCH_HEIGHT = 60;
 const BOTTOM_TAB_HEIGHT = 80;
@@ -97,7 +98,7 @@ const common = {
   HAS_NOTCH,
   NOTCH_HEIGHT,
   BOTTOM_TAB_HEIGHT,
-  TOTAL_PERMISSION_REQUIRED
+  TOTAL_PERMISSION_REQUIRED,
 };
 
 /**constants used in app */

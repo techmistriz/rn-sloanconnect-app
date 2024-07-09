@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image} from 'react-native';
+import {Image, Platform} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {
@@ -55,7 +55,11 @@ const Permission = ({navigation, route}: any) => {
   /** Function for manage permissions using in this screen */
   useEffect(() => {
     __checkAllRequiredPermissions();
-    // const apiLevel = parseInt(Platform.Version.toString(), 10);
+    const apiLevel = parseInt(Platform.Version.toString(), 10);
+    consoleLog('apiLevel==>', {
+      apiLevel,
+      TOTAL_PERMISSION_REQUIRED: constants.TOTAL_PERMISSION_REQUIRED,
+    });
   }, []);
 
   useEffect(() => {
@@ -131,9 +135,9 @@ const Permission = ({navigation, route}: any) => {
       } else if (__requestBluetoothPermissions == PERMISSIONS_RESULTS.DENIED) {
         setPermissionModal({
           status: true,
-          title: 'Bluetooth Permission',
-          message: 'We need Bluetooth Permission for searching devices.',
-          permission: 'Bluetooth',
+          title: 'Nearby Devices',
+          message: 'We need Nearby Devices Permission for searching devices.',
+          permission: 'NearbyDevices',
           result: 'denied',
         });
         return false;
@@ -161,17 +165,17 @@ const Permission = ({navigation, route}: any) => {
   };
 
   /** Function for manage permissions using in this screen */
-  const requestBluetoothEnablePermissions = async () => {
-    consoleLog('requestBluetoothEnablePermissions called==>');
+  const requireBluetoothEnablePermissions = async () => {
+    consoleLog('requireBluetoothEnablePermissions called==>');
     const bleState = await BLEService.manager.state();
-    consoleLog('requestBluetoothEnablePermissions bleState==>', bleState);
+    consoleLog('requireBluetoothEnablePermissions bleState==>', bleState);
 
     if (bleState === BluetoothState.PoweredOff) {
       try {
         await BLEService.manager.enable();
-        consoleLog('requestBluetoothEnablePermissions enabled==>');
+        consoleLog('requireBluetoothEnablePermissions enabled==>');
       } catch (error: any) {
-        consoleLog('requestBluetoothEnablePermissions enable error==>', error);
+        consoleLog('requireBluetoothEnablePermissions enable error==>', error);
         if (error?.errorCode === BleErrorCode?.BluetoothUnauthorized) {
           showToastMessage('Please allowe Nearby Device Permission first.');
         }
@@ -256,10 +260,12 @@ const Permission = ({navigation, route}: any) => {
     });
 
     if (__permissionModal?.result == 'denied') {
-      if (__permissionModal?.permission == 'Bluetooth') {
+      if (__permissionModal?.permission == 'NearbyDevices') {
         await requireNearbyDevicesPermissions();
       } else if (__permissionModal?.permission == 'Location') {
         await requireLocationPermissions();
+      } else if (__permissionModal?.permission == 'GeoLocation') {
+        await requireGeoLocationPermissions();
       } else if (__permissionModal?.permission == 'BluetoothEnable') {
         await requireBluetoothEnablePermissions();
       }
@@ -332,7 +338,7 @@ const Permission = ({navigation, route}: any) => {
                 allowed: bluetoothStateStatus,
               }}
               onAllowedPress={() => {
-                requestBluetoothEnablePermissions();
+                requireBluetoothEnablePermissions();
               }}
               style={{
                 marginTop: 10,
