@@ -49,16 +49,6 @@ const Permission = ({navigation, route}: any) => {
     result: '',
   });
 
-  /** Function for manage permissions using in this screen */
-  useEffect(() => {
-    __checkAllRequiredPermissions();
-
-    consoleLog('apiLevel==>', {
-      apiLevel: constants.API_LEVEL,
-      TOTAL_PERMISSION_REQUIRED: constants.TOTAL_PERMISSION_REQUIRED,
-    });
-  }, []);
-
   useEffect(() => {
     const subscription = BLEService.manager.onStateChange(state => {
       consoleLog('useEffect state==>', state);
@@ -68,6 +58,16 @@ const Permission = ({navigation, route}: any) => {
     }, true);
     return () => subscription.remove();
   }, [BLEService.manager]);
+
+  /** Function for manage permissions using in this screen */
+  useEffect(() => {
+    __checkAllRequiredPermissions();
+
+    consoleLog('apiLevel==>', {
+      apiLevel: constants.API_LEVEL,
+      TOTAL_PERMISSION_REQUIRED: constants.TOTAL_PERMISSION_REQUIRED,
+    });
+  }, []);
 
   /** Function for manage permissions using in this screen */
   const __checkAllRequiredPermissions = async () => {
@@ -187,7 +187,7 @@ const Permission = ({navigation, route}: any) => {
             'Bluetooth enabling failed, Please enable manually.',
           );
         } else {
-          showToastMessage(error?.message);
+          // showToastMessage(error?.message);
         }
       }
     } else if (bleState === BluetoothState.PoweredOn) {
@@ -359,41 +359,39 @@ const Permission = ({navigation, route}: any) => {
               // borderBottom={<Divider color={Theme.colors.lightGray} />}
             />
 
-            {constants.isAndroid &&
-              constants.TOTAL_PERMISSION_REQUIRED == 4 && (
-                <PermissionList
-                  item={{
-                    title: 'Location',
-                    description:
-                      'App needed Location permission to search nearby devices',
-                    allowed: locationPermissionStatus,
-                  }}
-                  onAllowedPress={() => {
-                    requireLocationPermissions();
-                  }}
-                  style={{
-                    marginTop: 10,
-                  }}
-                />
-              )}
+            {constants.isAndroid && constants.API_LEVEL <= 30 && (
+              <PermissionList
+                item={{
+                  title: 'Location',
+                  description:
+                    'App needed Location permission to search nearby devices',
+                  allowed: locationPermissionStatus,
+                }}
+                onAllowedPress={() => {
+                  requireLocationPermissions();
+                }}
+                style={{
+                  marginTop: 10,
+                }}
+              />
+            )}
 
-            {constants.isAndroid &&
-              constants.TOTAL_PERMISSION_REQUIRED == 4 && (
-                <PermissionList
-                  item={{
-                    title: 'GEO Location',
-                    description:
-                      'App needed GEO Location permission to search nearby devices',
-                    allowed: geoPermissionStatus,
-                  }}
-                  onAllowedPress={() => {
-                    requireGeoLocationPermissions();
-                  }}
-                  style={{
-                    marginTop: 10,
-                  }}
-                />
-              )}
+            {constants.isAndroid && constants.API_LEVEL <= 30 && (
+              <PermissionList
+                item={{
+                  title: 'GEO Location',
+                  description:
+                    'App needed GEO Location permission to search nearby devices',
+                  allowed: geoPermissionStatus,
+                }}
+                onAllowedPress={() => {
+                  requireGeoLocationPermissions();
+                }}
+                style={{
+                  marginTop: 10,
+                }}
+              />
+            )}
           </Wrap>
 
           <Wrap autoMargin={false} style={styles.section3}>

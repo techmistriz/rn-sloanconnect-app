@@ -8,11 +8,13 @@ import {
   requestGeoLocationPermission,
   checkGeoLocationPermission,
 } from 'src/utils/Permissions';
+import {constants} from 'src/common';
 
 /** Function for manage permissions using in this screen */
 export const checkAllRequiredPermissions = async (returnType: number = 1) => {
   consoleLog('checkAllRequiredPermissions called==>');
   let status = 0;
+
   let permissionsStatus = {
     NearbyDevices: false,
     Location: false,
@@ -37,7 +39,8 @@ export const checkAllRequiredPermissions = async (returnType: number = 1) => {
   );
 
   if (__checkLocationPermissions == PERMISSIONS_RESULTS.GRANTED) {
-    status++;
+    // This required in android version upto 11
+    constants.API_LEVEL <= 30 && status++;
     permissionsStatus.Location = true;
   }
 
@@ -48,7 +51,8 @@ export const checkAllRequiredPermissions = async (returnType: number = 1) => {
   );
 
   if (__checkGeoLocationPermission) {
-    status++;
+    // This required in android version upto 11
+    constants.API_LEVEL <= 30 && status++;
     permissionsStatus.GeoLocation = true;
   }
 
