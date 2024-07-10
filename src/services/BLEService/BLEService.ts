@@ -14,7 +14,6 @@ import {
   ScanMode,
 } from 'react-native-ble-plx';
 import {PermissionsAndroid, Platform} from 'react-native';
-import {showMessage} from 'react-native-flash-message';
 import {
   base64EncodeDecode,
   base64EncodeFromByteArray,
@@ -31,7 +30,7 @@ import {
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
-import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import {consoleLog, showToastMessage} from 'src/utils/Helpers/HelperFunction';
 import {DeviceExtendedProps} from 'src/screens/DeviceSearching/types';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 
@@ -932,11 +931,7 @@ class BLEServiceInstance {
    * @param characteristicUUID
    */
   showErrorToast = (error: string) => {
-    showMessage({
-      type: 'danger',
-      message: 'Error',
-      description: error,
-    });
+    showToastMessage(error);
     // console.error(error);
   };
 
@@ -946,11 +941,7 @@ class BLEServiceInstance {
    * @param characteristicUUID
    */
   showSuccessToast = (info: string) => {
-    showMessage({
-      type: 'success',
-      message: 'Success',
-      description: info,
-    });
+    showToastMessage(info, 'success');
   };
 
   /**
@@ -982,11 +973,7 @@ class BLEServiceInstance {
         BLE_CONSTANTS.GEN1.WATER_DISPENCE_CHARACTERISTIC_UUID,
         '1',
       );
-    showMessage({
-      type: 'success',
-      message: 'Success',
-      description: 'Water dispensed successfully',
-    });
+    showToastMessage('Water dispensed successfully', 'success');
     consoleLog(
       'dispenseWater writeCharacteristicWithResponseForDevice==>',
       JSON.stringify(writeCharacteristicWithResponseForDevice),
@@ -1014,11 +1001,7 @@ class BLEServiceInstance {
       JSON.stringify(writeDataResponse),
     );
 
-    showMessage({
-      type: 'success',
-      message: 'Success',
-      description: 'Water dispensed successfully',
-    });
+    showToastMessage('Water dispensed successfully', 'success');
   };
 
   /**

@@ -14,6 +14,7 @@ import {styles} from './styles';
 import {Animated, Easing} from 'react-native';
 import {constants} from 'src/common';
 import {checkAllRequiredPermissions} from 'src/screens/Permission/helper';
+import {BLEService} from 'src/services';
 
 const Welcome = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -36,6 +37,12 @@ const Welcome = ({navigation, route}: any) => {
     if (referrer == 'Login') {
       const __checkAllRequiredPermissions: any =
         await checkAllRequiredPermissions();
+
+      consoleLog(
+        'Welcome __checkAllRequiredPermissions==>',
+        __checkAllRequiredPermissions,
+      );
+
       if (
         __checkAllRequiredPermissions >= constants.TOTAL_PERMISSION_REQUIRED
       ) {
