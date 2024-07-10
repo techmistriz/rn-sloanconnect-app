@@ -176,7 +176,7 @@ const Index = ({route, navigation}: any) => {
         industry: industry?.name,
         phone_number: phoneNumber,
         country: country?.name,
-        state: statesMaster?.length > 0 ? state?.name : stateInput,
+        state: statesMaster?.length > 0 ? state?.state_name : stateInput,
         city: city,
         address: address,
         zipcode: zip,
@@ -205,6 +205,8 @@ const Index = ({route, navigation}: any) => {
    * validation checking for email and password
    */
   const checkValidation = () => {
+
+    consoleLog("statestate==>", state);
     if (firstName.trim() === '') {
       showSimpleAlert('Please enter your first name');
       return false;
@@ -226,7 +228,7 @@ const Index = ({route, navigation}: any) => {
     } else if (!country?.name) {
       showSimpleAlert('Please select your country');
       return false;
-    } else if (statesMaster?.length > 0 && !state?.name) {
+    } else if (statesMaster?.length > 0 && !state?.state_name) {
       showSimpleAlert('Please select your state');
       return false;
     } else if (statesMaster?.length == 0 && stateInput?.trim() === '') {
@@ -282,7 +284,7 @@ const Index = ({route, navigation}: any) => {
       if (setExistingState) {
         if (state_name) {
           const stateObj = findObject(state_name, item?.states, {
-            searchKey: 'name',
+            searchKey: 'state_name',
           });
 
           if (stateObj) {

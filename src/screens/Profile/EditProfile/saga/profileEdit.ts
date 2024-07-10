@@ -17,7 +17,6 @@ function* __userProfileRequestSaga({
   payload: any;
   options: any;
 }) {
-
   try {
     //@ts-ignore
     const response = yield Network('user', 'POST', payload, options?.token);
@@ -28,7 +27,7 @@ function* __userProfileRequestSaga({
           user: response,
         }),
       );
-      showToastMessage("Profile updated successfully");
+      showToastMessage('Profile updated successfully', 'success');
       NavigationService.goBack();
     } else {
       yield put(userProfileFailureAction({}));
