@@ -494,4 +494,22 @@ export const BLE_DEVICE_MODELS = {
   },
   gen3: {},
   gen4: {},
+  unknown: {
+    empty: {
+      name: 'UNKNOWN',
+      fullNameAllModel: 'UNKNOWN',
+      type: 'ADSKU',
+      version: '00',
+      generation: '02',
+      models: [
+        {
+          ETFModel: 'UNKNOWN FAUCET',
+          EBFModel: 'UNKNOWN FAUCET',
+          displayName: 'UNKNOWN FAUCET',
+          image: require('src/assets/images/products/empty/1.png'),
+          notes: '',
+        },
+      ],
+    },
+  },
 };
