@@ -169,7 +169,7 @@ const Index = ({navigation, route}: any) => {
                         dateResult?.value?.toString()?.length > 6
                           ? parseDateHumanFormatFromUnix(
                               dateResult?.value,
-                              'ddd, DD MMMM YYYY HH:MM:SS a z',
+                              'ddd, DD MMMM YYYY HH:mm:ss a z',
                             )
                           : 'N/A'
                       }`}
@@ -223,7 +223,7 @@ const Index = ({navigation, route}: any) => {
                             dateLastResult?.value?.toString()?.length > 6
                               ? parseDateHumanFormatFromUnix(
                                   dateLastResult?.value,
-                                  'ddd, DD MMMM YYYY HH:MM:SS a z',
+                                  'ddd, DD MMMM YYYY HH:mm:ss a z',
                                 )
                               : 'N/A'
                           }`}

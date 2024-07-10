@@ -75,26 +75,26 @@ export const readingDiagnostic = async () => {
   }
 
   //  Dispense result
-  const __characteristicDispense = await BLEService.readCharacteristicForDevice(
-    BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_CHARACTERISTIC_UUID,
-  );
+  // const __characteristicDispense = await BLEService.readCharacteristicForDevice(
+  //   BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_SERVICE_UUID,
+  //   BLE_CONSTANTS.GEN1.DIAGNOSTIC_WATER_DISPENSE_CHARACTERISTIC_UUID,
+  // );
 
-  consoleLog(
-    'initialize __characteristicDispense==>',
-    JSON.stringify(cleanCharacteristic(__characteristicDispense)),
-  );
+  // consoleLog(
+  //   'initialize __characteristicDispense==>',
+  //   JSON.stringify(cleanCharacteristic(__characteristicDispense)),
+  // );
 
-  if (__characteristicDispense) {
-    const __characteristicDispense__ = cleanCharacteristic(
-      __characteristicDispense,
-    );
-    RESULTS.push({
-      name: 'Water Dispense',
-      value: base64EncodeDecode(__characteristicDispense__?.value, 'decode'),
-      showInList: true,
-    });
-  }
+  // if (__characteristicDispense) {
+  //   const __characteristicDispense__ = cleanCharacteristic(
+  //     __characteristicDispense,
+  //   );
+  //   RESULTS.push({
+  //     name: 'Water Dispense',
+  //     value: base64EncodeDecode(__characteristicDispense__?.value, 'decode'),
+  //     showInList: true,
+  //   });
+  // }
 
   //  Battery result
   const __characteristicBattery = await BLEService.readCharacteristicForDevice(
@@ -116,7 +116,10 @@ export const readingDiagnostic = async () => {
     RESULTS.push({
       // ...__characteristicBattery__,
       name: 'Battery Level at Diagnostic',
-      value: Number(hexEncodeValue),
+      value:
+        Number(hexEncodeValue) > 100
+          ? Number(hexEncodeValue)
+          : Number(hexEncodeValue),
       forceText: true,
       prefix: null,
       postfix: ' %',

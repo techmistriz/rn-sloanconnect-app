@@ -163,6 +163,7 @@ const Index = ({navigation, route}: any) => {
       '__mappingDiagnosticGen2SetupMonitor characteristic==>',
       characteristic,
     );
+    // 76 0f 00 00 00 00 01 00 1f 5d ff 66 8e b3 03 ff
     if (characteristic?.value) {
       var deviceDataIntegerHex = base64ToHex(characteristic?.value);
       consoleLog(
@@ -332,23 +333,27 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const finishDiagnosticsGen2 = async (waterDispensed: number) => {
-    // D/T of last diagnostic
-
     const currentTimestamp = timestampInSec();
-    const diagnosticDateTimestampMappedValue = mapValueGen2(
-      BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_LAST_DIAGNOSTIC,
-      currentTimestamp,
-    );
-
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-      BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-      fromHexStringUint8Array(diagnosticDateTimestampMappedValue),
-    );
 
     // Read raw data
     // await __mappingDeviceDataIntegersGen2SetupMonitor();
     await __mappingDiagnosticGen2SetupMonitor();
+
+    // Map data
+    const mappingDiagnosticGen2Response = await mappingDiagnosticGen2(
+      BLE_GEN2_GATT_SERVICES,
+      BLE_CONSTANTS?.GEN2?.DIAGNOSTIC_SERVICE_UUID,
+      BLE_CONSTANTS?.GEN2?.DIAGNOSTIC_CHARACTERISTIC_UUID,
+      BLEService.characteristicMonitorDiagnostic,
+    );
+
+    consoleLog(
+      'initlizeAppGen2 mappingDiagnosticGen2Response==>',
+      JSON.stringify(mappingDiagnosticGen2Response),
+    );
+
+    BLEService.characteristicMonitorDiagnosticMapped =
+      mappingDiagnosticGen2Response;
 
     setTimeout(async () => {
       const RESULTS = await readingDiagnosticGen2(
@@ -372,6 +377,7 @@ const Index = ({navigation, route}: any) => {
         },
       );
 
+      // Finish diagnostic by writing value 0
       const diagnosticInitMappedValue = mapValueGen2(
         BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DIAGNOSTIC_INIT,
         '0',
@@ -381,6 +387,19 @@ const Index = ({navigation, route}: any) => {
         BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
         fromHexStringUint8Array(diagnosticInitMappedValue),
       );
+
+      // D/T of last diagnostic
+      const diagnosticDateTimestampMappedValue = mapValueGen2(
+        BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_LAST_DIAGNOSTIC,
+        currentTimestamp,
+      );
+
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+        fromHexStringUint8Array(diagnosticDateTimestampMappedValue),
+      );
+
       setLoading(false);
 
       // consoleLog('finishDiagnosticsGen2==>', {dateResult, dateLastResult});

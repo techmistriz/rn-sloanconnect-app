@@ -185,19 +185,19 @@ export const readingDiagnosticGen2 = async (
   });
 
   //  Dispense result
-  const __characteristicDispense =
-    characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[3];
+  // const __characteristicDispense =
+  //   characteristicMonitorDiagnosticMapped?.chunks?.[0]?.uuidData?.[3];
 
   // consoleLog(
   //   'initialize __characteristicDispense==>',
   //   JSON.stringify(cleanCharacteristic(__characteristicDispense)),
   // );
 
-  RESULTS.push({
-    name: 'Water Dispense',
-    value: __characteristicDispense?.value?.currentValue,
-    showInList: true,
-  });
+  // RESULTS.push({
+  //   name: 'Water Dispense',
+  //   value: __characteristicDispense?.value?.currentValue,
+  //   showInList: true,
+  // });
 
   //  Battery result
   const __characteristicBattery =
@@ -209,7 +209,10 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Battery Level at Diagnostic',
-    value: __characteristicBattery?.value?.currentValue,
+    value:
+      __characteristicBattery?.value?.currentValue > 100
+        ? 100
+        : __characteristicBattery?.value?.currentValue,
     forceText: true,
     prefix: null,
     postfix: ' %',
