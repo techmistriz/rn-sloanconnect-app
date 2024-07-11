@@ -78,17 +78,15 @@ export function findIndexById(data: any, item: any) {
  * function which convert First character into Capital letter of String
  */
 export function getBleDeviceGeneration(str: string | null | undefined = '') {
-  if (!str) return '';
-  if (str.search(/FAUCET/i) >= 0) {
+  if (!str) return 'unknown';
+  // if (str.search(/FAUCET/i) >= 0) {
+  if (str?.toUpperCase()?.includes('FAUCET')) {
     return 'gen1';
-  } else if (str.search(/SL/i) >= 0) {
+    // } else if (str.search(/SL/i) >= 0) {
+  } else if (str?.toUpperCase()?.includes('SL')) {
     return 'gen2';
-  } else if (str.search(/FAUCET/i) >= 0) {
-    return 'gen1';
-  } else if (str.search(/FAUCET/i) >= 0) {
-    return 'gen1';
   } else {
-    return '';
+    return 'unknown';
   }
 }
 
