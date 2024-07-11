@@ -216,6 +216,8 @@ export function getDeviceModelData(
       if (deviceModel && typeof deviceModel[deviceVersion] != 'undefined') {
         deviceStaticData = deviceModel[deviceVersion];
         // consoleLog('getDeviceModelData deviceStaticData==>', deviceStaticData);
+      } else {
+        deviceStaticData = deviceModel?.empty;
       }
     }
   }
