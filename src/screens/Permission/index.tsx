@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, Platform} from 'react-native';
+import {Image, Linking, Platform} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {
@@ -284,6 +284,16 @@ const Permission = ({navigation, route}: any) => {
     }
   };
 
+  const openBluetoothSettings = () => {
+    try {
+      Linking.openURL('App-Prefs:Bluetooth');
+    } catch (error) {
+      showToastMessage(
+        'App counld not open Bluetooth settings, Please open manually.',
+      );
+    }
+  };
+
   return (
     <>
       <Wrap autoMargin={false} style={styles.container}>
@@ -350,7 +360,9 @@ const Permission = ({navigation, route}: any) => {
                 allowed: bluetoothStateStatus,
               }}
               onAllowedPress={() => {
-                requireBluetoothEnablePermissions();
+                constants.isAndroid
+                  ? requireBluetoothEnablePermissions()
+                  : openBluetoothSettings();
               }}
               style={{
                 marginTop: 10,
