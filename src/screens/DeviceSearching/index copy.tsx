@@ -6,7 +6,6 @@ import {
   consoleLog,
   getImgSource,
   showToastMessage,
-  timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
@@ -22,15 +21,18 @@ import {BLEService} from 'src/services';
 import {cloneDeep} from 'src/services/BLEService/cloneDeep';
 import DeviceConnecting from 'src/components/@ProjectComponent/DeviceConnecting';
 import NoDeviceFound from 'src/components/@ProjectComponent/NoDeviceFound';
+import {Device} from 'react-native-ble-plx';
 import {filterBLEDevices} from './helper';
 import {DeviceExtendedProps, ScanningProps} from './types';
 import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
+import {checkAllRequiredPermissions} from 'src/screens/Permission/helper';
+import {constants} from 'src/common';
 
+const WAITING_TIMEOUT_FOR_CHECKING_DEVICE = 20000;
+const MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS = 5000;
+const WAITING_TIMEOUT_FOR_REFRESH_LIST = 5000;
 let timeoutID: any = null;
 let intervalID: any = null;
-const LAST_SCAN_TIME_IN_SEC = 4;
-const LAST_SCAN_INTERVAL_TIME_MS = 2000;
-const DEVICE_LIST_CHECKING_TIMEOUT_MS = 10000;
 
 const Index = ({navigation, route}: any) => {
   const [isScanning, setScanning] = useState<ScanningProps>(
@@ -39,9 +41,11 @@ const Index = ({navigation, route}: any) => {
   const foundDevicesRef = useRef<DeviceExtendedProps[]>([]);
   const [foundDevices, setFoundDevices] = useState<DeviceExtendedProps[]>([]);
   const connectedDevice: any = BLEService.getDevice();
+  const [requiredPermissionAllowed, setRequiredPermissionAllowed] =
+    useState(false);
   const [searchAgainFlag, setSearchAgain] = useState(0);
 
-  /** Hooks for checking if user turned off bluetooth power */
+  /** Function comments */
   useEffect(() => {
     const subscription = BLEService.manager.onStateChange(state => {
       consoleLog('DeviceSearching useEffect state==>', state);
@@ -52,35 +56,120 @@ const Index = ({navigation, route}: any) => {
     return () => subscription.remove();
   }, [BLEService.manager]);
 
-  /** Hooks method checking for first init and came back to another screen */
+  /** Function comments */
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      // The screen is focused
-      // Call any action
-      consoleLog('DeviceSearching useEffect addListener focused');
-      initlizeApp();
+    consoleLog('useEffect manageRequirePermissions==>', {
+      requiredPermissionAllowed,
     });
+    __checkAllRequiredPermissions();
+  }, []);
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    // return unsubscribe;
-    return () => {
-      consoleLog('Unmounting unsubscribe');
-      unsubscribe();
-    };
-  }, [navigation, searchAgainFlag]);
-
-  /** Hooks method for unmounting times when screen moved to another screen */
+  /** Function for manage permissions using in this screen */
+  const __checkAllRequiredPermissions = async () => {
+    const __checkAllRequiredPermissions: any =
+      await checkAllRequiredPermissions();
+    if (__checkAllRequiredPermissions >= constants.TOTAL_PERMISSION_REQUIRED) {
+      setRequiredPermissionAllowed(true);
+    } else {
+      NavigationService.replace('Permission');
+    }
+  };
+  
+  /** component hooks method for focus */
   useEffect(() => {
-    return () => {
-      consoleLog('Unmounting clearTimeout & clearInterval');
+    // // consoleLog('useEffect DeviceSearching focused==>', {
+    // //   requiredPermissionAllowed,
+    // // });
+    if (requiredPermissionAllowed) {
+      // consoleLog('useEffect initlizeApp called==>', {
+      //   requiredPermissionAllowed,
+      // });
+      initlizeApp();
+
+      const unsubscribe = navigation.addListener('focus', () => {
+        // The screen is focused
+        // Call any action
+        consoleLog('DeviceSearching useEffect addListener focused');
+        if (requiredPermissionAllowed) {
+          initlizeApp();
+        }
+      });
+
+      // Return the function to unsubscribe from the event so it gets removed on unmount
+      return unsubscribe;
+    }
+  }, [navigation, requiredPermissionAllowed, searchAgainFlag]);
+
+  /** component hooks method for checking and setting foundDevicesRef */
+  useEffect(() => {
+    consoleLog('useEffect foundDevicesRef called');
+    // THIS IS THE MAGIC PART
+    foundDevicesRef.current = foundDevices;
+    if (foundDevices.length) {
       clearTimeout(timeoutID);
+      // clearInterval(intervalID);
+    } else {
+      reInitIntervals();
+    }
+  }, [foundDevices]);
+
+  /** component hooks method for searching timeout */
+  const reInitIntervals = () => {
+    consoleLog('reInitIntervals called');
+
+    // NoDevice
+    timeoutID && clearInterval(timeoutID);
+    timeoutID = setInterval(() => {
+      if (
+        !foundDevicesRef?.current?.length ||
+        foundDevicesRef?.current?.length == 0
+      ) {
+        clearInterval(timeoutID);
+        clearInterval(intervalID);
+        BLEService.manager.stopDeviceScan();
+        setScanning(ScanningProps.NoDevice);
+      }
+    }, WAITING_TIMEOUT_FOR_CHECKING_DEVICE);
+  };
+
+  /** component hooks method for searching timeout */
+  useEffect(() => {
+    consoleLog('useEffect setTimeout called');
+    if (requiredPermissionAllowed) {
+      // Clear timeout callback if previously set before creating new one
+      // timeoutID && clearTimeout(timeoutID);
+      reInitIntervals();
+    }
+    return () => {
+      consoleLog('Unmounting clearTimeout');
+      // clearTimeout(timeoutID);
+      clearInterval(timeoutID);
+    };
+  }, [requiredPermissionAllowed, searchAgainFlag]);
+
+  /** component hooks method for refresh search list timeout */
+  useEffect(() => {
+    consoleLog('useEffect setInterval called', requiredPermissionAllowed);
+    if (requiredPermissionAllowed) {
+      // Clear interval callback if previously set before creating new one
+      intervalID && clearInterval(intervalID);
+      intervalID = setInterval(() => {
+        refreshFoundDevices();
+      }, WAITING_TIMEOUT_FOR_REFRESH_LIST);
+    }
+
+    return () => {
+      consoleLog('Unmounting clearInterval');
       clearInterval(intervalID);
     };
-  }, []);
+  }, [requiredPermissionAllowed, searchAgainFlag]);
 
   /** Function comments */
   const initlizeApp = async () => {
-    consoleLog('initlizeApp called');
+    consoleLog('initlizeApp called', {requiredPermissionAllowed});
+    if (!requiredPermissionAllowed) {
+      return false;
+    }
     if (connectedDevice?.id) {
       try {
         const isDeviceConnected = await BLEService.isDeviceConnected(
@@ -94,9 +183,6 @@ const Index = ({navigation, route}: any) => {
       }
     }
 
-    initlizeCheckDeviceListTimer();
-    initlizeCheckAndRemoveNoAdvertsingDevicesTimer();
-
     setFoundDevices([]);
     setScanning(ScanningProps.Scanning);
     BLEService.initializeBLE().then(() =>
@@ -104,88 +190,19 @@ const Index = ({navigation, route}: any) => {
     );
   };
 
-  /** Hooks method for checking and setting foundDevicesRef
-   * this is because foundDevices var values does not reflect updated in timer functions
-   */
-  useEffect(() => {
-    consoleLog('useEffect foundDevicesRef called', foundDevices);
-    foundDevicesRef.current = foundDevices;
-    if (foundDevices.length) {
-      clearTimeout(timeoutID);
-    } else {
-      initlizeCheckDeviceListTimer();
-    }
-  }, [foundDevices]);
-
-  /** component timer method */
-  const initlizeCheckDeviceListTimer = () => {
-    consoleLog('initlizeCheckDeviceListTimer called');
-
-    if (timeoutID) {
-      clearTimeout(timeoutID);
-    }
-
-    timeoutID = setTimeout(() => {
-      if (
-        !foundDevicesRef?.current?.length ||
-        foundDevicesRef?.current?.length == 0
-      ) {
-        clearTimeout(timeoutID);
-        clearInterval(intervalID);
-        BLEService.manager.stopDeviceScan();
-        setScanning(ScanningProps.NoDevice);
-      }
-    }, DEVICE_LIST_CHECKING_TIMEOUT_MS);
-  };
-
-  /** component timer method */
-  const initlizeCheckAndRemoveNoAdvertsingDevicesTimer = () => {
-    consoleLog('initlizeCheckAndRemoveNoAdvertsingDevicesTimer called');
-    if (intervalID) {
-      clearInterval(intervalID);
-    }
-    intervalID = setInterval(() => {
-      CheckAndRemoveNoAdvertsingDevices();
-      // consoleLog('initlizeTimers foundDevicesRef==>', foundDevicesRef);
-    }, LAST_SCAN_INTERVAL_TIME_MS);
-  };
-
-  /** method for CheckAndRemoveNoAdvertsingDevices */
-  const CheckAndRemoveNoAdvertsingDevices = (
-    __foundDevices1?: DeviceExtendedProps[],
-  ) => {
-    const __foundDevices: DeviceExtendedProps[] = foundDevicesRef?.current;
-    consoleLog(
-      'CheckAndRemoveNoAdvertsingDevices __foundDevices called==>',
-      __foundDevices?.length,
-    );
-    if (Array.isArray(__foundDevices) && __foundDevices.length > 0) {
-      // LAST_SCAN_INTERVAL_TIME_MS = 2
-      // Suppose last scan = 100
-      // LAST_SCAN_TIME = 2
-      // current time = 101
-      // {"LAST_SCAN_TIME_IN_SEC": 4, "lastScan": 1720801168, "timestampInSec": 1720801172}
-      const __foundDevicesTmp = __foundDevices.filter(device => {
-        consoleLog('checkDevicesIfOld __foundDevicesTmp==>', {
-          lastScan: device?.lastScan,
-          LAST_SCAN_TIME_IN_SEC,
-          timestampInSec: timestampInSec(),
-        });
-        return device?.lastScan + LAST_SCAN_TIME_IN_SEC > timestampInSec();
-      });
-
-      if (Array.isArray(__foundDevicesTmp) && __foundDevicesTmp.length > 0) {
-        setFoundDevices(__foundDevicesTmp);
-      } else {
-        setFoundDevices([]);
-      }
-    }
-  };
-
   /** Function comments */
   const addFoundDevice = (__device: DeviceExtendedProps) => {
+    // {"deviceCustomName": "FAUCET ETF610 / EBF615, ETF600 / EBF650 T0224 ", "localName": "FAUCET ADSKU02 T0224"}
     const device = filterBLEDevices(__device);
     consoleLog('addFoundDevice device==>', device);
+    // const device = __device;
+    // device.deviceCustomName = device?.localName ?? 'Unknown';
+    // consoleLog('addFoundDevice device names==>', {
+    //   localName: device?.localName,
+    //   deviceCustomName: device?.deviceCustomName,
+    //   // rawScanRecord: __device?.rawScanRecord,
+    //   // manufacturerData: __device?.manufacturerData,
+    // });
     if (!device) {
       return false;
     }
@@ -195,21 +212,85 @@ const Index = ({navigation, route}: any) => {
     }
 
     setFoundDevices(prevState => {
+      const __isFoundDeviceUpdateNecessary = isFoundDeviceUpdateNecessary(
+        prevState,
+        device,
+      );
+
+      if (!__isFoundDeviceUpdateNecessary) {
+        return prevState;
+      }
+      // deep clone
       const nextState = cloneDeep(prevState);
       const extendedDevice: DeviceExtendedProps = {
         ...device,
-        lastScan: timestampInSec(),
+        updateTimestamp: Date.now() + MIN_TIME_BEFORE_UPDATE_IN_MILLISECONDS,
       } as DeviceExtendedProps;
 
       const indexToReplace = nextState.findIndex(
         currentDevice => currentDevice.id === device.id,
       );
+      // consoleLog('indexToReplace', indexToReplace);
       if (indexToReplace === -1) {
         return nextState.concat(extendedDevice);
       }
       nextState[indexToReplace] = extendedDevice;
+
       return nextState;
     });
+  };
+
+  /** Function comments */
+  const isFoundDeviceUpdateNecessary = (
+    currentDevices: DeviceExtendedProps[],
+    updatedDevice: Device,
+  ) => {
+    const currentDevice = currentDevices.find(
+      ({id}) => updatedDevice.id === id,
+    );
+    if (!currentDevice) {
+      return true;
+    }
+    return currentDevice?.updateTimestamp < Date.now();
+  };
+
+  /** Function comments */
+  const refreshFoundDevices = () => {
+    consoleLog('refreshFoundDevices init intervalID==>', {
+      intervalID,
+      timeoutID,
+    });
+    setFoundDevices(prevState => {
+      var nextState = prevState;
+      // consoleLog('refreshFoundDevices prevState==>', prevState);
+
+      const findStatus = prevState.find(device => {
+        return device?.updateTimestamp < Date.now();
+      });
+      // consoleLog('findStatus', findStatus);
+
+      if (findStatus) {
+        nextState = prevState.filter(device => {
+          // consoleLog('filter', {
+          //   updateTimestamp: device?.updateTimestamp,
+          //   current: Date.now(),
+          // });
+          return device?.updateTimestamp > Date.now();
+        });
+        // consoleLog('nextState==>', nextState);
+      }
+      checkIfNoFoundDevices(nextState);
+      return nextState;
+    });
+  };
+
+  /** Function comments */
+  const checkIfNoFoundDevices = (__foundDevices: any) => {
+    consoleLog('checkIfNoFoundDevices called');
+    if (!__foundDevices?.length && isScanning == ScanningProps.DeviceFound) {
+      setScanning(ScanningProps.Scanning);
+      // initlizeApp();
+    }
   };
 
   /** Function comments */

@@ -1,6 +1,7 @@
 import {Device} from 'react-native-ble-plx';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {
+  cleanCharacteristic,
   getBleDeviceGeneration,
   getBleDeviceSerialNumber,
   getDeviceModelData,
@@ -9,7 +10,8 @@ import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
 import {DeviceExtendedProps} from './types';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 
-export const filterBLEDevices = (device: DeviceExtendedProps): any => {
+export const filterBLEDevices = (deviceRaw: DeviceExtendedProps): any => {
+  const device = cleanCharacteristic(deviceRaw);
   var filterDevice = null;
   var deviceName = device?.localName ?? device?.name ?? '';
   // deviceName = 'FAUCET ADSKU00 AYYSS';

@@ -12,7 +12,7 @@ export enum ScanningProps {
 }
 
 export type DeviceExtendedProps = Device & {
-  updateTimestamp?: number;
+  lastScan: number;
   modelStaticData?: any;
   deviceCustomName?: string;
 };
