@@ -35,6 +35,8 @@ const Permission = ({navigation, route}: any) => {
   const [bluetoothStateStatus, setBluetoothStateStatus] = useState(0);
   const [locationPermissionStatus, setLocationPermissionStatus] = useState(0);
   const [geoPermissionStatus, setGeoPermissionStatus] = useState(0);
+  const [iosBluetoothSettingsModel, setIosBluetoothSettingsModel] =
+    useState(false);
 
   const [settingModal, setSettingModal] = useState<any>({
     status: false,
@@ -362,7 +364,7 @@ const Permission = ({navigation, route}: any) => {
               onAllowedPress={() => {
                 constants.isAndroid
                   ? requireBluetoothEnablePermissions()
-                  : openBluetoothSettings();
+                  : setIosBluetoothSettingsModel(true);
               }}
               style={{
                 marginTop: 10,
@@ -452,6 +454,21 @@ const Permission = ({navigation, route}: any) => {
             message: '',
           });
           openSettings();
+        }}
+        okayText="Open Settings"
+      />
+
+      <AlertBox
+        visible={iosBluetoothSettingsModel}
+        title={`${constants.APP_NAME} would like to use Bluetooth for new connections`}
+        message={`You can allow new connections in Settings}`}
+        onCancelPress={() => {
+          setSettingModal(false);
+          RNExitApp.exitApp();
+        }}
+        cancelText="Close"
+        onOkayPress={() => {
+          openBluetoothSettings();
         }}
         okayText="Open Settings"
       />
