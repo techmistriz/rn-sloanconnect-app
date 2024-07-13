@@ -243,7 +243,7 @@ const Index = ({navigation, route}: any) => {
     showToastMessage(
       'Looks like BD closed the bluetooth connection, please retry',
     );
-    await initlizeApp();
+    initlizeApp();
   };
 
   /**Child flatlist render method */
