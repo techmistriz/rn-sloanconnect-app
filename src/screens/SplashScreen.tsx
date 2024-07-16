@@ -1,38 +1,15 @@
-import React, {Component, Fragment, useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
-  View,
   StyleSheet,
   Image,
-  StatusBar,
-  AppState,
-  BackHandler,
 } from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {consoleLog, getImgSource} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {Wrap, Row} from 'src/components/Common';
+import {Wrap} from 'src/components/Common';
 import constants from 'src/common/constants';
-import {
-  BleError,
-  BleErrorCode,
-  Device,
-  State as BluetoothState,
-} from 'react-native-ble-plx';
-import {BLEService} from 'src/services';
-import {
-  checkBluetoothPermissions,
-  PERMISSIONS_RESULTS,
-  requestBluetoothPermissions,
-  checkLocationPermissions,
-  requestLocationPermissions,
-  requestGeoLocationPermission,
-  permissionDeniedBlockedAlert,
-  openSettings,
-} from 'src/utils/Permissions';
-import AlertBox from 'src/components/AlertBox';
-import RNExitApp from 'react-native-exit-app';
 
 const SplashScreen = ({navigation}: any) => {
   const {user, loading, token} = useSelector(

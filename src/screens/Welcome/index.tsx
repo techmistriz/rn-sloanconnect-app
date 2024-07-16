@@ -40,7 +40,7 @@ const Welcome = ({navigation, route}: any) => {
 
       consoleLog(
         'Welcome __checkAllRequiredPermissions==>',
-        __checkAllRequiredPermissions,
+        {__checkAllRequiredPermissions, TOTAL_PERMISSION_REQUIRED: constants.API_LEVEL},
       );
 
       if (

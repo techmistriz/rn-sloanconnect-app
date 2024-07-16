@@ -165,6 +165,8 @@ const Index = ({navigation, route}: any) => {
       // LAST_SCAN_TIME = 2
       // current time = 101
       // {"LAST_SCAN_TIME_IN_SEC": 4, "lastScan": 1720801168, "timestampInSec": 1720801172}
+      // {"LAST_SCAN_TIME_IN_SEC": 5, "lastScan": 1721101249, "timestampInSec": 1721101254}
+
       const __foundDevicesTmp = __foundDevices.filter(device => {
         consoleLog('checkDevicesIfOld __foundDevicesTmp==>', {
           lastScan: device?.lastScan,
@@ -185,10 +187,15 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const addFoundDevice = (__device: DeviceExtendedProps) => {
     const device = filterBLEDevices(__device);
-    consoleLog('addFoundDevice device==>', device);
+
     if (!device) {
+      consoleLog('Scanning....');
       return false;
     }
+    consoleLog('addFoundDevice device==>', {
+      deviceCustomName: device?.deviceCustomName,
+      timestampInSec: timestampInSec(),
+    });
 
     if (ScanningProps.DeviceFound != isScanning) {
       setScanning(ScanningProps.DeviceFound);

@@ -234,7 +234,11 @@ class BLEServiceInstance {
   ) => {
     this.manager.startDeviceScan(
       UUIDs,
-      {legacyScan: legacyScan, scanMode: ScanMode.LowLatency},
+      {
+        legacyScan: legacyScan,
+        allowDuplicates: true,
+        scanMode: ScanMode.LowLatency,
+      },
       (error, device) => {
         if (error) {
           this.onError(error);
