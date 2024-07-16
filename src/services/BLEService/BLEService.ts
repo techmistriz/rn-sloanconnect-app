@@ -940,8 +940,8 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-  showSuccessToast = (info: string) => {
-    showToastMessage(info, 'success');
+  showSuccessToast = (message: string) => {
+    showToastMessage(message, 'success');
   };
 
   /**
