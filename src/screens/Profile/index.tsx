@@ -5,6 +5,7 @@ import {
   showSimpleAlert,
   showConfirmAlert,
   consoleLog,
+  showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
 import TouchableItem from 'src/components/TouchableItem';
 import VectorIcon from 'src/components/VectorIcon';
@@ -19,14 +20,16 @@ import {
 } from 'src/redux/actions';
 import AlertBox from 'src/components/AlertBox';
 import {BLEService} from 'src/services';
+import {Button} from 'src/components/Button';
+import Network from 'src/network/Network';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
-  const {user, loading, token, type} = useSelector(
-    (state: any) => state?.AuthReducer,
-  );
+  const {user, token, type} = useSelector((state: any) => state?.AuthReducer);
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
+  const [deleteAccountModal, setDeleteAccountModal] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   /** compoment hooks method */
   useEffect(() => {
@@ -37,16 +40,31 @@ const Index = ({route, navigation}: any) => {
   /** action for logout */
   const onLogout = async () => {
     dispatch(loginResetDataAction());
-    await checkDevice();
+    await checkDeviceOnLogout();
     NavigationService.resetAllAction('Login');
   };
 
-  const checkDevice = async () => {
+  const checkDeviceOnLogout = async () => {
     dispatch(deviceSettingsResetDataAction());
-    if (BLEService?.deviceGeneration == 'gen2') {
-      BLEService?.finishMonitor();
-    }
     BLEService?.disconnectDevice(false);
+  };
+
+  /** */
+  const onDeleteAccountPress = async () => {
+    try {
+      setLoading(true);
+      const response = await Network('profile', 'DELETE', {}, token);
+      if (response?.status) {
+        showToastMessage(response?.message, 'success');
+        onLogout();
+      } else {
+        showToastMessage(response?.message);
+      }
+    } catch (error: any) {
+      showToastMessage(error?.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   /** compoment render method */
@@ -226,6 +244,24 @@ const Index = ({route, navigation}: any) => {
             </TouchableItem>
           </Wrap>
 
+          <Wrap autoMargin={true} style={{}}>
+            <TouchableItem
+              onPress={() => setLogoutModal(true)}
+              style={styles.item}>
+              <Wrap
+                autoMargin={false}
+                style={[styles.itemRow, {justifyContent: 'center'}]}>
+                <Button
+                  type={'danger'}
+                  title="DELETE ACCOUNT"
+                  onPress={() => {
+                    setDeleteAccountModal(true);
+                  }}
+                />
+              </Wrap>
+            </TouchableItem>
+          </Wrap>
+
           <AlertBox
             visible={logoutModal}
             title="Logout"
@@ -237,6 +273,20 @@ const Index = ({route, navigation}: any) => {
             onOkayPress={() => {
               setLogoutModal(false);
               onLogout();
+            }}
+          />
+
+          <AlertBox
+            visible={deleteAccountModal}
+            title="Delete Account"
+            message={`Are you sure you want to Delete Account?`}
+            okayText={'CONFIRM'}
+            onCancelPress={() => {
+              setDeleteAccountModal(false);
+            }}
+            onOkayPress={() => {
+              setDeleteAccountModal(false);
+              onDeleteAccountPress();
             }}
           />
         </Wrap>
