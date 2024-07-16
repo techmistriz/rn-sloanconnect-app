@@ -203,7 +203,7 @@ const Index = ({navigation, route}: any) => {
 
     setFoundDevices(prevState => {
       // const nextState = cloneDeep(prevState); // due to so fast state value updation issue on time
-      const nextState = cloneDeep(foundDevicesRef?.current);
+      const nextState = cloneDeep(foundDevicesRef?.current); // ref values are always upto date
       const extendedDevice: DeviceExtendedProps = {
         ...device,
         lastScan: timestampInSec(),
