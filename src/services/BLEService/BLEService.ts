@@ -237,7 +237,7 @@ class BLEServiceInstance {
       {
         legacyScan: legacyScan,
         allowDuplicates: true,
-        scanMode: ScanMode.LowLatency,
+        scanMode: ScanMode.Balanced,
       },
       (error, device) => {
         if (error) {
