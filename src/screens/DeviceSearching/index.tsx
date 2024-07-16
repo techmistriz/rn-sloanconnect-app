@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Image, FlatList} from 'react-native';
+import {FlatList, Image} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {
@@ -9,7 +9,7 @@ import {
   timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {Wrap, Row} from 'src/components/Common';
+import {Row, Wrap} from 'src/components/Common';
 import TouchableItem from 'src/components/TouchableItem';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import AppInfo from 'src/components/@ProjectComponent/AppInfo';
@@ -40,6 +40,7 @@ const Index = ({navigation, route}: any) => {
   const [foundDevices, setFoundDevices] = useState<DeviceExtendedProps[]>([]);
   const connectedDevice: any = BLEService.getDevice();
   const [searchAgainFlag, setSearchAgain] = useState(0);
+  const [lastFoundEmptyTime, setLastFoundEmptyTime] = useState(timestampInSec());
 
   /** Hooks for checking if user turned off bluetooth power */
   useEffect(() => {
@@ -80,7 +81,7 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const initlizeApp = async () => {
-    consoleLog('initlizeApp called');
+    consoleLog('initlizeApp called', connectedDevice);
     if (connectedDevice?.id) {
       try {
         const isDeviceConnected = await BLEService.isDeviceConnected(
@@ -112,13 +113,20 @@ const Index = ({navigation, route}: any) => {
     foundDevicesRef.current = foundDevices;
     if (foundDevices.length) {
       clearTimeout(timeoutID);
+    } else if (isScanning == ScanningProps.DeviceFound) {
+      initlizeCheckDeviceListTimer(ScanningProps.Scanning, () => {
+        initlizeCheckDeviceListTimer();
+      });
     } else {
       initlizeCheckDeviceListTimer();
     }
   }, [foundDevices]);
 
   /** component timer method */
-  const initlizeCheckDeviceListTimer = () => {
+  const initlizeCheckDeviceListTimer = (
+    timeoutPage = ScanningProps.NoDevice,
+    callback = null,
+  ) => {
     consoleLog('initlizeCheckDeviceListTimer called');
 
     if (timeoutID) {
@@ -132,8 +140,13 @@ const Index = ({navigation, route}: any) => {
       ) {
         clearTimeout(timeoutID);
         clearInterval(intervalID);
-        BLEService.manager.stopDeviceScan();
-        setScanning(ScanningProps.NoDevice);
+        timeoutPage == ScanningProps.NoDevice
+          ? BLEService.manager.stopDeviceScan()
+          : null;
+        setScanning(timeoutPage);
+        if (typeof callback == 'function') {
+          callback();
+        }
       }
     }, DEVICE_LIST_CHECKING_TIMEOUT_MS);
   };
@@ -165,18 +178,21 @@ const Index = ({navigation, route}: any) => {
       // LAST_SCAN_TIME = 2
       // current time = 101
       // {"LAST_SCAN_TIME_IN_SEC": 4, "lastScan": 1720801168, "timestampInSec": 1720801172}
+      let curTimestamp = timestampInSec() - 3; // Subtract 2 ms to compensate the runtime
       const __foundDevicesTmp = __foundDevices.filter(device => {
         consoleLog('checkDevicesIfOld __foundDevicesTmp==>', {
+          id: device?.id,
           lastScan: device?.lastScan,
           LAST_SCAN_TIME_IN_SEC,
-          timestampInSec: timestampInSec(),
+          timestampInSec: curTimestamp,
         });
-        return device?.lastScan + LAST_SCAN_TIME_IN_SEC > timestampInSec();
+        return device?.lastScan + LAST_SCAN_TIME_IN_SEC >= curTimestamp;
       });
 
       if (Array.isArray(__foundDevicesTmp) && __foundDevicesTmp.length > 0) {
         setFoundDevices(__foundDevicesTmp);
       } else {
+        setLastFoundEmptyTime(curTimestamp);
         setFoundDevices([]);
       }
     }
@@ -351,7 +367,7 @@ const Index = ({navigation, route}: any) => {
     );
   } else if (
     isScanning == ScanningProps.DeviceFound &&
-    foundDevices?.length > 0
+    (foundDevices?.length > 0 || lastFoundEmptyTime + 1000 >= timestampInSec())
   ) {
     return (
       <AppContainer
