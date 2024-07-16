@@ -28,7 +28,7 @@ import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
 
 let timeoutID: any = null;
 let intervalID: any = null;
-const LAST_SCAN_TIME_IN_SEC = 5;
+const LAST_SCAN_TIME_IN_SEC = 3;
 const LAST_SCAN_INTERVAL_TIME_MS = 2000;
 const DEVICE_LIST_CHECKING_TIMEOUT_MS = 10000;
 
