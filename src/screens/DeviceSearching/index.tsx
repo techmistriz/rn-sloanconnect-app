@@ -28,7 +28,7 @@ import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
 
 let timeoutID: any = null;
 let intervalID: any = null;
-const LAST_SCAN_TIME_IN_SEC = 4;
+const LAST_SCAN_TIME_IN_SEC = 5;
 const LAST_SCAN_INTERVAL_TIME_MS = 2000;
 const DEVICE_LIST_CHECKING_TIMEOUT_MS = 10000;
 
@@ -151,38 +151,38 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** method for CheckAndRemoveNoAdvertsingDevices */
-  const CheckAndRemoveNoAdvertsingDevices = (
-    __foundDevices1?: DeviceExtendedProps[],
-  ) => {
-    const __foundDevices: DeviceExtendedProps[] = foundDevicesRef?.current;
-    consoleLog(
-      'CheckAndRemoveNoAdvertsingDevices __foundDevices called==>',
-      __foundDevices?.length,
-    );
-    if (Array.isArray(__foundDevices) && __foundDevices.length > 0) {
-      // LAST_SCAN_INTERVAL_TIME_MS = 2
-      // Suppose last scan = 100
-      // LAST_SCAN_TIME = 2
-      // current time = 101
-      // {"LAST_SCAN_TIME_IN_SEC": 4, "lastScan": 1720801168, "timestampInSec": 1720801172}
-      // {"LAST_SCAN_TIME_IN_SEC": 5, "lastScan": 1721101249, "timestampInSec": 1721101254}
+  const CheckAndRemoveNoAdvertsingDevices = () =>
+    // __foundDevices1?: DeviceExtendedProps[],
+    {
+      const __foundDevices: DeviceExtendedProps[] = foundDevicesRef?.current;
+      consoleLog(
+        'CheckAndRemoveNoAdvertsingDevices __foundDevices called==>',
+        __foundDevices?.length,
+      );
+      if (Array.isArray(__foundDevices) && __foundDevices.length > 0) {
+        // LAST_SCAN_INTERVAL_TIME_MS = 2
+        // Suppose last scan = 100
+        // LAST_SCAN_TIME = 2
+        // current time = 101
+        // {"LAST_SCAN_TIME_IN_SEC": 4, "lastScan": 1720801168, "timestampInSec": 1720801172}
+        // {"LAST_SCAN_TIME_IN_SEC": 5, "lastScan": 1721101249, "timestampInSec": 1721101254}
 
-      const __foundDevicesTmp = __foundDevices.filter(device => {
-        consoleLog('checkDevicesIfOld __foundDevicesTmp==>', {
-          lastScan: device?.lastScan,
-          LAST_SCAN_TIME_IN_SEC,
-          timestampInSec: timestampInSec(),
+        const __foundDevicesTmp = __foundDevices.filter(device => {
+          consoleLog('checkDevicesIfOld __foundDevicesTmp==>', {
+            lastScan: device?.lastScan,
+            LAST_SCAN_TIME_IN_SEC,
+            timestampInSec: timestampInSec(),
+          });
+          return device?.lastScan + LAST_SCAN_TIME_IN_SEC > timestampInSec();
         });
-        return device?.lastScan + LAST_SCAN_TIME_IN_SEC > timestampInSec();
-      });
 
-      if (Array.isArray(__foundDevicesTmp) && __foundDevicesTmp.length > 0) {
-        setFoundDevices(__foundDevicesTmp);
-      } else {
-        setFoundDevices([]);
+        if (Array.isArray(__foundDevicesTmp) && __foundDevicesTmp.length > 0) {
+          setFoundDevices(__foundDevicesTmp);
+        } else {
+          setFoundDevices([]);
+        }
       }
-    }
-  };
+    };
 
   /** Function comments */
   const addFoundDevice = (__device: DeviceExtendedProps) => {
@@ -202,7 +202,8 @@ const Index = ({navigation, route}: any) => {
     }
 
     setFoundDevices(prevState => {
-      const nextState = cloneDeep(prevState);
+      // const nextState = cloneDeep(prevState); // due to so fast state value updation issue on time
+      const nextState = cloneDeep(foundDevicesRef?.current);
       const extendedDevice: DeviceExtendedProps = {
         ...device,
         lastScan: timestampInSec(),
