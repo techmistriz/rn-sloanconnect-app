@@ -27,6 +27,7 @@ import {DeviceExtendedProps, ScanningProps} from './types';
 import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
 
 let timeoutID: any = null;
+let timeoutIDForConnecting: any = null;
 let intervalID: any = null;
 const LAST_SCAN_TIME_IN_SEC = 4;
 const LAST_SCAN_INTERVAL_TIME_MS = 2000;
@@ -232,11 +233,16 @@ const Index = ({navigation, route}: any) => {
     BLEService.connectToDevice(item?.id, item)
       .then(onConnectSuccess)
       .catch(onConnectFail);
+
+    timeoutIDForConnecting = setTimeout(() => {
+      onConnectFail({});
+    }, 10000);
   };
 
   /** Function comments */
   const onConnectSuccess = async () => {
     consoleLog('onConnectSuccess');
+    clearTimeout(timeoutIDForConnecting);
     await BLEService.discoverAllServicesAndCharacteristicsForDevice();
     await BLEService.initDeviceData();
     // NavigationService.navigate('DeviceDashboard');
@@ -248,9 +254,7 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const onConnectFail = async (error: any) => {
     consoleLog('onConnectFail error==>', error);
-    showToastMessage(
-      'Looks like BD closed the bluetooth connection, please retry',
-    );
+    showToastMessage('Failed to establish connection to device. Please retry.');
     initlizeApp();
   };
 
