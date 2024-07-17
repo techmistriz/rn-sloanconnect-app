@@ -31,7 +31,7 @@ let timeoutIDForConnecting: any = null;
 let intervalID: any = null;
 const LAST_SCAN_TIME_IN_SEC = 4;
 const LAST_SCAN_INTERVAL_TIME_MS = 2000;
-const DEVICE_LIST_CHECKING_TIMEOUT_MS = 10000;
+const DEVICE_LIST_CHECKING_TIMEOUT_MS = 20000;
 
 const Index = ({navigation, route}: any) => {
   const [isScanning, setScanning] = useState<ScanningProps>(
