@@ -7,6 +7,7 @@ import {
   getTimezone,
   parseDateHumanFormat,
   parseDateHumanFormatFromUnix,
+  showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Row, Col, Wrap} from 'src/components/Common';
@@ -294,15 +295,21 @@ const Index = ({navigation, route}: any) => {
               </Row>
             </Wrap> */}
 
-            {/* <Wrap
+            <Wrap
               autoMargin={true}
-              style={[styles.container, styles.screenMargin]}>
+              style={[
+                styles.container,
+                styles.screenMargin,
+                {paddingBottom: 10},
+              ]}>
               <Row autoMargin={false} style={{}}>
                 <Col autoMargin={false} style={{flex: 1, paddingRight: 20}}>
                   <Button
                     type={'link'}
                     title={'SEND REPORT'}
-                    onPress={() => {}}
+                    onPress={() => {
+                      showToastMessage('Report sent', 'success');
+                    }}
                     textStyle={{
                       fontSize: 12,
                       fontFamily: Theme.fonts.ThemeFontMedium,
@@ -319,6 +326,9 @@ const Index = ({navigation, route}: any) => {
                     onPress={() => {
                       NavigationService.navigate(
                         'DeviceDiagnosticTroubleshoot',
+                        {
+                          referrer: 'DeviceDiagnosticResults',
+                        },
                       );
                     }}
                     textStyle={{
@@ -331,9 +341,9 @@ const Index = ({navigation, route}: any) => {
                   />
                 </Col>
               </Row>
-            </Wrap> */}
+            </Wrap>
 
-            <Wrap
+            {/* <Wrap
               autoMargin={true}
               style={[
                 styles.container,
@@ -356,7 +366,7 @@ const Index = ({navigation, route}: any) => {
                   borderColor: Theme.colors.primaryColor,
                 }}
               />
-            </Wrap>
+            </Wrap> */}
 
             <Wrap
               autoMargin={false}
