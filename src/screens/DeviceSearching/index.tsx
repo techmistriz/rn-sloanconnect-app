@@ -233,10 +233,6 @@ const Index = ({navigation, route}: any) => {
     BLEService.connectToDevice(item?.id, item)
       .then(onConnectSuccess)
       .catch(onConnectFail);
-
-    timeoutIDForConnecting = setTimeout(() => {
-      onConnectFail({});
-    }, 10000);
   };
 
   /** Function comments */

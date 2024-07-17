@@ -262,7 +262,7 @@ class BLEServiceInstance {
     new Promise<Device>((resolve, reject) => {
       this.manager.stopDeviceScan();
       this.manager
-        .connectToDevice(deviceId)
+        .connectToDevice(deviceId, {timeout: 10000})
         .then(device => {
           // Device localName not getting fetched when device connected
           // But when device scanning, localName available
