@@ -839,7 +839,7 @@ class BLEServiceInstance {
   onError = (error: BleError) => {
     switch (error.errorCode) {
       case BleErrorCode.BluetoothUnauthorized:
-        this.requestBluetoothPermission();
+        // this.requestBluetoothPermission();
         break;
       case BleErrorCode.LocationServicesDisabled:
         this.showErrorToast('Location services are disabled');

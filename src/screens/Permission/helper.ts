@@ -16,12 +16,15 @@ import {constants} from 'src/common';
 import {delay} from 'lodash';
 
 /** Function for manage permissions using in this screen */
-export const checkAllRequiredPermissions = (returnType: number = 1) => {
+export const checkAllRequiredPermissions = (
+  returnType: number = 1,
+  shouldNotCheckStateIfNearbyDevicesNotAllowed: boolean = false,
+) => {
   return new Promise(async resolve => {
     consoleLog('checkAllRequiredPermissions called==>');
     let status = 0;
 
-    let permissionsStatus = {
+    let permissionsStatuses = {
       NearbyDevices: false,
       Location: false,
       GeoLocation: false,
@@ -35,7 +38,7 @@ export const checkAllRequiredPermissions = (returnType: number = 1) => {
 
     if (__checkBluetoothPermissions == PERMISSIONS_RESULTS.GRANTED) {
       status++;
-      permissionsStatus.NearbyDevices = true;
+      permissionsStatuses.NearbyDevices = true;
     }
 
     const __checkLocationPermissions = await checkLocationPermissions();
@@ -47,7 +50,7 @@ export const checkAllRequiredPermissions = (returnType: number = 1) => {
     if (__checkLocationPermissions == PERMISSIONS_RESULTS.GRANTED) {
       // This required in android version upto 11
       constants.API_LEVEL <= 30 && status++;
-      permissionsStatus.Location = true;
+      permissionsStatuses.Location = true;
     }
 
     const __checkGeoLocationPermission = await checkGeoLocationPermission();
@@ -59,27 +62,37 @@ export const checkAllRequiredPermissions = (returnType: number = 1) => {
     if (__checkGeoLocationPermission) {
       // This required in android version upto 11
       constants.API_LEVEL <= 30 && status++;
-      permissionsStatus.GeoLocation = true;
+      permissionsStatuses.GeoLocation = true;
     }
 
-    var bleState = await BLEService.manager.state();
-    consoleLog('checkAllRequiredPermissions bleState==>', bleState);
-
-    while (bleState == BluetoothState.Unknown) {
-      await sleep(500);
+    if (
+      permissionsStatuses.NearbyDevices == false &&
+      constants.isIOS &&
+      shouldNotCheckStateIfNearbyDevicesNotAllowed
+    ) {
+      consoleLog('shouldNotCheckStateIfNearbyDevicesNotAllowed called');
+      // no-code
+    } else {
+      consoleLog('shouldNotCheckStateIfNearbyDevicesNotAllowed else called');
       var bleState = await BLEService.manager.state();
-    }
+      consoleLog('checkAllRequiredPermissions bleState==>', bleState);
 
-    consoleLog('checkAllRequiredPermissions bleState==>', bleState);
-    if (bleState === BluetoothState.PoweredOn) {
-      status++;
-      permissionsStatus.BluetoothState = true;
+      while (bleState == BluetoothState.Unknown) {
+        await sleep(500);
+        var bleState = await BLEService.manager.state();
+      }
+
+      consoleLog('checkAllRequiredPermissions bleState==>', bleState);
+      if (bleState === BluetoothState.PoweredOn) {
+        status++;
+        permissionsStatuses.BluetoothState = true;
+      }
     }
 
     consoleLog('checkAllRequiredPermissions status==>', status);
 
     if (returnType == 2) {
-      resolve(permissionsStatus);
+      resolve(permissionsStatuses);
       return;
     }
     resolve(status);

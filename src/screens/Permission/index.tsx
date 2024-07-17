@@ -28,6 +28,7 @@ import AlertBox from 'src/components/AlertBox';
 import RNExitApp from 'react-native-exit-app';
 import {checkAllRequiredPermissions} from './helper';
 import PermissionList from 'src/components/@ProjectComponent/PermissionList';
+// import useAppIsActive from 'src/utils/useAppIsActive';
 
 const Permission = ({navigation, route}: any) => {
   const [nearbyDevicesPermissionStatus, setNearbyDevicesPermissionStatus] =
@@ -37,6 +38,7 @@ const Permission = ({navigation, route}: any) => {
   const [geoPermissionStatus, setGeoPermissionStatus] = useState(0);
   const [iosBluetoothSettingsModel, setIosBluetoothSettingsModel] =
     useState(false);
+  // useAppIsActive(() => __checkAllRequiredPermissions());
 
   const [settingModal, setSettingModal] = useState<any>({
     status: false,
@@ -63,47 +65,46 @@ const Permission = ({navigation, route}: any) => {
 
   /** Function for manage permissions using in this screen */
   useEffect(() => {
-    __checkAllRequiredPermissions();
-
-    consoleLog('apiLevel==>', {
-      apiLevel: constants.API_LEVEL,
+    consoleLog('useEffect PermissionScreen==>', {
+      API_LEVEL: constants.API_LEVEL,
       TOTAL_PERMISSION_REQUIRED: constants.TOTAL_PERMISSION_REQUIRED,
     });
+    __checkAllRequiredPermissions();
   }, []);
 
   /** Function for manage permissions using in this screen */
   const __checkAllRequiredPermissions = async () => {
-    const __checkAllRequiredPermissions: any =
-      await checkAllRequiredPermissions(2);
-
-    consoleLog(
-      '__checkAllRequiredPermissions checkAllRequiredPermissions==>',
-      __checkAllRequiredPermissions,
+    const requiredPermissionsStatuses: any = await checkAllRequiredPermissions(
+      2,
+      true,
     );
 
-    if (__checkAllRequiredPermissions.NearbyDevices) {
+    consoleLog(
+      'PermissionScreen checkAllRequiredPermissions requiredPermissionsStatuses ==>',
+      requiredPermissionsStatuses,
+    );
+
+    if (requiredPermissionsStatuses.NearbyDevices) {
       setNearbyDevicesPermissionStatus(1);
     }
 
-    if (__checkAllRequiredPermissions.Location) {
+    if (requiredPermissionsStatuses.Location) {
       setLocationPermissionStatus(1);
     }
 
-    if (__checkAllRequiredPermissions.GeoLocation) {
+    if (requiredPermissionsStatuses.GeoLocation) {
       setGeoPermissionStatus(1);
     }
 
-    if (__checkAllRequiredPermissions.BluetoothState) {
+    if (requiredPermissionsStatuses.BluetoothState) {
       setBluetoothStateStatus(1);
     }
   };
 
   /** Function for manage permissions using in this screen */
   const onNextPress = async () => {
-    const __checkAllRequiredPermissions: any =
-      await checkAllRequiredPermissions();
-
-    if (__checkAllRequiredPermissions >= constants.TOTAL_PERMISSION_REQUIRED) {
+    const requiredPermissionCount: any = await checkAllRequiredPermissions();
+    if (requiredPermissionCount >= constants.TOTAL_PERMISSION_REQUIRED) {
       allPermissionGivenAndRedirect();
     } else {
       showToastMessage('Please allow required permissions.');
@@ -420,6 +421,7 @@ const Permission = ({navigation, route}: any) => {
           </Wrap>
         </Wrap>
       </Wrap>
+
       <AlertBox
         visible={permissionModal?.status}
         title={permissionModal?.title}
@@ -429,9 +431,8 @@ const Permission = ({navigation, route}: any) => {
             ...permissionModal,
             status: false,
           });
-          RNExitApp.exitApp();
         }}
-        cancelText="EXIT APP"
+        cancelText="CLOSE"
         onOkayPress={() => {
           handlePermissionPopup();
         }}
@@ -444,9 +445,8 @@ const Permission = ({navigation, route}: any) => {
         message={settingModal?.message}
         onCancelPress={() => {
           setSettingModal(false);
-          RNExitApp.exitApp();
         }}
-        cancelText="Exit App"
+        cancelText="CLOSE"
         onOkayPress={() => {
           setSettingModal({
             status: false,
@@ -455,22 +455,22 @@ const Permission = ({navigation, route}: any) => {
           });
           openSettings();
         }}
-        okayText="Open Settings"
+        okayText="OPEN SETTINGS"
       />
 
       <AlertBox
         visible={iosBluetoothSettingsModel}
         title={`${constants.APP_NAME} would like to use Bluetooth for new connections`}
-        message={`You can allow new connections in Settings}`}
+        message={`You can allow new connections in Settings`}
         onCancelPress={() => {
-          setSettingModal(false);
-          RNExitApp.exitApp();
+          setIosBluetoothSettingsModel(false);
         }}
-        cancelText="Close"
+        cancelText="CLOSE"
         onOkayPress={() => {
+          setIosBluetoothSettingsModel(false);
           openBluetoothSettings();
         }}
-        okayText="Open Settings"
+        okayText="OPEN SETTINGS"
       />
     </>
   );
