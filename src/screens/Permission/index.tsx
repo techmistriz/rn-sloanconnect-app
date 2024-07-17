@@ -28,7 +28,9 @@ import AlertBox from 'src/components/AlertBox';
 import RNExitApp from 'react-native-exit-app';
 import {checkAllRequiredPermissions} from './helper';
 import PermissionList from 'src/components/@ProjectComponent/PermissionList';
-// import useAppIsActive from 'src/utils/useAppIsActive';
+
+let timeoutIDForPermissionCheckiOS: any = null;
+const IOS_PERMISSION_CHECKING_TIMEOUT_MS = 2000;
 
 const Permission = ({navigation, route}: any) => {
   const [nearbyDevicesPermissionStatus, setNearbyDevicesPermissionStatus] =
@@ -38,7 +40,6 @@ const Permission = ({navigation, route}: any) => {
   const [geoPermissionStatus, setGeoPermissionStatus] = useState(0);
   const [iosBluetoothSettingsModel, setIosBluetoothSettingsModel] =
     useState(false);
-  // useAppIsActive(() => __checkAllRequiredPermissions());
 
   const [settingModal, setSettingModal] = useState<any>({
     status: false,
@@ -70,6 +71,22 @@ const Permission = ({navigation, route}: any) => {
       TOTAL_PERMISSION_REQUIRED: constants.TOTAL_PERMISSION_REQUIRED,
     });
     __checkAllRequiredPermissions();
+  }, []);
+
+  /** Function for manage permissions using in this screen */
+  useEffect(() => {
+    consoleLog('useEffect PermissionScreen timeoutIDForPermissionCheckiOS==>');
+
+    if (constants.isIOS) {
+      timeoutIDForPermissionCheckiOS = setInterval(() => {
+        __checkAllRequiredPermissions();
+      }, IOS_PERMISSION_CHECKING_TIMEOUT_MS);
+    }
+
+    return () => {
+      consoleLog('Unmounting clearInterval');
+      clearInterval(timeoutIDForPermissionCheckiOS);
+    };
   }, []);
 
   /** Function for manage permissions using in this screen */
