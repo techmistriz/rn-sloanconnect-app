@@ -41,6 +41,7 @@ const Index = ({navigation, route}: any) => {
   const [foundDevices, setFoundDevices] = useState<DeviceExtendedProps[]>([]);
   const connectedDevice: any = BLEService.getDevice();
   const [searchAgainFlag, setSearchAgain] = useState(0);
+  const [isDeviceConnectTimedout, setDeviceConnectTimeout] = useState(false);
 
   /** Hooks for checking if user turned off bluetooth power */
   useEffect(() => {
@@ -160,6 +161,10 @@ const Index = ({navigation, route}: any) => {
         'CheckAndRemoveNoAdvertsingDevices __foundDevices called==>',
         __foundDevices?.length,
       );
+      consoleLog(
+          'CheckAndRemoveNoAdvertsingDevices __foundDevices called isScanning==>',
+          isScanning
+      );
       if (Array.isArray(__foundDevices) && __foundDevices.length > 0) {
         // LAST_SCAN_INTERVAL_TIME_MS = 2
         // Suppose last scan = 100
@@ -167,14 +172,14 @@ const Index = ({navigation, route}: any) => {
         // current time = 101
         // {"LAST_SCAN_TIME_IN_SEC": 4, "lastScan": 1720801168, "timestampInSec": 1720801172}
         // {"LAST_SCAN_TIME_IN_SEC": 5, "lastScan": 1721101249, "timestampInSec": 1721101254}
-
+        let timestampInSecond = timestampInSec();
         const __foundDevicesTmp = __foundDevices.filter(device => {
           consoleLog('checkDevicesIfOld __foundDevicesTmp==>', {
             lastScan: device?.lastScan,
             LAST_SCAN_TIME_IN_SEC,
-            timestampInSec: timestampInSec(),
+            timestampInSec: timestampInSecond,
           });
-          return device?.lastScan + LAST_SCAN_TIME_IN_SEC > timestampInSec();
+          return device?.lastScan + LAST_SCAN_TIME_IN_SEC >= timestampInSecond;
         });
 
         if (Array.isArray(__foundDevicesTmp) && __foundDevicesTmp.length > 0) {
@@ -190,7 +195,7 @@ const Index = ({navigation, route}: any) => {
     const device = filterBLEDevices(__device);
 
     if (!device) {
-      consoleLog('Scanning....');
+      // consoleLog('Scanning....');
       return false;
     }
     consoleLog('addFoundDevice device==>', {
@@ -198,9 +203,7 @@ const Index = ({navigation, route}: any) => {
       timestampInSec: timestampInSec(),
     });
 
-    if (ScanningProps.DeviceFound != isScanning) {
-      setScanning(ScanningProps.DeviceFound);
-    }
+    setScanning(ScanningProps.DeviceFound);
 
     setFoundDevices(prevState => {
       // const nextState = cloneDeep(prevState); // due to so fast state value updation issue on time
@@ -230,15 +233,24 @@ const Index = ({navigation, route}: any) => {
     clearTimeout(timeoutID);
     clearInterval(intervalID);
     setScanning(ScanningProps.Connecting);
+    setDeviceConnectTimeout(false);
     BLEService.connectToDevice(item?.id, item)
-      .then(onConnectSuccess)
+      .then(() => onConnectSuccess(item?.id))
       .catch(onConnectFail);
+    timeoutIDForConnecting = setTimeout(() => {
+      setDeviceConnectTimeout(true);
+      onConnectFail({}, item?.id);
+    }, 15000);
   };
 
   /** Function comments */
-  const onConnectSuccess = async () => {
+  const onConnectSuccess = async (deviceId) => {
     consoleLog('onConnectSuccess');
     clearTimeout(timeoutIDForConnecting);
+    if (isDeviceConnectTimedout) {
+      BLEService.disconnectDevice(false, deviceId);
+      return;
+    }
     await BLEService.discoverAllServicesAndCharacteristicsForDevice();
     await BLEService.initDeviceData();
     // NavigationService.navigate('DeviceDashboard');
@@ -248,7 +260,9 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** Function comments */
-  const onConnectFail = async (error: any) => {
+  const onConnectFail = async (error: any, deviceId: any = null) => {
+    clearTimeout(timeoutIDForConnecting);
+    BLEService.disconnectDevice(false, deviceId);
     consoleLog('onConnectFail error==>', error);
     showToastMessage('Failed to establish connection to device. Please retry.');
     initlizeApp();

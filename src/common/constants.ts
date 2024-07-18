@@ -34,12 +34,12 @@ const BASE_DATE_TIME_FROM_FORMAT = 'YYYY-MM-DD HH:mm';
 
 const ANDROID_APP_LINK =
   'https://play.google.com/store/apps/details?id=app.appID&pli=1';
-const ANDROID_APP_VERSION = '1.1.5 (2)';
-const ANDROID_RELEASE_DATE = 'Jul 3, 2024';
+const ANDROID_APP_VERSION = '1.1.7';
+const ANDROID_RELEASE_DATE = 'Jul 18, 2024';
 const IOS_APP_LINK =
   'https://play.google.com/store/apps/details?id=app.appID&pli=1';
-const IOS_APP_VERSION = '1.1.5 (2)';
-const IOS_APP_RELEASE_DATE = 'Jul 3, 2024';
+const IOS_APP_VERSION = '1.1.7';
+const IOS_APP_RELEASE_DATE = 'Jul 18, 2024';
 const RELEASE_DATE = isAndroid ? ANDROID_RELEASE_DATE : IOS_APP_RELEASE_DATE;
 const APP_VERSION = isAndroid ? ANDROID_APP_VERSION : IOS_APP_VERSION;
 const RELEASE_TEXT = `Release On: ${

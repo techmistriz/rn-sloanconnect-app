@@ -160,15 +160,15 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
-  disconnectDevice = (showToast: boolean = true) => {
+  disconnectDevice = (showToast: boolean = true, deviceId: any = null) => {
     new Promise<boolean>((resolve, reject) => {
-      if (!this.device?.id) {
+      if (!this.device?.id && !deviceId) {
         // this.showErrorToast(deviceNotConnectedErrorText);
         return resolve(true);
         // throw new Error(deviceNotConnectedErrorText);
       }
       this.manager
-        .cancelDeviceConnection(this.device.id)
+        .cancelDeviceConnection(deviceId ? deviceId : this.device.id)
         .then(() => {
           this.device = null;
           showToast && this.showSuccessToast('Device disconnected');
@@ -262,7 +262,7 @@ class BLEServiceInstance {
     new Promise<Device>((resolve, reject) => {
       this.manager.stopDeviceScan();
       this.manager
-        .connectToDevice(deviceId, {timeout: 10000})
+        .connectToDevice(deviceId, {autoConnect: false})
         .then(device => {
           // Device localName not getting fetched when device connected
           // But when device scanning, localName available
