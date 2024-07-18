@@ -29,6 +29,7 @@ import {
 } from 'src/utils/Helpers/encryption';
 import {mapValueGen2} from 'src/utils/Helpers/project';
 import {mappingDeviceDataIntegersGen2} from '../DeviceDashboard/helperGen2';
+import LoaderOverlay from 'src/components/LoaderOverlay';
 
 const Index = ({navigation, route}: any) => {
   const connectedDevice = BLEService.getDevice();
@@ -544,6 +545,7 @@ const Index = ({navigation, route}: any) => {
           </Wrap>
         </Wrap>
       </Wrap>
+      <LoaderOverlay loading={loading} />
     </Wrap>
   );
 };
