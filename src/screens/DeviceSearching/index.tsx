@@ -29,7 +29,7 @@ import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
 let timeoutID: any = null;
 let timeoutIDForConnecting: any = null;
 let intervalID: any = null;
-const LAST_SCAN_TIME_IN_SEC = 4;
+const LAST_SCAN_TIME_IN_SEC = 5;
 const LAST_SCAN_INTERVAL_TIME_MS = 2000;
 const DEVICE_LIST_CHECKING_TIMEOUT_MS = 20000;
 
@@ -162,8 +162,8 @@ const Index = ({navigation, route}: any) => {
         __foundDevices?.length,
       );
       consoleLog(
-          'CheckAndRemoveNoAdvertsingDevices __foundDevices called isScanning==>',
-          isScanning
+        'CheckAndRemoveNoAdvertsingDevices __foundDevices called isScanning==>',
+        isScanning,
       );
       if (Array.isArray(__foundDevices) && __foundDevices.length > 0) {
         // LAST_SCAN_INTERVAL_TIME_MS = 2
@@ -239,15 +239,16 @@ const Index = ({navigation, route}: any) => {
       .catch(onConnectFail);
     timeoutIDForConnecting = setTimeout(() => {
       setDeviceConnectTimeout(true);
+      setFoundDevices([]);
       onConnectFail({}, item?.id);
     }, 15000);
   };
 
   /** Function comments */
-  const onConnectSuccess = async (deviceId) => {
+  const onConnectSuccess = async (deviceId: any = null) => {
     consoleLog('onConnectSuccess');
     clearTimeout(timeoutIDForConnecting);
-    if (isDeviceConnectTimedout) {
+    if (isDeviceConnectTimedout && deviceId) {
       BLEService.disconnectDevice(false, deviceId);
       return;
     }
