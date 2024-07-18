@@ -235,7 +235,13 @@ const Index = ({navigation, route}: any) => {
     setScanning(ScanningProps.Connecting);
     setDeviceConnectTimeout(false);
     BLEService.connectToDevice(item?.id, item)
-      .then(() => onConnectSuccess(item?.id))
+      .then(async () => {
+        try {
+          await onConnectSuccess(item?.id);
+        } catch (e) {
+          await onConnectFail({}, item?.id);
+        }
+      })
       .catch(onConnectFail);
     timeoutIDForConnecting = setTimeout(() => {
       setDeviceConnectTimeout(true);
@@ -247,7 +253,7 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const onConnectSuccess = async (deviceId: any = null) => {
     consoleLog('onConnectSuccess');
-    clearTimeout(timeoutIDForConnecting);
+    if (timeoutIDForConnecting) clearTimeout(timeoutIDForConnecting);
     if (isDeviceConnectTimedout && deviceId) {
       BLEService.disconnectDevice(false, deviceId);
       return;
