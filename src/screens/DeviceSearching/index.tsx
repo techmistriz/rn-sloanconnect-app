@@ -247,12 +247,12 @@ const Index = ({navigation, route}: any) => {
       setDeviceConnectTimeout(true);
       setFoundDevices([]);
       onConnectFail({}, item?.id);
-    }, 15000);
+    }, 20000);
   };
 
   /** Function comments */
   const onConnectSuccess = async (deviceId: any = null) => {
-    consoleLog('onConnectSuccess');
+    consoleLog('onConnectSuccess', {isDeviceConnectTimedout, deviceId});
     if (timeoutIDForConnecting) clearTimeout(timeoutIDForConnecting);
     if (isDeviceConnectTimedout && deviceId) {
       BLEService.disconnectDevice(false, deviceId);
@@ -269,6 +269,7 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const onConnectFail = async (error: any, deviceId: any = null) => {
     clearTimeout(timeoutIDForConnecting);
+    setDeviceConnectTimeout(false);
     BLEService.disconnectDevice(false, deviceId);
     consoleLog('onConnectFail error==>', error);
     showToastMessage('Failed to establish connection to device. Please retry.');
