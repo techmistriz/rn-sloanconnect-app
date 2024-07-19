@@ -29,7 +29,7 @@ const Index = ({route, navigation}: any) => {
     // await BLEReport.mapDeviceInfo();
     // await BLEReport.mapUserPreference();
     // await BLEReport.mapFaucetDeviceDetails();
-    await BLEReport.mapAdvanceDeviceDetails(); 
+    // await BLEReport.mapAdvanceDeviceDetails(); 
   };
 
   return (

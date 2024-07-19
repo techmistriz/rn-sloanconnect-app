@@ -9,7 +9,9 @@ import {
 } from 'src/services/DBService/SQLiteDBService';
 import NetInfo from '@react-native-community/netinfo';
 
-export const checkPendingSycableItems = async (): Promise<boolean> => {
+export const checkPendingSycableItems = async (
+  token: string,
+): Promise<boolean> => {
   try {
     NetInfo.fetch().then(state => {
       if (state.isConnected == false) {
@@ -43,7 +45,7 @@ export const checkPendingSycableItems = async (): Promise<boolean> => {
 
       for (let index = 0; index < storedReportItems.length; index++) {
         const item = storedReportItems[index];
-        const syncStatus: boolean = await syncToServer(item);
+        const syncStatus: boolean = await syncToServer(item, token);
 
         promises.push(syncStatus);
         if (syncStatus) {
@@ -65,13 +67,19 @@ export const checkPendingSycableItems = async (): Promise<boolean> => {
   }
 };
 
-export const syncToServer = async (item: ReportItemModel): Promise<boolean> => {
+export const syncToServer = async (
+  item: ReportItemModel,
+  token: string,
+): Promise<boolean> => {
   try {
     const response = await Network(
       'v1/sloan/save-device-report',
       'POST',
-      item?.value,
+      typeof item?.value == 'string' ? JSON.parse(item?.value) : item?.value,
+      token,
     );
+
+    consoleLog('syncToServer response==>', response);
     if (response) {
       return true;
     } else {

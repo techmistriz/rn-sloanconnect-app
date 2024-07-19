@@ -22,6 +22,7 @@ import {readingDiagnosticGen2} from 'src/screens/DeviceDiagnostics/helperGen2';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
 import moment from 'moment';
+import {cleanString, cleanString2} from 'src/utils/Helpers/encryption';
 
 const __reportMappingStats = {
   report_created_at: '',
@@ -440,7 +441,9 @@ class BLEReportInstance {
         break;
 
       case 'Note':
-        __FAUCET_SETTINGS.bd_note = response?.note?.value ?? null;
+        __FAUCET_SETTINGS.bd_note = cleanString2(
+          cleanString(response?.note?.value ?? ''),
+        );
         break;
 
       default:

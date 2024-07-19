@@ -35,6 +35,7 @@ import LoaderComponent from 'src/components/Loader';
 import Network from 'src/network/Network';
 import {syncToServer} from 'src/services/SyncService/SyncService';
 import NetInfo from '@react-native-community/netinfo';
+import {useDispatch, useSelector} from 'react-redux';
 
 const initReports = [
   {
@@ -65,6 +66,7 @@ const Index = () => {
   const [newReport, setNewReport] = useState('');
   const [apiRequestCompleted, setApiRequestCompleted] = useState(true);
   const [loading, setLoading] = useState(false);
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
 
   const loadDataCallback = useCallback(async () => {
     consoleLog('loadDataCallback called==>');
@@ -85,7 +87,7 @@ const Index = () => {
         );
         setReports(storedReportItems);
       } else {
-        await saveReportItems(db, initReports);
+        // await saveReportItems(db, initReports);
         consoleLog('loadDataCallback saveReportItems==>', initReports);
         setReports([]);
       }
@@ -105,19 +107,19 @@ const Index = () => {
     try {
       NetInfo.fetch().then(state => {
         if (state.isConnected == false) {
-          showToastMessage('Synced successfully.', 'danger');
+          showToastMessage('No internet connected.', 'danger');
           return false;
         }
       });
 
       setLoading(true);
       const db = await getDBConnection();
-      await updateReportItem(db, item, 1);
-      loadDataCallback();
-      const status: boolean = await syncToServer(item);
+      // await updateReportItem(db, item, 1);
+      // loadDataCallback();
+      const status: boolean = await syncToServer(item, token);
 
       if (status) {
-        await deleteReportItem(db, item.id);
+        // await deleteReportItem(db, item.id);
         showToastMessage('Synced successfully.', 'success');
       } else {
         showToastMessage('Something went wrong!', 'danger');
