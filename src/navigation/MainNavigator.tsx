@@ -21,6 +21,7 @@ import Settings from 'src/screens/Settings';
 import Profile from 'src/screens/Profile';
 import EditProfile from 'src/screens/Profile/EditProfile';
 import ChangePassword from 'src/screens/Profile/ChangePassword';
+import SyncReport from 'src/screens/SyncReport';
 
 //Cms
 import Help from 'src/screens/Cms/Help';
@@ -309,6 +310,15 @@ const MainNavigator = () => {
             headerShown: true,
             // headerRight: () => <Header route={route?.params?.image} />
             header: () => <Header title="Notes" />,
+          }}
+        />
+        <Stack.Screen
+          name="SyncReport"
+          component={SyncReport}
+          options={{
+            headerShown: true,
+            // headerRight: () => <Header route={route?.params?.image} />
+            header: () => <Header title="SyncReport" />,
           }}
         />
       </Stack.Navigator>

@@ -4,6 +4,7 @@ import {
   consoleLog,
   getImgSource,
   parseDateHumanFormatFromUnix,
+  showToastMessage,
   timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Theme from 'src/theme';
@@ -11,10 +12,13 @@ import {
   getDBConnection,
   getReportItems,
   saveReportItems,
-  createTable,
+  createReportTable,
   deleteReportItem,
-} from 'src/services/DB/SQLiteDBService';
-import {ReportItemModel} from 'src/services/DB/Models';
+  checkTableExistance,
+  updateReportItem,
+  clearTable,
+} from 'src/services/DBService/SQLiteDBService';
+import {ReportItemModel} from 'src/services/DBService/Models';
 import AppInfo from 'src/components/@ProjectComponent/AppInfo';
 import AppContainer from 'src/components/AppContainer';
 import {Wrap, Row} from 'src/components/Common';
@@ -28,24 +32,27 @@ import {styles} from './styles';
 import EmptyComponent from 'src/components/EmptyState';
 import {constants} from 'src/common';
 import LoaderComponent from 'src/components/Loader';
+import Network from 'src/network/Network';
+import {syncToServer} from 'src/services/SyncService/SyncService';
+import NetInfo from '@react-native-community/netinfo';
 
 const initReports = [
   {
-    id: 0,
+    id: 1,
     name: 'Diagnostic report 1',
     value: 'go to shop',
     status: 0,
     dateTime: timestampInSec(),
   },
   {
-    id: 1,
+    id: 2,
     name: 'Diagnostic report 2',
     value: 'eat at least a one healthy foods',
     status: 0,
     dateTime: timestampInSec(),
   },
   {
-    id: 2,
+    id: 3,
     name: 'Diagnostic report 2',
     value: 'Do some exercises',
     status: 0,
@@ -57,16 +64,19 @@ const Index = () => {
   const [reports, setReports] = useState<ReportItemModel[]>([]);
   const [newReport, setNewReport] = useState('');
   const [apiRequestCompleted, setApiRequestCompleted] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const loadDataCallback = async () => {
+  const loadDataCallback = useCallback(async () => {
     consoleLog('loadDataCallback called==>');
 
     try {
       const db = await getDBConnection();
-      const storedReportItems = await getReportItems(db);
       consoleLog('loadDataCallback db==>', db);
-      // await createTable(db, 'table_reports');
-      // const storedReportItems = await getReportItems(db);
+      // await clearTable(db, 'table_reports');
+      // await createReportTable(db, 'table_reports');
+      const isTableExistance = await checkTableExistance(db, 'table_reports');
+      consoleLog('loadDataCallback isTableExistance==>', isTableExistance);
+      const storedReportItems = await getReportItems(db);
       consoleLog('loadDataCallback storedReportItems==>', storedReportItems);
       if (storedReportItems.length) {
         consoleLog(
@@ -77,60 +87,49 @@ const Index = () => {
       } else {
         await saveReportItems(db, initReports);
         consoleLog('loadDataCallback saveReportItems==>', initReports);
-        setReports(initReports);
+        setReports([]);
       }
 
       consoleLog('reports==>', reports);
     } catch (error) {
       consoleLog('reports error==>', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     consoleLog('Sync useEffect called');
     loadDataCallback();
-  }, []);
+  }, [loadDataCallback]);
 
-  const addReport = async () => {
-    if (!newReport.trim()) return;
+  const onSync = async (item: ReportItemModel) => {
     try {
-      const newReports = [
-        ...reports,
-        {
-          id: reports.length
-            ? reports.reduce((acc, cur) => {
-                if (cur.id > acc.id) return cur;
-                return acc;
-              }).id + 1
-            : 0,
-          value: newReport,
-          status: 0,
-          dateTime: '',
-        },
-      ];
-      setReports(newReports);
+      NetInfo.fetch().then(state => {
+        if (state.isConnected == false) {
+          showToastMessage('Synced successfully.', 'danger');
+          return false;
+        }
+      });
+
+      setLoading(true);
       const db = await getDBConnection();
-      await saveReportItems(db, newReports);
-      setNewReport('');
+      await updateReportItem(db, item, 1);
+      loadDataCallback();
+      const status: boolean = await syncToServer(item);
+
+      if (status) {
+        await deleteReportItem(db, item.id);
+        showToastMessage('Synced successfully.', 'success');
+      } else {
+        showToastMessage('Something went wrong!', 'danger');
+      }
     } catch (error) {
-      console.error(error);
+      showToastMessage(error?.message, 'danger');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const deleteItem = async (id: number) => {
-    try {
-      const db = await getDBConnection();
-      await deleteReportItem(db, id);
-      reports.splice(id, 1);
-      setReports(reports.slice(0));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const syncToServer = (item: ReportItemModel) => {};
-
-  /**Child flatlist render method */
+  /**Flatlist render method */
   const renderItem = ({item}: any) => {
     return (
       <TouchableItem disabled style={{}}>
@@ -176,7 +175,7 @@ const Index = () => {
                   size={25}
                   color={Theme.colors.primaryColor}
                   onPress={() => {
-                    syncToServer(item);
+                    onSync(item);
                   }}
                 />
               ) : (
@@ -204,6 +203,7 @@ const Index = () => {
       scrollViewStyle={{}}
       backgroundType="solid"
       hasHeader={false}
+      loading={loading}
       headerContainerStyle={{backgroundColor: Theme.colors.primaryColor}}>
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>

@@ -255,7 +255,8 @@ const Index = ({route, navigation}: any) => {
                   type={'danger'}
                   title="DELETE ACCOUNT"
                   onPress={() => {
-                    setDeleteAccountModal(true);
+                    NavigationService.navigate('Sync');
+                    // setDeleteAccountModal(true);
                   }}
                 />
               </Wrap>

@@ -18,12 +18,14 @@ import {
   getDeviceInfoNormal,
 } from 'src/screens/DeviceInfo/helperGen1';
 import {readingDiagnostic} from 'src/screens/DeviceDiagnostics/helperGen1';
+import {readingDiagnosticGen2} from 'src/screens/DeviceDiagnostics/helperGen2';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
 import moment from 'moment';
 
 const __reportMappingStats = {
   report_created_at: '',
+  is_report_manual: 'yes',
   user_info: {
     user_email: '',
     first_name: '',
@@ -92,7 +94,6 @@ const __reportMappingStats = {
       sensor: '',
       valve: '',
       turbine: '',
-      water_dispence: '',
       battery: '',
       date_of_diagnostic: '',
     },
@@ -100,7 +101,6 @@ const __reportMappingStats = {
       sensor: '',
       valve: '',
       turbine: '',
-      water_dispence: '',
       battery: '',
       date_of_diagnostic: '',
     },
@@ -460,7 +460,16 @@ class BLEReportInstance {
     // );
   }
 
-  async mapDiagnosticReport(hasSettingsChanged: boolean = false) {
+  async mapDiagnosticReport() {
+    consoleLog('mapFaucetDeviceDetails called');
+    if (BLEService.deviceGeneration == 'gen1') {
+      await this.mapDiagnosticReportGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      await this.mapDiagnosticReportGen2();
+    }
+  }
+
+  async mapDiagnosticReportGen1(hasSettingsChanged: boolean = false) {
     const RESULTS = await readingDiagnostic();
     consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
 
@@ -484,14 +493,77 @@ class BLEReportInstance {
       valueKey: 'value',
     });
 
-    __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
-      'Water Dispense',
+    // __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
+    //   'Water Dispense',
+    //   RESULTS,
+    //   {
+    //     searchKey: 'name',
+    //     valueKey: 'value',
+    //   },
+    // );
+    __DIAGNOSTIC_REPORT.battery = findValueObject(
+      'Battery Level at Diagnostic',
       RESULTS,
       {
         searchKey: 'name',
         valueKey: 'value',
       },
     );
+    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    if (hasSettingsChanged) {
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+    } else {
+      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
+    }
+
+    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
+  }
+
+  async mapDiagnosticReportGen2(hasSettingsChanged: boolean = false) {
+    const RESULTS = await readingDiagnosticGen2(
+      BLEService.characteristicMonitorDiagnosticMapped,
+    );
+    consoleLog(
+      'mapDiagnosticReportGen2 readingDiagnosticGen2 RESULTS==>',
+      RESULTS,
+    );
+
+    let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
+    let __DIAGNOSTIC_REPORT = hasSettingsChanged
+      ? __DIAGNOSTIC_REPORT_ALL?.current
+      : __DIAGNOSTIC_REPORT_ALL?.prev;
+
+    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.valve = findValueObject('Valve', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.turbine = findValueObject('Turbine', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    // __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
+    //   'Water Dispense',
+    //   RESULTS,
+    //   {
+    //     searchKey: 'name',
+    //     valueKey: 'value',
+    //   },
+    // );
     __DIAGNOSTIC_REPORT.battery = findValueObject(
       'Battery Level at Diagnostic',
       RESULTS,
@@ -818,12 +890,12 @@ class BLEReportInstance {
     const currentTimestamp = timestampInSec();
     this.reportMappingStats.report_created_at = moment
       .unix(currentTimestamp)
-      .format('YY-MM-DD HH:mm');
+      .format('YYYY-MM-DD HH:mm');
     this.mapUserInfo(user);
     this.mapDeviceInfo();
     this.mapUserPreference();
     await this.mapFaucetDeviceDetails();
-    // this.mapFaucetSettings(); this is called from dashboarc for gen1 and gen2 both for filling values
+    // this.mapFaucetSettings(); this is called from dashboard for gen1 and gen2 both for filling values
     await this.mapDiagnosticReport();
     await this.mapAdvanceDeviceDetails();
     return this.reportMappingStats;

@@ -1,11 +1,11 @@
 {
   "advanced_device_details": {
-    "accumulated_activation_time": "15336 sec",
-    "accumulated_flush_time": "1710 sec",
-    "accumulated_water_usage": "74.27 Gal (281.16 L)",
-    "activations_since_day_1": 1205,
-    "activations_since_last_change": 136,
-    "battery_status": 93,
+    "accumulated_activation_time": "17119 sec",
+    "accumulated_flush_time": "2160 sec",
+    "accumulated_water_usage": "82.91 Gal (313.85 L)",
+    "activations_since_day_1": 1387,
+    "activations_since_last_change": 67,
+    "battery_status": 94,
     "date_of_installation": "May 2024",
     "date_of_last_bd_note_change": 1719421040,
     "date_of_last_factory": 0,
@@ -17,26 +17,24 @@
     "date_of_last_mode_change": 1717818680,
     "date_of_last_ondemand_timeout_change": 1717818680,
     "date_of_last_range_change": 1719127967,
-    "hours_of_operation": 1057,
-    "line_flushes_since_day1": "19",
-    "number_of_ble_connections": "281"
+    "hours_of_operation": 1234,
+    "line_flushes_since_day1": "24",
+    "number_of_ble_connections": "297"
   },
   "diagnostic_report": {
     "current": {
-      "battery": "",
-      "date_of_diagnostic": "",
-      "sensor": "",
-      "turbine": "",
-      "valve": "",
-      "water_dispence": ""
+      "battery": "90",
+      "date_of_diagnostic": 1721303039,
+      "sensor": "0",
+      "turbine": "0",
+      "valve": "1"
     },
     "prev": {
-      "battery": null,
-      "date_of_diagnostic": null,
-      "sensor": null,
-      "turbine": null,
-      "valve": null,
-      "water_dispence": null
+      "battery": "90",
+      "date_of_diagnostic": 1721303539,
+      "sensor": "0",
+      "turbine": "0",
+      "valve": "1"
     }
   },
   "faucet_device_details": {
@@ -51,28 +49,28 @@
       "faucet_model": "ETF500 / EBF550, ETF500S / EBF550S, ETF800 / EBF850",
       "sensor_firmware_ver": "0175",
       "sensor_hardware_ver": "0109",
-      "sensor_manufacturing_date": "N/A",
-      "sensor_serial_number": ""
+      "sensor_manufacturing_date": "2018/04/20",
+      "sensor_serial_number": "A050002249"
     }
   },
   "faucet_settings": {
     "current": {
-      "bd_note": "",
-      "flow_rate": "",
-      "flush_duration": "",
-      "flush_enable": "",
-      "flush_interval": "",
-      "metered_run_time": "",
-      "mode_selection": "",
-      "on_demand_time_out": "",
-      "sensor_range": ""
+      "bd_note": "test note updated 28506929916",
+      "flow_rate": "11",
+      "flush_duration": "30",
+      "flush_enable": "0",
+      "flush_interval": "8",
+      "metered_run_time": "30",
+      "mode_selection": "0",
+      "on_demand_time_out": "30",
+      "sensor_range": "3"
     },
     "prev": {
       "bd_note": "test note updated 28506929916",
       "flow_rate": "11",
       "flush_duration": "30",
-      "flush_enable": "1",
-      "flush_interval": "15",
+      "flush_enable": "0",
+      "flush_interval": "8",
       "metered_run_time": "30",
       "mode_selection": "0",
       "on_demand_time_out": "30",
@@ -80,15 +78,15 @@
     }
   },
   "mobile_device_info": {
-    "app_install_date": "05-14-2024",
-    "app_release_date": "Jul 3, 2024",
-    "app_version": "1.1.5 (2)",
+    "app_install_date": "2024-07-18",
+    "app_release_date": "Jul 18, 2024",
+    "app_version": "1.1.7",
     "bluetooth_ver": "",
     "model": "I2126",
     "os": "android",
-    "phone_battery": 97
+    "phone_battery": 17
   },
-  "report_created_at": "24-07-07 12:57",
+  "report_created_at": "2024-07-18 17:37",
   "user_app_preferences": {
     "gallon_liter": "",
     "language": "EN",
