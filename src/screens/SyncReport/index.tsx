@@ -127,7 +127,7 @@ const Index = () => {
       loadDataCallback();
       const payload =
         typeof item?.value === 'string' ? JSON.parse(item?.value) : item?.value;
-      // consoleLog('onSync payload==>', payload);
+      consoleLog('onSync payload==>', payload);
       const status: boolean = await syncToServer(payload, token);
       consoleLog('status==>', status);
 
@@ -137,6 +137,7 @@ const Index = () => {
         loadDataCallback();
       } else {
         await updateReportItem(db, item, 2);
+        loadDataCallback();
         showToastMessage('Something went wrong!', 'danger');
       }
     } catch (error) {
