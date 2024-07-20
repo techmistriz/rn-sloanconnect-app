@@ -1,8 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  StyleSheet,
-  Image,
-} from 'react-native';
+import {StyleSheet, Image} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useSelector} from 'react-redux';

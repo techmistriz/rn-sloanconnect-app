@@ -28,6 +28,7 @@ const __reportMappingStats = {
   report_created_at: '',
   is_report_manual: 'yes',
   user_info: {
+    id: '',
     user_email: '',
     first_name: '',
     last_name: '',
@@ -38,7 +39,7 @@ const __reportMappingStats = {
   mobile_device_info: {
     os: 'ios/android',
     model: 'SAM SG990',
-    bluetooth_ver: '',
+    bluetooth_rssi: '',
     app_version: '',
     app_release_date: '',
     app_install_date: '',
@@ -142,6 +143,7 @@ class BLEReportInstance {
       return false;
     }
     let __USER_INFO = {
+      id: '',
       user_email: '',
       first_name: '',
       last_name: '',
@@ -153,23 +155,29 @@ class BLEReportInstance {
     __USER_INFO.user_email = user?.email ?? null;
     __USER_INFO.first_name = user?.first_name ?? null;
     __USER_INFO.last_name = user?.last_name ?? null;
-    __USER_INFO.user_id = user?.id ?? null;
+    __USER_INFO.user_id = user?.organizations?.[0]?.id ?? null;
+    __USER_INFO.id = user?.organizations?.[0]?.id ?? null;
     __USER_INFO.user_phone = user?.user_metadata?.phone_number ?? null;
     __USER_INFO.user_title = user?.user_metadata?.title ?? null;
     this.reportMappingStats.user_info = __USER_INFO;
   }
 
   mapDeviceInfo() {
+    var installTime = DeviceInfo.getFirstInstallTimeSync();
+
+    if (installTime <= 0) {
+      installTime = timestampInSec();
+    }
+
     let __MOBILE_DEVICE_INFO = {
       os: constants.isIOS ? 'ios' : 'android',
       model: DeviceInfo.getModel(),
       bluetooth_ver: '',
       // app_version: DeviceInfo.getVersion(),
+      bluetooth_rssi: BLEService?.deviceRaw?.rssi,
       app_version: constants.APP_VERSION,
       app_release_date: constants.RELEASE_DATE,
-      app_install_date: parseDateHumanFormatFromUnix(
-        DeviceInfo.getFirstInstallTimeSync() / 1000,
-      ),
+      app_install_date: parseDateHumanFormatFromUnix(installTime / 1000),
       phone_battery: parseInt(
         (DeviceInfo.getBatteryLevelSync() * 100).toString(),
       ),
@@ -453,6 +461,7 @@ class BLEReportInstance {
     if (hasSettingsChanged) {
       __FAUCET_SETTINGS_ALL.current = __FAUCET_SETTINGS;
     } else {
+      __FAUCET_SETTINGS_ALL.current = __FAUCET_SETTINGS; // added temporary due to validation, need to clearify
       __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS;
     }
     this.reportMappingStats.faucet_settings = __FAUCET_SETTINGS_ALL;

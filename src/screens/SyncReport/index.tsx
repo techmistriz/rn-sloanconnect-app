@@ -36,6 +36,8 @@ import Network from 'src/network/Network';
 import {syncToServer} from 'src/services/SyncService/SyncService';
 import NetInfo from '@react-native-community/netinfo';
 import {useDispatch, useSelector} from 'react-redux';
+import {BLEService} from 'src/services';
+import DeviceInfo from 'react-native-device-info';
 
 const initReports = [
   {
@@ -99,9 +101,17 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    consoleLog('Sync useEffect called');
+    consoleLog('Sync useEffect loadDataCallback called');
     loadDataCallback();
   }, [loadDataCallback]);
+
+  useEffect(() => {
+    consoleLog('Sync useEffect called==>');
+
+    DeviceInfo.getFirstInstallTime().then(info => {
+      consoleLog('Sync getFirstInstallTime==> ', info);
+    });
+  }, []);
 
   const onSync = async (item: ReportItemModel) => {
     try {
@@ -114,13 +124,18 @@ const Index = () => {
 
       setLoading(true);
       const db = await getDBConnection();
-      // await updateReportItem(db, item, 1);
-      // loadDataCallback();
-      const status: boolean = await syncToServer(item, token);
+      await updateReportItem(db, item, 1);
+      loadDataCallback();
+      const payload =
+        typeof item?.value === 'string' ? JSON.parse(item?.value) : item?.value;
+      // consoleLog('onSync payload==>', payload);
+      const status: boolean = await syncToServer(payload, token);
+      consoleLog('status==>', status);
 
       if (status) {
-        // await deleteReportItem(db, item.id);
-        showToastMessage('Synced successfully.', 'success');
+        await deleteReportItem(db, item.id);
+        showToastMessage('Report sent successfully.', 'success');
+        loadDataCallback();
       } else {
         showToastMessage('Something went wrong!', 'danger');
       }

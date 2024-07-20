@@ -45,7 +45,14 @@ export const checkPendingSycableItems = async (
 
       for (let index = 0; index < storedReportItems.length; index++) {
         const item = storedReportItems[index];
-        const syncStatus: boolean = await syncToServer(item, token);
+
+        const payload =
+          typeof item?.value === 'string'
+            ? JSON.parse(item?.value)
+            : item?.value;
+        // consoleLog('onSync payload==>', payload);
+
+        const syncStatus: boolean = await syncToServer(payload, token);
 
         promises.push(syncStatus);
         if (syncStatus) {
@@ -68,18 +75,18 @@ export const checkPendingSycableItems = async (
 };
 
 export const syncToServer = async (
-  item: ReportItemModel,
+  payload: any,
   token: string,
 ): Promise<boolean> => {
   try {
     const response = await Network(
-      'v1/sloan/save-device-report',
+      'sloan/save-device-report',
       'POST',
-      typeof item?.value == 'string' ? JSON.parse(item?.value) : item?.value,
+      payload,
       token,
     );
 
-    consoleLog('syncToServer response==>', response);
+    // consoleLog('syncToServer response==>', response);
     if (response) {
       return true;
     } else {
@@ -88,6 +95,6 @@ export const syncToServer = async (
   } catch (error) {
     return false;
   } finally {
-    return false;
+    //
   }
 };

@@ -46,32 +46,32 @@ const Index = ({navigation, route}: any) => {
 
   const initlizeApp = async () => {
     try {
-      // setLoading(true);
-      // const allReports = await BLEReport.prepareReport(user);
-      // consoleLog('DeviceDisconnect initlizeApp==>', allReports);
-      // const currentTimestamp = timestampInSec();
-      // const db = await getDBConnection();
-      // consoleLog('DeviceDisconnect initlizeApp db==>', db);
-      // const isTableExistance = await checkTableExistance(db, 'table_reports');
-      // if (!isTableExistance) {
-      //   await createReportTable(db, 'table_reports');
-      // }
+      setLoading(true);
+      const allReports = await BLEReport.prepareReport(user);
+      consoleLog('DeviceDisconnect initlizeApp==>', allReports);
+      const currentTimestamp = timestampInSec();
+      const db = await getDBConnection();
+      consoleLog('DeviceDisconnect initlizeApp db==>', db);
+      const isTableExistance = await checkTableExistance(db, 'table_reports');
+      if (!isTableExistance) {
+        await createReportTable(db, 'table_reports');
+      }
 
-      // var deviceName =
-      //   connectedDevice?.localName ?? connectedDevice?.name ?? '';
-      // const payload: ReportItemModel = {
-      //   // id: currentTimestamp,
-      //   id: 99,
-      //   name: `${deviceName}-Report-${moment
-      //     .unix(currentTimestamp)
-      //     .format('YYYY-MM-DD HH:mm')}`,
-      //   value: JSON.stringify(allReports),
-      //   dateTime: currentTimestamp,
-      //   status: 0,
-      // };
-      // await saveReportItems(db, [payload]);
-      // NavigationService.goBack();
-      // return;
+      var deviceName =
+        connectedDevice?.localName ?? connectedDevice?.name ?? '';
+      const payload: ReportItemModel = {
+        // id: currentTimestamp,
+        id: 99,
+        name: `${deviceName}-Report-${moment
+          .unix(currentTimestamp)
+          .format('YYYY-MM-DD HH:mm')}`,
+        value: JSON.stringify(allReports),
+        dateTime: currentTimestamp,
+        status: 0,
+      };
+      await saveReportItems(db, [payload]);
+      NavigationService.goBack();
+      return;
       // await checkPendingSycableItems(token);
 
       setTimeout(() => {
