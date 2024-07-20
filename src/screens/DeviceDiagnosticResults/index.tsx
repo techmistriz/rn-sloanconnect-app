@@ -8,6 +8,7 @@ import {
   parseDateHumanFormat,
   parseDateHumanFormatFromUnix,
   showToastMessage,
+  timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Row, Col, Wrap} from 'src/components/Common';
@@ -25,6 +26,15 @@ import {readingDiagnostic} from '../DeviceDiagnostics/helperGen1';
 import {BackHandler} from 'react-native';
 import Header from 'src/components/Header';
 import {BLEReport} from 'src/services/BLEService/BLEReport';
+import moment from 'moment';
+import {ReportItemModel} from 'src/services/DBService/Models';
+import {
+  getDBConnection,
+  checkTableExistance,
+  createReportTable,
+  saveReportItems,
+} from 'src/services/DBService/SQLiteDBService';
+import {checkAndSyncPendingSycableItems} from 'src/services/SyncService/SyncService';
 
 const Index = ({navigation, route}: any) => {
   const {
@@ -112,6 +122,44 @@ const Index = ({navigation, route}: any) => {
   const initlizeAppGen2 = async () => {
     if (waterDispensed == 1 && sensorResult?.value == '0') {
       setInfoModal(true);
+    }
+  };
+
+  const handleSendReport = async () => {
+    try {
+      setLoading(true);
+      const allReports = await BLEReport.prepareReport(user, true);
+      consoleLog('DeviceDisconnect initlizeApp==>', allReports);
+      const currentTimestamp = timestampInSec();
+      const db = await getDBConnection();
+      consoleLog('DeviceDisconnect initlizeApp db==>', db);
+      const isTableExistance = await checkTableExistance(db, 'table_reports');
+      if (!isTableExistance) {
+        await createReportTable(db, 'table_reports');
+      }
+
+      var deviceName =
+        connectedDevice?.localName ?? connectedDevice?.name ?? '';
+      const payload: ReportItemModel = {
+        // id: currentTimestamp,
+        name: `${deviceName}-Report-${moment
+          .unix(currentTimestamp)
+          .format('YYYY-MM-DD HH:mm')}`,
+        value: JSON.stringify(allReports),
+        dateTime: currentTimestamp,
+        status: 0,
+      };
+      await saveReportItems(db, [payload]);
+
+      // await checkAndSyncPendingSycableItems(token);
+
+      showToastMessage('Report sent', 'success');
+
+      return true;
+    } catch (error) {
+      return true;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -308,7 +356,7 @@ const Index = ({navigation, route}: any) => {
                     type={'link'}
                     title={'SEND REPORT'}
                     onPress={() => {
-                      showToastMessage('Report sent', 'success');
+                      handleSendReport();
                     }}
                     textStyle={{
                       fontSize: 12,

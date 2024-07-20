@@ -534,6 +534,7 @@ class BLEReportInstance {
       __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
     } else {
       __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT; // added temporary due to validation, need to clearify
     }
 
     this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
@@ -597,6 +598,7 @@ class BLEReportInstance {
       __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
     } else {
       __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT; // added temporary due to validation, need to clearify
     }
 
     this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
@@ -898,7 +900,7 @@ class BLEReportInstance {
     // );
   }
 
-  async prepareReport(user: any) {
+  async prepareReport(user: any, shouldMapDiagnostic = false) {
     const currentTimestamp = timestampInSec();
     this.reportMappingStats.report_created_at = moment
       .unix(currentTimestamp)
@@ -908,7 +910,7 @@ class BLEReportInstance {
     this.mapUserPreference();
     await this.mapFaucetDeviceDetails();
     // this.mapFaucetSettings(); this is called from dashboard for gen1 and gen2 both for filling values
-    await this.mapDiagnosticReport();
+    shouldMapDiagnostic && (await this.mapDiagnosticReport());
     await this.mapAdvanceDeviceDetails();
     return this.reportMappingStats;
   }

@@ -136,6 +136,7 @@ const Index = () => {
         showToastMessage('Report sent successfully.', 'success');
         loadDataCallback();
       } else {
+        await updateReportItem(db, item, 2);
         showToastMessage('Something went wrong!', 'danger');
       }
     } catch (error) {
@@ -143,6 +144,12 @@ const Index = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const onDelete = async (item: ReportItemModel) => {
+    const db = await getDBConnection();
+    await deleteReportItem(db, item?.id);
+    showToastMessage('Report deleted from offline list.', 'success');
   };
 
   /**Flatlist render method */
@@ -171,7 +178,7 @@ const Index = () => {
               />
               <Typography
                 size={12}
-                text={`Date & Time: ${parseDateHumanFormatFromUnix(
+                text={`Date: ${parseDateHumanFormatFromUnix(
                   item?.dateTime,
                   'DD/MM/YYYY HH:mm:ss a z',
                 )}`}
@@ -185,22 +192,35 @@ const Index = () => {
             </Wrap>
             <Wrap autoMargin={false} style={{justifyContent: 'flex-end'}}>
               {item?.status == 0 ? (
-                <VectorIcon
-                  iconPack="Ionicons"
-                  name={'sync-outline'}
-                  size={25}
-                  color={Theme.colors.primaryColor}
-                  onPress={() => {
-                    onSync(item);
-                  }}
-                />
+                <Row autoMargin={false}>
+                  <VectorIcon
+                    iconPack="Ionicons"
+                    name={'sync-outline'}
+                    size={25}
+                    color={Theme.colors.primaryColor}
+                    onPress={() => {
+                      onSync(item);
+                    }}
+                    style={{marginRight: 10}}
+                  />
+                  <VectorIcon
+                    iconPack="Ionicons"
+                    name={'trash'}
+                    size={25}
+                    color={Theme.colors.red}
+                    onPress={() => {
+                      onDelete(item);
+                    }}
+                  />
+                </Row>
               ) : item?.status == 1 ? (
-                <>
+                <Row autoMargin={false}>
                   <Typography
                     size={12}
                     text={`Syncing...`}
                     style={{
                       textAlign: 'right',
+                      marginRight: 10,
                     }}
                     color={Theme.colors.darkGray}
                     noOfLine={1}
@@ -214,16 +234,17 @@ const Index = () => {
                       onSync(item);
                     }}
                   />
-                </>
+                </Row>
               ) : (
-                <>
+                <Row autoMargin={false}>
                   <Typography
                     size={12}
                     text={`Failed`}
                     style={{
                       textAlign: 'right',
+                      marginRight: 10,
                     }}
-                    color={Theme.colors.darkGray}
+                    color={Theme.colors.red}
                     noOfLine={1}
                   />
                   <VectorIcon
@@ -235,7 +256,7 @@ const Index = () => {
                       onSync(item);
                     }}
                   />
-                </>
+                </Row>
               )}
             </Wrap>
           </Row>
