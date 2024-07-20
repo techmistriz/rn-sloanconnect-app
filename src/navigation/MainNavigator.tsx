@@ -318,7 +318,7 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             // headerRight: () => <Header route={route?.params?.image} />
-            header: () => <Header title="SyncReport" />,
+            header: () => <Header title="Sync Report" />,
           }}
         />
       </Stack.Navigator>

@@ -9,29 +9,28 @@ import {
 } from 'src/services/DBService/SQLiteDBService';
 import NetInfo from '@react-native-community/netinfo';
 
-export const checkPendingSycableItems = async (
+export const checkAndSyncPendingSycableItems = async (
   token: string,
 ): Promise<boolean> => {
   try {
-    NetInfo.fetch().then(state => {
-      if (state.isConnected == false) {
-        return false;
-      }
-    });
+    const state = await NetInfo.fetch();
+    if (state.isConnected == false) {
+      return false;
+    }
 
     const promises = [];
     const db = await getDBConnection();
-    consoleLog('checkPendingSycableItems db==>', db);
+    consoleLog('checkAndSyncPendingSycableItems db==>', db);
     const isTableExistance = await checkTableExistance(db, 'table_reports');
     consoleLog(
-      'checkPendingSycableItems isTableExistance==>',
+      'checkAndSyncPendingSycableItems isTableExistance==>',
       isTableExistance,
     );
 
     if (isTableExistance) {
       const storedReportItems = await getReportItems(db);
       consoleLog(
-        'checkPendingSycableItems storedReportItems==>',
+        'checkAndSyncPendingSycableItems storedReportItems==>',
         storedReportItems,
       );
       if (storedReportItems.length == 0) {
@@ -39,7 +38,7 @@ export const checkPendingSycableItems = async (
       }
 
       consoleLog(
-        'checkPendingSycableItems storedReportItems.length==>',
+        'checkAndSyncPendingSycableItems storedReportItems.length==>',
         storedReportItems.length,
       );
 

@@ -31,7 +31,8 @@ import {
   saveReportItems,
 } from 'src/services/DBService/SQLiteDBService';
 import {ReportItemModel} from 'src/services/DBService/Models';
-import {checkPendingSycableItems} from 'src/services/SyncService/SyncService';
+import {checkAndSyncPendingSycableItems} from 'src/services/SyncService/SyncService';
+import {uniqueId} from 'lodash';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -46,33 +47,7 @@ const Index = ({navigation, route}: any) => {
 
   const initlizeApp = async () => {
     try {
-      setLoading(true);
-      const allReports = await BLEReport.prepareReport(user);
-      consoleLog('DeviceDisconnect initlizeApp==>', allReports);
-      const currentTimestamp = timestampInSec();
-      const db = await getDBConnection();
-      consoleLog('DeviceDisconnect initlizeApp db==>', db);
-      const isTableExistance = await checkTableExistance(db, 'table_reports');
-      if (!isTableExistance) {
-        await createReportTable(db, 'table_reports');
-      }
-
-      var deviceName =
-        connectedDevice?.localName ?? connectedDevice?.name ?? '';
-      const payload: ReportItemModel = {
-        // id: currentTimestamp,
-        id: 99,
-        name: `${deviceName}-Report-${moment
-          .unix(currentTimestamp)
-          .format('YYYY-MM-DD HH:mm')}`,
-        value: JSON.stringify(allReports),
-        dateTime: currentTimestamp,
-        status: 0,
-      };
-      await saveReportItems(db, [payload]);
-      NavigationService.goBack();
-      return;
-      // await checkPendingSycableItems(token);
+      await handleReport();
 
       setTimeout(() => {
         dispatch(deviceSettingsResetDataAction());
@@ -91,12 +66,48 @@ const Index = ({navigation, route}: any) => {
     }
   };
 
+  const handleReport = async () => {
+    try {
+      setLoading(true);
+      const allReports = await BLEReport.prepareReport(user);
+      consoleLog('DeviceDisconnect initlizeApp==>', allReports);
+      const currentTimestamp = timestampInSec();
+      const db = await getDBConnection();
+      consoleLog('DeviceDisconnect initlizeApp db==>', db);
+      const isTableExistance = await checkTableExistance(db, 'table_reports');
+      if (!isTableExistance) {
+        await createReportTable(db, 'table_reports');
+      }
+
+      var deviceName =
+        connectedDevice?.localName ?? connectedDevice?.name ?? '';
+      const payload: ReportItemModel = {
+        // id: currentTimestamp,
+        name: `${deviceName}-Report-${moment
+          .unix(currentTimestamp)
+          .format('YYYY-MM-DD HH:mm')}`,
+        value: JSON.stringify(allReports),
+        dateTime: currentTimestamp,
+        status: 0,
+      };
+      await saveReportItems(db, [payload]);
+      await checkAndSyncPendingSycableItems(token);
+
+      return true;
+    } catch (error) {
+      return true;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AppContainer
       scroll={false}
       scrollViewStyle={{}}
       backgroundType="gradient"
-      loading={loading}>
+      loading={loading}
+      loadingText={'Please wait, system check and syncing reports to server'}>
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>

@@ -115,12 +115,11 @@ const Index = () => {
 
   const onSync = async (item: ReportItemModel) => {
     try {
-      NetInfo.fetch().then(state => {
-        if (state.isConnected == false) {
-          showToastMessage('No internet connected.', 'danger');
-          return false;
-        }
-      });
+      const state = await NetInfo.fetch();
+      if (state.isConnected == false) {
+        showToastMessage('No internet connected.', 'danger');
+        return false;
+      }
 
       setLoading(true);
       const db = await getDBConnection();
@@ -133,7 +132,7 @@ const Index = () => {
       consoleLog('status==>', status);
 
       if (status) {
-        await deleteReportItem(db, item.id);
+        await deleteReportItem(db, item?.id);
         showToastMessage('Report sent successfully.', 'success');
         loadDataCallback();
       } else {
@@ -195,16 +194,48 @@ const Index = () => {
                     onSync(item);
                   }}
                 />
+              ) : item?.status == 1 ? (
+                <>
+                  <Typography
+                    size={12}
+                    text={`Syncing...`}
+                    style={{
+                      textAlign: 'right',
+                    }}
+                    color={Theme.colors.darkGray}
+                    noOfLine={1}
+                  />
+                  <VectorIcon
+                    iconPack="Ionicons"
+                    name={'sync-outline'}
+                    size={25}
+                    color={Theme.colors.primaryColor}
+                    onPress={() => {
+                      onSync(item);
+                    }}
+                  />
+                </>
               ) : (
-                <Typography
-                  size={12}
-                  text={`Syncing...`}
-                  style={{
-                    textAlign: 'right',
-                  }}
-                  color={Theme.colors.darkGray}
-                  noOfLine={1}
-                />
+                <>
+                  <Typography
+                    size={12}
+                    text={`Failed`}
+                    style={{
+                      textAlign: 'right',
+                    }}
+                    color={Theme.colors.darkGray}
+                    noOfLine={1}
+                  />
+                  <VectorIcon
+                    iconPack="Ionicons"
+                    name={'sync-outline'}
+                    size={25}
+                    color={Theme.colors.primaryColor}
+                    onPress={() => {
+                      onSync(item);
+                    }}
+                  />
+                </>
               )}
             </Wrap>
           </Row>

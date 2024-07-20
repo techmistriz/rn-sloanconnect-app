@@ -85,12 +85,9 @@ export const saveReportItems = async (
 ) => {
   const __tableName = 'table_reports';
   const insertQuery =
-    `INSERT OR REPLACE INTO ${__tableName}(rowid, name, value, dateTime, status) values` +
+    `INSERT INTO ${__tableName}(name, value, dateTime, status) values` +
     reportItems
-      .map(
-        i =>
-          `(${i.id}, '${i.name}', '${i.value}', '${i.dateTime}', '${i.status}')`,
-      )
+      .map(i => `('${i.name}', '${i.value}', '${i.dateTime}', '${i.status}')`)
       .join(',');
 
   return db.executeSql(insertQuery);

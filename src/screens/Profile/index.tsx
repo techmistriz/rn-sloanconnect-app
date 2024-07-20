@@ -22,6 +22,7 @@ import AlertBox from 'src/components/AlertBox';
 import {BLEService} from 'src/services';
 import {Button} from 'src/components/Button';
 import Network from 'src/network/Network';
+import {constants} from 'src/common';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
@@ -280,9 +281,9 @@ const Index = ({route, navigation}: any) => {
                   type={'danger'}
                   title="DELETE ACCOUNT"
                   onPress={() => {
-                    NavigationService.navigate('Sync');
-                    // setDeleteAccountModal(true);
+                    setDeleteAccountModal(true);
                   }}
+                  style={{width: constants.screenWidth - 40}}
                 />
               </Wrap>
             </TouchableItem>

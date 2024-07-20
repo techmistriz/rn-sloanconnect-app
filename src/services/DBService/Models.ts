@@ -4,7 +4,7 @@ export type ToDoItemModel = {
 };
 
 export type ReportItemModel = {
-  id: number;
+  id?: number;
   name: string;
   value: any;
   dateTime: number;

@@ -84,11 +84,11 @@ function App() {
             <MainNavigator />
             <FlashMessage position="bottom" />
             <LoaderOverlay3 />
-            <NetworkLost
+            {/* <NetworkLost
               isInternet={isInternet}
               setIsInternet={setIsInternet}
               buttonPress={() => {}}
-            />
+            /> */}
           </SafeAreaProvider>
         </PersistGate>
       </StoreProvider>
