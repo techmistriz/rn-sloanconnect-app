@@ -1,0 +1,25 @@
+{
+  "common": {
+    "APP_NAME": "Sloan App",
+    "APP_VERSION": "Version v 0.0.1",
+    "WELCOME": "Welcome",
+    "NO_INTERNET": "No Internet Connection",
+    "EOF": "EOF"
+  },
+  "welcome": {
+    "WELCOME_TITLE": "Welcome",
+    "WELCOME_DESCRIPTION": "Please tap on the blue button below to begin. You will be redirected to our website to continue.",
+    "LOGIN_REGISTER_BTN": "LOGIN / REGISTER",
+    "HELP_BTN": "HELP",
+    "EOF": "EOF"
+  },
+  "language": {
+    "CONTINUE_BTN": "Continue",
+    "CHOOSE_LANGUAGE_TITLE": "Choose Language",
+    "CHOOSE_LANGUAGE_DESC": "Choose your prefered language",
+    "ENGLISH": "English",
+    "HINDI": "हिन्दी",
+    "CHOOSE_LANGUAGE_ERROR": "Please select language",
+    "EOF": "EOF"
+  }
+}
