@@ -117,18 +117,27 @@ const Index = ({navigation, route}: any) => {
     if (waterDispensed == 1 && sensorResult?.value == '0') {
       setInfoModal(true);
     }
+    handleSendReport('no', false);
   };
 
   const initlizeAppGen2 = async () => {
     if (waterDispensed == 1 && sensorResult?.value == '0') {
       setInfoModal(true);
     }
+    handleSendReport('no', false);
   };
 
-  const handleSendReport = async () => {
+  const handleSendReport = async (
+    isReportManual: string,
+    showToast: boolean = true,
+  ) => {
     try {
       setLoading(true);
-      const allReports = await BLEReport.prepareReport(user, true);
+      const allReports = await BLEReport.prepareReport(
+        user,
+        true,
+        isReportManual,
+      );
       consoleLog('DeviceDisconnect initlizeApp==>', allReports);
       const currentTimestamp = timestampInSec();
       const db = await getDBConnection();
@@ -150,10 +159,8 @@ const Index = ({navigation, route}: any) => {
         status: 0,
       };
       await saveReportItems(db, [payload]);
-
-      // await checkAndSyncPendingSycableItems(token);
-
-      showToastMessage('Report sent', 'success');
+      await checkAndSyncPendingSycableItems(token);
+      showToast && showToastMessage('Report sent', 'success');
 
       return true;
     } catch (error) {
@@ -356,7 +363,7 @@ const Index = ({navigation, route}: any) => {
                     type={'link'}
                     title={'SEND REPORT'}
                     onPress={() => {
-                      handleSendReport();
+                      handleSendReport('yes');
                     }}
                     textStyle={{
                       fontSize: 12,

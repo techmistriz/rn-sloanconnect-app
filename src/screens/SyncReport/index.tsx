@@ -117,7 +117,7 @@ const Index = () => {
     try {
       const state = await NetInfo.fetch();
       if (state.isConnected == false) {
-        showToastMessage('No internet connected.', 'danger');
+        showToastMessage('No internet connection.', 'danger');
         return false;
       }
 

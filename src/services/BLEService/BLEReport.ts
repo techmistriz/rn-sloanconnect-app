@@ -420,6 +420,10 @@ class BLEReportInstance {
     }
 
     let __FAUCET_SETTINGS_ALL = this.reportMappingStats.faucet_settings;
+
+    let __FAUCET_SETTINGS_PREV = __FAUCET_SETTINGS_ALL?.prev;
+    let __FAUCET_SETTINGS_CURRENT = __FAUCET_SETTINGS_ALL?.current;
+
     let __FAUCET_SETTINGS = hasSettingsChanged
       ? __FAUCET_SETTINGS_ALL?.current
       : __FAUCET_SETTINGS_ALL?.prev;
@@ -460,9 +464,10 @@ class BLEReportInstance {
 
     if (hasSettingsChanged) {
       __FAUCET_SETTINGS_ALL.current = __FAUCET_SETTINGS;
+      __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS_CURRENT;
     } else {
-      __FAUCET_SETTINGS_ALL.current = __FAUCET_SETTINGS; // added temporary due to validation, need to clearify
-      __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS;
+      __FAUCET_SETTINGS_ALL.current = __FAUCET_SETTINGS;
+      // __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS;
     }
     this.reportMappingStats.faucet_settings = __FAUCET_SETTINGS_ALL;
 
@@ -486,6 +491,10 @@ class BLEReportInstance {
     consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
 
     let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
+
+    let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
+    let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
+
     let __DIAGNOSTIC_REPORT = hasSettingsChanged
       ? __DIAGNOSTIC_REPORT_ALL?.current
       : __DIAGNOSTIC_REPORT_ALL?.prev;
@@ -532,9 +541,10 @@ class BLEReportInstance {
 
     if (hasSettingsChanged) {
       __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
     } else {
-      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT; // added temporary due to validation, need to clearify
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
     }
 
     this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
@@ -550,6 +560,10 @@ class BLEReportInstance {
     );
 
     let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
+
+    let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
+    let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
+
     let __DIAGNOSTIC_REPORT = hasSettingsChanged
       ? __DIAGNOSTIC_REPORT_ALL?.current
       : __DIAGNOSTIC_REPORT_ALL?.prev;
@@ -596,9 +610,10 @@ class BLEReportInstance {
 
     if (hasSettingsChanged) {
       __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
     } else {
-      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT; // added temporary due to validation, need to clearify
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
     }
 
     this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
@@ -900,8 +915,14 @@ class BLEReportInstance {
     // );
   }
 
-  async prepareReport(user: any, shouldMapDiagnostic = false) {
+  async prepareReport(
+    user: any,
+    shouldMapDiagnostic: boolean = false,
+    isReportManual: string = 'yes',
+  ) {
     const currentTimestamp = timestampInSec();
+    this.reportMappingStats.is_report_manual = isReportManual;
+
     this.reportMappingStats.report_created_at = moment
       .unix(currentTimestamp)
       .format('YYYY-MM-DD HH:mm');
