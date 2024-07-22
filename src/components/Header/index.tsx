@@ -16,11 +16,11 @@ import {
   deviceSettingsResetDataAction,
   loginResetDataAction,
 } from 'src/redux/actions';
-import {useDispatch} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import AlertBox from 'src/components/AlertBox';
 import {BLEService} from 'src/services/BLEService/BLEService';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {useDispatch, useSelector} from 'react-redux';
 
 // Header Props
 type HeaderProps = {
@@ -60,6 +60,7 @@ const Header = ({
   const dispatch = useDispatch();
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
   const {isConnected, isInternetReachable} = useNetInfo();
+  const {status} = useSelector((state: any) => state?.SyncReportReducer);
 
   /** action for logout */
   const onLogout = async () => {
@@ -209,12 +210,21 @@ const Header = ({
         {hasOnlineOfflineIcon && (
           <TouchableItem disabled>
             <>
-              <VectorIcon
-                iconPack="Octicons"
-                name={'dot-fill'}
-                size={20}
-                color={isConnected ? Theme.colors.green : Theme.colors.red}
-              />
+              {status == 1 ? (
+                <VectorIcon
+                  iconPack="Ionicons"
+                  name={'sync-outline'}
+                  size={20}
+                  color={Theme.colors.green}
+                />
+              ) : (
+                <VectorIcon
+                  iconPack="Octicons"
+                  name={'dot-fill'}
+                  size={20}
+                  color={isConnected ? Theme.colors.green : Theme.colors.red}
+                />
+              )}
             </>
           </TouchableItem>
         )}

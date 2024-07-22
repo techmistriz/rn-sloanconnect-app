@@ -8,10 +8,17 @@ import {
   deleteReportItem,
 } from 'src/services/DBService/SQLiteDBService';
 import NetInfo from '@react-native-community/netinfo';
+import {useDispatch} from 'react-redux';
+import {
+  syncReportRequestAction,
+  syncReportSuccessAction,
+} from 'src/redux/actions';
 
 export const checkAndSyncPendingSycableItems = async (
   token: string,
 ): Promise<boolean> => {
+  const dispatch = useDispatch();
+
   try {
     const state = await NetInfo.fetch();
     if (state.isConnected == false) {
@@ -42,6 +49,8 @@ export const checkAndSyncPendingSycableItems = async (
         storedReportItems.length,
       );
 
+      dispatch(syncReportRequestAction({status: 1}));
+
       for (let index = 0; index < storedReportItems.length; index++) {
         const item = storedReportItems[index];
 
@@ -63,6 +72,7 @@ export const checkAndSyncPendingSycableItems = async (
       // wait for all the promises in the promises array to resolve
       Promise.all(promises).then(results => {
         // all the fetch requests have completed, and the results are in the "results" array
+        dispatch(syncReportSuccessAction({status: 0}));
         return true;
       });
     }
