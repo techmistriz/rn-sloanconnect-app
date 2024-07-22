@@ -1,5 +1,3 @@
-import {Alert, Linking, Platform, Share, ToastAndroid} from 'react-native';
-import {constants} from '../../common';
 import moment from 'moment';
 import {
   addSeparatorInString,
@@ -11,18 +9,18 @@ import {
   decimalToHex,
   fromHexStringUint8Array,
   getTimestampInSeconds,
-  hexEncodeDecode,
-  hexToDecimal,
+  getTimestampInYMDFormat, hexToByte,
+  hexToDecimal, hexToString,
   toHexString,
 } from './encryption';
 import {BLEService} from 'src/services';
 import {findObject, isObjectEmpty} from './array';
 import StorageService from 'src/services/StorageService/StorageService';
-import {consoleLog, parseDateTimeInFormat} from './HelperFunction';
+import {consoleLog, parseDateTimeInFormat, sleep} from './HelperFunction';
 import {BLE_GATT_SERVICES} from '../StaticData/BLE_GATT_SERVICES';
 import BLE_CONSTANTS from '../StaticData/BLE_CONSTANTS';
 import {sha256Bytes} from 'react-native-sha256';
-import {Device} from 'react-native-ble-plx';
+import {Device, type} from 'react-native-ble-plx';
 
 /**
  *
@@ -78,13 +76,17 @@ export function findIndexById(data: any, item: any) {
  * function which convert First character into Capital letter of String
  */
 export function getBleDeviceGeneration(str: string | null | undefined = '') {
-  if (!str) return 'unknown';
+  if (!str) {
+    return 'unknown';
+  }
   // if (str.search(/FAUCET/i) >= 0) {
   if (str?.toUpperCase()?.includes('FAUCET')) {
     return 'gen1';
     // } else if (str.search(/SL/i) >= 0) {
   } else if (str?.toUpperCase()?.includes('SL')) {
     return 'gen2';
+  } else if (str?.toUpperCase()?.includes('FLUSHER')) {
+    return 'flusher';
   } else {
     return 'unknown';
   }
@@ -99,7 +101,9 @@ export function getBleDeviceGeneration(str: string | null | undefined = '') {
 export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
   var str = connectedDevice?.localName ?? connectedDevice?.name;
 
-  if (!str) return '';
+  if (!str) {
+    return '';
+  }
   var result = 'empty';
   // return result;
   if (gen == 'gen1') {
@@ -129,7 +133,7 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
     const modelNumber = __manufacturerDataHexArr?.[3];
     result = modelNumber ?? result;
     // consoleLog('modelNumber==>', modelNumber);
-  } else if (gen == 'gen3') {
+  } else if (gen == 'flusher') {
     var arr = str.split(' ');
 
     if (Array.isArray(arr) && arr.length > 1) {
@@ -166,7 +170,9 @@ export function getBleDeviceSerialNumber(
   gen = 'gen1',
 ) {
   var str = connectedDevice?.localName ?? connectedDevice?.name;
-  if (!str) return '';
+  if (!str) {
+    return '';
+  }
   var result = '';
   if (gen == 'gen2') {
     const __manufacturerData = connectedDevice?.manufacturerData;
@@ -207,13 +213,13 @@ export function getDeviceModelData(
   // localName have more relevant name indentification
   var deviceName = connectedDevice?.localName ?? connectedDevice?.name;
   if (deviceName) {
-    if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] != 'undefined') {
+    if (deviceGen && typeof BLE_DEVICE_MODELS[deviceGen] !== 'undefined') {
       const deviceVersion = getBleDeviceVersion(connectedDevice, deviceGen);
       // consoleLog('getDeviceModelData deviceVersion==>', deviceVersion);
       const deviceModel = BLE_DEVICE_MODELS?.[deviceGen];
       // consoleLog('getDeviceModelData deviceModel==>', deviceModel);
 
-      if (deviceModel && typeof deviceModel[deviceVersion] != 'undefined') {
+      if (deviceModel && typeof deviceModel[deviceVersion] !== 'undefined') {
         deviceStaticData = deviceModel[deviceVersion];
         // consoleLog('getDeviceModelData deviceStaticData==>', deviceStaticData);
       } else {
@@ -236,7 +242,7 @@ export function getDeviceService(
   __BLE_GATT_SERVICES: any,
 ) {
   var result = null;
-  if (typeof __BLE_GATT_SERVICES[serviceUUID] != 'undefined') {
+  if (typeof __BLE_GATT_SERVICES[serviceUUID] !== 'undefined') {
     result = __BLE_GATT_SERVICES[serviceUUID];
   }
 
@@ -254,7 +260,7 @@ export function getDeviceCharacteristicsByServiceUUID(
   __BLE_GATT_SERVICES: any,
 ) {
   var result = null;
-  if (typeof __BLE_GATT_SERVICES[serviceUUID] != 'undefined') {
+  if (typeof __BLE_GATT_SERVICES[serviceUUID] !== 'undefined') {
     result = __BLE_GATT_SERVICES[serviceUUID]?.characteristics ?? null;
   }
 
@@ -273,10 +279,10 @@ export function getDeviceCharacteristic(
 ) {
   var result = null;
   if (
-    typeof services != 'undefined' &&
-    typeof services?.characteristics != 'undefined' &&
+    typeof services !== 'undefined' &&
+    typeof services?.characteristics !== 'undefined' &&
     services?.characteristics &&
-    typeof services?.characteristics?.[characteristicUUID] != 'undefined' &&
+    typeof services?.characteristics?.[characteristicUUID] !== 'undefined' &&
     services?.characteristics?.[characteristicUUID]
   ) {
     result = services?.characteristics?.[characteristicUUID];
@@ -293,8 +299,8 @@ export function getDeviceCharacteristic(
 export function getDeviceCharacteristics(services: any) {
   var result = null;
   if (
-    typeof services != 'undefined' &&
-    typeof services?.characteristics != 'undefined' &&
+    typeof services !== 'undefined' &&
+    typeof services?.characteristics !== 'undefined' &&
     services?.characteristics
   ) {
     result = services?.characteristics;
@@ -331,19 +337,19 @@ export function mapValue(characteristic: any, deviceStaticData: any = null) {
   if (characteristic?.value) {
     var decodedValue = base64EncodeDecode(characteristic?.value, 'decode');
 
-    if (typeof deviceStaticData?.prefix != 'undefined') {
+    if (typeof deviceStaticData?.prefix !== 'undefined') {
       prefix = deviceStaticData?.prefix;
     }
 
-    if (typeof deviceStaticData?.postfix != 'undefined') {
+    if (typeof deviceStaticData?.postfix !== 'undefined') {
       postfix = deviceStaticData?.postfix;
     }
 
     if (
       deviceStaticData &&
       decodedValue &&
-      typeof deviceStaticData?.valueMapped != 'undefined' &&
-      typeof deviceStaticData?.valueMapped[decodedValue] != 'undefined'
+      typeof deviceStaticData?.valueMapped !== 'undefined' &&
+      typeof deviceStaticData?.valueMapped[decodedValue] !== 'undefined'
     ) {
       result = deviceStaticData?.valueMapped[decodedValue];
     } else {
@@ -504,7 +510,7 @@ export const saveSettings = async (
     // setLoading(true);
     for (const [key, value] of Object.entries(deviceSettingsData)) {
       if (
-        typeof value != 'undefined' &&
+        typeof value !== 'undefined' &&
         Array.isArray(value) &&
         value.length > 0
       ) {
@@ -586,7 +592,7 @@ export const updatePreviousSettings = async (
 
   for (const [key, value] of Object.entries(deviceSettingsData)) {
     if (
-      typeof value != 'undefined' &&
+      typeof value !== 'undefined' &&
       Array.isArray(value) &&
       value.length > 0
     ) {
@@ -1427,4 +1433,181 @@ export const mapValueGenTextToHex = (
   consoleLog('mapValueGenTextToHex hexReplaced==>', hexReplaced);
 
   return hexReplaced;
+};
+
+// Flusher security key
+
+// Cloud Key A = SHAn(TP) where n=3
+async function sha256(data) {
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return new Uint8Array(hashBuffer);
+}
+
+async function computeFlusherFaucetKey(timestampInYMDFormat: string) {
+  let timestampUint8Array = fromHexStringUint8Array(timestampInYMDFormat);
+  consoleLog('timestampUint8Array==>', timestampUint8Array);
+  // Secret P
+  const P = new Uint8Array(BLE_CONSTANTS?.FLUSHER?.SECRET_KEY);
+
+  // Time Stamp T format
+  const T = new Uint8Array(timestampUint8Array);
+
+  // TP=(Time Stamp^secret)
+  const TP = new Uint8Array(32);
+  for (let j = 0; j < 32; j++) {
+    if (j < 6) {
+      TP[j] = T[j] ^ P[j];
+    } else {
+      TP[j] = P[j];
+    }
+  }
+  consoleLog('TP', {T, TP});
+  const tpArray = Array.from(TP);
+  let cloudKeyFirstShaHex = await sha256Bytes(tpArray);
+
+  // 2nd SHA
+  let cloudKeyFirstShaUintArraySHA =
+    fromHexStringUint8Array(cloudKeyFirstShaHex);
+  const tpArray2 = Array.from(cloudKeyFirstShaUintArraySHA);
+  let cloudKeySecondShaHex = await sha256Bytes(tpArray2);
+
+  // 3rd SHA
+  let cloudKeyThirdUintArraySHA = fromHexStringUint8Array(cloudKeySecondShaHex);
+  const tpArray3 = Array.from(cloudKeyThirdUintArraySHA);
+  let cloudKeyFinal = await sha256Bytes(tpArray3);
+
+  let cloudKeyUintArraySHA = fromHexStringUint8Array(cloudKeyFinal);
+  // consoleLog('cloudKey', {cloudKeyFinal, cloudKeyUintArraySHA});
+
+  return cloudKeyUintArraySHA;
+}
+
+async function computeFlusherUnlockKey(BDSN: string, cloudKey: any) {
+  // ABDSN = (A^BDSN)
+  let ABDSN = new Uint8Array(32);
+  for (let j = 0; j < 32; j++) {
+    if (j < 10) {
+      ABDSN[j] = cloudKey[j] ^ BDSN.charCodeAt(j);
+    } else {
+      ABDSN[j] = cloudKey[j];
+    }
+  }
+
+  const abdsnArray = Array.from(ABDSN);
+  let unlockKeyFirstShaHex = await sha256Bytes(abdsnArray);
+
+  // 2nd SHA
+  let unlockKeyFirstShaUintArraySHA =
+    fromHexStringUint8Array(unlockKeyFirstShaHex);
+  const ukArray2 = Array.from(unlockKeyFirstShaUintArraySHA);
+  let unlockKeySecondShaHex = await sha256Bytes(ukArray2);
+
+  return (unlockKeySecondShaHex);
+}
+
+export const initFlusherSecurityKey = async () => {
+  try {
+    const FLUSHER_APP_IDENTIFICATION_SERVICE_UUID =
+        BLE_CONSTANTS?.FLUSHER?.FLUSHER_APP_IDENTIFICATION_SERVICE_UUID;
+    const FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID =
+        BLE_CONSTANTS?.FLUSHER?.FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID;
+
+    const lockStatusResponse = await BLEService.readCharacteristicForDevice(
+        FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
+        FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID,
+    );
+
+    consoleLog('lockStatusResponseBefore=>', lockStatusResponse);
+
+
+    let timestamp = getTimestampInSeconds();
+    //let timestampYmd = '180905';
+    let timestampYmd = getTimestampInYMDFormat(timestamp);
+    let timestampHex = asciiToHex(timestampYmd);
+    consoleLog('initFlusherSecurityKey', {timestampHex, timestampYmd});
+    const FLUSHER_SERVICE_UUID = BLE_CONSTANTS?.FLUSHER?.FLUSHER_SERVICE_UUID;
+    const FLUSHER_BDSN_CHARACTERISTIC_UUID =
+      BLE_CONSTANTS?.FLUSHER?.BDSN_CHARACTERISTIC_UUID;
+    const bdsnResponse = await BLEService.readCharacteristicForDevice(
+      FLUSHER_SERVICE_UUID,
+      FLUSHER_BDSN_CHARACTERISTIC_UUID,
+    );
+    await BLEService.discoverAllServicesAndCharacteristicsForDevice();
+    if (typeof bdsnResponse.value !== 'undefined' && bdsnResponse.value) {
+      let bdsnText = 'ANNSSSSSSS'; //
+      bdsnText = base64ToText(bdsnResponse.value);
+      consoleLog('deviceBDSN=>', {bdsnText});
+
+      // Now write timestamp to device
+      await sleep(2000);
+      const FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID =
+          BLE_CONSTANTS?.FLUSHER?.FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID;
+
+      let writeResponse = await BLEService.writeCharacteristicWithResponseForDevice(
+          FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
+          FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID,
+          timestampHex,
+      );
+
+      consoleLog('FlusherTimestampWriteResponse=>', writeResponse);
+
+      const cloudAKey = await computeFlusherFaucetKey(timestampHex);
+      consoleLog('cloudAkey', {cloudAKey});
+
+      // Now phone app part
+      let unlockKeyHex = await computeFlusherUnlockKey(bdsnText, cloudAKey);
+      // unlockKeyHex = hexToByte(unlockKeyHex);
+      consoleLog('unlockKey', {unlockKeyHex});
+
+      // Now send unlock key to device
+      const FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID =
+          BLE_CONSTANTS?.FLUSHER?.FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID;
+
+      let keyWriteResponse = await BLEService.writeCharacteristicWithResponseForDevice(
+          FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
+          FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID,
+          unlockKeyHex,
+      ).then((response) => {
+        consoleLog('unlockKeyWriteCallback', response);
+      });
+
+      consoleLog('FlusherUnlockKeyWriteResponse=>', keyWriteResponse);
+      // await sleep(5000);
+      // now read unlock status
+
+      const lockStatusResponse = await BLEService.readCharacteristicForDevice(
+          FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
+          FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID,
+      );
+      consoleLog('lockStatusResponse=>', lockStatusResponse);
+      const activationsSince = await BLEService.readCharacteristicForDevice(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88343',
+      );
+
+      consoleLog('activationsSince=>', activationsSince);
+
+      let activationWriteResponse = await BLEService.writeCharacteristicWithResponseForDevice(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88343',
+          asciiToHex('17'),
+      ).then((response) => {
+        consoleLog('unlockKeyWriteCallback', response);
+      });
+
+      consoleLog('activationWriteResponse=>', activationWriteResponse);
+
+      const activationsReadSince = await BLEService.readCharacteristicForDevice(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88343',
+      );
+
+      consoleLog('activations After Write Since=>', activationsReadSince);
+
+    } else {
+      consoleLog('Unable to read the BDSN', {bdsnResponse});
+    }
+  } catch (e) {
+    consoleLog('initFlusherSecurityKey error==>', e);
+  }
 };

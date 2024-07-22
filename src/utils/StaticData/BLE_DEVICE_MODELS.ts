@@ -371,8 +371,8 @@ export const BLE_DEVICE_MODELS = {
       ],
     },
   },
-  gen22: {
-    '20': {
+  basys: {
+    '01': {
       name: 'BASYS/Aquis Faucets',
       fullNameAllModel: 'EFX1XX, EFX2XX, EFX3XX, EFX6XX, EFX8XX',
       type: 'ADSKU',
@@ -492,7 +492,24 @@ export const BLE_DEVICE_MODELS = {
       ],
     },
   },
-  gen3: {},
+  flusher: {
+    '20': {
+      name: 'Flushometer',
+      fullNameAllModel: 'ECOS 8186-0.5-BT',
+      type: 'ADSKU',
+      version: '01',
+      generation: '02',
+      models: [
+        {
+          ETFModel: 'ECOS RESS-U-0.5-BT',
+          EBFModel: '',
+          displayName: 'ECOS Urinal-0.5 GPF',
+          image: require('src/assets/images/products/gen1/faucet_etf_80.png'),
+          notes: '',
+        }
+      ],
+    },
+  },
   gen4: {},
   unknown: {
     empty: {

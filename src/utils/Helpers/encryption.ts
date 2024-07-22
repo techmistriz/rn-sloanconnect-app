@@ -20,7 +20,9 @@ export function base64EncodeDecode(
   str: string | null,
   type: 'encode' | 'decode' = 'encode',
 ) {
-  if (!str) return '';
+  if (!str) {
+    return '';
+  }
   return type == 'encode' ? base64.encode(str) : base64.decode(str);
 }
 
@@ -31,7 +33,9 @@ export function base64EncodeDecode(
  * @return {number} Decode (in decimal) string
  */
 export const base64ToHex = (encodedString: string | any) => {
-  if (!encodedString) return encodedString;
+  if (!encodedString) {
+    return encodedString;
+  }
   var result = hexEncodeDecode(base64EncodeDecode(encodedString, 'decode'));
   return result;
 };
@@ -43,7 +47,9 @@ export const base64ToHex = (encodedString: string | any) => {
  * @return {number} Decode (in decimal) string
  */
 export function __base64ToHex(encodedString: string | any) {
-  if (!encodedString) return encodedString;
+  if (!encodedString) {
+    return encodedString;
+  }
   var raw = base64ToText(encodedString);
   let result = '';
   for (let i = 0; i < raw.length; i++) {
@@ -82,7 +88,9 @@ export const base64ToDecimal = (encodedString: any) => {
  * @return {number} Decode (in decimal) string
  */
 export const base64ToText = (encodedString: string | any) => {
-  if (!encodedString) return '';
+  if (!encodedString) {
+    return '';
+  }
   return base64.decode(encodedString);
 };
 
@@ -98,7 +106,9 @@ export function hexEncodeDecode(
   type: 'encode' | 'decode' | 'decodeSpecial' = 'encode',
   base = 16,
 ) {
-  if (!str) return '';
+  if (!str) {
+    return '';
+  }
   return type == 'encode'
     ? str
         .split('')
@@ -126,8 +136,9 @@ export function hexEncodeDecode(
 export function hexToString(hexx: any) {
   var hex = hexx.toString(); //force conversion
   var str = '';
-  for (var i = 0; i < hex.length; i += 2)
+  for (var i = 0; i < hex.length; i += 2) {
     str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  }
   return str;
 }
 
@@ -138,10 +149,19 @@ export function hexToString(hexx: any) {
  * @return {number} Decode (in decimal) string
  */
 export const hexToDecimal = (hex: any, base: number = 16) => {
-  if (!hex) return hex;
+  if (!hex) {
+    return hex;
+  }
   return parseInt(hex, base);
 };
 
+export const hexToByte = (hex: any) => {
+  let bytes = [];
+  for (let c = 0; c < hex.length; c += 2) {
+    bytes.push(parseInt(hex.substr(c, 2), 16));
+  }
+  return bytes;
+};
 /**
  * Function to convert a hex string to decimal
  *
@@ -154,11 +174,13 @@ export const decimalToHex = (
   base: number = 16,
   padding: number = 0,
 ) => {
-  if (!encodedString) return encodedString;
+  if (!encodedString) {
+    return encodedString;
+  }
   // return encodedString.toString(base);
   var hex = Number(encodedString).toString(base);
 
-  if (typeof padding != 'undefined' && padding > 0) {
+  if (typeof padding !== 'undefined' && padding > 0) {
     while (hex.length < padding) {
       hex = '0' + hex;
     }
@@ -191,7 +213,7 @@ export function asciiToHex(str: string, padding = 8) {
   // Join the hexadecimal values in the array to form a single string
   var hex = arr1.join('');
 
-  if (typeof padding != 'undefined' && padding > 0) {
+  if (typeof padding !== 'undefined' && padding > 0) {
     while (hex.length < padding) {
       hex = '0' + hex;
     }
@@ -218,6 +240,16 @@ export function getTimestampInSeconds() {
   return Math.floor(Date.now() / 1000);
 }
 
+export function getTimestampInYMDFormat(unixTimestamp: number) {
+  let curTime = new Date(unixTimestamp * 1000);
+  let year = ('' + curTime.getFullYear()).substr(-2);
+  let month = '0' + (curTime.getMonth() + 1);
+  let date = '0' + curTime.getDate();
+
+  // Will display date in YYMMDD
+  return year + month.substr(-2) + date.substr(-2);
+}
+
 /**
  * Function to add space at every n chars
  * @param {string} str
@@ -226,7 +258,9 @@ export function getTimestampInSeconds() {
  * @return {string}
  */
 export function addSeparatorInString(str: string, n: number, separator = ' ') {
-  if (!str) return str;
+  if (!str) {
+    return str;
+  }
   var a = [],
     start = 0;
   while (start < str.length) {

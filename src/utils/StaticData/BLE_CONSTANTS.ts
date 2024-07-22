@@ -208,7 +208,20 @@ const GEN2 = {
   },
 };
 
-const GEN3 = {};
+const FLUSHER = {
+  SECRET_KEY: [
+    0x24, 0x52, 0x40, 0x9c, 0x76, 0xec, 0x04, 0x1d, 0xfb, 0x66, 0xed, 0x4a,
+    0xcb, 0x7a, 0x33, 0xbf, 0xf6, 0x1b, 0x74, 0xfa, 0xed, 0xf3, 0xbb, 0x66,
+    0x7d, 0x03, 0x72, 0xca, 0xdf, 0xad, 0x0a, 0xac
+  ],
+  FLUSHER_SERVICE_UUID: 'f89f13e7-83f8-4b7c-9e8b-364576d88300',
+  BDSN_CHARACTERISTIC_UUID: 'f89f13e7-83f8-4b7c-9e8b-364576d88302',
+
+  FLUSHER_APP_IDENTIFICATION_SERVICE_UUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c950',
+  FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c951',
+  FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c952',
+  FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c953'
+};
 
 const GEN4 = {};
 
@@ -217,7 +230,7 @@ const BLE_CONSTANTS = {
   COMMON: COMMON,
   GEN1: GEN1,
   GEN2: GEN2,
-  GEN3: GEN3,
+  FLUSHER: FLUSHER,
   GEN4: GEN4,
 };
 

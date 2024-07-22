@@ -14,6 +14,7 @@ export const filterBLEDevices = (deviceRaw: DeviceExtendedProps): any => {
   const device = cleanCharacteristic(deviceRaw);
   var filterDevice = null;
   var deviceName = device?.localName ?? device?.name ?? '';
+  // console.log('deviceName', deviceName);
   // deviceName = 'FAUCET ADSKU00 AYYSS';
 
   if (device && !isObjectEmpty(device) && deviceName != '') {
@@ -21,7 +22,8 @@ export const filterBLEDevices = (deviceRaw: DeviceExtendedProps): any => {
     if (
       // true
       deviceName?.toUpperCase()?.includes('FAUCET') ||
-      deviceName?.toUpperCase()?.includes('SL')
+      deviceName?.toUpperCase()?.includes('SL') ||
+      deviceName?.toUpperCase()?.includes('FLUSHER')
     ) {
       const deviceTmp = {...device};
       deviceTmp.localName = deviceName;
@@ -32,7 +34,7 @@ export const filterBLEDevices = (deviceRaw: DeviceExtendedProps): any => {
         deviceGen,
       );
       const deviceSerialNumber = getBleDeviceSerialNumber(device, deviceGen);
-      consoleLog('filterBLEDevices deviceGen==>', deviceGen);
+      // consoleLog('filterBLEDevices deviceGen==>', deviceGen);
       // consoleLog('filterBLEDevices deviceSerialNumber==>', deviceSerialNumber);
       // consoleLog('filterBLEDevices deviceStaticData==>', deviceStaticData);
 

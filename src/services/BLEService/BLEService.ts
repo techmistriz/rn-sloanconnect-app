@@ -24,7 +24,7 @@ import {
   getBleDeviceGeneration,
   getBleDeviceVersion,
   getDeviceModelData,
-  getTotalWaterUsase,
+  getTotalWaterUsase, initFlusherSecurityKey, intiFlusherSecurityKey,
   intiGen2SecurityKey,
 } from 'src/utils/Helpers/project';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
@@ -306,10 +306,10 @@ class BLEServiceInstance {
         .discoverAllServicesAndCharacteristicsForDevice(this.device.id)
         .then(device => {
           resolve(device);
-          // consoleLog(
-          //   'discoverAllServicesAndCharacteristicsForDevice device==>',
-          //   JSON.stringify(device),
-          // );
+          consoleLog(
+            'discoverAllServicesAndCharacteristicsForDevice device==>',
+            JSON.stringify(device),
+          );
           this.device = device;
         })
         .catch(error => {
@@ -370,9 +370,10 @@ class BLEServiceInstance {
         this.device.id,
         serviceUUID,
         characteristicUUID,
-        base64EncodeDecode(value),
+        (value),
       )
       .catch(error => {
+        consoleLog('writeCharacteristicWithResponseForDevice error: ', JSON.stringify(error));
         this.onError(error);
       });
   };
@@ -1076,8 +1077,8 @@ class BLEServiceInstance {
       await this.initDeviceDataGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       await this.initDeviceDataGen2();
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      this.initDeviceDataGen3();
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      await this.initDeviceDataFlusher();
     } else if (BLEService.deviceGeneration == 'gen4') {
       await this.initDeviceDataGen4();
     }
@@ -1093,7 +1094,9 @@ class BLEServiceInstance {
     await intiGen2SecurityKey();
     await this.setDeviceModelData();
   };
-  initDeviceDataGen3 = async () => {};
+  initDeviceDataFlusher = async () => {
+    await initFlusherSecurityKey();
+  };
   initDeviceDataGen4 = async () => {};
 }
 

@@ -25,6 +25,8 @@ import NoDeviceFound from 'src/components/@ProjectComponent/NoDeviceFound';
 import {filterBLEDevices} from './helper';
 import {DeviceExtendedProps, ScanningProps} from './types';
 import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
+import {initFlusherSecurityKey} from "src/utils/Helpers/project";
+import * as console from "console";
 
 let timeoutID: any = null;
 let timeoutIDForConnecting: any = null;
@@ -46,7 +48,7 @@ const Index = ({navigation, route}: any) => {
   /** Hooks for checking if user turned off bluetooth power */
   useEffect(() => {
     const subscription = BLEService.manager.onStateChange(state => {
-      consoleLog('DeviceSearching useEffect state==>', state);
+      // consoleLog('DeviceSearching useEffect state==>', state);
       if (state === 'PoweredOff') {
         NavigationService.replace('Permission');
       }
@@ -96,6 +98,8 @@ const Index = ({navigation, route}: any) => {
       }
     }
 
+    // await initFlusherSecurityKey();
+
     initlizeCheckDeviceListTimer();
     initlizeCheckAndRemoveNoAdvertsingDevicesTimer();
 
@@ -110,7 +114,7 @@ const Index = ({navigation, route}: any) => {
    * this is because foundDevices var values does not reflect updated in timer functions
    */
   useEffect(() => {
-    consoleLog('useEffect foundDevicesRef called', foundDevices);
+    // consoleLog('useEffect foundDevicesRef called', foundDevices);
     foundDevicesRef.current = foundDevices;
     if (foundDevices.length) {
       clearTimeout(timeoutID);
@@ -121,7 +125,7 @@ const Index = ({navigation, route}: any) => {
 
   /** component timer method */
   const initlizeCheckDeviceListTimer = () => {
-    consoleLog('initlizeCheckDeviceListTimer called');
+    // consoleLog('initlizeCheckDeviceListTimer called');
 
     if (timeoutID) {
       clearTimeout(timeoutID);
@@ -157,14 +161,14 @@ const Index = ({navigation, route}: any) => {
     // __foundDevices1?: DeviceExtendedProps[],
     {
       const __foundDevices: DeviceExtendedProps[] = foundDevicesRef?.current;
-      consoleLog(
-        'CheckAndRemoveNoAdvertsingDevices __foundDevices called==>',
-        __foundDevices?.length,
-      );
-      consoleLog(
-        'CheckAndRemoveNoAdvertsingDevices __foundDevices called isScanning==>',
-        isScanning,
-      );
+      // consoleLog(
+      //   'CheckAndRemoveNoAdvertsingDevices __foundDevices called==>',
+      //   __foundDevices?.length,
+      // );
+      // consoleLog(
+      //   'CheckAndRemoveNoAdvertsingDevices __foundDevices called isScanning==>',
+      //   isScanning,
+      // );
       if (Array.isArray(__foundDevices) && __foundDevices.length > 0) {
         // LAST_SCAN_INTERVAL_TIME_MS = 2
         // Suppose last scan = 100
@@ -174,11 +178,11 @@ const Index = ({navigation, route}: any) => {
         // {"LAST_SCAN_TIME_IN_SEC": 5, "lastScan": 1721101249, "timestampInSec": 1721101254}
         let timestampInSecond = timestampInSec();
         const __foundDevicesTmp = __foundDevices.filter(device => {
-          consoleLog('checkDevicesIfOld __foundDevicesTmp==>', {
-            lastScan: device?.lastScan,
-            LAST_SCAN_TIME_IN_SEC,
-            timestampInSec: timestampInSecond,
-          });
+          // consoleLog('checkDevicesIfOld __foundDevicesTmp==>', {
+          //   lastScan: device?.lastScan,
+          //   LAST_SCAN_TIME_IN_SEC,
+          //   timestampInSec: timestampInSecond,
+          // });
           return device?.lastScan + LAST_SCAN_TIME_IN_SEC >= timestampInSecond;
         });
 
@@ -198,10 +202,10 @@ const Index = ({navigation, route}: any) => {
       // consoleLog('Scanning....');
       return false;
     }
-    consoleLog('addFoundDevice device==>', {
-      deviceCustomName: device?.deviceCustomName,
-      timestampInSec: timestampInSec(),
-    });
+    // consoleLog('addFoundDevice device==>', {
+    //   deviceCustomName: device?.deviceCustomName,
+    //   timestampInSec: timestampInSec(),
+    // });
 
     setScanning(ScanningProps.DeviceFound);
 
