@@ -20,6 +20,7 @@ import {useDispatch} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import AlertBox from 'src/components/AlertBox';
 import {BLEService} from 'src/services/BLEService/BLEService';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 // Header Props
 type HeaderProps = {
@@ -27,6 +28,7 @@ type HeaderProps = {
   hasBackButton?: boolean;
   hasDeviceSearchButton?: boolean;
   hasProfileButton?: boolean;
+  hasOnlineOfflineIcon?: boolean;
   onLogOutButtonPress?: (params?: any) => void;
   onBackButtonPress?: (params?: any) => void;
   onDeviceSearchButtonPress?: (params?: any) => void;
@@ -44,6 +46,7 @@ const Header = ({
   hasLogOutButton = false,
   hasDeviceSearchButton = false,
   hasProfileButton = false,
+  hasOnlineOfflineIcon = false,
   onLogOutButtonPress,
   onBackButtonPress,
   onDeviceSearchButtonPress,
@@ -56,6 +59,7 @@ const Header = ({
 }: HeaderProps) => {
   const dispatch = useDispatch();
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
+  const {isConnected, isInternetReachable} = useNetInfo();
 
   /** action for logout */
   const onLogout = async () => {
@@ -198,6 +202,18 @@ const Header = ({
                 source={getImgSource(Icons?.loader)}
                 style={{width: 22, height: 22}}
                 resizeMode="contain"
+              />
+            </>
+          </TouchableItem>
+        )}
+        {hasOnlineOfflineIcon && (
+          <TouchableItem disabled>
+            <>
+              <VectorIcon
+                iconPack="Entypo"
+                name={'dot-single'}
+                size={30}
+                color={isConnected ? Theme.colors.green : Theme.colors.red}
               />
             </>
           </TouchableItem>

@@ -390,7 +390,8 @@ const Index = ({navigation, route}: any) => {
         backgroundType="solid"
         hasHeader={true}
         hasLogOutButton={true}
-        hasDeviceSearchButton
+        // hasDeviceSearchButton
+        hasOnlineOfflineIcon={true}
         headerBackgroundType="solid"
         // haslogOutButton={true}
         // hasRightButton={true}
