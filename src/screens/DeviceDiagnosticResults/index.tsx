@@ -51,6 +51,7 @@ const Index = ({navigation, route}: any) => {
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
   const [infoModal, setInfoModal] = useState<boolean>(false);
+  const [reportSentStatus, setReportSentStatus] = useState<boolean>(false);
 
   /** component hooks method for hardwareBackPress */
   useEffect(() => {
@@ -160,7 +161,12 @@ const Index = ({navigation, route}: any) => {
       };
       await saveReportItems(db, [payload]);
       await checkAndSyncPendingSycableItems(token);
-      showToast && showToastMessage('Report sent', 'success');
+
+      // showToast && showToastMessage('Report sent', 'success');
+
+      if (isReportManual == 'yes') {
+        setReportSentStatus(true);
+      }
 
       return true;
     } catch (error) {
@@ -207,6 +213,32 @@ const Index = ({navigation, route}: any) => {
                 </Col>
               </Row>
             </Wrap>
+
+            {/* Message */}
+            {reportSentStatus && (
+              <Wrap autoMargin={false} style={styles.container}>
+                <Row autoMargin={false} style={{}}>
+                  <Col autoMargin={false} style={{flex: 1}}>
+                    <Wrap
+                      autoMargin={false}
+                      style={{
+                        backgroundColor: Theme.colors.green,
+                      }}>
+                      <Typography
+                        size={12}
+                        text={`Report will be sent to Sloan. Please contact Sloan\nTechnical Service at +1-888-756-2614 or\ntechsupport@sloan.com to follow up.`}
+                        style={{
+                          textAlign: 'center',
+                          paddingVertical: 10,
+                        }}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
+                  </Col>
+                </Row>
+              </Wrap>
+            )}
 
             {/* Current Diagnostic */}
             <Wrap autoMargin={false} style={styles.container}>

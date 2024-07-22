@@ -488,7 +488,7 @@ const Index = ({navigation, route}: any) => {
           <Wrap autoMargin={false}>
             <Typography
               size={22}
-              text={'Diagnostics'}
+              text={'Diagnosing'}
               style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontMedium}

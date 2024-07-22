@@ -16,10 +16,7 @@ const PermissionList = ({
   style,
   onAllowedPress,
 }: PermissionListProps) => (
-  <Wrap autoMargin={false} style={[
-    styles.wrapper,
-    style
-  ]}>
+  <Wrap autoMargin={false} style={[styles.wrapper, style]}>
     <>
       <Row autoMargin={false} style={styles.row}>
         <Wrap autoMargin={false} style={styles.leftStyle}>
@@ -36,7 +33,7 @@ const PermissionList = ({
             size={12}
             text={item?.description ?? 'N/A'}
             style={{
-              textAlign: 'left',
+              textAlign: 'justify',
             }}
             color={Theme.colors.black}
             ff={Theme.fonts.ThemeFontLight}

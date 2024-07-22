@@ -8,7 +8,7 @@ import {
   showToastMessage,
 } from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
-import {Wrap} from 'src/components/Common';
+import {Container, Wrap} from 'src/components/Common';
 import {Button} from 'src/components/Button';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {styles} from './styles';
@@ -28,6 +28,7 @@ import AlertBox from 'src/components/AlertBox';
 import RNExitApp from 'react-native-exit-app';
 import {checkAllRequiredPermissions} from './helper';
 import PermissionList from 'src/components/@ProjectComponent/PermissionList';
+import AppContainer from 'src/components/AppContainer';
 
 let timeoutIDForPermissionCheckiOS: any = null;
 const IOS_PERMISSION_CHECKING_TIMEOUT_MS = 2000;
@@ -315,7 +316,7 @@ const Permission = ({navigation, route}: any) => {
   };
 
   return (
-    <>
+    <AppContainer scroll={true} scrollViewStyle={{}}>
       <Wrap autoMargin={false} style={styles.container}>
         <Image
           source={getImgSource(Images?.splashScreen)}
@@ -344,7 +345,7 @@ const Permission = ({navigation, route}: any) => {
             />
             <Typography
               size={13}
-              text="Please allowed required permissions"
+              text="Please allow required permissions"
               style={{textAlign: 'left'}}
               color={Theme.colors.black}
               ff={Theme.fonts.ThemeFontRegular}
@@ -352,7 +353,7 @@ const Permission = ({navigation, route}: any) => {
 
             <Typography
               size={10}
-              text="You would not able to proceed if any of permission not allowed"
+              text="You wouldn't be able to proceed if any of these permissions not allowed"
               style={{textAlign: 'left', marginBottom: 20}}
               color={Theme.colors.black}
               ff={Theme.fonts.ThemeFontRegular}
@@ -375,8 +376,8 @@ const Permission = ({navigation, route}: any) => {
 
             <PermissionList
               item={{
-                title: 'Bluetooth Power On',
-                description: 'App needed Bluetooth Power On to search devices',
+                title: 'Bluetooth',
+                description: 'App needed Bluetooth to search devices',
                 allowed: bluetoothStateStatus,
               }}
               onAllowedPress={() => {
@@ -489,7 +490,7 @@ const Permission = ({navigation, route}: any) => {
         }}
         okayText="OPEN SETTINGS"
       />
-    </>
+    </AppContainer>
   );
 };
 

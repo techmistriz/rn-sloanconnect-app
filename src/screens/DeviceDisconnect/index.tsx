@@ -107,7 +107,9 @@ const Index = ({navigation, route}: any) => {
       scrollViewStyle={{}}
       backgroundType="gradient"
       loading={loading}
-      loadingText={'Please wait, system check and syncing reports to server'}>
+      loadingText={
+        'Please wait, system checking and syncing reports to server'
+      }>
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>

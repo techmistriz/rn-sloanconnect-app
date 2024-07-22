@@ -14,7 +14,11 @@ export const filterBLEDevices = (deviceRaw: DeviceExtendedProps): any => {
   const device = cleanCharacteristic(deviceRaw);
   var filterDevice = null;
   var deviceName = device?.localName ?? device?.name ?? '';
-  // deviceName = 'FAUCET ADSKU00 AYYSS';
+  consoleLog('deviceName', deviceName);
+
+  // if (deviceName == 'FAUCET ADSKU02 T0123') {
+  //   deviceName = 'FAUCET ADSKU08 AYYSS';
+  // }
 
   if (device && !isObjectEmpty(device) && deviceName != '') {
     device.deviceCustomName = deviceName;
