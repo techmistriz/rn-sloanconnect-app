@@ -76,5 +76,30 @@
     "BTN_VERIFY_EMAIL": "VERIFY EMAIL",
     "LABEL_RETURN_TO_LOGIN": "Return to login",
     "EOF": "EOF"
+  },
+  "register": {
+    "TITLE_REGISTER": "Register",
+    "SUBTITLE_REGISTER": "Enter your email to receive the verification code in your inbox.",
+    "LABEL_FIRST_NAME": "First Name",
+    "LABEL_LAST_NAME": "First Name",
+    "LABEL_JOB_TITLE": "Job Title",
+    "LABEL_COMPANY": "Company",
+    "LABEL_INDUSTRY": "Industry",
+    "LABEL_PHONE_NUMBER": "Phone Number",
+    "LABEL_EMAIL": "Email",
+    "LABEL_PASSWORD": "Password",
+    "LABEL_CONFIRM_PASSWORD": "Confirm Password",
+    "LABEL_COUNTRY": "Country",
+    "LABEL_STATE_PROVINCE": "State/Province",
+    "LABEL_CITY": "City",
+    "LABEL_ADDRESS": "Address",
+    "LABEL_ZIPCODE": "Zip/Postal",
+    "LABEL_TIMEZONE": "Timezone",
+    "LABEL_TERM": "I have read and agree to these ",
+    "LABEL_TERM_LINK": "Terms",
+    "BTN_REGISTER": "Next",
+    "LABEL_ALREADY_HAVE_AN_ACCOUNT": "Already have an account?",
+    "LABEL_RETURN_TO_REGISTER": "Login Here",
+    "EOF": "EOF"
   }
 }
