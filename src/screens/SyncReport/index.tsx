@@ -128,17 +128,20 @@ const Index = () => {
       const payload =
         typeof item?.value === 'string' ? JSON.parse(item?.value) : item?.value;
       consoleLog('onSync payload==>', payload);
-      const status: boolean = await syncToServer(payload, token);
-      consoleLog('status==>', status);
+      const response: any = await syncToServer(payload, token);
+      // consoleLog('onSync syncToServer response==>', response);
 
-      if (status) {
+      if (response?.status) {
         await deleteReportItem(db, item?.id);
         showToastMessage('Report sent successfully.', 'success');
         loadDataCallback();
       } else {
         await updateReportItem(db, item, 2);
         loadDataCallback();
-        showToastMessage('Something went wrong!', 'danger');
+        showToastMessage(
+          response?.message ?? 'Something went wrong!',
+          'danger',
+        );
       }
     } catch (error) {
       showToastMessage(error?.message, 'danger');
@@ -150,6 +153,7 @@ const Index = () => {
   const onDelete = async (item: ReportItemModel) => {
     const db = await getDBConnection();
     await deleteReportItem(db, item?.id);
+    loadDataCallback();
     showToastMessage('Report deleted from offline list.', 'success');
   };
 

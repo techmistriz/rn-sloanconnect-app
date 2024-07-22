@@ -86,7 +86,7 @@ export const checkAndSyncPendingSycableItems = async (
 export const syncToServer = async (
   payload: any,
   token: string,
-): Promise<boolean> => {
+): Promise<any> => {
   try {
     const response = await Network(
       'sloan/save-device-report',
@@ -97,12 +97,16 @@ export const syncToServer = async (
 
     // consoleLog('syncToServer response==>', response);
     if (response) {
-      return true;
+      return response;
     } else {
-      return false;
+      return response;
     }
   } catch (error) {
-    return false;
+    return {
+      status: false,
+      message: error?.message,
+      data: {},
+    };
   } finally {
     //
   }
