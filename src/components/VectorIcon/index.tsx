@@ -11,6 +11,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
 import Theme from 'src/theme';
 import {styles} from './styles';
 import TouchableItem from 'src/components/TouchableItem';
@@ -101,6 +102,9 @@ const GetIconPack = ({iconPack, ...rest}: any) => {
   }
   if (iconPack === 'SimpleLineIcons') {
     return <SimpleLineIcons {...rest} />;
+  }
+  if (iconPack === 'Octicons') {
+    return <Octicons {...rest} />;
   }
 
   return <Feather {...rest} />;

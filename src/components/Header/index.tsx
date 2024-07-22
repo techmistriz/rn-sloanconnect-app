@@ -210,9 +210,9 @@ const Header = ({
           <TouchableItem disabled>
             <>
               <VectorIcon
-                iconPack="Entypo"
-                name={'dot-single'}
-                size={30}
+                iconPack="Octicons"
+                name={'dot-fill'}
+                size={20}
                 color={isConnected ? Theme.colors.green : Theme.colors.red}
               />
             </>

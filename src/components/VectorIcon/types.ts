@@ -15,6 +15,7 @@ export type VectorIconProps = {
     | 'FontAwesome5'
     | 'FontAwesome6'
     | 'Entypo'
+    | 'Octicons'
     | 'SimpleLineIcons';
   onPress?: () => void;
   containerStyle?: ViewStyle | ViewStyle[] | {};
