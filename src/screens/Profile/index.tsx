@@ -23,14 +23,20 @@ import {BLEService} from 'src/services';
 import {Button} from 'src/components/Button';
 import Network from 'src/network/Network';
 import {constants} from 'src/common';
+import LANGUAGES from 'src/locales/languages.json';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const {user, token, type} = useSelector((state: any) => state?.AuthReducer);
+  const {settings} = useSelector((state: any) => state?.SettingsReducer);
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
   const [deleteAccountModal, setDeleteAccountModal] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
+
+  const selectedLanguage = React.useMemo(() => {
+    return LANGUAGES.find((o: any) => o.code === settings?.language);
+  }, [settings]);
 
   /** compoment hooks method */
   useEffect(() => {
@@ -220,6 +226,40 @@ const Index = ({route, navigation}: any) => {
                   color={Theme.colors.black}
                   size={20}
                 />
+              </Wrap>
+            </TouchableItem>
+          </Wrap>
+
+          <Wrap autoMargin={false} style={[styles.itemContainer]}>
+            <TouchableItem
+              onPress={() => {
+                NavigationService.navigate('Language', {
+                  referrer: 'ProfileScreen',
+                  type: type,
+                });
+              }}
+              style={styles.item}>
+              <Wrap autoMargin={false} style={styles.itemRow}>
+                <Wrap autoMargin={false}>
+                  <Typography
+                    text="Language"
+                    color={Theme?.colors.black}
+                    size={16}
+                  />
+                </Wrap>
+                <Wrap autoMargin={false} style={styles.itemRow}>
+                  <Typography
+                    text={selectedLanguage?.name}
+                    color={Theme?.colors?.black}
+                    size={12}
+                  />
+                  <VectorIcon
+                    iconPack="Feather"
+                    name={'chevron-right'}
+                    color={Theme?.colors?.black}
+                    size={20}
+                  />
+                </Wrap>
               </Wrap>
             </TouchableItem>
           </Wrap>

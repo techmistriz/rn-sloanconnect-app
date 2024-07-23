@@ -5,7 +5,6 @@ import {settingsFailureAction, settingsSuccessAction} from 'src/redux/actions';
 import {
   showToastMessage,
   consoleLog,
-  getUserAPiPrefixByUserType,
   showSimpleAlert,
   isValidEmail,
 } from 'src/utils/Helpers/HelperFunction';
@@ -17,7 +16,7 @@ function* __settingsRequestSaga({payload, options}: any) {
   try {
     //@ts-ignore
     const response = yield Network(
-      getUserAPiPrefixByUserType(options?.type) + 'profile/update',
+      'profile/update',
       'POST',
       payload,
       options?.token,
