@@ -1516,14 +1516,6 @@ export const initFlusherSecurityKey = async () => {
     const FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID =
         BLE_CONSTANTS?.FLUSHER?.FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID;
 
-    const lockStatusResponse = await BLEService.readCharacteristicForDevice(
-        FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
-        FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID,
-    );
-
-    consoleLog('lockStatusResponseBefore=>', lockStatusResponse);
-
-
     let timestamp = getTimestampInSeconds();
     //let timestampYmd = '180905';
     let timestampYmd = getTimestampInYMDFormat(timestamp);
@@ -1547,10 +1539,13 @@ export const initFlusherSecurityKey = async () => {
       const FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID =
           BLE_CONSTANTS?.FLUSHER?.FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID;
 
-      let writeResponse = await BLEService.writeCharacteristicWithResponseForDevice(
+      const readSingleWifiShortBase64 = hexToByte(timestampHex); //Buffer.from(timestampHex, "hex").toString("base64");
+      consoleLog('readSingleWifiShortBase64', readSingleWifiShortBase64);
+
+      let writeResponse = await BLEService.writeCharacteristicWithResponseForDevice2(
           FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
           FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID,
-          timestampHex,
+          readSingleWifiShortBase64,
       );
 
       consoleLog('FlusherTimestampWriteResponse=>', writeResponse);
@@ -1566,17 +1561,17 @@ export const initFlusherSecurityKey = async () => {
       // Now send unlock key to device
       const FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID =
           BLE_CONSTANTS?.FLUSHER?.FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID;
-
-      let keyWriteResponse = await BLEService.writeCharacteristicWithResponseForDevice(
+      const readSingleWifiShortBase6422 = hexToByte(unlockKeyHex);
+      let keyWriteResponse = await BLEService.writeCharacteristicWithResponseForDevice2(
           FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
           FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID,
-          unlockKeyHex,
+          readSingleWifiShortBase6422,
       ).then((response) => {
         consoleLog('unlockKeyWriteCallback', response);
       });
 
       consoleLog('FlusherUnlockKeyWriteResponse=>', keyWriteResponse);
-      // await sleep(5000);
+      await sleep(1000);
       // now read unlock status
 
       const lockStatusResponse = await BLEService.readCharacteristicForDevice(
