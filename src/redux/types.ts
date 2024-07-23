@@ -44,7 +44,7 @@ export const changePasswordActionTypes = {
   CHANGE_PASSWORD_SUCCESS: 'CHANGE_PASSWORD_SUCCESS',
   CHANGE_PASSWORD_FAILURE: 'CHANGE_PASSWORD_FAILURE',
   CHANGE_PASSWORD_RESET_DATA: 'CHANGE_PASSWORD_RESET_DATA',
-}
+};
 
 /**action types for login module */
 export const verifyEmailActionTypes = {
@@ -101,4 +101,12 @@ export const settingsActionTypes = {
   SETTINGS_FAILURE: 'SETTINGS_FAILURE',
   SETTINGS_SUCCESS: 'SETTINGS_SUCCESS',
   SETTINGS_RESET_DATA: 'SETTINGS_RESET_DATA',
+};
+
+/**action types for login module */
+export const syncReportActionTypes = {
+  SYNC_REPORT_REQUEST: 'SYNC_REPORT_REQUEST',
+  SYNC_REPORT_FAILURE: 'SYNC_REPORT_FAILURE',
+  SYNC_REPORT_SUCCESS: 'SYNC_REPORT_SUCCESS',
+  SYNC_REPORT_RESET_DATA: 'SYNC_REPORT_RESET_DATA',
 };

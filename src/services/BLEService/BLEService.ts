@@ -272,6 +272,11 @@ class BLEServiceInstance {
           this.deviceRaw = __device;
           const deviceGen = getBleDeviceGeneration(deviceLocalName);
           const deviceVer = getBleDeviceVersion(__device, deviceGen);
+
+          consoleLog('connectToDevice deviceGen==>', {
+            deviceGen,
+            deviceVer,
+          });
           this.deviceGeneration = deviceGen;
           this.deviceVersion = deviceVer;
           resolve(device);
@@ -1061,10 +1066,12 @@ class BLEServiceInstance {
         // consoleLog('setDeviceModelData deviceVer==>', deviceVer);
 
         const deviceModel = BLE_DEVICE_MODELS[deviceGen];
-        consoleLog('setDeviceModelData deviceModel==>', deviceModel);
+        // consoleLog('setDeviceModelData deviceModel==>', deviceModel);
 
         if (deviceModel && typeof deviceModel[deviceVer] != 'undefined') {
           deviceStaticData = deviceModel[deviceVer];
+        } else {
+          deviceStaticData = deviceModel?.empty;
         }
       }
     }

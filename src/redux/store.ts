@@ -9,7 +9,7 @@ import rootSaga from './sagas';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['AuthReducer', 'DeviceSettingsReducer'],
+  whitelist: ['AuthReducer', 'DeviceSettingsReducer', 'SettingsReducer'],
 };
 
 // const persistedReducer = persistReducer(persistConfig, authReducer);

@@ -1,26 +1,18 @@
 import {settingsActionTypes} from 'src/redux/types';
 
-enum IsBiometricProps {
-  DISABLED = 'DISABLED',
-  ENABLED = 'ENABLED',
-  BLOCKED = 'BLOCKED',
-}
-
 export interface SettingsProps {
   loading: boolean;
   settings: {
-    isBiometric: IsBiometricProps;
     isNotification: boolean;
-    type: number;
+    language: string;
   };
 }
 
 const initialState: SettingsProps = {
   loading: false,
   settings: {
-    isBiometric: IsBiometricProps.DISABLED,
     isNotification: false,
-    type: 0,
+    language: 'en',
   },
 };
 

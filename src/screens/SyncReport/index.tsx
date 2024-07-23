@@ -4,6 +4,7 @@ import {
   consoleLog,
   getImgSource,
   parseDateHumanFormatFromUnix,
+  showToastMessage,
   timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
 import Theme from 'src/theme';
@@ -11,10 +12,13 @@ import {
   getDBConnection,
   getReportItems,
   saveReportItems,
-  createTable,
+  createReportTable,
   deleteReportItem,
-} from 'src/services/DB/SQLiteDBService';
-import {ReportItemModel} from 'src/services/DB/Models';
+  checkTableExistance,
+  updateReportItem,
+  clearTable,
+} from 'src/services/DBService/SQLiteDBService';
+import {ReportItemModel} from 'src/services/DBService/Models';
 import AppInfo from 'src/components/@ProjectComponent/AppInfo';
 import AppContainer from 'src/components/AppContainer';
 import {Wrap, Row} from 'src/components/Common';
@@ -28,24 +32,30 @@ import {styles} from './styles';
 import EmptyComponent from 'src/components/EmptyState';
 import {constants} from 'src/common';
 import LoaderComponent from 'src/components/Loader';
+import Network from 'src/network/Network';
+import {syncToServer} from 'src/services/SyncService/SyncService';
+import NetInfo from '@react-native-community/netinfo';
+import {useDispatch, useSelector} from 'react-redux';
+import {BLEService} from 'src/services';
+import DeviceInfo from 'react-native-device-info';
 
 const initReports = [
   {
-    id: 0,
+    id: 1,
     name: 'Diagnostic report 1',
     value: 'go to shop',
     status: 0,
     dateTime: timestampInSec(),
   },
   {
-    id: 1,
+    id: 2,
     name: 'Diagnostic report 2',
     value: 'eat at least a one healthy foods',
     status: 0,
     dateTime: timestampInSec(),
   },
   {
-    id: 2,
+    id: 3,
     name: 'Diagnostic report 2',
     value: 'Do some exercises',
     status: 0,
@@ -57,16 +67,20 @@ const Index = () => {
   const [reports, setReports] = useState<ReportItemModel[]>([]);
   const [newReport, setNewReport] = useState('');
   const [apiRequestCompleted, setApiRequestCompleted] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
 
-  const loadDataCallback = async () => {
+  const loadDataCallback = useCallback(async () => {
     consoleLog('loadDataCallback called==>');
 
     try {
       const db = await getDBConnection();
-      const storedReportItems = await getReportItems(db);
       consoleLog('loadDataCallback db==>', db);
-      // await createTable(db, 'table_reports');
-      // const storedReportItems = await getReportItems(db);
+      // await clearTable(db, 'table_reports');
+      // await createReportTable(db, 'table_reports');
+      const isTableExistance = await checkTableExistance(db, 'table_reports');
+      consoleLog('loadDataCallback isTableExistance==>', isTableExistance);
+      const storedReportItems = await getReportItems(db);
       consoleLog('loadDataCallback storedReportItems==>', storedReportItems);
       if (storedReportItems.length) {
         consoleLog(
@@ -75,62 +89,75 @@ const Index = () => {
         );
         setReports(storedReportItems);
       } else {
-        await saveReportItems(db, initReports);
+        // await saveReportItems(db, initReports);
         consoleLog('loadDataCallback saveReportItems==>', initReports);
-        setReports(initReports);
+        setReports([]);
       }
 
       consoleLog('reports==>', reports);
     } catch (error) {
       consoleLog('reports error==>', error);
     }
-  };
-
-  useEffect(() => {
-    consoleLog('Sync useEffect called');
-    loadDataCallback();
   }, []);
 
-  const addReport = async () => {
-    if (!newReport.trim()) return;
+  useEffect(() => {
+    consoleLog('Sync useEffect loadDataCallback called');
+    loadDataCallback();
+  }, [loadDataCallback]);
+
+  useEffect(() => {
+    consoleLog('Sync useEffect called==>');
+
+    DeviceInfo.getFirstInstallTime().then(info => {
+      consoleLog('Sync getFirstInstallTime==> ', info);
+    });
+  }, []);
+
+  const onSync = async (item: ReportItemModel) => {
     try {
-      const newReports = [
-        ...reports,
-        {
-          id: reports.length
-            ? reports.reduce((acc, cur) => {
-                if (cur.id > acc.id) return cur;
-                return acc;
-              }).id + 1
-            : 0,
-          value: newReport,
-          status: 0,
-          dateTime: '',
-        },
-      ];
-      setReports(newReports);
+      const state = await NetInfo.fetch();
+      if (state.isConnected == false) {
+        showToastMessage('No internet connection.', 'danger');
+        return false;
+      }
+
+      setLoading(true);
       const db = await getDBConnection();
-      await saveReportItems(db, newReports);
-      setNewReport('');
+      await updateReportItem(db, item, 1);
+      loadDataCallback();
+      const payload =
+        typeof item?.value === 'string' ? JSON.parse(item?.value) : item?.value;
+      consoleLog('onSync payload==>', payload);
+      const response: any = await syncToServer(payload, token);
+      // consoleLog('onSync syncToServer response==>', response);
+
+      if (response?.status) {
+        await deleteReportItem(db, item?.id);
+        showToastMessage('Report sent successfully.', 'success');
+        loadDataCallback();
+      } else {
+        await updateReportItem(db, item, 2);
+        loadDataCallback();
+        showToastMessage(
+          response?.message ?? 'Something went wrong!',
+          'danger',
+        );
+      }
     } catch (error) {
-      console.error(error);
+      showToastMessage(error?.message, 'danger');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const deleteItem = async (id: number) => {
-    try {
-      const db = await getDBConnection();
-      await deleteReportItem(db, id);
-      reports.splice(id, 1);
-      setReports(reports.slice(0));
-    } catch (error) {
-      console.error(error);
-    }
+  const onDelete = async (item: ReportItemModel) => {
+    const db = await getDBConnection();
+    await deleteReportItem(db, item?.id);
+    loadDataCallback();
+    showToastMessage('Report deleted from offline list.', 'success');
   };
 
-  const syncToServer = (item: ReportItemModel) => {};
-
-  /**Child flatlist render method */
+  /**Flatlist render method */
   const renderItem = ({item}: any) => {
     return (
       <TouchableItem disabled style={{}}>
@@ -156,7 +183,7 @@ const Index = () => {
               />
               <Typography
                 size={12}
-                text={`Date & Time: ${parseDateHumanFormatFromUnix(
+                text={`Date: ${parseDateHumanFormatFromUnix(
                   item?.dateTime,
                   'DD/MM/YYYY HH:mm:ss a z',
                 )}`}
@@ -170,25 +197,96 @@ const Index = () => {
             </Wrap>
             <Wrap autoMargin={false} style={{justifyContent: 'flex-end'}}>
               {item?.status == 0 ? (
-                <VectorIcon
-                  iconPack="Ionicons"
-                  name={'sync-outline'}
-                  size={25}
-                  color={Theme.colors.primaryColor}
-                  onPress={() => {
-                    syncToServer(item);
-                  }}
-                />
+                <Row autoMargin={false}>
+                  <VectorIcon
+                    iconPack="Ionicons"
+                    name={'sync-outline'}
+                    size={25}
+                    color={Theme.colors.primaryColor}
+                    onPress={() => {
+                      onSync(item);
+                    }}
+                    style={{marginRight: 10}}
+                  />
+                  <VectorIcon
+                    iconPack="Ionicons"
+                    name={'trash'}
+                    size={25}
+                    color={Theme.colors.red}
+                    onPress={() => {
+                      onDelete(item);
+                    }}
+                  />
+                </Row>
+              ) : item?.status == 1 ? (
+                <>
+                  <Row autoMargin={false}>
+                    <VectorIcon
+                      iconPack="Ionicons"
+                      name={'sync-outline'}
+                      size={25}
+                      color={Theme.colors.primaryColor}
+                      onPress={() => {
+                        onSync(item);
+                      }}
+                      style={{marginRight: 10}}
+                    />
+                    <VectorIcon
+                      iconPack="Ionicons"
+                      name={'trash'}
+                      size={25}
+                      color={Theme.colors.red}
+                      onPress={() => {
+                        onDelete(item);
+                      }}
+                    />
+                  </Row>
+
+                  <Typography
+                    size={12}
+                    text={`Syncing...`}
+                    style={{
+                      textAlign: 'left',
+                      marginTop: 10,
+                    }}
+                    color={Theme.colors.darkGray}
+                    noOfLine={1}
+                  />
+                </>
               ) : (
-                <Typography
-                  size={12}
-                  text={`Syncing...`}
-                  style={{
-                    textAlign: 'right',
-                  }}
-                  color={Theme.colors.darkGray}
-                  noOfLine={1}
-                />
+                <>
+                  <Row autoMargin={false}>
+                    <VectorIcon
+                      iconPack="Ionicons"
+                      name={'sync-outline'}
+                      size={25}
+                      color={Theme.colors.primaryColor}
+                      onPress={() => {
+                        onSync(item);
+                      }}
+                      style={{marginRight: 10}}
+                    />
+                    <VectorIcon
+                      iconPack="Ionicons"
+                      name={'trash'}
+                      size={25}
+                      color={Theme.colors.red}
+                      onPress={() => {
+                        onDelete(item);
+                      }}
+                    />
+                  </Row>
+                  <Typography
+                    size={12}
+                    text={`Failed`}
+                    style={{
+                      textAlign: 'left',
+                      marginTop: 10,
+                    }}
+                    color={Theme.colors.red}
+                    noOfLine={1}
+                  />
+                </>
               )}
             </Wrap>
           </Row>
@@ -204,6 +302,7 @@ const Index = () => {
       scrollViewStyle={{}}
       backgroundType="solid"
       hasHeader={false}
+      loading={loading}
       headerContainerStyle={{backgroundColor: Theme.colors.primaryColor}}>
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>

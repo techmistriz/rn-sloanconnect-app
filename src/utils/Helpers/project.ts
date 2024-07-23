@@ -104,6 +104,10 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
   if (!str) {
     return '';
   }
+  // if (str == 'FAUCET ADSKU02 T0123') {
+  //   str = 'FAUCET ADSKU08 AYYSS';
+  // }
+  if (!str) return '';
   var result = 'empty';
   // return result;
   if (gen == 'gen1') {

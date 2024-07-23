@@ -1,0 +1,107 @@
+{
+  "advanced_device_details": {
+    "accumulated_activation_time": 5720,
+    "accumulated_flush_time": 1070,
+    "accumulated_water_usage": "143.55 Gal (543.4 L)",
+    "activations_since_day_1": 459,
+    "activations_since_last_change": 113,
+    "battery_status": 94,
+    "date_of_installation": "Jul 2024",
+    "date_of_last_bd_note_change": "",
+    "date_of_last_factory": "N/A",
+    "date_of_last_flow_rate_change": "",
+    "date_of_last_flush_enable_change": "2024/06/18 10:42",
+    "date_of_last_flush_interval_change": "2024/06/18 10:42",
+    "date_of_last_flush_time_change": "2024/06/01 07:43",
+    "date_of_last_metered_run_time_change": "2024/06/24 16:40",
+    "date_of_last_mode_change": "2024/06/24 16:40",
+    "date_of_last_ondemand_timeout_change": "2024/06/24 16:39",
+    "date_of_last_range_change": "2024/06/26 12:11",
+    "hours_of_operation": 497,
+    "line_flushes_since_day1": 28,
+    "number_of_ble_connections": 99
+  },
+  "diagnostic_report": {
+    "current": {
+      "battery": 94,
+      "date_of_diagnostic": 1721454011,
+      "sensor": "0",
+      "turbine": "2",
+      "valve": "1"
+    },
+    "prev": {
+      "battery": 94,
+      "date_of_diagnostic": 1721454011,
+      "sensor": "0",
+      "turbine": "2",
+      "valve": "1"
+    }
+  },
+  "faucet_device_details": {
+    "control_box_details": {
+      "control_box_firmware_ver": "0243",
+      "control_box_hardware_ver": "0506",
+      "control_box_manuf_date": "2023/12/07",
+      "control_box_model": "1",
+      "control_box_serial_number": "T011810023"
+    },
+    "faucet_sensor_details": {
+      "faucet_model": "ETF610 / EBF615, ETF600 / EBF650",
+      "sensor_firmware_ver": "0175",
+      "sensor_hardware_ver": "0109",
+      "sensor_manufacturing_date": "2020/12/02",
+      "sensor_serial_number": "A020093783"
+    }
+  },
+  "faucet_settings": {
+    "current": {
+      "bd_note": "test note updated 28506929916",
+      "flow_rate": "57",
+      "flush_duration": "40",
+      "flush_enable": "1",
+      "flush_interval": "13",
+      "metered_run_time": "31",
+      "mode_selection": "1",
+      "on_demand_time_out": "37",
+      "sensor_range": "5"
+    },
+    "prev": {
+      "bd_note": "test note updated 28506929916",
+      "flow_rate": "57",
+      "flush_duration": "40",
+      "flush_enable": "1",
+      "flush_interval": "13",
+      "metered_run_time": "31",
+      "mode_selection": "1",
+      "on_demand_time_out": "37",
+      "sensor_range": "5"
+    }
+  },
+  "is_report_manual": "yes",
+  "mobile_device_info": {
+    "app_install_date": "07-20-2024",
+    "app_release_date": "Jul 18, 2024",
+    "app_version": "1.1.7",
+    "bluetooth_rssi": -41,
+    "bluetooth_ver": "",
+    "model": "iPhone XR",
+    "os": "ios",
+    "phone_battery": 60
+  },
+  "report_created_at": "2024-07-20 11:10",
+  "user_app_preferences": {
+    "gallon_liter": "",
+    "language": "EN",
+    "metric_imperial": "",
+    "timezone": "IST"
+  },
+  "user_info": {
+    "first_name": "Pradeep2",
+    "id": 2247,
+    "last_name": "Kumar",
+    "user_email": "pk836746+11@gmail.com",
+    "user_id": 2247,
+    "user_phone": "+1-91817161",
+    "user_title": "Mr"
+  }
+}

@@ -6,6 +6,7 @@ import verifyEmailReducer from './verifyEmail';
 import signupReducer from './signup';
 import settingsReducer from './settings';
 import deviceSettingsReducer from './deviceSettings';
+import syncReportReducer from './syncReport';
 
 const combinedReducers = combineReducers({
   AuthReducer: authReducer,
@@ -15,6 +16,7 @@ const combinedReducers = combineReducers({
   SignupReducer: signupReducer,
   SettingsReducer: settingsReducer,
   DeviceSettingsReducer: deviceSettingsReducer,
+  SyncReportReducer: syncReportReducer,
 });
 
 export {combinedReducers};

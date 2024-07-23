@@ -105,7 +105,7 @@ const Index = ({route, navigation}: any) => {
               />
               <Typography
                 size={14}
-                text="if you forget your password, please enter your email address below to be emailed a OTP"
+                text="If you forget your password, please enter your email address below to be emailed a OTP"
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,

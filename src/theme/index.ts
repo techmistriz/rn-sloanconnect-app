@@ -46,7 +46,7 @@ export const colors = {
   midGray: '#C5C5C5',
   darkGray: '#A3A3A3',
   gray: '#ddd',
-  red: '#FE0000',
+  red: '#c81e1e',
   blue: 'blue',
   pink: 'pink',
   yellow: '#F5A623',

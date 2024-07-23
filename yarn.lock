@@ -2606,6 +2606,11 @@
   resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.45.tgz#ffa764bb68a66c08db6efb9c816eb7be850577b1"
   integrity sha512-qkcUlZmX6c4J8q45taBKTL3p+LbITgyx7qhlPYOdOHZB7B31K0mXbP5YA7i7SgDeEGuI9MnumiKPEMrxg8j3KQ==
 
+"@types/i18n-js@*":
+  version "3.8.9"
+  resolved "https://registry.yarnpkg.com/@types/i18n-js/-/i18n-js-3.8.9.tgz#074d1389539d2db992e6afd7eb379aa02929ef93"
+  integrity sha512-bSxgya4x5O+x+QhfCGckiDDE+17XGPp1TNBgBA/vfF5EwdiZC70F4cKG5QK2v44+v62oY7/t/InreRhxskulcA==
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.6.tgz#7739c232a1fee9b4d3ce8985f314c0c6d33549d7"
@@ -2680,6 +2685,18 @@
   dependencies:
     "@types/react" "*"
     react-native "*"
+
+"@types/react-native-i18n@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-i18n/-/react-native-i18n-2.0.2.tgz#d2c80e14ceb689a8566b36ad1673b487012b6388"
+  integrity sha512-LcCFPu/Y3yWDA+bMbK9+OUWAJDLueWmG04GkP9gw0G+wawlVkD4pn6SJSdo0mYF/6SQz9Rpwa9M001hxescfDQ==
+  dependencies:
+    "@types/i18n-js" "*"
+
+"@types/react-native-sqlite-storage@^6.0.5":
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@types/react-native-sqlite-storage/-/react-native-sqlite-storage-6.0.5.tgz#2b32935cc06ec59ffeade0e7c7eb6097c5d9109e"
+  integrity sha512-1gPwgYil6pHV/EDF816M8KmVsQC5nGMTAm8OMC25GbyuBaXFn7sdguMq6A2owtXB8c4qsH2tOEIQNetbOquawA==
 
 "@types/react-native-vector-icons@^6.4.18":
   version "6.4.18"
@@ -4830,6 +4847,11 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
+i18n-js@3.0.11:
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-3.0.11.tgz#f9e96bdb641c5b9d6be12759d7c422089987ef02"
+  integrity sha512-v7dG3kYJTQTyox3NqDabPDE/ZotWntyMI9kh4cYi+XlCSnsIR+KBTS2opPyObL8WndnklcLzbNU92FP/mLge3Q==
+
 ieee754@^1.1.13:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
@@ -6829,6 +6851,13 @@ react-native-htmlview@^0.17.0:
     deprecated-react-native-prop-types "^5.0.0"
     entities "^1.1.1"
     htmlparser2-without-node-native "^3.9.2"
+
+react-native-i18n@^2.0.15:
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/react-native-i18n/-/react-native-i18n-2.0.15.tgz#09b5a9836116fa7dbd0054c46e2d1014c1ef3c65"
+  integrity sha512-V8VwUP0TLda3oJvgt5tdnFaOV7WXPhTjCTLO7sXI3C2SHggSbD4bCUryMzNJhesimJidH21V2Owvj4zAylHoQQ==
+  dependencies:
+    i18n-js "3.0.11"
 
 react-native-image-crop-picker@^0.40.3:
   version "0.40.3"

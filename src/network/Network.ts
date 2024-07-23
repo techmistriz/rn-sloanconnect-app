@@ -34,7 +34,6 @@ const Network = (
 
         const __headers = getHeaders(payload, authToken);
         const __payload = method !== METHODS.GET ? {data: payload} : {};
-
         axios({
           method,
           url: `${API_URL}${endpoint}`,
@@ -59,7 +58,7 @@ const Network = (
             resolve(__response);
           })
           .catch(function (error) {
-            // consoleLog('Network Error: ', JSON.stringify(error));
+            consoleLog('Network Error: ', JSON.stringify(error));
             if (error.response) {
               // console.log(error.response.data);
               // console.log(error.response.status);

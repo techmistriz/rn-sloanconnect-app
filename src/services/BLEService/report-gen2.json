@@ -1,11 +1,11 @@
 {
   "advanced_device_details": {
-    "accumulated_activation_time": "17119 sec",
+    "accumulated_activation_time": "17151 sec",
     "accumulated_flush_time": "2160 sec",
-    "accumulated_water_usage": "82.91 Gal (313.85 L)",
-    "activations_since_day_1": 1387,
-    "activations_since_last_change": 67,
-    "battery_status": 94,
+    "accumulated_water_usage": "83.07 Gal (314.44 L)",
+    "activations_since_day_1": 1400,
+    "activations_since_last_change": 80,
+    "battery_status": 93,
     "date_of_installation": "May 2024",
     "date_of_last_bd_note_change": 1719421040,
     "date_of_last_factory": 0,
@@ -17,21 +17,21 @@
     "date_of_last_mode_change": 1717818680,
     "date_of_last_ondemand_timeout_change": 1717818680,
     "date_of_last_range_change": 1719127967,
-    "hours_of_operation": 1234,
+    "hours_of_operation": 1274,
     "line_flushes_since_day1": "24",
-    "number_of_ble_connections": "297"
+    "number_of_ble_connections": "302"
   },
   "diagnostic_report": {
     "current": {
-      "battery": "90",
-      "date_of_diagnostic": 1721303039,
+      "battery": "94",
+      "date_of_diagnostic": 1721449273,
       "sensor": "0",
       "turbine": "0",
       "valve": "1"
     },
     "prev": {
-      "battery": "90",
-      "date_of_diagnostic": 1721303539,
+      "battery": "94",
+      "date_of_diagnostic": 1721449273,
       "sensor": "0",
       "turbine": "0",
       "valve": "1"
@@ -77,16 +77,18 @@
       "sensor_range": "3"
     }
   },
+  "is_report_manual": "yes",
   "mobile_device_info": {
-    "app_install_date": "2024-07-18",
+    "app_install_date": "01-21-1970",
     "app_release_date": "Jul 18, 2024",
     "app_version": "1.1.7",
+    "bluetooth_rssi": -53,
     "bluetooth_ver": "",
     "model": "I2126",
     "os": "android",
-    "phone_battery": 17
+    "phone_battery": 93
   },
-  "report_created_at": "2024-07-18 17:37",
+  "report_created_at": "2024-07-20 09:58",
   "user_app_preferences": {
     "gallon_liter": "",
     "language": "EN",
@@ -95,9 +97,10 @@
   },
   "user_info": {
     "first_name": "Pradeep2",
+    "id": 2247,
     "last_name": "Kumar",
     "user_email": "pk836746+11@gmail.com",
-    "user_id": null,
+    "user_id": 2247,
     "user_phone": "+1-91817161",
     "user_title": "Mr"
   }

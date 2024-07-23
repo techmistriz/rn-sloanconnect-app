@@ -10,6 +10,7 @@ import {
   changePasswordActionTypes,
   settingsActionTypes,
   deviceSettingsActionTypes,
+  syncReportActionTypes,
 } from 'src/redux/types';
 
 /** login module related actions */
@@ -238,4 +239,25 @@ export const deviceSettingsFailureAction = (payload: any) => ({
 
 export const deviceSettingsResetDataAction = () => ({
   type: deviceSettingsActionTypes.DEVICE_SETTINGS_RESET_DATA,
+});
+
+/** deviceSettings module related actions */
+export const syncReportRequestAction = (payload: any, options?: any) => ({
+  type: syncReportActionTypes.SYNC_REPORT_REQUEST,
+  payload,
+  options,
+});
+
+export const syncReportSuccessAction = (payload: any) => ({
+  type: syncReportActionTypes.SYNC_REPORT_SUCCESS,
+  payload,
+});
+
+export const syncReportFailureAction = (payload: any) => ({
+  type: syncReportActionTypes.SYNC_REPORT_FAILURE,
+  payload,
+});
+
+export const syncReportResetDataAction = () => ({
+  type: syncReportActionTypes.SYNC_REPORT_RESET_DATA,
 });

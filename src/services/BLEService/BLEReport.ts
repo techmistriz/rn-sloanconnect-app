@@ -18,13 +18,17 @@ import {
   getDeviceInfoNormal,
 } from 'src/screens/DeviceInfo/helperGen1';
 import {readingDiagnostic} from 'src/screens/DeviceDiagnostics/helperGen1';
+import {readingDiagnosticGen2} from 'src/screens/DeviceDiagnostics/helperGen2';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
 import moment from 'moment';
+import {cleanString, cleanString2} from 'src/utils/Helpers/encryption';
 
 const __reportMappingStats = {
   report_created_at: '',
+  is_report_manual: 'yes',
   user_info: {
+    id: '',
     user_email: '',
     first_name: '',
     last_name: '',
@@ -35,7 +39,7 @@ const __reportMappingStats = {
   mobile_device_info: {
     os: 'ios/android',
     model: 'SAM SG990',
-    bluetooth_ver: '',
+    bluetooth_rssi: '',
     app_version: '',
     app_release_date: '',
     app_install_date: '',
@@ -92,7 +96,6 @@ const __reportMappingStats = {
       sensor: '',
       valve: '',
       turbine: '',
-      water_dispence: '',
       battery: '',
       date_of_diagnostic: '',
     },
@@ -100,7 +103,6 @@ const __reportMappingStats = {
       sensor: '',
       valve: '',
       turbine: '',
-      water_dispence: '',
       battery: '',
       date_of_diagnostic: '',
     },
@@ -141,6 +143,7 @@ class BLEReportInstance {
       return false;
     }
     let __USER_INFO = {
+      id: '',
       user_email: '',
       first_name: '',
       last_name: '',
@@ -152,23 +155,29 @@ class BLEReportInstance {
     __USER_INFO.user_email = user?.email ?? null;
     __USER_INFO.first_name = user?.first_name ?? null;
     __USER_INFO.last_name = user?.last_name ?? null;
-    __USER_INFO.user_id = user?.id ?? null;
+    __USER_INFO.user_id = user?.organizations?.[0]?.id ?? null;
+    __USER_INFO.id = user?.organizations?.[0]?.id ?? null;
     __USER_INFO.user_phone = user?.user_metadata?.phone_number ?? null;
     __USER_INFO.user_title = user?.user_metadata?.title ?? null;
     this.reportMappingStats.user_info = __USER_INFO;
   }
 
   mapDeviceInfo() {
+    var installTime = DeviceInfo.getFirstInstallTimeSync();
+
+    if (installTime <= 0) {
+      installTime = timestampInSec();
+    }
+
     let __MOBILE_DEVICE_INFO = {
       os: constants.isIOS ? 'ios' : 'android',
       model: DeviceInfo.getModel(),
       bluetooth_ver: '',
       // app_version: DeviceInfo.getVersion(),
+      bluetooth_rssi: BLEService?.deviceRaw?.rssi,
       app_version: constants.APP_VERSION,
       app_release_date: constants.RELEASE_DATE,
-      app_install_date: parseDateHumanFormatFromUnix(
-        DeviceInfo.getFirstInstallTimeSync() / 1000,
-      ),
+      app_install_date: parseDateHumanFormatFromUnix(installTime / 1000),
       phone_battery: parseInt(
         (DeviceInfo.getBatteryLevelSync() * 100).toString(),
       ),
@@ -411,6 +420,10 @@ class BLEReportInstance {
     }
 
     let __FAUCET_SETTINGS_ALL = this.reportMappingStats.faucet_settings;
+
+    let __FAUCET_SETTINGS_PREV = __FAUCET_SETTINGS_ALL?.prev;
+    let __FAUCET_SETTINGS_CURRENT = __FAUCET_SETTINGS_ALL?.current;
+
     let __FAUCET_SETTINGS = hasSettingsChanged
       ? __FAUCET_SETTINGS_ALL?.current
       : __FAUCET_SETTINGS_ALL?.prev;
@@ -440,7 +453,9 @@ class BLEReportInstance {
         break;
 
       case 'Note':
-        __FAUCET_SETTINGS.bd_note = response?.note?.value ?? null;
+        __FAUCET_SETTINGS.bd_note = cleanString2(
+          cleanString(response?.note?.value ?? ''),
+        );
         break;
 
       default:
@@ -449,8 +464,10 @@ class BLEReportInstance {
 
     if (hasSettingsChanged) {
       __FAUCET_SETTINGS_ALL.current = __FAUCET_SETTINGS;
+      __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS_CURRENT;
     } else {
-      __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS;
+      __FAUCET_SETTINGS_ALL.current = __FAUCET_SETTINGS;
+      // __FAUCET_SETTINGS_ALL.prev = __FAUCET_SETTINGS;
     }
     this.reportMappingStats.faucet_settings = __FAUCET_SETTINGS_ALL;
 
@@ -460,11 +477,24 @@ class BLEReportInstance {
     // );
   }
 
-  async mapDiagnosticReport(hasSettingsChanged: boolean = false) {
+  async mapDiagnosticReport() {
+    consoleLog('mapFaucetDeviceDetails called');
+    if (BLEService.deviceGeneration == 'gen1') {
+      await this.mapDiagnosticReportGen1();
+    } else if (BLEService.deviceGeneration == 'gen2') {
+      await this.mapDiagnosticReportGen2();
+    }
+  }
+
+  async mapDiagnosticReportGen1(hasSettingsChanged: boolean = false) {
     const RESULTS = await readingDiagnostic();
     consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
 
     let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
+
+    let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
+    let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
+
     let __DIAGNOSTIC_REPORT = hasSettingsChanged
       ? __DIAGNOSTIC_REPORT_ALL?.current
       : __DIAGNOSTIC_REPORT_ALL?.prev;
@@ -484,14 +514,14 @@ class BLEReportInstance {
       valueKey: 'value',
     });
 
-    __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
-      'Water Dispense',
-      RESULTS,
-      {
-        searchKey: 'name',
-        valueKey: 'value',
-      },
-    );
+    // __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
+    //   'Water Dispense',
+    //   RESULTS,
+    //   {
+    //     searchKey: 'name',
+    //     valueKey: 'value',
+    //   },
+    // );
     __DIAGNOSTIC_REPORT.battery = findValueObject(
       'Battery Level at Diagnostic',
       RESULTS,
@@ -511,8 +541,79 @@ class BLEReportInstance {
 
     if (hasSettingsChanged) {
       __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
     } else {
-      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
+    }
+
+    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
+  }
+
+  async mapDiagnosticReportGen2(hasSettingsChanged: boolean = false) {
+    const RESULTS = await readingDiagnosticGen2(
+      BLEService.characteristicMonitorDiagnosticMapped,
+    );
+    consoleLog(
+      'mapDiagnosticReportGen2 readingDiagnosticGen2 RESULTS==>',
+      RESULTS,
+    );
+
+    let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
+
+    let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
+    let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
+
+    let __DIAGNOSTIC_REPORT = hasSettingsChanged
+      ? __DIAGNOSTIC_REPORT_ALL?.current
+      : __DIAGNOSTIC_REPORT_ALL?.prev;
+
+    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.valve = findValueObject('Valve', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.turbine = findValueObject('Turbine', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    // __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
+    //   'Water Dispense',
+    //   RESULTS,
+    //   {
+    //     searchKey: 'name',
+    //     valueKey: 'value',
+    //   },
+    // );
+    __DIAGNOSTIC_REPORT.battery = findValueObject(
+      'Battery Level at Diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    if (hasSettingsChanged) {
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
+    } else {
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
     }
 
     this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
@@ -814,17 +915,23 @@ class BLEReportInstance {
     // );
   }
 
-  async prepareReport(user: any) {
+  async prepareReport(
+    user: any,
+    shouldMapDiagnostic: boolean = false,
+    isReportManual: string = 'yes',
+  ) {
     const currentTimestamp = timestampInSec();
+    this.reportMappingStats.is_report_manual = isReportManual;
+
     this.reportMappingStats.report_created_at = moment
       .unix(currentTimestamp)
-      .format('YY-MM-DD HH:mm');
+      .format('YYYY-MM-DD HH:mm');
     this.mapUserInfo(user);
     this.mapDeviceInfo();
     this.mapUserPreference();
     await this.mapFaucetDeviceDetails();
-    // this.mapFaucetSettings(); this is called from dashboarc for gen1 and gen2 both for filling values
-    await this.mapDiagnosticReport();
+    // this.mapFaucetSettings(); this is called from dashboard for gen1 and gen2 both for filling values
+    shouldMapDiagnostic && (await this.mapDiagnosticReport());
     await this.mapAdvanceDeviceDetails();
     return this.reportMappingStats;
   }

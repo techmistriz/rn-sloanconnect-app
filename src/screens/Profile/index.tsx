@@ -22,6 +22,7 @@ import AlertBox from 'src/components/AlertBox';
 import {BLEService} from 'src/services';
 import {Button} from 'src/components/Button';
 import Network from 'src/network/Network';
+import {constants} from 'src/common';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
@@ -198,6 +199,31 @@ const Index = ({route, navigation}: any) => {
             </TouchableItem>
           </Wrap>
 
+          <Wrap autoMargin={false} style={[styles.itemContainer]}>
+            <TouchableItem
+              onPress={() => {
+                NavigationService.navigate('SyncReport', {
+                  referrer: 'ProfileScreen',
+                  type: type,
+                });
+              }}
+              style={styles.item}>
+              <Wrap autoMargin={false} style={styles.itemRow}>
+                <Typography
+                  text="Sync Report"
+                  color={Theme?.colors?.black}
+                  size={16}
+                />
+                <VectorIcon
+                  iconPack="Feather"
+                  name={'chevron-right'}
+                  color={Theme.colors.black}
+                  size={20}
+                />
+              </Wrap>
+            </TouchableItem>
+          </Wrap>
+
           {/* <Wrap autoMargin={false} style={[styles.itemContainer]}>
             <TouchableItem
               onPress={() => {
@@ -257,6 +283,7 @@ const Index = ({route, navigation}: any) => {
                   onPress={() => {
                     setDeleteAccountModal(true);
                   }}
+                  style={{width: constants.screenWidth - 40}}
                 />
               </Wrap>
             </TouchableItem>

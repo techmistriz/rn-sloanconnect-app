@@ -1,0 +1,105 @@
+{
+  "common": {
+    "APP_NAME": "Sloan App",
+    "APP_VERSION": "Version v 0.0.1",
+    "WELCOME": "Welcome",
+    "NO_INTERNET": "No Internet Connection",
+    "EOF": "EOF"
+  },
+  "welcome": {
+    "WELCOME_TITLE": "Welcome",
+    "WELCOME_DESCRIPTION": "Please tap on the blue button below to begin. You will be redirected to our website to continue.",
+    "BTN_LOGIN_REGISTER": "LOGIN / REGISTER",
+    "BTN_HELP": "HELP",
+    "EOF": "EOF"
+  },
+  "language": {
+    "CONTINUE_BTN": "Continue",
+    "CHOOSE_LANGUAGE_TITLE": "Choose Language",
+    "CHOOSE_LANGUAGE_DESC": "Choose your prefered language",
+    "ENGLISH": "English",
+    "HINDI": "हिन्दी",
+    "CHOOSE_LANGUAGE_ERROR": "Please select language",
+    "EOF": "EOF"
+  },
+  "login": {
+    "TITLE_LOGIN": "Login",
+    "LABEL_EMAIL": "Email Address",
+    "LABEL_PASSWORD": "Password",
+    "LABEL_FORGOT_YOUR_PASSWORD": "Forgot your password?",
+    "BTN_LOGIN": "Login",
+    "LABEL_DONT_HAVE_ANY_ACCOUNT": "Don't have an account?",
+    "LABEL_REGISTER_HERE": "Register Here",
+    "EOF": "EOF"
+  },
+  "forgot_password": {
+    "TITLE_FORGOT_YOUR_PASSWORD": "Forgot Your Password?",
+    "SUBTITLE_FORGOT_YOUR_PASSWORD": "If you forget your password, please enter your email address below to be emailed a OTP",
+    "LABEL_EMAIL": "Email Address",
+    "BTN_RESET_PASSWORD": "RESET PASSWORD",
+    "LABEL_RETURN_TO_LOGIN": "Return to login",
+    "EOF": "EOF"
+  },
+  "verify_otp": {
+    "TITLE_VERIFY_OTP": "Verify OTP",
+    "SUBTITLE_VERIFY_OTP": "Enter the code you received in your email.",
+    "LABEL_EMAIL": "Email Address",
+    "BTN_VERIFY": "VERIFY",
+    "LABEL_RESEND_OTP_TEXT": "I didn't receive the code,",
+    "LABEL_RESEND_OTP": "Resend",
+    "LABEL_RETURN_TO_LOGIN": "Return to login",
+    "EOF": "EOF"
+  },
+  "reset_password": {
+    "TITLE_RESET_YOUR_PASSWORD": "Forgot Your Password?",
+    "SUBTITLE_RESET_YOUR_PASSWORD": "If you forget your password, please enter your email address below to be emailed a OTP",
+    "LABEL_PASSWORD": "Password",
+    "LABEL_CONFIRM_PASSWORD": "Confirm Password",
+    "LABEL_PASSWORD_REQUIREMENT": "Password Requirements",
+    "LABEL_PASSWORD_CONDITION1": "At least 8 characters",
+    "LABEL_PASSWORD_CONDITION2": "A mixture of both uppercase and lowercase letters",
+    "LABEL_PASSWORD_CONDITION3": "A mixture of letters and numbers",
+    "LABEL_PASSWORD_CONDITION4": "Inclusive of at least one special charater, e.g., ! @ # ?",
+    "BTN_RESET_PASSWORD": "RESET PASSWORD",
+    "EOF": "EOF"
+  },
+  "reset_password_success": {
+    "TITLE_RESET_PASSWORD_SUCCESS": "Success",
+    "SUBTITLE_RESET_PASSWORD_SUCCESS": "Your password has been reset, Now just sign in to get started.",
+    "BTN_RESET_PASSWORD_SUCCESS": "CONTINUE",
+    "EOF": "EOF"
+  },
+  "verify_email": {
+    "TITLE_VERIFY_EMAIL": "Verify Email",
+    "SUBTITLE_VERIFY_EMAIL": "Enter your email to receive the verification code in your inbox.",
+    "LABEL_EMAIL": "Email Address",
+    "BTN_VERIFY_EMAIL": "VERIFY EMAIL",
+    "LABEL_RETURN_TO_LOGIN": "Return to login",
+    "EOF": "EOF"
+  },
+  "register": {
+    "TITLE_REGISTER": "Register",
+    "SUBTITLE_REGISTER": "Enter your email to receive the verification code in your inbox.",
+    "LABEL_FIRST_NAME": "First Name",
+    "LABEL_LAST_NAME": "First Name",
+    "LABEL_JOB_TITLE": "Job Title",
+    "LABEL_COMPANY": "Company",
+    "LABEL_INDUSTRY": "Industry",
+    "LABEL_PHONE_NUMBER": "Phone Number",
+    "LABEL_EMAIL": "Email",
+    "LABEL_PASSWORD": "Password",
+    "LABEL_CONFIRM_PASSWORD": "Confirm Password",
+    "LABEL_COUNTRY": "Country",
+    "LABEL_STATE_PROVINCE": "State/Province",
+    "LABEL_CITY": "City",
+    "LABEL_ADDRESS": "Address",
+    "LABEL_ZIPCODE": "Zip/Postal",
+    "LABEL_TIMEZONE": "Timezone",
+    "LABEL_TERM": "I have read and agree to these ",
+    "LABEL_TERM_LINK": "Terms",
+    "BTN_REGISTER": "Next",
+    "LABEL_ALREADY_HAVE_AN_ACCOUNT": "Already have an account?",
+    "LABEL_RETURN_TO_REGISTER": "Login Here",
+    "EOF": "EOF"
+  }
+}

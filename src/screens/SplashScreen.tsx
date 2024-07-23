@@ -1,8 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  StyleSheet,
-  Image,
-} from 'react-native';
+import {StyleSheet, Image} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useSelector} from 'react-redux';
@@ -10,11 +7,22 @@ import {consoleLog, getImgSource} from 'src/utils/Helpers/HelperFunction';
 import Typography from 'src/components/Typography';
 import {Wrap} from 'src/components/Common';
 import constants from 'src/common/constants';
+import I18n from 'react-native-i18n';
 
 const SplashScreen = ({navigation}: any) => {
   const {user, loading, token} = useSelector(
     (state: any) => state?.AuthReducer,
   );
+  const {settings} = useSelector((state: any) => state?.SettingsReducer);
+
+  useEffect(() => {
+    console.log('SplashScreen useEffect settings==>', settings);
+    if (settings?.language) {
+      I18n.locale = settings?.language;
+    } else {
+      I18n.locale = 'en';
+    }
+  }, []);
 
   /** component hooks method for not in use*/
   useEffect(() => {
