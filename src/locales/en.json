@@ -6,6 +6,15 @@
     "NO_INTERNET": "No Internet Connection",
     "EOF": "EOF"
   },
+  "button_labels": {
+    "TROUBLESHOOT": "Troubleshoot",
+    "SEND_REPORT": "Send Report",
+    "SEARCH_AGAIN": "Search Again",
+    "OK": "Ok",
+    "CANCEL": "Cancel",
+    "YES_BUTTON_LABEL": "Yes",
+    "NO_BUTTON_LABEL": "No"
+  },
   "welcome": {
     "WELCOME_TITLE": "Welcome",
     "WELCOME_DESCRIPTION": "Please tap on the blue button below to begin. You will be redirected to our website to continue.",
@@ -16,7 +25,7 @@
   "language": {
     "CONTINUE_BTN": "Continue",
     "CHOOSE_LANGUAGE_TITLE": "Choose Language",
-    "CHOOSE_LANGUAGE_DESC": "Choose your prefered language",
+    "CHOOSE_LANGUAGE_DESC": "Choose your preferred language",
     "ENGLISH": "English",
     "HINDI": "हिन्दी",
     "CHOOSE_LANGUAGE_ERROR": "Please select language",
@@ -101,5 +110,123 @@
     "LABEL_ALREADY_HAVE_AN_ACCOUNT": "Already have an account?",
     "LABEL_RETURN_TO_REGISTER": "Login Here",
     "EOF": "EOF"
+  },
+  "activate_your_device": {
+    "HEADING": "Activate Your Device",
+    "SUB_MSG": "Wave your hand 3 times in front of sensor within 10 seconds to activate your product.",
+    "SEARCH_LIST_HEADING": "Connect Your Product",
+    "SEARCHING_HINT_TEXT": "Searching nearby devices...",
+  },
+  "no_product_found": {
+    "HEADING": "No Product Found",
+    "SUB_MSG": "Please be sure Bluetooth is enabled and try again."
+  },
+  "device_landing": {
+    "tab_diagnostics": "Diagnostics",
+    "tab_details": "Details",
+    "tab_help": "Help",
+    "tab_disconnect": "Disconnect"
+  },
+  "device_dashboard": {
+    "BATTERY_POWER": "Battery Power",
+    "TOTAL_WATER_USAGE": "Total water usage",
+    "DISPENSE_WATER": "Dispense Water",
+    "FAUCET_SETTINGS": "Faucet Settings",
+    "LOAD_PREVIOUS_SETTINGS": "Load Previous Settings",
+    "PREVIOUS_SETTING_SUCCESS_MSG": "Previous settings applied successfully.",
+    "CHANGES_APPLIED_HEADING": "CHANGES APPLIED",
+    "APPLY_SETTINGS_TO_FAUCET": "APPLY SETTINGS TO FAUCET",
+    "NO_PREVIOUS_SETTINGS_FOUND": "No previous saved settings found",
+
+    "ACTIVATION_MODE": "Activation Mode",
+    "LINE_FLUSH": "Line Flush",
+    "CONFIRM_FLOW_RATE": "Confirm Flow Rate",
+    "SENSOR_RANGE": "Sensor Range",
+    "UNITS": "Units",
+    "NOTES": "Notes",
+  },
+  "device_details": {
+    "DEVICE_DETAILS_HEADING": "Device Details",
+    "ADVANCED_DEVICE_DETAILS_HEADING": "Advanced Device Details",
+    "DONE_BTN_LABEL": "Done",
+    "VIEW_ADVANCED_DETAILS_BTN_LABEL": "View Advanced Details",
+
+    "FAUCET_MODEL_LABEL": "Faucet Model",
+    "SENSOR_SERIAL_NUMBER_LABEL": "Sensor Serial Number",
+    "SENSOR_MANUF_DATE_LABEL": "Sensor Manufacturing Date",
+    "SENSOR_HARDWARE_VER_LABEL": "Sensor Hardware Number",
+    "SENSOR_FIRMWARE_VER_LABEL": "Sensor Firmware Number",
+    "CONTROL_BOX_MODEL_LABEL": "Control Box Model",
+    "CONTROL_BOX_SERIAL_NUMBER_LABEL": "Control Box Serial Number",
+    "CONTROL_BOX_MANUF_DATE_LABEL": "Control Box Manufacturing Data",
+    "CONTROL_BOX_HARDWARE_VER_LABEL": "Control Box Hardware Version",
+    "CONTROL_BOX_FIRMWARE_VER_LABEL": "Control Box Firmware Version",
+    "BATTERY_STATUS_LABEL": "Battery Status",
+
+    "DATE_OF_INSTALLATION_LABEL": "Date of installation",
+    "HOURS_OF_OPERATION_LABEL": "Hours of Operation",
+    "ACTIVATION_SINCE_DAY_1_LABEL": "Activations since day 1",
+    "ACCUMULATED_ACTIVATION_TIME_LABEL": "Accumulated activation time",
+    "ACCUMULATED_WATER_USAGE_LABEL": "Accumulated water usage",
+    "ACTIVATIONS_SINCE_LAST_CHANGE_LABEL": "Activations since last change",
+    "LINE_FLUSHES_SINCE_DAY_1_LABEL": "Line flushes since day 1",
+    "ACCUMULATED_FLUSH_TIME_LABEL": "Accumulated flush time",
+    "NUMBER_OF_BLE_CONNECTION_LABEL": "Number Of BLE connections",
+
+    "DATE_OF_LAST_FACTORY_RESET_LABEL": "Date of last factory reset",
+    "DATE_OF_LAST_MODE_CHANGE_LABEL": "Date of last mode change",
+    "DATE_OF_LAST_METERED_CHANGE_LABEL": "Date of last Metered Runtime change",
+    "DATE_OF_LAST_ONDEMAND_CHANGE_LABEL": "Date of last On-demand timeout change",
+    "DATE_OF_LAST_FLUSH_ENABLE_CHANGE_LABEL": "Date of last flush enable change",
+    "DATE_OF_LAST_FLUSH_TIME_CHANGE_LABEL": "Date of last flush time change",
+    "DATE_OF_LAST_FLUSH_INTERVAL_CHANGE_LABEL": "Date of last flush interval change",
+    "DATE_OF_LAST_FLOW_RATE_CHANGE_LABEL": "Date of last flow rate change",
+    "DATE_OF_LAST_RANGE_CHANGE_LABEL": "Date of last range change",
+    "DATE_OF_LAST_BD_NOTE_CHANGE_LABEL": "Date of last BD Note change",
+
+    "APP_VERSION_LABEL": "App version and release date",
+    "APP_INSTALLATION_DATE_LABEL": "App Installation Date",
+
+    "USERNAME_LABEL": "User Name",
+    "USER_PHONE_LABEL": "User Phone #",
+    "USER_COMPANY_LABEL": "User Company",
+    "USER_TITLE_LABEL": "User Title",
+    "USER_EMAIL_LABEL": "User Email"
+  },
+  "diagnostic_page": {
+    "DIAGNOSING_HEADING": "Diagnosing",
+    "DIAGNOSE_SUB_TEXT": "Place your hand in front of the \nfaucet for at least 3 seconds.",
+    "DID_YOU_SEE_WATER": "Did you see water dispense?",
+    "DIAGNOSTIC_RESULT_TITLE": "Diagnostic Results",
+    "REPORT_SENT_SUCCESS_MSG": "Report will be sent to Sloan. Please contact Sloan\nTechnical Service at +1-888-756-2614 or\ntechsupport@sloan.com to follow up.",
+    "LAST_DIAGNOSTIC_RESULT_HEADING": "LAST DIAGNOSTIC RESULTS"
+  },
+  "profile": {
+    "NAME_TITLE": "Name",
+    "EMAIL_TITLE": "Email",
+    "PHONE_NUMBER_TITLE": "Phone Number",
+    "TIMEZONE_TITLE": "Timezone",
+    "COMPANY_TITLE": "Company",
+    "INDUSTRY_TITLE": "Industry",
+    "EDIT_PROFILE_MENU_TITLE": "Edit Profile",
+    "SYNC_REPORT_MENU_TITLE": "Sync Report",
+    "LANGUAGE_MENU_TITLE": "Change Language",
+    "LOGOUT_MENU_TITLE": "Logout",
+    "DELETE_ACCOUNT_BTN_LABEL": "Delete Account",
+    "UPDATE_PROFILE_BTN": "Update Profile",
+    "CHANGE_LANGUAGE_BTN": "Change Language"
+  },
+  "disconnect": {
+    "POPUP_HEADING": "Disconnect",
+    "SUB_MSG": "Are you sure you want to disconnect?",
+    "DISCONNECTING_MSG": "Disconnecting to your %s might take a few seconds."
+  },
+  "static_pages": {
+    "HELP_PAGE_TITLE": "HELP",
+    "TROUBLESHOOT_PAGE_TITLE": "Troubleshooting",
+    "CONTACT_SUPPORT": "Contact Support"
+  },
+  "errors": {
+    "DEVICE_DISCONNECTED": "Your device was disconnected"
   }
 }
