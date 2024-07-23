@@ -407,6 +407,7 @@ class BLEServiceInstance {
         base64EncodeFromByteArray(value),
       )
       .catch(error => {
+        consoleLog('writeCharacteristicWithResponseForDevice2 error => ', error);
         this.onError(error);
       });
   };

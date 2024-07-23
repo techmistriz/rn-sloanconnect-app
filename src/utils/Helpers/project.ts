@@ -1579,29 +1579,31 @@ export const initFlusherSecurityKey = async () => {
           FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID,
       );
       consoleLog('lockStatusResponse=>', lockStatusResponse);
-      const activationsSince = await BLEService.readCharacteristicForDevice(
+
+      const notesResponse = await BLEService.readCharacteristicForDevice(
           'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-          'f89f13e7-83f8-4b7c-9e8b-364576d88343',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88346',
       );
 
-      consoleLog('activationsSince=>', activationsSince);
+      await sleep(1000);
+      consoleLog('flusherNote=>', notesResponse);
 
-      let activationWriteResponse = await BLEService.writeCharacteristicWithResponseForDevice(
+      let notesWriteResponse = await BLEService.writeCharacteristicWithResponseForDevice2(
           'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-          'f89f13e7-83f8-4b7c-9e8b-364576d88343',
-          asciiToHex('17'),
+          'f89f13e7-83f8-4b7c-9e8b-364576d88346',
+          hexToByte(asciiToHex('ABCD')),
       ).then((response) => {
         consoleLog('unlockKeyWriteCallback', response);
       });
 
-      consoleLog('activationWriteResponse=>', activationWriteResponse);
+      consoleLog('flusherNoteResponse=>', notesWriteResponse);
 
-      const activationsReadSince = await BLEService.readCharacteristicForDevice(
+      const notesAfterWrite = await BLEService.readCharacteristicForDevice(
           'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-          'f89f13e7-83f8-4b7c-9e8b-364576d88343',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88346',
       );
 
-      consoleLog('activations After Write Since=>', activationsReadSince);
+      consoleLog('notes After Write =>', notesAfterWrite);
 
     } else {
       consoleLog('Unable to read the BDSN', {bdsnResponse});
