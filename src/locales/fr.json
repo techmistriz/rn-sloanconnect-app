@@ -1,0 +1,231 @@
+{
+  "common": {
+    "APP_NAME": "Sloan App",
+    "APP_VERSION": "Version v 0.0.1",
+    "WELCOME": "Bienvenue",
+    "NO_INTERNET": "Pas de connexion Internet",
+    "EOF": "EOF"
+  },
+  "button_labels": {
+    "TROUBLESHOOT": "Dépannage",
+    "SEND_REPORT": "Envoyer le rapport",
+    "SEARCH_AGAIN": "Rechercher à nouveau",
+    "OK": "Ok",
+    "CANCEL": "Annuler",
+    "YES_BUTTON_LABEL": "Oui",
+    "NO_BUTTON_LABEL": "Non"
+  },
+  "welcome": {
+    "WELCOME_TITLE": "Bienvenue",
+    "WELCOME_DESCRIPTION": "Veuillez appuyer sur le bouton bleu ci-dessous pour commencer. Vous serez redirigé vers notre site Web pour continuer.",
+    "BTN_LOGIN_REGISTER": "CONNEXION / INSCRIPTION",
+    "BTN_HELP": "AIDE",
+    "EOF": "EOF"
+  },
+  "language": {
+    "CONTINUE_BTN": "Continuer",
+    "CHOOSE_LANGUAGE_TITLE": "Choisir la langue",
+    "CHOOSE_LANGUAGE_DESC": "Choisissez votre langue préférée",
+    "ENGLISH": "Anglais",
+    "HINDI": "हिन्दी",
+    "CHOOSE_LANGUAGE_ERROR": "Veuillez sélectionner la langue",
+    "EOF": "EOF"
+  },
+  "login": {
+    "TITLE_LOGIN": "Connexion",
+    "LABEL_EMAIL": "Adresse e-mail",
+    "LABEL_PASSWORD": "Mot de passe",
+    "LABEL_FORGOT_YOUR_PASSWORD": "Mot de passe oublié?",
+    "BTN_LOGIN": "Connexion",
+    "LABEL_DONT_HAVE_ANY_ACCOUNT": "Vous n'avez pas de compte?",
+    "LABEL_REGISTER_HERE": "Inscrivez-vous ici",
+    "EOF": "EOF"
+  },
+  "forgot_password": {
+    "TITLE_FORGOT_YOUR_PASSWORD": "Mot de passe oublié?",
+    "SUBTITLE_FORGOT_YOUR_PASSWORD": "Si vous avez oublié votre mot de passe, veuillez entrer votre adresse e-mail ci-dessous pour recevoir un code OTP",
+    "LABEL_EMAIL": "Adresse e-mail",
+    "BTN_RESET_PASSWORD": "RÉINITIALISER LE MOT DE PASSE",
+    "LABEL_RETURN_TO_LOGIN": "Retour à la connexion",
+    "EOF": "EOF"
+  },
+  "verify_otp": {
+    "TITLE_VERIFY_OTP": "Vérifier le code OTP",
+    "SUBTITLE_VERIFY_OTP": "Entrez le code que vous avez reçu dans votre e-mail.",
+    "LABEL_EMAIL": "Adresse e-mail",
+    "BTN_VERIFY": "VÉRIFIER",
+    "LABEL_RESEND_OTP_TEXT": "Je n'ai pas reçu le code,",
+    "LABEL_RESEND_OTP": "Renvoyer",
+    "LABEL_RETURN_TO_LOGIN": "Retour à la connexion",
+    "EOF": "EOF"
+  },
+  "reset_password": {
+    "TITLE_RESET_YOUR_PASSWORD": "Réinitialiser votre mot de passe",
+    "SUBTITLE_RESET_YOUR_PASSWORD": "Si vous avez oublié votre mot de passe, veuillez entrer votre adresse e-mail ci-dessous pour recevoir un code OTP",
+    "LABEL_PASSWORD": "Mot de passe",
+    "LABEL_CONFIRM_PASSWORD": "Confirmer le mot de passe",
+    "LABEL_PASSWORD_REQUIREMENT": "Exigences du mot de passe",
+    "LABEL_PASSWORD_CONDITION1": "Au moins 8 caractères",
+    "LABEL_PASSWORD_CONDITION2": "Un mélange de lettres majuscules et minuscules",
+    "LABEL_PASSWORD_CONDITION3": "Un mélange de lettres et de chiffres",
+    "LABEL_PASSWORD_CONDITION4": "Inclure au moins un caractère spécial, par exemple, ! @ # ?",
+    "BTN_RESET_PASSWORD": "RÉINITIALISER LE MOT DE PASSE",
+    "EOF": "EOF"
+  },
+  "reset_password_success": {
+    "TITLE_RESET_PASSWORD_SUCCESS": "Succès",
+    "SUBTITLE_RESET_PASSWORD_SUCCESS": "Votre mot de passe a été réinitialisé, connectez-vous maintenant pour commencer.",
+    "BTN_RESET_PASSWORD_SUCCESS": "CONTINUER",
+    "EOF": "EOF"
+  },
+  "verify_email": {
+    "TITLE_VERIFY_EMAIL": "Vérifier l'e-mail",
+    "SUBTITLE_VERIFY_EMAIL": "Entrez votre e-mail pour recevoir le code de vérification dans votre boîte de réception.",
+    "LABEL_EMAIL": "Adresse e-mail",
+    "BTN_VERIFY_EMAIL": "VÉRIFIER L'E-MAIL",
+    "LABEL_RETURN_TO_LOGIN": "Retour à la connexion",
+    "EOF": "EOF"
+  },
+  "register": {
+    "TITLE_REGISTER": "S'inscrire",
+    "SUBTITLE_REGISTER": "Entrez votre e-mail pour recevoir le code de vérification dans votre boîte de réception.",
+    "LABEL_FIRST_NAME": "Prénom",
+    "LABEL_LAST_NAME": "Nom",
+    "LABEL_JOB_TITLE": "Titre du poste",
+    "LABEL_COMPANY": "Entreprise",
+    "LABEL_INDUSTRY": "Industrie",
+    "LABEL_PHONE_NUMBER": "Numéro de téléphone",
+    "LABEL_EMAIL": "E-mail",
+    "LABEL_PASSWORD": "Mot de passe",
+    "LABEL_CONFIRM_PASSWORD": "Confirmer le mot de passe",
+    "LABEL_COUNTRY": "Pays",
+    "LABEL_STATE_PROVINCE": "État/Province",
+    "LABEL_CITY": "Ville",
+    "LABEL_ADDRESS": "Adresse",
+    "LABEL_ZIPCODE": "Code postal",
+    "LABEL_TIMEZONE": "Fuseau horaire",
+    "LABEL_TERM": "J'ai lu et j'accepte ces ",
+    "LABEL_TERM_LINK": "Termes",
+    "BTN_REGISTER": "Suivant",
+    "LABEL_ALREADY_HAVE_AN_ACCOUNT": "Vous avez déjà un compte?",
+    "LABEL_RETURN_TO_REGISTER": "Connectez-vous ici",
+    "EOF": "EOF"
+  },
+  "activate_your_device": {
+    "HEADING": "Activer votre appareil",
+    "SUB_MSG": "Agitez votre main 3 fois devant le capteur dans les 10 secondes pour activer votre produit.",
+    "SEARCH_LIST_HEADING": "Connectez votre produit",
+    "SEARCHING_HINT_TEXT": "Recherche d'appareils à proximité...",
+  },
+  "no_product_found": {
+    "HEADING": "Aucun produit trouvé",
+    "SUB_MSG": "Veuillez vous assurer que le Bluetooth est activé et réessayez."
+  },
+  "device_landing": {
+    "tab_diagnostics": "Diagnostics",
+    "tab_details": "Détails",
+    "tab_help": "Aide",
+    "tab_disconnect": "Déconnecter"
+  },
+  "device_dashboard": {
+    "BATTERY_POWER": "Puissance de la batterie",
+    "TOTAL_WATER_USAGE": "Consommation totale d'eau",
+    "DISPENSE_WATER": "Distribuer de l'eau",
+    "FAUCET_SETTINGS": "Paramètres du robinet",
+    "LOAD_PREVIOUS_SETTINGS": "Charger les paramètres précédents",
+    "PREVIOUS_SETTING_SUCCESS_MSG": "Paramètres précédents appliqués avec succès.",
+    "CHANGES_APPLIED_HEADING": "MODIFICATIONS APPLIQUÉES",
+    "APPLY_SETTINGS_TO_FAUCET": "APPLIQUER LES PARAMÈTRES AU ROBINET",
+    "NO_PREVIOUS_SETTINGS_FOUND": "Aucun paramètre précédent trouvé",
+
+    "ACTIVATION_MODE": "Mode d'activation",
+    "LINE_FLUSH": "Rinçage de la ligne",
+    "CONFIRM_FLOW_RATE": "Confirmer le débit",
+    "SENSOR_RANGE": "Plage du capteur",
+    "UNITS": "Unités",
+    "NOTES": "Remarques"
+  },
+"device_details": {
+  "DEVICE_DETAILS_HEADING": "Détails de l'appareil",
+  "ADVANCED_DEVICE_DETAILS_HEADING": "Détails avancés de l'appareil",
+  "DONE_BTN_LABEL": "Terminé",
+  "VIEW_ADVANCED_DETAILS_BTN_LABEL": "Voir les détails avancés",
+
+  "FAUCET_MODEL_LABEL": "Modèle de robinet",
+  "SENSOR_SERIAL_NUMBER_LABEL": "Numéro de série du capteur",
+  "SENSOR_MANUF_DATE_LABEL": "Date de fabrication du capteur",
+  "SENSOR_HARDWARE_VER_LABEL": "Numéro de matériel du capteur",
+  "SENSOR_FIRMWARE_VER_LABEL": "Numéro de firmware du capteur",
+  "CONTROL_BOX_MODEL_LABEL": "Modèle de la boîte de contrôle",
+  "CONTROL_BOX_SERIAL_NUMBER_LABEL": "Numéro de série de la boîte de contrôle",
+  "CONTROL_BOX_MANUF_DATE_LABEL": "Date de fabrication de la boîte de contrôle",
+  "CONTROL_BOX_HARDWARE_VER_LABEL": "Version du matériel de la boîte de contrôle",
+  "CONTROL_BOX_FIRMWARE_VER_LABEL": "Version du firmware de la boîte de contrôle",
+  "BATTERY_STATUS_LABEL": "État de la batterie",
+
+  "DATE_OF_INSTALLATION_LABEL": "Date d'installation",
+  "HOURS_OF_OPERATION_LABEL": "Heures de fonctionnement",
+  "ACTIVATION_SINCE_DAY_1_LABEL": "Activations depuis le premier jour",
+  "ACCUMULATED_ACTIVATION_TIME_LABEL": "Temps d'activation cumulé",
+  "ACCUMULATED_WATER_USAGE_LABEL": "Utilisation d'eau accumulée",
+  "ACTIVATIONS_SINCE_LAST_CHANGE_LABEL": "Activations depuis le dernier changement",
+  "LINE_FLUSHES_SINCE_DAY_1_LABEL": "Rinçages de ligne depuis le premier jour",
+  "ACCUMULATED_FLUSH_TIME_LABEL": "Temps de rinçage cumulé",
+  "NUMBER_OF_BLE_CONNECTION_LABEL": "Nombre de connexions BLE",
+
+  "DATE_OF_LAST_FACTORY_RESET_LABEL": "Date du dernier rétablissement aux paramètres d'usine",
+  "DATE_OF_LAST_MODE_CHANGE_LABEL": "Date du dernier changement de mode",
+  "DATE_OF_LAST_METERED_CHANGE_LABEL": "Date du dernier changement de mesure",
+  "DATE_OF_LAST_ONDEMAND_CHANGE_LABEL": "Date du dernier changement à la demande",
+  "DATE_OF_LAST_FLUSH_ENABLE_CHANGE_LABEL": "Date du dernier changement d'activation du rinçage",
+  "DATE_OF_LAST_FLUSH_TIME_CHANGE_LABEL": "Date du dernier changement de temps de rinçage",
+  "DATE_OF_LAST_FLUSH_INTERVAL_CHANGE_LABEL": "Date du dernier changement d'intervalle de rinçage",
+  "DATE_OF_LAST_FLOW_RATE_CHANGE_LABEL": "Date du dernier changement de débit",
+  "DATE_OF_LAST_RANGE_CHANGE_LABEL": "Date du dernier changement de portée",
+  "DATE_OF_LAST_BD_NOTE_CHANGE_LABEL": "Date du dernier changement de note BD",
+
+  "APP_VERSION_LABEL": "Version de l'application et date de sortie",
+  "APP_INSTALLATION_DATE_LABEL": "Date d'installation de l'application",
+
+  "USERNAME_LABEL": "Nom d'utilisateur",
+  "USER_PHONE_LABEL": "Téléphone de l'utilisateur",
+  "USER_COMPANY_LABEL": "Entreprise de l'utilisateur",
+  "USER_TITLE_LABEL": "Titre de l'utilisateur",
+  "USER_EMAIL_LABEL": "Courriel de l'utilisateur"
+},
+"diagnostic_page": {
+  "DIAGNOSING_HEADING": "Diagnostic",
+  "DIAGNOSE_SUB_TEXT": "Placez votre main devant le \nrobinet pendant au moins 3 secondes.",
+  "DID_YOU_SEE_WATER": "Avez-vous vu de l'eau?",
+  "DIAGNOSTIC_RESULT_TITLE": "Résultats du diagnostic",
+  "REPORT_SENT_SUCCESS_MSG": "Le rapport sera envoyé à Sloan. Veuillez contacter le service technique de Sloan\nau +1-888-756-2614 ou\ntechsupport@sloan.com pour un suivi.",
+  "LAST_DIAGNOSTIC_RESULT_HEADING": "DERNIERS RÉSULTATS DU DIAGNOSTIC"
+},
+"profile": {
+  "NAME_TITLE": "Nom",
+  "EMAIL_TITLE": "Courriel",
+  "PHONE_NUMBER_TITLE": "Numéro de téléphone",
+  "TIMEZONE_TITLE": "Fuseau horaire",
+  "COMPANY_TITLE": "Entreprise",
+  "INDUSTRY_TITLE": "Industrie",
+  "EDIT_PROFILE_MENU_TITLE": "Modifier le profil",
+  "SYNC_REPORT_MENU_TITLE": "Synchroniser le rapport",
+  "LANGUAGE_MENU_TITLE": "Changer de langue",
+  "LOGOUT_MENU_TITLE": "Déconnexion",
+  "DELETE_ACCOUNT_BTN_LABEL": "Supprimer le compte",
+  "UPDATE_PROFILE_BTN": "Mettre à jour le profil",
+  "CHANGE_LANGUAGE_BTN": "Changer de langue"
+},
+"disconnect": {
+  "POPUP_HEADING": "Déconnexion",
+  "SUB_MSG": "Êtes-vous sûr de vouloir vous déconnecter?",
+  "DISCONNECTING_MSG": "La déconnexion de votre %s peut prendre quelques secondes."
+},
+"static_pages": {
+  "HELP_PAGE_TITLE": "AIDE",
+  "TROUBLESHOOT_PAGE_TITLE": "Dépannage",
+  "CONTACT_SUPPORT": "Contacter le support"
+},
+"errors": {
+  "DEVICE_DISCONNECTED": "Votre appareil a été déconnecté"
+}
