@@ -103,6 +103,7 @@
   },
   "register": {
     "TITLE_REGISTER": "Register",
+    "SUBTITLE_REGISTER": "",
     "LABEL_FIRST_NAME": "First Name",
     "LABEL_LAST_NAME": "Last Name",
     "LABEL_JOB_TITLE": "Job Title",

@@ -12,8 +12,14 @@
     "SEARCH_AGAIN": "Rechercher à nouveau",
     "OK": "Ok",
     "CANCEL": "Annuler",
+    "CONFIRM": "CONFIRM",
+    "DONE_BUTTON_LABEL": "DONE",
     "YES_BUTTON_LABEL": "Oui",
-    "NO_BUTTON_LABEL": "Non"
+    "NO_BUTTON_LABEL": "Non",
+    "ENABLE_BUTTON_LABEL": "ENABLE",
+    "CLOSE_BUTTON_LABEL": "CLOSE",
+    "OPEN_SETTING_BUTTON_LABEL": "OPEN SETTINGS",
+    "EOF": "EOF"
   },
   "welcome": {
     "WELCOME_TITLE": "Bienvenue",
@@ -22,13 +28,21 @@
     "BTN_HELP": "AIDE",
     "EOF": "EOF"
   },
-  "language": {
-    "CONTINUE_BTN": "Continuer",
-    "CHOOSE_LANGUAGE_TITLE": "Choisir la langue",
-    "CHOOSE_LANGUAGE_DESC": "Choisissez votre langue préférée",
-    "ENGLISH": "Anglais",
-    "HINDI": "हिन्दी",
-    "CHOOSE_LANGUAGE_ERROR": "Veuillez sélectionner la langue",
+  "permission": {
+    "PERMISSION_TITLE": "Permission",
+    "PERMISSION_SUBTITLE": "Please allow required permissions",
+    "PERMISSION_DESCRIPTION": "You wouldn't be able to proceed if any of these permissions not allowed",
+    "NEARBY_DEVICES_TITLE": "Nearby Devices",
+    "NEARBY_DEVICES_DESC": "App needed Nearby Devices permission to search nearby devices",
+    "BLUETOOTH_TITLE": "Bluetooth",
+    "BLUETOOTH_DESC": "App needed Bluetooth to search devices",
+    "LOCATION_TITLE": "Location",
+    "LOCATION_DESC": "App needed Location permission to search nearby devices",
+    "GEO_LOCATION_TTILE": "GEO Location",
+    "GEO_LOCATION_DESC": "App needed GEO Location permission to search nearby devices",
+    "BTN_NEXT": "Next",
+    "ALLOWE_PERMISSION_TITLE": "would like to use Bluetooth for new connections",
+    "ALLOWE_PERMISSION_MSG": "You can allow new connections in Settings",
     "EOF": "EOF"
   },
   "login": {
@@ -62,6 +76,7 @@
   "reset_password": {
     "TITLE_RESET_YOUR_PASSWORD": "Réinitialiser votre mot de passe",
     "SUBTITLE_RESET_YOUR_PASSWORD": "Si vous avez oublié votre mot de passe, veuillez entrer votre adresse e-mail ci-dessous pour recevoir un code OTP",
+    "LABEL_PLZ_PROVIDE_NEW_PASSWORD": "Please provide new password for account",
     "LABEL_PASSWORD": "Mot de passe",
     "LABEL_CONFIRM_PASSWORD": "Confirmer le mot de passe",
     "LABEL_PASSWORD_REQUIREMENT": "Exigences du mot de passe",
@@ -108,7 +123,36 @@
     "LABEL_TERM_LINK": "Termes",
     "BTN_REGISTER": "Suivant",
     "LABEL_ALREADY_HAVE_AN_ACCOUNT": "Vous avez déjà un compte?",
-    "LABEL_RETURN_TO_REGISTER": "Connectez-vous ici",
+    "LABEL_RETURN_TO_LOGIN": "Connectez-vous ici",
+    "LABEL_SELECT_INDUSTRY": "Select Industry",
+    "LABEL_SELECT_COUNTY": "Select Country",
+    "LABEL_SELECT_STATE": "Select State",
+    "LABEL_SELECT_TIMEZONE": "Select Timezone",
+    "VALIDATION_MSG_EMPTY_FIRST_NAME": "Please enter your first name",
+    "VALIDATION_MSG_EMPTY_LAST_NAME": "Please enter your last name",
+    "VALIDATION_MSG_EMPTY_JOB_TITLE": "Please enter your job title",
+    "VALIDATION_MSG_EMPTY_COMPANY": "Please enter your country",
+    "VALIDATION_MSG_EMPTY_INDUSTRY": "Please select your industry",
+    "VALIDATION_MSG_EMPTY_PHONE_NUMBER": "Please enter your phone number",
+    "VALIDATION_MSG_EMPTY_EMAIL": "Please enter your email",
+    "VALIDATION_MSG_VALID_EMAIL": "Please enter valid email",
+    "VALIDATION_MSG_EMPTY_COUNTRY": "Please select your country",
+    "VALIDATION_MSG_EMPTY_STATE": "Please select your state",
+    "VALIDATION_MSG_EMPTY_CITY": "Please enter your city",
+    "VALIDATION_MSG_EMPTY_ADDRESS": "Please enter your address",
+    "VALIDATION_MSG_EMPTY_ZIPCODE": "Please enter your zipcode",
+    "VALIDATION_MSG_EMPTY_TIMEZONE": "Please select your timezone",
+    "VALIDATION_MSG_EMPTY_TERM": "Please agree our terms and condition",
+    "VALIDATION_MSG_EMPTY_PASSWORD": "Please enter your password",
+    "VALIDATION_MSG_EMPTY_CONFIRM_PASSWORD": "Please enter your confirm password",
+    "VALIDATION_MSG_MINIMUM_PASSWORD": "Password must contain at least minimum 6 characters",
+    "VALIDATION_MSG_SAME_PASSWORD": "Password and confirm password should same",
+    "EOF": "EOF"
+  },
+  "register_success": {
+    "TITLE_REGISTER_SUCCESS": "Success",
+    "SUBTITLE_REGISTER_SUCCESS": "Your password has been reset, Now just sign in to get started.",
+    "BTN_REGISTER_SUCCESS": "CONTINUE",
     "EOF": "EOF"
   },
   "activate_your_device": {
@@ -117,15 +161,22 @@
     "SEARCH_LIST_HEADING": "Connectez votre produit",
     "SEARCHING_HINT_TEXT": "Recherche d'appareils à proximité..."
   },
+  "connecting": {
+    "HEADING": "Connecting",
+    "SUB_MSG": "Connecting to your Sloan Faucet\n Might take a few seconds."
+  },
   "no_product_found": {
     "HEADING": "Aucun produit trouvé",
-    "SUB_MSG": "Veuillez vous assurer que le Bluetooth est activé et réessayez."
+    "SUB_MSG": "Veuillez vous assurer que le Bluetooth est activé et réessayez.",
+    "BTN_TROUBLESHOOT": "TROUBLESHOOT",
+    "BTN_SEEARCH_AGAIN": "SEARCH AGAIN"
   },
   "device_landing": {
-    "tab_diagnostics": "Diagnostics",
-    "tab_details": "Détails",
-    "tab_help": "Aide",
-    "tab_disconnect": "Déconnecter"
+    "TAB_HOME": "Home",
+    "TAB_DIAGNOSTICS": "Diagnostics",
+    "TAB_DETAILS": "Détails",
+    "TAB_HELP": "Aide",
+    "TAB_DISCONNECT": "Déconnecter"
   },
   "device_dashboard": {
     "BATTERY_POWER": "Puissance de la batterie",
@@ -137,18 +188,25 @@
     "CHANGES_APPLIED_HEADING": "MODIFICATIONS APPLIQUÉES",
     "APPLY_SETTINGS_TO_FAUCET": "APPLIQUER LES PARAMÈTRES AU ROBINET",
     "NO_PREVIOUS_SETTINGS_FOUND": "Aucun paramètre précédent trouvé",
+    "APPLIYING_MSG": "Applying...",
+    "ADAPTIVE_SENSING_MSG": "Adaptive sensing in progress. Water may be dispensed. Please wait.",
+
     "ACTIVATION_MODE": "Mode d'activation",
     "LINE_FLUSH": "Rinçage de la ligne",
     "CONFIRM_FLOW_RATE": "Confirmer le débit",
     "SENSOR_RANGE": "Plage du capteur",
     "UNITS": "Unités",
-    "NOTES": "Remarques"
+    "SECONDS": "Sec",
+    "NOTES": "Remarques",
+    "DISCONNECTING_HEADING": "Disconnect",
+    "DISCONNECTING_MSG": "Are you sure you want to disconnect?"
   },
   "device_details": {
     "DEVICE_DETAILS_HEADING": "Détails de l'appareil",
     "ADVANCED_DEVICE_DETAILS_HEADING": "Détails avancés de l'appareil",
     "DONE_BTN_LABEL": "Terminé",
     "VIEW_ADVANCED_DETAILS_BTN_LABEL": "Voir les détails avancés",
+
     "FAUCET_MODEL_LABEL": "Modèle de robinet",
     "SENSOR_SERIAL_NUMBER_LABEL": "Numéro de série du capteur",
     "SENSOR_MANUF_DATE_LABEL": "Date de fabrication du capteur",
@@ -160,6 +218,7 @@
     "CONTROL_BOX_HARDWARE_VER_LABEL": "Version du matériel de la boîte de contrôle",
     "CONTROL_BOX_FIRMWARE_VER_LABEL": "Version du firmware de la boîte de contrôle",
     "BATTERY_STATUS_LABEL": "État de la batterie",
+
     "DATE_OF_INSTALLATION_LABEL": "Date d'installation",
     "HOURS_OF_OPERATION_LABEL": "Heures de fonctionnement",
     "ACTIVATION_SINCE_DAY_1_LABEL": "Activations depuis le premier jour",
@@ -169,6 +228,7 @@
     "LINE_FLUSHES_SINCE_DAY_1_LABEL": "Rinçages de ligne depuis le premier jour",
     "ACCUMULATED_FLUSH_TIME_LABEL": "Temps de rinçage cumulé",
     "NUMBER_OF_BLE_CONNECTION_LABEL": "Nombre de connexions BLE",
+
     "DATE_OF_LAST_FACTORY_RESET_LABEL": "Date du dernier rétablissement aux paramètres d'usine",
     "DATE_OF_LAST_MODE_CHANGE_LABEL": "Date du dernier changement de mode",
     "DATE_OF_LAST_METERED_CHANGE_LABEL": "Date du dernier changement de mesure",
@@ -179,8 +239,10 @@
     "DATE_OF_LAST_FLOW_RATE_CHANGE_LABEL": "Date du dernier changement de débit",
     "DATE_OF_LAST_RANGE_CHANGE_LABEL": "Date du dernier changement de portée",
     "DATE_OF_LAST_BD_NOTE_CHANGE_LABEL": "Date du dernier changement de note BD",
+
     "APP_VERSION_LABEL": "Version de l'application et date de sortie",
     "APP_INSTALLATION_DATE_LABEL": "Date d'installation de l'application",
+
     "USERNAME_LABEL": "Nom d'utilisateur",
     "USER_PHONE_LABEL": "Téléphone de l'utilisateur",
     "USER_COMPANY_LABEL": "Entreprise de l'utilisateur",
@@ -193,7 +255,15 @@
     "DID_YOU_SEE_WATER": "Avez-vous vu de l'eau?",
     "DIAGNOSTIC_RESULT_TITLE": "Résultats du diagnostic",
     "REPORT_SENT_SUCCESS_MSG": "Le rapport sera envoyé à Sloan. Veuillez contacter le service technique de Sloan\nau +1-888-756-2614 ou\ntechsupport@sloan.com pour un suivi.",
-    "LAST_DIAGNOSTIC_RESULT_HEADING": "DERNIERS RÉSULTATS DU DIAGNOSTIC"
+    "HINT_TITLE": "Hint",
+    "HINT_DESCRIPTION": "If water was dispensed continously\nbefore running diagnostic, the\nsolenoid is probably faulty.",
+    "DIAGNOSTIC_RESULT_HEADING": "DIAGNOSTIC RESULTS",
+    "SENSOR_TITLE": "Sensor",
+    "VALVE_TITLE": "Valve",
+    "TURBINE_TITLE": "Turbine",
+    "BATTERY_LEVEL_AT_DIAGNOSTIC_TITLE": "Valve",
+    "LAST_DIAGNOSTIC_RESULT_HEADING": "DERNIERS RÉSULTATS DU DIAGNOSTIC",
+    "EOF": "EOF"
   },
   "profile": {
     "NAME_TITLE": "Nom",
@@ -207,13 +277,25 @@
     "LANGUAGE_MENU_TITLE": "Changer de langue",
     "LOGOUT_MENU_TITLE": "Déconnexion",
     "DELETE_ACCOUNT_BTN_LABEL": "Supprimer le compte",
+    "LOGOUT_HEADING": "Logout",
+    "LOGOUT_MSG": "Are you sure you want to log out?",
+    "DELETE_ACCOUNT_HEADING": "Delete Account",
+    "DELETE_ACCOUNT_MSG": "Are you sure you want to Delete Account?",
     "UPDATE_PROFILE_BTN": "Mettre à jour le profil",
-    "CHANGE_LANGUAGE_BTN": "Changer de langue"
+    "CHANGE_LANGUAGE_BTN": "Changer de langue",
+    "CHANGE_LANGUAGE_SUCCESS_MSG": "Language changed sucessfully.",
+    "EDIT_PROFILE_HEADING": "Language changed sucessfully.",
+    "PASSWORD_CHANGE_MSG": "If you wish to change the password, please fill in the below field; otherwise, leave it empty.",
+    "END": "END"
   },
   "disconnect": {
     "POPUP_HEADING": "Déconnexion",
     "SUB_MSG": "Êtes-vous sûr de vouloir vous déconnecter?",
-    "DISCONNECTING_MSG": "La déconnexion de votre %s peut prendre quelques secondes."
+    "DISCONNECTING_MSG1": "Disconnecting",
+    "DISCONNECTING_MSG2": "Disconnecting to your",
+    "DISCONNECTING_MSG3": "Disconnecting to your",
+    "SYNC_MGS": "Please wait, system checking and syncing reports to server",
+    "SYNC_ERROR_MGS": "Something went wrong with sync process"
   },
   "static_pages": {
     "HELP_PAGE_TITLE": "AIDE",

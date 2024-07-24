@@ -12,8 +12,14 @@
     "SEARCH_AGAIN": "Buscar de nuevo",
     "OK": "Ok",
     "CANCEL": "Cancelar",
+    "CONFIRM": "CONFIRM",
+    "DONE_BUTTON_LABEL": "DONE",
     "YES_BUTTON_LABEL": "Sí",
-    "NO_BUTTON_LABEL": "No"
+    "NO_BUTTON_LABEL": "No",
+    "ENABLE_BUTTON_LABEL": "ENABLE",
+    "CLOSE_BUTTON_LABEL": "CLOSE",
+    "OPEN_SETTING_BUTTON_LABEL": "OPEN SETTINGS",
+    "EOF": "EOF"
   },
   "welcome": {
     "WELCOME_TITLE": "Bienvenido",
@@ -22,13 +28,21 @@
     "BTN_HELP": "AYUDA",
     "EOF": "EOF"
   },
-  "language": {
-    "CONTINUE_BTN": "Continuar",
-    "CHOOSE_LANGUAGE_TITLE": "Elegir idioma",
-    "CHOOSE_LANGUAGE_DESC": "Elija su idioma preferido",
-    "ENGLISH": "Inglés",
-    "HINDI": "हिन्दी",
-    "CHOOSE_LANGUAGE_ERROR": "Por favor seleccione un idioma",
+  "permission": {
+    "PERMISSION_TITLE": "Permission",
+    "PERMISSION_SUBTITLE": "Please allow required permissions",
+    "PERMISSION_DESCRIPTION": "You wouldn't be able to proceed if any of these permissions not allowed",
+    "NEARBY_DEVICES_TITLE": "Nearby Devices",
+    "NEARBY_DEVICES_DESC": "App needed Nearby Devices permission to search nearby devices",
+    "BLUETOOTH_TITLE": "Bluetooth",
+    "BLUETOOTH_DESC": "App needed Bluetooth to search devices",
+    "LOCATION_TITLE": "Location",
+    "LOCATION_DESC": "App needed Location permission to search nearby devices",
+    "GEO_LOCATION_TTILE": "GEO Location",
+    "GEO_LOCATION_DESC": "App needed GEO Location permission to search nearby devices",
+    "BTN_NEXT": "Next",
+    "ALLOWE_PERMISSION_TITLE": "would like to use Bluetooth for new connections",
+    "ALLOWE_PERMISSION_MSG": "You can allow new connections in Settings",
     "EOF": "EOF"
   },
   "login": {
@@ -62,6 +76,7 @@
   "reset_password": {
     "TITLE_RESET_YOUR_PASSWORD": "¿Olvidó su contraseña?",
     "SUBTITLE_RESET_YOUR_PASSWORD": "Si olvidó su contraseña, ingrese su dirección de correo electrónico a continuación para recibir un OTP por correo electrónico.",
+    "LABEL_PLZ_PROVIDE_NEW_PASSWORD": "Please provide new password for account",
     "LABEL_PASSWORD": "Contraseña",
     "LABEL_CONFIRM_PASSWORD": "Confirmar contraseña",
     "LABEL_PASSWORD_REQUIREMENT": "Requisitos de contraseña",
@@ -108,7 +123,36 @@
     "LABEL_TERM_LINK": "Términos",
     "BTN_REGISTER": "Siguiente",
     "LABEL_ALREADY_HAVE_AN_ACCOUNT": "¿Ya tienes una cuenta?",
-    "LABEL_RETURN_TO_REGISTER": "Inicia sesión aquí",
+    "LABEL_RETURN_TO_LOGIN": "Inicia sesión aquí",
+    "LABEL_SELECT_INDUSTRY": "Select Industry",
+    "LABEL_SELECT_COUNTY": "Select Country",
+    "LABEL_SELECT_STATE": "Select State",
+    "LABEL_SELECT_TIMEZONE": "Select Timezone",
+    "VALIDATION_MSG_EMPTY_FIRST_NAME": "Please enter your first name",
+    "VALIDATION_MSG_EMPTY_LAST_NAME": "Please enter your last name",
+    "VALIDATION_MSG_EMPTY_JOB_TITLE": "Please enter your job title",
+    "VALIDATION_MSG_EMPTY_COMPANY": "Please enter your country",
+    "VALIDATION_MSG_EMPTY_INDUSTRY": "Please select your industry",
+    "VALIDATION_MSG_EMPTY_PHONE_NUMBER": "Please enter your phone number",
+    "VALIDATION_MSG_EMPTY_EMAIL": "Please enter your email",
+    "VALIDATION_MSG_VALID_EMAIL": "Please enter valid email",
+    "VALIDATION_MSG_EMPTY_COUNTRY": "Please select your country",
+    "VALIDATION_MSG_EMPTY_STATE": "Please select your state",
+    "VALIDATION_MSG_EMPTY_CITY": "Please enter your city",
+    "VALIDATION_MSG_EMPTY_ADDRESS": "Please enter your address",
+    "VALIDATION_MSG_EMPTY_ZIPCODE": "Please enter your zipcode",
+    "VALIDATION_MSG_EMPTY_TIMEZONE": "Please select your timezone",
+    "VALIDATION_MSG_EMPTY_TERM": "Please agree our terms and condition",
+    "VALIDATION_MSG_EMPTY_PASSWORD": "Please enter your password",
+    "VALIDATION_MSG_EMPTY_CONFIRM_PASSWORD": "Please enter your confirm password",
+    "VALIDATION_MSG_MINIMUM_PASSWORD": "Password must contain at least minimum 6 characters",
+    "VALIDATION_MSG_SAME_PASSWORD": "Password and confirm password should same",
+    "EOF": "EOF"
+  },
+  "register_success": {
+    "TITLE_REGISTER_SUCCESS": "Success",
+    "SUBTITLE_REGISTER_SUCCESS": "Your password has been reset, Now just sign in to get started.",
+    "BTN_REGISTER_SUCCESS": "CONTINUE",
     "EOF": "EOF"
   },
   "activate_your_device": {
@@ -117,15 +161,22 @@
     "SEARCH_LIST_HEADING": "Conecte su producto",
     "SEARCHING_HINT_TEXT": "Buscando dispositivos cercanos..."
   },
+  "connecting": {
+    "HEADING": "Connecting",
+    "SUB_MSG": "Connecting to your Sloan Faucet\n Might take a few seconds."
+  },
   "no_product_found": {
     "HEADING": "No se encontró producto",
-    "SUB_MSG": "Asegúrese de que el Bluetooth esté habilitado e intente nuevamente."
+    "SUB_MSG": "Asegúrese de que el Bluetooth esté habilitado e intente nuevamente.",
+    "BTN_TROUBLESHOOT": "TROUBLESHOOT",
+    "BTN_SEEARCH_AGAIN": "SEARCH AGAIN"
   },
   "device_landing": {
-    "tab_diagnostics": "Diagnósticos",
-    "tab_details": "Detalles",
-    "tab_help": "Ayuda",
-    "tab_disconnect": "Desconectar"
+    "TAB_HOME": "Home",
+    "TAB_DIAGNOSTICS": "Diagnósticos",
+    "TAB_DETAILS": "Detalles",
+    "TAB_HELP": "Ayuda",
+    "TAB_DISCONNECT": "Desconectar"
   },
   "device_dashboard": {
     "BATTERY_POWER": "Energía de la batería",
@@ -137,13 +188,18 @@
     "CHANGES_APPLIED_HEADING": "CAMBIOS APLICADOS",
     "APPLY_SETTINGS_TO_FAUCET": "APLICAR CONFIGURACIÓN AL GRIFO",
     "NO_PREVIOUS_SETTINGS_FOUND": "No se encontraron configuraciones guardadas anteriormente",
+    "APPLIYING_MSG": "Applying...",
+    "ADAPTIVE_SENSING_MSG": "Adaptive sensing in progress. Water may be dispensed. Please wait.",
 
     "ACTIVATION_MODE": "Modo de activación",
     "LINE_FLUSH": "Limpieza de línea",
     "CONFIRM_FLOW_RATE": "Confirmar tasa de flujo",
     "SENSOR_RANGE": "Rango del sensor",
     "UNITS": "Unidades",
-    "NOTES": "Notas"
+    "SECONDS": "Sec",
+    "NOTES": "Notas",
+    "DISCONNECTING_HEADING": "Disconnect",
+    "DISCONNECTING_MSG": "Are you sure you want to disconnect?"
   },
   "device_details": {
     "DEVICE_DETAILS_HEADING": "Detalles del dispositivo",
@@ -199,7 +255,15 @@
     "DID_YOU_SEE_WATER": "¿Vio salir agua?",
     "DIAGNOSTIC_RESULT_TITLE": "Resultados del diagnóstico",
     "REPORT_SENT_SUCCESS_MSG": "El informe se enviará a Sloan. Por favor, contacte al servicio técnico de Sloan\nal +1-888-756-2614 o\ntechsupport@sloan.com para seguimiento.",
-    "LAST_DIAGNOSTIC_RESULT_HEADING": "ÚLTIMOS RESULTADOS DEL DIAGNÓSTICO"
+    "HINT_TITLE": "Hint",
+    "HINT_DESCRIPTION": "If water was dispensed continously\nbefore running diagnostic, the\nsolenoid is probably faulty.",
+    "DIAGNOSTIC_RESULT_HEADING": "ÚLTIMOS RESULTADOS DEL DIAGNÓSTICO",
+    "SENSOR_TITLE": "Sensor",
+    "VALVE_TITLE": "Valve",
+    "TURBINE_TITLE": "Turbine",
+    "BATTERY_LEVEL_AT_DIAGNOSTIC_TITLE": "Valve",
+    "LAST_DIAGNOSTIC_RESULT_HEADING": "LAST DIAGNOSTIC RESULTS",
+    "EOF": "EOF"
   },
   "profile": {
     "NAME_TITLE": "Nombre",
@@ -213,13 +277,25 @@
     "LANGUAGE_MENU_TITLE": "Cambiar idioma",
     "LOGOUT_MENU_TITLE": "Cerrar sesión",
     "DELETE_ACCOUNT_BTN_LABEL": "Eliminar cuenta",
+    "LOGOUT_HEADING": "Logout",
+    "LOGOUT_MSG": "Are you sure you want to log out?",
+    "DELETE_ACCOUNT_HEADING": "Delete Account",
+    "DELETE_ACCOUNT_MSG": "Are you sure you want to Delete Account?",
     "UPDATE_PROFILE_BTN": "Actualizar perfil",
-    "CHANGE_LANGUAGE_BTN": "Cambiar idioma"
+    "CHANGE_LANGUAGE_BTN": "Cambiar idioma",
+    "CHANGE_LANGUAGE_SUCCESS_MSG": "Language changed sucessfully.",
+    "EDIT_PROFILE_HEADING": "Language changed sucessfully.",
+    "PASSWORD_CHANGE_MSG": "If you wish to change the password, please fill in the below field; otherwise, leave it empty.",
+    "END": "END"
   },
   "disconnect": {
     "POPUP_HEADING": "Desconectar",
     "SUB_MSG": "¿Está seguro de que desea desconectar?",
-    "DISCONNECTING_MSG": "Desconectarse de su %s podría tomar unos segundos."
+    "DISCONNECTING_MSG1": "Disconnecting",
+    "DISCONNECTING_MSG2": "Disconnecting to your",
+    "DISCONNECTING_MSG3": "Disconnecting to your",
+    "SYNC_MGS": "Please wait, system checking and syncing reports to server",
+    "SYNC_ERROR_MGS": "Something went wrong with sync process"
   },
   "static_pages": {
     "HELP_PAGE_TITLE": "AYUDA",
