@@ -11,6 +11,7 @@ import {getImgSource} from 'src/utils/Helpers/HelperFunction';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Success"
+                text={I18n.t('reset_password_success.TITLE_RESET_PASSWORD_SUCCESS')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -51,7 +52,7 @@ const Index = ({route, navigation}: any) => {
 
               <Typography
                 size={14}
-                text={`Your password has been reset, Now just sign in to get started.`}
+                text={I18n.t('reset_password_success.SUBTITLE_RESET_PASSWORD_SUCCESS')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -62,7 +63,7 @@ const Index = ({route, navigation}: any) => {
 
               <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                 <Button
-                  title="CONTINUE"
+                  title={I18n.t('reset_password_success.BTN_RESET_PASSWORD_SUCCESS')}
                   onPress={() => {
                     NavigationService.pop(4);
                   }}

@@ -17,6 +17,7 @@ import {verifyEmailRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -91,7 +92,7 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Verify Email"
+                text={I18n.t('verify_email.TITLE_VERIFY_EMAIL')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -101,7 +102,7 @@ const Index = ({route, navigation}: any) => {
               />
               <Typography
                 size={14}
-                text="Enter your email to receive the verification code in your inbox."
+                text={I18n.t('verify_email.SUBTITLE_VERIFY_EMAIL')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -123,7 +124,7 @@ const Index = ({route, navigation}: any) => {
                   returnKeyType="next"
                   blurOnSubmit={false}
                   keyboardType="email-address"
-                  placeholder="Email Address"
+                  placeholder={I18n.t('verify_email.LABEL_EMAIL')}
                   value={email}
                   inputContainerStyle={styles.inputContainer}
                   inputStyle={styles.textInput}
@@ -134,7 +135,7 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="VERIFY EMAIL"
+                  title={I18n.t('verify_email.BTN_VERIFY_EMAIL')}
                   onPress={() => {
                     onVerifyEmailPress();
                   }}
@@ -145,7 +146,7 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                 <Typography
                   size={13}
-                  text={'Back to login'}
+                  text={I18n.t('verify_email.LABEL_RETURN_TO_LOGIN')}
                   style={{textAlign: 'center', textDecorationLine: 'underline'}}
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}

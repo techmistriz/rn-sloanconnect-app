@@ -11,6 +11,7 @@ import {getImgSource} from 'src/utils/Helpers/HelperFunction';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Success"
+                text={I18n.t('register_success.TITLE_REGISTER_SUCCESS')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -52,7 +53,7 @@ const Index = ({route, navigation}: any) => {
 
               <Typography
                 size={14}
-                text={`Your account has been verified successfully. Now just sign in to get started.`}
+                text={I18n.t('register_success.SUBTITLE_REGISTER_SUCCESS')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -63,7 +64,7 @@ const Index = ({route, navigation}: any) => {
 
               <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                 <Button
-                  title="CONTINUE"
+                  title={I18n.t('register_success.BTN_REGISTER_SUCCESS')}
                   onPress={() => {
                     referrer == 'VerifyEmail'
                       ? NavigationService.pop(3)

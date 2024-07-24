@@ -40,6 +40,7 @@ import Copyright from 'src/components/@ProjectComponent/Copyright';
 import CheckBox from '@react-native-community/checkbox';
 import DropdownPicker from 'src/components/DropdownPicker';
 import Network from 'src/network/Network';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -327,7 +328,7 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={styles.formWrapper}>
                 <Typography
                   size={20}
-                  text="Register"
+                  text={I18n.t('register.TITLE_REGISTER')}
                   style={{
                     textAlign: 'center',
                     marginBottom: 20,
@@ -356,7 +357,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="First Name*"
+                        placeholder={`${I18n.t('register.LABEL_FIRST_NAME')}*`}
                         value={firstName}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -377,7 +378,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Last Name*"
+                        placeholder={`${I18n.t('register.LABEL_LAST_NAME')}*`}
                         value={lastName}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -398,7 +399,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Job Title*"
+                        placeholder={`${I18n.t('register.LABEL_JOB_TITLE')}*`}
                         value={title}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -419,7 +420,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Company*"
+                        placeholder={`${I18n.t('register.LABEL_COMPANY')}*`}
                         value={company}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -440,7 +441,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Industry*"
+                        placeholder={`${I18n.t('register.LABEL_INDUSTRY')}*`}
                         value={industry?.name}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -474,7 +475,9 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Phone Number*"
+                        placeholder={`${I18n.t(
+                          'register.LABEL_PHONE_NUMBER',
+                        )}*`}
                         value={phoneNumber}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -495,7 +498,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Email*"
+                        placeholder={`${I18n.t('register.LABEL_EMAIL')}*`}
                         value={email}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -516,7 +519,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Password*"
+                        placeholder={`${I18n.t('register.LABEL_PASSWORD')}*`}
                         value={password}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -550,7 +553,9 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="done"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Confirm Password*"
+                        placeholder={`${I18n.t(
+                          'register.LABEL_CONFIRM_PASSWORD',
+                        )}*`}
                         value={passwordConfirmation}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -586,7 +591,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Country*"
+                        placeholder={`${I18n.t('register.LABEL_COUNTRY')}*`}
                         value={country?.name}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -621,7 +626,9 @@ const Index = ({route, navigation}: any) => {
                           returnKeyType="next"
                           blurOnSubmit={false}
                           keyboardType="default"
-                          placeholder="State/Province*"
+                          placeholder={`${I18n.t(
+                            'register.LABEL_STATE_PROVINCE',
+                          )}*`}
                           value={state?.state_name}
                           inputContainerStyle={styles.inputContainer}
                           inputStyle={styles.textInput}
@@ -653,7 +660,9 @@ const Index = ({route, navigation}: any) => {
                           returnKeyType="next"
                           blurOnSubmit={false}
                           keyboardType="default"
-                          placeholder="State/Province*"
+                          placeholder={`${I18n.t(
+                            'register.LABEL_STATE_PROVINCE',
+                          )}*`}
                           value={stateInput}
                           inputContainerStyle={styles.inputContainer}
                           inputStyle={styles.textInput}
@@ -675,7 +684,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="City*"
+                        placeholder={`${I18n.t('register.LABEL_CITY')}*`}
                         value={city}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -696,7 +705,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Address*"
+                        placeholder={`${I18n.t('register.LABEL_ADDRESS')}*`}
                         value={address}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -717,7 +726,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Zip/Postal*"
+                        placeholder={`${I18n.t('register.LABEL_ZIPCODE')}*`}
                         value={zip}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -737,7 +746,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Timezone*"
+                        placeholder={`${I18n.t('register.LABEL_TIMEZONE')}*`}
                         value={timezone?.format}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -787,7 +796,7 @@ const Index = ({route, navigation}: any) => {
                     />
                     <Typography
                       size={12}
-                      text={'I have read and agree to these '}
+                      text={`${I18n.t('register.LABEL_TERM')}`}
                       style={{
                         textAlign: 'left',
                       }}
@@ -799,7 +808,7 @@ const Index = ({route, navigation}: any) => {
                     />
                     <Typography
                       size={12}
-                      text={'Terms'}
+                      text={`${I18n.t('register.LABEL_TERM_LINK')}`}
                       style={{
                         textAlign: 'left',
                         textDecorationLine: 'underline',
@@ -815,7 +824,7 @@ const Index = ({route, navigation}: any) => {
 
                 <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                   <Button
-                    title="Next"
+                    title={I18n.t('register.BTN_REGISTER')}
                     onPress={() => {
                       onRegisterPress();
                     }}
@@ -825,14 +834,14 @@ const Index = ({route, navigation}: any) => {
                 <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                   <Typography
                     size={12}
-                    text={`Already have an account?`}
+                    text={I18n.t('register.LABEL_ALREADY_HAVE_AN_ACCOUNT')}
                     style={{textAlign: 'center'}}
                     color={Theme.colors.darkGray}
                   />
 
                   <Typography
                     size={13}
-                    text={'Login Here'}
+                    text={I18n.t('register.LABEL_RETURN_TO_LOGIN')}
                     style={{
                       textAlign: 'center',
                       textDecorationLine: 'underline',
@@ -854,7 +863,7 @@ const Index = ({route, navigation}: any) => {
             <DropdownPicker
               dialogVisible={industriesDropdownModal}
               setDialogVisible={() => setIndustriesDropdownModal(false)}
-              title={'Select Industry'}
+              title={I18n.t('register.LABEL_SELECT_INDUSTRY')}
               data={industriesMaster}
               onSelectedItem={(item: any) => {
                 setIndustriesDropdownModal(false);
@@ -867,7 +876,7 @@ const Index = ({route, navigation}: any) => {
             <DropdownPicker
               dialogVisible={countriesDropdownModal}
               setDialogVisible={() => setCountriesDropdownModal(false)}
-              title={'Select Country'}
+              title={I18n.t('register.LABEL_SELECT_COUNTY')}
               data={countriesMaster}
               onSelectedItem={(item: any) => {
                 setCountriesDropdownModal(false);
@@ -880,7 +889,7 @@ const Index = ({route, navigation}: any) => {
             <DropdownPicker
               dialogVisible={statesDropdownModal}
               setDialogVisible={() => setStatesDropdownModal(false)}
-              title={'Select State'}
+              title={I18n.t('register.LABEL_SELECT_STATE')}
               data={statesMaster}
               onSelectedItem={(item: any) => {
                 setStatesDropdownModal(false);
@@ -893,7 +902,7 @@ const Index = ({route, navigation}: any) => {
             <DropdownPicker
               dialogVisible={timezonesDropdownModal}
               setDialogVisible={() => setTimezonesDropdownModal(false)}
-              title={'Select Timezone'}
+              title={I18n.t('register.LABEL_SELECT_TIMEZONE')}
               data={timezonesMaster}
               onSelectedItem={(item: any) => {
                 setTimezonesDropdownModal(false);

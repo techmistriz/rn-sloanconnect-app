@@ -25,6 +25,7 @@ import Copyright from 'src/components/@ProjectComponent/Copyright';
 import Input from 'src/components/InputPaper';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import VectorIcon from 'src/components/VectorIcon';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const {email, hash, otp} = route?.params;
@@ -130,7 +131,7 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Reset Your Password"
+                text={I18n.t('reset_password.TITLE_RESET_YOUR_PASSWORD')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -141,7 +142,9 @@ const Index = ({route, navigation}: any) => {
 
               <Typography
                 size={14}
-                text={`Please provide new password for account ${email}`}
+                text={`${I18n.t(
+                  'reset_password.LABEL_PLZ_PROVIDE_NEW_PASSWORD',
+                )} ${email}`}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -164,7 +167,7 @@ const Index = ({route, navigation}: any) => {
                   returnKeyType="next"
                   blurOnSubmit={false}
                   keyboardType="default"
-                  placeholder="Password"
+                  placeholder={I18n.t('reset_password.LABEL_PASSWORD')}
                   value={password}
                   inputContainerStyle={styles.inputContainer}
                   inputStyle={styles.textInput}
@@ -198,7 +201,7 @@ const Index = ({route, navigation}: any) => {
                   returnKeyType="done"
                   blurOnSubmit={false}
                   keyboardType="default"
-                  placeholder="Confirm Password"
+                  placeholder={I18n.t('reset_password.LABEL_CONFIRM_PASSWORD')}
                   value={passwordConfirmation}
                   inputContainerStyle={styles.inputContainer}
                   inputStyle={styles.textInput}
@@ -223,7 +226,7 @@ const Index = ({route, navigation}: any) => {
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Typography
                   size={13}
-                  text={`Password Requirements`}
+                  text={I18n.t('reset_password.LABEL_PASSWORD_REQUIREMENT')}
                   style={{
                     textAlign: 'left',
                     marginBottom: 20,
@@ -234,7 +237,7 @@ const Index = ({route, navigation}: any) => {
 
                 <Typography
                   size={11}
-                  text={`At least 8 characters`}
+                  text={I18n.t('reset_password.LABEL_PASSWORD_CONDITION1')}
                   style={{
                     textAlign: 'left',
                     marginBottom: 5,
@@ -244,7 +247,7 @@ const Index = ({route, navigation}: any) => {
                 />
                 <Typography
                   size={11}
-                  text={`A mixture of both uppercase and lowercase letters`}
+                  text={I18n.t('reset_password.LABEL_PASSWORD_CONDITION2')}
                   style={{
                     textAlign: 'left',
                     marginBottom: 5,
@@ -254,7 +257,7 @@ const Index = ({route, navigation}: any) => {
                 />
                 <Typography
                   size={11}
-                  text={`A mixture of letters and numbers`}
+                  text={I18n.t('reset_password.LABEL_PASSWORD_CONDITION3')}
                   style={{
                     textAlign: 'left',
                     marginBottom: 5,
@@ -264,7 +267,7 @@ const Index = ({route, navigation}: any) => {
                 />
                 <Typography
                   size={11}
-                  text={`Inclusive of at least one special charater, e.g., ! @ # ?`}
+                  text={I18n.t('reset_password.LABEL_PASSWORD_CONDITION4')}
                   style={{
                     textAlign: 'left',
                     marginBottom: 5,
@@ -277,7 +280,7 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="RESET PASSWORD"
+                  title={I18n.t('reset_password.BTN_RESET_PASSWORD')}
                   onPress={() => {
                     onResetPasswordPress();
                   }}
