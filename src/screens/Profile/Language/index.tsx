@@ -40,6 +40,7 @@ const Index = ({route, navigation}: any) => {
 
   /** action for logout */
   const onSaveLanguage = async () => {
+    I18n.locale = selectedLanguageState?.code ?? 'en';
     dispatch(
       settingsSuccessAction({
         settings: {
