@@ -112,7 +112,7 @@ const Index = ({navigation, route}: any) => {
 
       const batteryStatus = [
         {
-          name: I18n.t('device_details.BATTERY_STATUS'),
+          name: I18n.t('device_details.BATTERY_STATUS_LABEL'),
           value: `${BLEService.batteryLevel}%`,
           uuid: null,
         },
@@ -308,6 +308,9 @@ const Index = ({navigation, route}: any) => {
                 if (element2 && element2?.displayInList !== false) {
                   allData.push({
                     name: element2?.name?.name,
+                    nameLocale: `${I18n.t(
+                      'device_details.' + element2?.name?.nameLocaleKey,
+                    )}`,
                     position: element2?.position,
                     // value: element2?.value?.currentValue ?? 'N/A',
                     value: formatCharateristicValue(
@@ -334,6 +337,7 @@ const Index = ({navigation, route}: any) => {
          */
         allData.push({
           name: 'Control Box Model',
+          nameLocale: `${I18n.t('device_details.CONTROL_BOX_MODEL_LABEL')}`,
           position: 6,
           value: controlBoxModel?.value?.currentValue,
           uuid: null,
@@ -347,6 +351,7 @@ const Index = ({navigation, route}: any) => {
         sloanModel = [
           {
             name: 'FAUCET MODEL',
+            nameLocale: `${I18n.t('device_details.FAUCET_MODEL_LABEL')}`,
             value: deviceStaticData?.fullNameAllModel,
             uuid: null,
             position: 1,
@@ -357,6 +362,7 @@ const Index = ({navigation, route}: any) => {
       const batteryStatus = [
         {
           name: 'Battery Status',
+          nameLocale: `${I18n.t('device_details.BATTERY_STATUS_LABEL')}`,
           value: `${BLEService.batteryLevel}%`,
           uuid: null,
           position: 11,
@@ -425,6 +431,7 @@ const Index = ({navigation, route}: any) => {
          */
         allData.push({
           name: 'Hours of Operation',
+          nameLocale: `${I18n.t('device_details.HOURS_OF_OPERATION_LABEL')}`,
           position: 1,
           value: operatingHoursSinceInstall?.value?.currentValue,
           uuid: null,
@@ -441,6 +448,7 @@ const Index = ({navigation, route}: any) => {
           currentTimestamp - __operatingHoursSinceInstallInSecs;
         allData.push({
           name: 'Date of installation',
+          nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
           position: 0,
           value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
           uuid: null,
@@ -455,6 +463,9 @@ const Index = ({navigation, route}: any) => {
       if (!isObjectEmpty(activationsSinceInstall)) {
         allData.push({
           name: 'Activations since day 1',
+          nameLocale: `${I18n.t(
+            'device_details.ACTIVATION_SINCE_DAY_1_LABEL',
+          )}`,
           position: 5,
           value: formatCharateristicValue(
             activationsSinceInstall?.value,
@@ -473,6 +484,9 @@ const Index = ({navigation, route}: any) => {
       if (!isObjectEmpty(durationOfAllActivations)) {
         allData.push({
           name: 'Accumulated activation time',
+          nameLocale: `${I18n.t(
+            'device_details.ACCUMULATED_ACTIVATION_TIME_LABEL',
+          )}`,
           position: 6,
           value: `${durationOfAllActivations?.value?.currentValue} sec`,
           uuid: null,
@@ -490,6 +504,7 @@ const Index = ({navigation, route}: any) => {
       } Gal`;
       allData.push({
         name: 'Accumulated water usage',
+        nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
         position: 7,
         value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
         uuid: null,
@@ -504,6 +519,9 @@ const Index = ({navigation, route}: any) => {
       if (!isObjectEmpty(activationsSinceLastChange)) {
         allData.push({
           name: 'Activations since last change',
+          nameLocale: `${I18n.t(
+            'device_details.ACTIVATIONS_SINCE_LAST_CHANGE_LABEL',
+          )}`,
           position: 8,
           value: activationsSinceLastChange?.value?.currentValue,
           uuid: null,
@@ -519,6 +537,9 @@ const Index = ({navigation, route}: any) => {
       if (!isObjectEmpty(numberOfAllLineFlushes)) {
         allData.push({
           name: 'Line flushes since day 1',
+          nameLocale: `${I18n.t(
+            'device_details.LINE_FLUSHES_SINCE_DAY_1_LABEL',
+          )}`,
           position: 9,
           value: `${numberOfAllLineFlushes?.value?.currentValue}`,
           uuid: null,
@@ -534,6 +555,9 @@ const Index = ({navigation, route}: any) => {
       if (!isObjectEmpty(durationOfAllLineFlushes)) {
         allData.push({
           name: 'Accumulated flush time',
+          nameLocale: `${I18n.t(
+            'device_details.ACCUMULATED_FLUSH_TIME_LABEL',
+          )}`,
           position: 10,
           value: `${durationOfAllLineFlushes?.value?.currentValue} sec`,
           uuid: null,
@@ -549,6 +573,9 @@ const Index = ({navigation, route}: any) => {
       if (!isObjectEmpty(numberOfBLEConnections)) {
         allData.push({
           name: 'Number Of BLE connections',
+          nameLocale: `${I18n.t(
+            'device_details.NUMBER_OF_BLE_CONNECTION_LABEL',
+          )}`,
           position: 10,
           value: `${numberOfBLEConnections?.value?.currentValue}`,
           uuid: null,
@@ -566,6 +593,9 @@ const Index = ({navigation, route}: any) => {
                 if (element2 && element2?.displayInList !== false) {
                   allData.push({
                     name: element2?.name?.name,
+                    nameLocale: `${I18n.t(
+                      'device_details.' + element2?.name?.nameLocaleKey,
+                    )}`,
                     position: element2?.position,
                     // value: element2?.value?.currentValue ?? 'N/A',
                     value: formatCharateristicValue(
