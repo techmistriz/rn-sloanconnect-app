@@ -257,7 +257,12 @@
     "HINT_TITLE": "Hint",
     "HINT_DESCRIPTION": "If water was dispensed continously\nbefore running diagnostic, the\nsolenoid is probably faulty.",
     "DIAGNOSTIC_RESULT_HEADING": "DIAGNOSTIC RESULTS",
-    "LAST_DIAGNOSTIC_RESULT_HEADING": "LAST DIAGNOSTIC RESULTS"
+    "SENSOR_TITLE": "Sensor",
+    "VALVE_TITLE": "Valve",
+    "TURBINE_TITLE": "Turbine",
+    "BATTERY_LEVEL_AT_DIAGNOSTIC_TITLE": "Valve",
+    "LAST_DIAGNOSTIC_RESULT_HEADING": "LAST DIAGNOSTIC RESULTS",
+    "EOF": "EOF"
   },
   "profile": {
     "NAME_TITLE": "Name",

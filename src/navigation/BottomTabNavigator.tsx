@@ -205,8 +205,8 @@ const CustomTabBar = ({state, descriptors, navigation}: any) => {
 
       <AlertBox
         visible={disconnectModal}
-        title="Disconnect"
-        message={'Are you sure you want to disconnect?'}
+        title={I18n.t('device_dashboard.DISCONNECTING_HEADING')}
+        message={I18n.t('device_dashboard.DISCONNECTING_MSG')}
         onCancelPress={() => {
           setDisconnectModal(false);
         }}

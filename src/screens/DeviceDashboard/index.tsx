@@ -96,6 +96,7 @@ const Index = ({navigation}: any) => {
     const backAction = () => {
       if (navigation.isFocused()) {
         setDisconnectModal(true);
+        // NavigationService.navigate('DeviceDisconnectStack');
         return true;
       }
     };

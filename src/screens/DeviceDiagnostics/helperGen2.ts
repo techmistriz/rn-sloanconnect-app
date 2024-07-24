@@ -10,6 +10,7 @@ import {
   hexToString,
   base64ToHex,
 } from 'src/utils/Helpers/encryption';
+import I18n from 'src/locales/Transaltions';
 
 /** Function comments */
 export const mappingDiagnosticGen2 = async (
@@ -150,6 +151,7 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Sensor',
+    nameLocale: I18n.t('diagnostic_page.SENSOR_TITLE'),
     value: __characteristicSensor?.value?.currentValue,
     showInList: true,
   });
@@ -165,6 +167,7 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Valve',
+    nameLocale: I18n.t('diagnostic_page.VALVE_TITLE'),
     value: __characteristicValve?.value?.currentValue,
     showInList: true,
   });
@@ -180,6 +183,7 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Turbine',
+    nameLocale: I18n.t('diagnostic_page.TURBINE_TITLE'),
     value: __characteristicTurbine?.value?.currentValue,
     showInList: true,
   });
@@ -209,6 +213,7 @@ export const readingDiagnosticGen2 = async (
 
   RESULTS.push({
     name: 'Battery Level at Diagnostic',
+    nameLocale: I18n.t('diagnostic_page.BATTERY_LEVEL_AT_DIAGNOSTIC_TITLE'),
     value:
       __characteristicBattery?.value?.currentValue > 100
         ? 100
