@@ -15,7 +15,11 @@
     "CONFIRM": "CONFIRM",
     "DONE_BUTTON_LABEL": "DONE",
     "YES_BUTTON_LABEL": "Yes",
-    "NO_BUTTON_LABEL": "No"
+    "NO_BUTTON_LABEL": "No",
+    "ENABLE_BUTTON_LABEL": "ENABLE",
+    "CLOSE_BUTTON_LABEL": "CLOSE",
+    "OPEN_SETTING_BUTTON_LABEL": "OPEN SETTINGS",
+    "EOF": "EOF"
   },
   "welcome": {
     "WELCOME_TITLE": "Welcome",
@@ -24,13 +28,21 @@
     "BTN_HELP": "HELP",
     "EOF": "EOF"
   },
-  "language": {
-    "CONTINUE_BTN": "Continue",
-    "CHOOSE_LANGUAGE_TITLE": "Choose Language",
-    "CHOOSE_LANGUAGE_DESC": "Choose your preferred language",
-    "ENGLISH": "English",
-    "HINDI": "हिन्दी",
-    "CHOOSE_LANGUAGE_ERROR": "Please select language",
+  "permission": {
+    "PERMISSION_TITLE": "Permission",
+    "PERMISSION_SUBTITLE": "Please allow required permissions",
+    "PERMISSION_DESCRIPTION": "You wouldn't be able to proceed if any of these permissions not allowed",
+    "NEARBY_DEVICES_TITLE": "Nearby Devices",
+    "NEARBY_DEVICES_DESC": "App needed Nearby Devices permission to search nearby devices",
+    "BLUETOOTH_TITLE": "Bluetooth",
+    "BLUETOOTH_DESC": "App needed Bluetooth to search devices",
+    "LOCATION_TITLE": "Location",
+    "LOCATION_DESC": "App needed Location permission to search nearby devices",
+    "GEO_LOCATION_TTILE": "GEO Location",
+    "GEO_LOCATION_DESC": "App needed GEO Location permission to search nearby devices",
+    "BTN_NEXT": "Next",
+    "ALLOWE_PERMISSION_TITLE": "would like to use Bluetooth for new connections",
+    "ALLOWE_PERMISSION_MSG": "You can allow new connections in Settings",
     "EOF": "EOF"
   },
   "login": {
