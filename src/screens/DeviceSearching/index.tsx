@@ -25,6 +25,7 @@ import NoDeviceFound from 'src/components/@ProjectComponent/NoDeviceFound';
 import {filterBLEDevices} from './helper';
 import {DeviceExtendedProps, ScanningProps} from './types';
 import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
+import I18n from 'src/locales/Transaltions';
 
 let timeoutID: any = null;
 let timeoutIDForConnecting: any = null;
@@ -427,7 +428,9 @@ const Index = ({navigation, route}: any) => {
                     }}>
                     <Loader
                       visible={true}
-                      loadingText="Searching nearby devices..."
+                      loadingText={I18n.t(
+                        'no_product_found.SEARCHING_HINT_TEXT',
+                      )}
                     />
                   </Wrap>
                 )}

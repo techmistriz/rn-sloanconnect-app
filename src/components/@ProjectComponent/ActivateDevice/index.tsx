@@ -9,6 +9,7 @@ import {styles} from './styles';
 import Header from 'src/components/Header';
 import AppContainer from 'src/components/AppContainer';
 import {ActivateDeviceProps} from './types';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({}: ActivateDeviceProps) => {
   return (
@@ -31,14 +32,14 @@ const Index = ({}: ActivateDeviceProps) => {
         <Wrap autoMargin={false} style={styles.section1}>
           <Typography
             size={22}
-            text={`Activate\n Your Device`}
+            text={I18n.t('activate_your_device.HEADING')}
             style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
             color={Theme.colors.white}
             ff={Theme.fonts.ThemeFontMedium}
           />
           <Typography
             size={14}
-            text={`Wave your hand 3 times in front\n of sensor within 10 seconds\n to activate you product.`}
+            text={I18n.t('activate_your_device.SUB_MSG')}
             style={{textAlign: 'center', marginTop: 10, lineHeight: 20}}
             color={Theme.colors.white}
             ff={Theme.fonts.ThemeFontRegular}

@@ -6,6 +6,6 @@ I18n.fallbacks = true;
 I18n.translations = {
   'en-US': require('./en.json'),
   en: require('./en.json'),
-  hi: require('./hi.json'),
+  es: require('./es.json'),
 };
 export default I18n;

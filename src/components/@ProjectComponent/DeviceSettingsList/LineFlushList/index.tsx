@@ -10,6 +10,7 @@ import NavigationService from 'src/services/NavigationService/NavigationService'
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import {useSelector} from 'react-redux';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import I18n from 'src/locales/Transaltions';
 
 // DeviceSettingList
 const DeviceSettingList = ({
@@ -20,7 +21,7 @@ const DeviceSettingList = ({
   style,
   navigation,
   applied = false,
-  showApplySettingButton
+  showApplySettingButton,
 }: DeviceSettingListProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
@@ -134,7 +135,7 @@ const DeviceSettingList = ({
                 <>
                   <Typography
                     size={16}
-                    text={`${flushTime} Sec`}
+                    text={`${flushTime} ${I18n.t('device_dashboard.SECONDS')}`}
                     style={{
                       textAlign: 'right',
                     }}
@@ -163,7 +164,8 @@ const DeviceSettingList = ({
                 />
               )}
 
-              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) && showApplySettingButton ? (
+              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) &&
+              showApplySettingButton ? (
                 <>
                   {applied ? (
                     <VectorIcon

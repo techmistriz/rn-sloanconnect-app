@@ -12,6 +12,7 @@
     "SEARCH_AGAIN": "Search Again",
     "OK": "Ok",
     "CANCEL": "Cancel",
+    "CONFIRM": "CONFIRM",
     "YES_BUTTON_LABEL": "Yes",
     "NO_BUTTON_LABEL": "No"
   },
@@ -122,20 +123,27 @@
     "EOF": "EOF"
   },
   "activate_your_device": {
-    "HEADING": "Activate Your Device",
-    "SUB_MSG": "Wave your hand 3 times in front of sensor within 10 seconds to activate your product.",
+    "HEADING": "Activate\nYour Device",
+    "SUB_MSG": "Wave your hand 3 times in front\n of sensor within 10 seconds\n to activate you product.",
     "SEARCH_LIST_HEADING": "Connect Your Product",
     "SEARCHING_HINT_TEXT": "Searching nearby devices..."
   },
+  "connecting": {
+    "HEADING": "Connecting",
+    "SUB_MSG": "Connecting to your Sloan Faucet\n Might take a few seconds."
+  },
   "no_product_found": {
     "HEADING": "No Product Found",
-    "SUB_MSG": "Please be sure Bluetooth is enabled and try again."
+    "SUB_MSG": "Please be sure Bluetooth is\n Enabled and try again.",
+    "BTN_TROUBLESHOOT": "TROUBLESHOOT",
+    "BTN_SEEARCH_AGAIN": "SEARCH AGAIN"
   },
   "device_landing": {
-    "tab_diagnostics": "Diagnostics",
-    "tab_details": "Details",
-    "tab_help": "Help",
-    "tab_disconnect": "Disconnect"
+    "TAB_HOME": "Home",
+    "TAB_DIAGNOSTICS": "Diagnostics",
+    "TAB_DETAILS": "Details",
+    "TAB_HELP": "Help",
+    "TAB_DISCONNECT": "Disconnect"
   },
   "device_dashboard": {
     "BATTERY_POWER": "Battery Power",
@@ -147,13 +155,18 @@
     "CHANGES_APPLIED_HEADING": "CHANGES APPLIED",
     "APPLY_SETTINGS_TO_FAUCET": "APPLY SETTINGS TO FAUCET",
     "NO_PREVIOUS_SETTINGS_FOUND": "No previous saved settings found",
+    "APPLIYING_MSG": "Applying...",
+    "ADAPTIVE_SENSING_MSG": "Adaptive sensing in progress. Water may be dispensed. Please wait.",
 
     "ACTIVATION_MODE": "Activation Mode",
     "LINE_FLUSH": "Line Flush",
     "CONFIRM_FLOW_RATE": "Confirm Flow Rate",
     "SENSOR_RANGE": "Sensor Range",
     "UNITS": "Units",
-    "NOTES": "Notes"
+    "SECONDS": "Sec",
+    "NOTES": "Notes",
+    "DISCONNECTING_HEADING": "Disconnect",
+    "DISCONNECTING_MSG": "Are you sure you want to disconnect?"
   },
   "device_details": {
     "DEVICE_DETAILS_HEADING": "Device Details",
