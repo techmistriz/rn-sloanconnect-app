@@ -24,6 +24,7 @@ import {Button} from 'src/components/Button';
 import Network from 'src/network/Network';
 import {constants} from 'src/common';
 import LANGUAGES from 'src/locales/languages.json';
+import I18n from 'src/locales/Transaltions';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
@@ -81,7 +82,7 @@ const Index = ({route, navigation}: any) => {
         <Row autoMargin={false} style={styles.profileContentContainerRow}>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Name: `}
+              text={`${I18n.t('profile.NAME_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -96,7 +97,7 @@ const Index = ({route, navigation}: any) => {
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Email: `}
+              text={`${I18n.t('profile.EMAIL_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -114,7 +115,7 @@ const Index = ({route, navigation}: any) => {
         <Row autoMargin={false} style={styles.profileContentContainerRow}>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Phone Number: `}
+              text={`${I18n.t('profile.PHONE_NUMBER_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -129,7 +130,7 @@ const Index = ({route, navigation}: any) => {
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Timezone: `}
+              text={`${I18n.t('profile.TIMEZONE_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -149,7 +150,7 @@ const Index = ({route, navigation}: any) => {
         <Row autoMargin={false} style={styles.profileContentContainerRow}>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Company: `}
+              text={`${I18n.t('profile.COMPANY_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -164,7 +165,7 @@ const Index = ({route, navigation}: any) => {
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Industry: `}
+              text={`${I18n.t('profile.INDUSTRY_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -191,7 +192,7 @@ const Index = ({route, navigation}: any) => {
               style={styles.item}>
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
-                  text="Edit Profile"
+                  text={`${I18n.t('profile.EDIT_PROFILE_MENU_TITLE')}`}
                   color={Theme?.colors?.black}
                   size={16}
                 />
@@ -216,7 +217,7 @@ const Index = ({route, navigation}: any) => {
               style={styles.item}>
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
-                  text="Sync Report"
+                  text={`${I18n.t('profile.SYNC_REPORT_MENU_TITLE')}`}
                   color={Theme?.colors?.black}
                   size={16}
                 />
@@ -242,7 +243,7 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Wrap autoMargin={false}>
                   <Typography
-                    text="Language"
+                    text={`${I18n.t('profile.LANGUAGE_MENU_TITLE')}`}
                     color={Theme?.colors.black}
                     size={16}
                   />
@@ -296,7 +297,7 @@ const Index = ({route, navigation}: any) => {
               style={styles.item}>
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
-                  text="Logout"
+                  text={`${I18n.t('profile.LOGOUT_MENU_TITLE')}`}
                   color={Theme?.colors?.black}
                   size={16}
                 />
@@ -319,7 +320,7 @@ const Index = ({route, navigation}: any) => {
                 style={[styles.itemRow, {justifyContent: 'center'}]}>
                 <Button
                   type={'danger'}
-                  title="DELETE ACCOUNT"
+                  title={`${I18n.t('profile.DELETE_ACCOUNT_BTN_LABEL')}`}
                   onPress={() => {
                     setDeleteAccountModal(true);
                   }}
@@ -331,9 +332,9 @@ const Index = ({route, navigation}: any) => {
 
           <AlertBox
             visible={logoutModal}
-            title="Logout"
-            message={`Are you sure you want to log out?`}
-            okayText={'CONFIRM'}
+            title={`${I18n.t('profile.LOGOUT_HEADING')}`}
+            message={`${I18n.t('profile.LOGOUT_MSG')}`}
+            okayText={I18n.t('button_labels.CONFIRM')}
             onCancelPress={() => {
               setLogoutModal(false);
             }}
@@ -345,9 +346,9 @@ const Index = ({route, navigation}: any) => {
 
           <AlertBox
             visible={deleteAccountModal}
-            title="Delete Account"
-            message={`Are you sure you want to Delete Account?`}
-            okayText={'CONFIRM'}
+            title={`${I18n.t('profile.DELETE_ACCOUNT_HEADING')}`}
+            message={`${I18n.t('profile.DELETE_ACCOUNT_MSG')}`}
+            okayText={I18n.t('button_labels.CONFIRM')}
             onCancelPress={() => {
               setDeleteAccountModal(false);
             }}

@@ -13,6 +13,7 @@ import {settingsSuccessAction} from 'src/redux/actions';
 import {Button} from 'src/components/Button';
 import {constants} from 'src/common';
 import LANGUAGES from 'src/locales/languages.json';
+import I18n from 'src/locales/Transaltions';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
@@ -47,7 +48,7 @@ const Index = ({route, navigation}: any) => {
         },
       }),
     );
-    showToastMessage('Language changed sucessfully.', 'success');
+    showToastMessage(I18n.t('profile.CHANGE_LANGUAGE_SUCCESS_MSG'), 'success');
     NavigationService.goBack();
   };
 
@@ -98,7 +99,7 @@ const Index = ({route, navigation}: any) => {
                 style={[styles.itemRow, {justifyContent: 'center'}]}>
                 <Button
                   type={'primary'}
-                  title="CHANGE LANGUAGE"
+                  title={I18n.t('profile.CHANGE_LANGUAGE_BTN')}
                   onPress={() => {
                     onSaveLanguage();
                   }}

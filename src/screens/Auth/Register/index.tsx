@@ -205,64 +205,64 @@ const Index = ({route, navigation}: any) => {
   const checkValidation = () => {
     const checkEmail = isValidEmail(email);
     if (firstName.trim() === '') {
-      showSimpleAlert('Please enter your first name');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_FIRST_NAME'));
       return false;
     } else if (lastName.trim() === '') {
-      showSimpleAlert('Please enter your last name');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_LAST_NAME'));
       return false;
     } else if (title.trim() === '') {
-      showSimpleAlert('Please enter your job title');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_JOB_TITLE'));
       return false;
     } else if (company.trim() === '') {
-      showSimpleAlert('Please enter your company');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_COMPANY'));
       return false;
     } else if (industry?.name === '') {
-      showSimpleAlert('Please select your industry');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_INDUSTRY'));
       return false;
     } else if (phoneNumber.trim() === '') {
-      showSimpleAlert('Please enter your phone number');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_PHONE_NUMBER'));
       return false;
     } else if (email.trim() === '') {
-      showSimpleAlert('Please enter your email');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_EMAIL'));
       return false;
     } else if (!checkEmail) {
-      showSimpleAlert('Please enter valid email');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_VALID_EMAIL'));
       return false;
     } else if (password.trim() == '') {
-      showSimpleAlert('Please enter your password');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_PASSWORD'));
       return false;
     } else if (password.trim().length < 6) {
-      showSimpleAlert('Password must contain at least minimum 6 characters');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_MINIMUM_PASSWORD'));
       return false;
     } else if (passwordConfirmation.trim() == '') {
-      showSimpleAlert('Please enter your confirm password');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_CONFIRM_PASSWORD'));
       return false;
     } else if (password.trim() !== passwordConfirmation.trim()) {
-      showSimpleAlert('Password and confirm password should same');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_SAME_PASSWORD'));
       return false;
-    } else if (country?.name === '') {
-      showSimpleAlert('Please select your country');
+    } else if (!country?.name) {
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_COUNTRY'));
       return false;
-    } else if (statesMaster?.length > 0 && state?.name === '') {
-      showSimpleAlert('Please select your state');
+    } else if (statesMaster?.length > 0 && !state?.state_name) {
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_STATE'));
       return false;
     } else if (statesMaster?.length == 0 && stateInput?.trim() === '') {
-      showSimpleAlert('Please select your state');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_STATE'));
       return false;
     } else if (city.trim() === '') {
-      showSimpleAlert('Please enter your city');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_CITY'));
       return false;
     } else if (address.trim() === '') {
-      showSimpleAlert('Please enter your address');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_ADDRESS'));
       return false;
     } else if (zip.trim() === '') {
-      showSimpleAlert('Please enter your zipcode');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_ZIPCODE'));
       return false;
     } else if (timezone?.format === '') {
-      showSimpleAlert('Please enter your address');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_TIMEZONE'));
       return false;
     } else if (!terms) {
-      showSimpleAlert('Please agree our terms and condition');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_TERM'));
       return false;
     } else {
       return true;

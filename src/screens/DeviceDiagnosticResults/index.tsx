@@ -35,6 +35,7 @@ import {
   saveReportItems,
 } from 'src/services/DBService/SQLiteDBService';
 import {checkAndSyncPendingSycableItems} from 'src/services/SyncService/SyncService';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   const {
@@ -201,7 +202,7 @@ const Index = ({navigation, route}: any) => {
                   <Wrap autoMargin={false}>
                     <Typography
                       size={18}
-                      text={'Diagnostic Results'}
+                      text={I18n.t('diagnostic_page.DIAGNOSTIC_RESULT_TITLE')}
                       style={{
                         textAlign: 'center',
                         // marginBottom: 30,
@@ -226,7 +227,7 @@ const Index = ({navigation, route}: any) => {
                       }}>
                       <Typography
                         size={12}
-                        text={`Report will be sent to Sloan. Please contact Sloan\nTechnical Service at +1-888-756-2614 or\ntechsupport@sloan.com to follow up.`}
+                        text={I18n.t('diagnostic_page.REPORT_SENT_SUCCESS_MSG')}
                         style={{
                           textAlign: 'center',
                           paddingVertical: 10,
@@ -251,7 +252,9 @@ const Index = ({navigation, route}: any) => {
                     }}>
                     <Typography
                       size={10}
-                      text={`DIAGNOSTIC RESULTS ${
+                      text={`${I18n.t(
+                        'diagnostic_page.DIAGNOSTIC_RESULT_HEADING',
+                      )} ${
                         dateResult?.value &&
                         dateResult?.value > 0 &&
                         dateResult?.value?.toString()?.length > 6
@@ -305,7 +308,9 @@ const Index = ({navigation, route}: any) => {
                         }}>
                         <Typography
                           size={10}
-                          text={`LAST DIAGNOSTIC RESULTS ${
+                          text={`${I18n.t(
+                            'diagnostic_page.LAST_DIAGNOSTIC_RESULT_HEADING',
+                          )} ${
                             dateLastResult?.value &&
                             dateLastResult?.value > 0 &&
                             dateLastResult?.value?.toString()?.length > 6
@@ -393,7 +398,7 @@ const Index = ({navigation, route}: any) => {
                 <Col autoMargin={false} style={{flex: 1, paddingRight: 20}}>
                   <Button
                     type={'link'}
-                    title={'SEND REPORT'}
+                    title={I18n.t('button_labels.SEND_REPORT')}
                     onPress={() => {
                       handleSendReport('yes');
                     }}
@@ -409,7 +414,7 @@ const Index = ({navigation, route}: any) => {
                 <Col autoMargin={false} style={{flex: 1}}>
                   <Button
                     type={'link'}
-                    title={'TROUBLESHOOT'}
+                    title={I18n.t('button_labels.TROUBLESHOOT')}
                     onPress={() => {
                       NavigationService.navigate(
                         'DeviceDiagnosticTroubleshoot',
@@ -463,7 +468,7 @@ const Index = ({navigation, route}: any) => {
                 {paddingBottom: 10},
               ]}>
               <Button
-                title={'DONE'}
+                title={I18n.t('button_labels.DONE_BUTTON_LABEL')}
                 onPress={() => {
                   NavigationService.pop(2);
                 }}
@@ -482,8 +487,8 @@ const Index = ({navigation, route}: any) => {
       </Wrap>
       <InfoBox
         visible={infoModal}
-        title="Hint"
-        message={`If water was dispensed continously\nbefore running diagnostic, the\nsolenoid is probably faulty.`}
+        title={I18n.t('diagnostic_page.HINT_TITLE')}
+        message={I18n.t('diagnostic_page.HINT_DESCRIPTION')}
         messageStyle={{textAlign: 'center'}}
         onOkayPress={() => {
           setInfoModal(false);

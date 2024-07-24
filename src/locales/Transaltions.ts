@@ -7,5 +7,6 @@ I18n.translations = {
   'en-US': require('./en.json'),
   en: require('./en.json'),
   es: require('./es.json'),
+  fr: require('./fr.json'),
 };
 export default I18n;
