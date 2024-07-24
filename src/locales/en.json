@@ -289,8 +289,12 @@
   },
   "disconnect": {
     "POPUP_HEADING": "Disconnect",
-    "SUB_MSG": "Are you sure you want to disconnect?",
-    "DISCONNECTING_MSG": "Disconnecting to your %s might take a few seconds."
+    "POPUP_MSG": "Are you sure you want to disconnect?",
+    "DISCONNECTING_MSG1": "Disconnecting",
+    "DISCONNECTING_MSG2": "Disconnecting to your",
+    "DISCONNECTING_MSG3": "Disconnecting to your",
+    "SYNC_MGS": "Please wait, system checking and syncing reports to server",
+    "SYNC_ERROR_MGS": "Something went wrong with sync process"
   },
   "static_pages": {
     "HELP_PAGE_TITLE": "HELP",

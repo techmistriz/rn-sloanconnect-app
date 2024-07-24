@@ -3,7 +3,6 @@ import Theme from 'src/theme';
 import {useSelector} from 'react-redux';
 import {
   consoleLog,
-  parseDateHumanFormat,
   showToastMessage,
   timestampInSec,
 } from 'src/utils/Helpers/HelperFunction';
@@ -16,8 +15,6 @@ import AppContainer from 'src/components/AppContainer';
 import Divider from 'src/components/Divider';
 import {BLEService} from 'src/services';
 import DeviceInfoList from 'src/components/@ProjectComponent/DeviceInfoList';
-import DeviceBottomTab from 'src/components/@ProjectComponent/DeviceBottomTab';
-import {TABS} from 'src/utils/StaticData/StaticData';
 import {getDeviceInfoNormal, getDeviceInfoAdvance} from './helperGen1';
 import moment from 'moment';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
@@ -26,7 +23,6 @@ import apiConfigs from 'src/network/apiConfig';
 import _ from 'lodash';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import LoaderOverlay from 'src/components/LoaderOverlay';
 
 const Index = ({navigation, route}: any) => {
