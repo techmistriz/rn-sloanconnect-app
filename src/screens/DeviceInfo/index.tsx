@@ -24,6 +24,7 @@ import _ from 'lodash';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import LoaderOverlay from 'src/components/LoaderOverlay';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -102,7 +103,7 @@ const Index = ({navigation, route}: any) => {
       if (deviceStaticData) {
         sloanModel = [
           {
-            name: 'FAUCET MODEL',
+            name: I18n.t('device_details.FAUCET_MODEL_LABEL'),
             value: deviceStaticData?.fullNameAllModel,
             uuid: null,
           },
@@ -111,7 +112,7 @@ const Index = ({navigation, route}: any) => {
 
       const batteryStatus = [
         {
-          name: 'Battery Status',
+          name: I18n.t('device_details.BATTERY_STATUS'),
           value: `${BLEService.batteryLevel}%`,
           uuid: null,
         },
@@ -596,12 +597,14 @@ const Index = ({navigation, route}: any) => {
       var data = [];
       data.push({
         name: 'App version and release date',
+        nameLocale: `${I18n.t('device_details.APP_VERSION_LABEL')}`,
         uuid: '6',
         // value: `3.0.1 2022/11/22`,
         value: `${constants.APP_VERSION} ${constants.RELEASE_DATE}`,
       });
       data.push({
         name: 'App Installation Date',
+        nameLocale: `${I18n.t('device_details.APP_INSTALLATION_DATE_LABEL')}`,
         uuid: '7',
         value: apiConfigs?.app_install_time
           ? moment(apiConfigs?.app_install_time).format('YYYY/MM/DD HH:MM')
@@ -618,26 +621,31 @@ const Index = ({navigation, route}: any) => {
       if (typeof user != 'undefined' && Object.entries(user)) {
         data.push({
           name: 'User Name',
+          nameLocale: `${I18n.t('device_details.USERNAME_LABEL')}`,
           uuid: '1',
           value: `${user?.first_name} ${user?.last_name}`,
         });
         data.push({
           name: 'User Phone #',
+          nameLocale: `${I18n.t('device_details.USER_PHONE_LABEL')}`,
           uuid: '2',
           value: user?.user_metadata?.phone_number ?? 'N/A',
         });
         data.push({
           name: 'User Company',
+          nameLocale: `${I18n.t('device_details.USER_COMPANY_LABEL')}`,
           uuid: '3',
           value: user?.user_metadata?.company ?? 'N/A',
         });
         data.push({
           name: 'User Title',
+          nameLocale: `${I18n.t('device_details.USER_TITLE_LABEL')}`,
           uuid: '4',
           value: user?.user_metadata?.title ?? 'N/A',
         });
         data.push({
           name: 'User Email',
+          nameLocale: `${I18n.t('device_details.USER_EMAIL_LABEL')}`,
           uuid: '5',
           value: user?.email ?? 'N/A',
         });
@@ -675,8 +683,10 @@ const Index = ({navigation, route}: any) => {
                       size={18}
                       text={
                         viewAdvanceDetails
-                          ? 'Advanced Device Details'
-                          : 'Device Details'
+                          ? I18n.t(
+                              'device_details.ADVANCED_DEVICE_DETAILS_HEADING',
+                            )
+                          : I18n.t('device_details.DEVICE_DETAILS_HEADING')
                       }
                       style={{
                         textAlign: 'center',
@@ -725,7 +735,11 @@ const Index = ({navigation, route}: any) => {
           zIndex: 1,
         }}>
         <Button
-          title={viewAdvanceDetails ? 'DONE' : 'VIEW ADVANCE DETAILS'}
+          title={
+            viewAdvanceDetails
+              ? I18n.t('device_details.DONE_BTN_LABEL')
+              : I18n.t('device_details.VIEW_ADVANCED_DETAILS_BTN_LABEL')
+          }
           onPress={() => {
             setViewAdvanceDetails(!viewAdvanceDetails);
           }}

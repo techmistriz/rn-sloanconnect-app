@@ -12,9 +12,9 @@ import {
 } from 'src/utils/Helpers/project';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
+import I18n from 'src/locales/Transaltions';
 
 const connectedDevice = BLEService.getDevice();
-
 /** getDeviceInfoNormal method for normal info */
 export const getDeviceInfoNormal = async () => {
   const ADBDInformationARR = await getBDInformationDataGen1();
@@ -67,6 +67,7 @@ const getBDInformationDataGen1 = () => {
 
           data.push({
             name: value?.name,
+            nameLocale: `${I18n.t('device_details.' + value?.nameLocaleKey)}`,
             uuid: value?.uuid,
             position: value?.position,
             value: formatCharateristicValue(value, decodeValue),
@@ -130,6 +131,7 @@ const getStatisticsInformationDataGen1 = () => {
         // consoleLog('dateOfInstallTimestamp==>', dateOfInstallTimestamp);
         data.push({
           name: 'Date of Installation',
+          nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
           prefix: null,
           postfix: null,
           uuid: null,
@@ -150,6 +152,7 @@ const getStatisticsInformationDataGen1 = () => {
     } Gal`;
     data.push({
       name: 'Accumulated water usage',
+      nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
       uuid: null,
       position: 5,
       value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
@@ -205,6 +208,7 @@ const getStatisticsInformationDataGen1 = () => {
           if (typeof characteristic != 'undefined') {
             data.push({
               name: value?.name,
+              nameLocale: `${I18n.t('device_details.' + value?.nameLocaleKey)}`,
               prefix: value?.prefix,
               postfix: value?.postfix,
               uuid: value?.uuid,
@@ -304,6 +308,7 @@ const getSettingLogsDataGen1 = () => {
 
             data.push({
               name: value?.name,
+              nameLocale: `${I18n.t('device_details.' + value?.nameLocaleKey)}`,
               uuid: value?.uuid,
               position: value?.position,
               value: formatCharateristicValue(value, decodeValue),
