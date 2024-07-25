@@ -21,6 +21,7 @@ import {loginResetDataAction, settingsResetDataAction} from 'src/redux/actions';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
 import VectorIcon from 'src/components/VectorIcon';
 import Header from 'src/components/Header';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -140,7 +141,7 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={styles.formWrapper}>
                 <Typography
                   size={20}
-                  text="Login"
+                  text={I18n.t('login.TITLE_LOGIN')}
                   style={{
                     textAlign: 'center',
                     marginBottom: 20,
@@ -162,7 +163,7 @@ const Index = ({route, navigation}: any) => {
                     returnKeyType="next"
                     blurOnSubmit={false}
                     keyboardType="email-address"
-                    placeholder="Email Address"
+                    placeholder={I18n.t('login.LABEL_EMAIL')}
                     value={email}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
@@ -182,7 +183,7 @@ const Index = ({route, navigation}: any) => {
                     returnKeyType="done"
                     blurOnSubmit={false}
                     keyboardType="default"
-                    placeholder="Password"
+                    placeholder={I18n.t('login.LABEL_PASSWORD')}
                     value={password}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.textInput}
@@ -203,7 +204,7 @@ const Index = ({route, navigation}: any) => {
                   />
                   <Typography
                     size={12}
-                    text={'Forgot your password?'}
+                    text={I18n.t('login.LABEL_FORGOT_YOUR_PASSWORD')}
                     style={{
                       textAlign: 'right',
                       textDecorationLine: 'underline',
@@ -220,7 +221,7 @@ const Index = ({route, navigation}: any) => {
                   autoMargin={false}
                   style={[styles.inputWrapper, {marginTop: 10}]}>
                   <Button
-                    title="LOGIN"
+                    title={I18n.t('login.BTN_LOGIN')}
                     onPress={() => {
                       onLoginPress();
                     }}
@@ -231,7 +232,7 @@ const Index = ({route, navigation}: any) => {
                 <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                   <Typography
                     size={12}
-                    text={`Don't have an account?`}
+                    text={I18n.t('login.LABEL_DONT_HAVE_ANY_ACCOUNT')}
                     style={{textAlign: 'center'}}
                     color={Theme.colors.darkGray}
                     ff={Theme.fonts.ThemeFontRegular}
@@ -239,7 +240,7 @@ const Index = ({route, navigation}: any) => {
 
                   <Typography
                     size={13}
-                    text={'Register Here'}
+                    text={I18n.t('login.LABEL_REGISTER_HERE')}
                     style={{
                       textAlign: 'center',
                       textDecorationLine: 'underline',

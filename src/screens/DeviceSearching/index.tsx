@@ -27,6 +27,7 @@ import {DeviceExtendedProps, ScanningProps} from './types';
 import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
 import {initFlusherSecurityKey} from "src/utils/Helpers/project";
 import * as console from "console";
+import I18n from 'src/locales/Transaltions';
 
 let timeoutID: any = null;
 let timeoutIDForConnecting: any = null;
@@ -431,7 +432,9 @@ const Index = ({navigation, route}: any) => {
                     }}>
                     <Loader
                       visible={true}
-                      loadingText="Searching nearby devices..."
+                      loadingText={I18n.t(
+                        'activate_your_device.SEARCHING_HINT_TEXT',
+                      )}
                     />
                   </Wrap>
                 )}

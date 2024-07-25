@@ -17,6 +17,7 @@ import AlertBox from 'src/components/AlertBox';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Header from 'src/components/Header';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
+import I18n from 'src/locales/Transaltions';
 
 const Stack = createNativeStackNavigator();
 
@@ -204,8 +205,8 @@ const CustomTabBar = ({state, descriptors, navigation}: any) => {
 
       <AlertBox
         visible={disconnectModal}
-        title="Disconnect"
-        message={'Are you sure you want to disconnect?'}
+        title={I18n.t('device_dashboard.DISCONNECTING_HEADING')}
+        message={I18n.t('device_dashboard.DISCONNECTING_MSG')}
         onCancelPress={() => {
           setDisconnectModal(false);
         }}
@@ -236,7 +237,7 @@ const BottomTabNavigator = () => {
         component={DeviceDashboardStack}
         options={{
           // unmountOnBlur: true,
-          tabBarLabel: 'Home',
+          tabBarLabel: I18n.t('device_landing.TAB_HOME'),
         }}
       />
       <BottomTab.Screen
@@ -244,7 +245,7 @@ const BottomTabNavigator = () => {
         component={DeviceDiagnosticsStack}
         options={{
           unmountOnBlur: true,
-          tabBarLabel: 'Diagnostics',
+          tabBarLabel: I18n.t('device_landing.TAB_DIAGNOSTICS'),
         }}
       />
       <BottomTab.Screen
@@ -252,7 +253,7 @@ const BottomTabNavigator = () => {
         component={DeviceInfoStack}
         options={{
           unmountOnBlur: true,
-          tabBarLabel: 'Details',
+          tabBarLabel: I18n.t('device_landing.TAB_DETAILS'),
         }}
       />
       <BottomTab.Screen
@@ -260,7 +261,7 @@ const BottomTabNavigator = () => {
         component={DeviceHelpStack}
         options={{
           // unmountOnBlur: true,
-          tabBarLabel: 'Help',
+          tabBarLabel: I18n.t('device_landing.TAB_HELP'),
         }}
       />
       <BottomTab.Screen
@@ -268,7 +269,7 @@ const BottomTabNavigator = () => {
         component={DeviceDisconnectStack}
         options={{
           // unmountOnBlur: true,
-          tabBarLabel: 'Disconnect',
+          tabBarLabel: I18n.t('device_landing.TAB_DISCONNECT'),
         }}
       />
     </BottomTab.Navigator>

@@ -22,7 +22,7 @@ const DiagnosticResultsList = ({
         <Wrap autoMargin={false} style={styles.leftStyle}>
           <Typography
             size={14}
-            text={item?.name ?? 'N/A'}
+            text={item?.nameLocale ?? 'N/A'}
             style={{
               textAlign: 'left',
             }}

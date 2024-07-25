@@ -32,7 +32,7 @@ import {
 } from 'src/services/DBService/SQLiteDBService';
 import {ReportItemModel} from 'src/services/DBService/Models';
 import {checkAndSyncPendingSycableItems} from 'src/services/SyncService/SyncService';
-import {uniqueId} from 'lodash';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -56,7 +56,7 @@ const Index = ({navigation, route}: any) => {
       }, 1000);
     } catch (error) {
       showToastMessage(
-        error?.message ?? 'Something went wrong with sync process',
+        error?.message ?? I18n.t('disconnect.SYNC_ERROR_MGS'),
         'danger',
       );
       NavigationService.goBack();
@@ -107,9 +107,7 @@ const Index = ({navigation, route}: any) => {
       scrollViewStyle={{}}
       backgroundType="gradient"
       loading={loading}
-      loadingText={
-        'Please wait, system checking and syncing reports to server'
-      }>
+      loadingText={I18n.t('disconnect.SYNC_MGS')}>
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
@@ -121,19 +119,19 @@ const Index = ({navigation, route}: any) => {
             />
             <Typography
               size={18}
-              text={`Disconnecting`}
+              text={I18n.t('disconnect.DISCONNECTING_MSG1')}
               style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontMedium}
             />
             <Typography
               size={12}
-              text={`Disconnecting to your ${
+              text={`${I18n.t('disconnect.DISCONNECTING_MSG2')} ${
                 connectedDeviceRaw?.deviceCustomName ??
                 connectedDevice?.localName ??
                 connectedDevice?.name ??
                 'N/A'
-              }\n Might take a few seconds.`}
+              }\n ${I18n.t('disconnect.DISCONNECTING_MSG3')}`}
               style={{textAlign: 'center', marginTop: 10, lineHeight: 20}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontLight}

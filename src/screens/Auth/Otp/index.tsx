@@ -26,6 +26,7 @@ import Input from 'src/components/InputPaper';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Network from 'src/network/Network';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const {email, hash, referrer} = route?.params;
@@ -182,7 +183,7 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Verify OTP"
+                text={I18n.t('verify_otp.TITLE_VERIFY_OTP')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -192,7 +193,7 @@ const Index = ({route, navigation}: any) => {
               />
               <Typography
                 size={14}
-                text="Enter the code you received in your email."
+                text={I18n.t('verify_otp.SUBTITLE_VERIFY_OTP')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -240,7 +241,7 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="VERIFY"
+                  title={I18n.t('verify_otp.BTN_VERIFY')}
                   onPress={() => {
                     onOtpPress();
                   }}
@@ -256,13 +257,13 @@ const Index = ({route, navigation}: any) => {
                   }}>
                   <Typography
                     size={16}
-                    text="I didn't receive the code, "
+                    text={I18n.t('verify_otp.LABEL_RESEND_OTP_TEXT')}
                     color={Theme.colors.black}
                   />
 
                   <Typography
                     size={16}
-                    text="Resend"
+                    text={I18n.t('verify_otp.LABEL_RESEND_OTP')}
                     style={{
                       textAlign: 'center',
                       textDecorationLine: 'underline',
@@ -279,7 +280,7 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={true} style={[styles.inputWrapper]}>
                 <Typography
                   size={13}
-                  text={'Back to login'}
+                  text={I18n.t('verify_otp.LABEL_RETURN_TO_LOGIN')}
                   style={{textAlign: 'center', textDecorationLine: 'underline'}}
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}

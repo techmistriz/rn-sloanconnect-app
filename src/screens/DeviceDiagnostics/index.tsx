@@ -30,6 +30,7 @@ import {
 import {mapValueGen2} from 'src/utils/Helpers/project';
 import {mappingDeviceDataIntegersGen2} from '../DeviceDashboard/helperGen2';
 import LoaderOverlay from 'src/components/LoaderOverlay';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   const connectedDevice = BLEService.getDevice();
@@ -488,7 +489,7 @@ const Index = ({navigation, route}: any) => {
           <Wrap autoMargin={false}>
             <Typography
               size={22}
-              text={'Diagnosing'}
+              text={I18n.t('diagnostic_page.DIAGNOSING_HEADING')}
               style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontMedium}
@@ -496,7 +497,7 @@ const Index = ({navigation, route}: any) => {
             <Typography
               size={14}
               text={
-                'Place your hand in front of the \nfaucet for at least 3 seconds.'
+                I18n.t('diagnostic_page.DIAGNOSE_SUB_TEXT')
               }
               style={{textAlign: 'center', marginTop: 15, lineHeight: 20}}
               color={Theme.colors.white}
@@ -505,7 +506,7 @@ const Index = ({navigation, route}: any) => {
 
             <Typography
               size={14}
-              text={'Did you see water dispense?'}
+              text={I18n.t('diagnostic_page.DID_YOU_SEE_WATER')}
               style={{textAlign: 'center', marginTop: 20, lineHeight: 20}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontLight}
@@ -518,7 +519,7 @@ const Index = ({navigation, route}: any) => {
               <Col autoMargin={false} style={[styles.col, {paddingRight: 5}]}>
                 <Button
                   type={'secondary'}
-                  title="NO"
+                  title={I18n.t('button_labels.NO_BUTTON_LABEL')}
                   onPress={() => {
                     finishDiagnostics(0);
                   }}
@@ -531,7 +532,7 @@ const Index = ({navigation, route}: any) => {
               <Col autoMargin={false} style={[styles.col, {paddingLeft: 5}]}>
                 <Button
                   type={'secondary'}
-                  title="YES"
+                  title={I18n.t('button_labels.YES_BUTTON_LABEL')}
                   onPress={() => {
                     finishDiagnostics(1);
                   }}

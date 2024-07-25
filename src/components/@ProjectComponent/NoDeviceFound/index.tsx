@@ -7,6 +7,7 @@ import NavigationService from 'src/services/NavigationService/NavigationService'
 import {styles} from './styles';
 import AppContainer from 'src/components/AppContainer';
 import Header from 'src/components/Header';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({onSearchAgainPress, onBackButtonPress}: any) => {
   return (
@@ -29,14 +30,16 @@ const Index = ({onSearchAgainPress, onBackButtonPress}: any) => {
           <Wrap autoMargin={false} style={styles.section1}>
             <Typography
               size={18}
-              text={`No Product Found`}
+              // text={`No Product Found`}
+              text={I18n.t('no_product_found.HEADING')}
               style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontMedium}
             />
             <Typography
               size={14}
-              text={`Please be sure Bluetooth is \n Enabled and try again.`}
+              // text={`Please be sure Bluetooth is \n Enabled and try again.`}
+              text={I18n.t('no_product_found.SUB_MSG')}
               style={{textAlign: 'center', marginTop: 10, lineHeight: 20}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontLight}
@@ -49,7 +52,7 @@ const Index = ({onSearchAgainPress, onBackButtonPress}: any) => {
               style={[{width: '100%', marginBottom: 10}]}>
               <Button
                 type={'link'}
-                title="TROUBLESHOOT"
+                title={I18n.t('no_product_found.BTN_TROUBLESHOOT')}
                 onPress={() => {
                   NavigationService.navigate('DeviceDiagnosticTroubleshoot');
                 }}
@@ -65,7 +68,7 @@ const Index = ({onSearchAgainPress, onBackButtonPress}: any) => {
               autoMargin={false}
               style={[{width: '100%', marginBottom: 10}]}>
               <Button
-                title="SEARCH AGAIN"
+                title={I18n.t('no_product_found.BTN_SEEARCH_AGAIN')}
                 onPress={() => {
                   onSearchAgainPress && onSearchAgainPress();
                 }}

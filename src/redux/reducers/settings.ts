@@ -3,6 +3,7 @@ import {settingsActionTypes} from 'src/redux/types';
 export interface SettingsProps {
   loading: boolean;
   settings: {
+    hasIntroCompleted: boolean;
     isNotification: boolean;
     language: string;
   };
@@ -11,6 +12,7 @@ export interface SettingsProps {
 const initialState: SettingsProps = {
   loading: false,
   settings: {
+    hasIntroCompleted: false,
     isNotification: false,
     language: 'en',
   },

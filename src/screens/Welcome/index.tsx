@@ -15,6 +15,9 @@ import {Animated, Easing} from 'react-native';
 import {constants} from 'src/common';
 import {checkAllRequiredPermissions} from 'src/screens/Permission/helper';
 import {BLEService} from 'src/services';
+import I18n from 'src/locales/Transaltions';
+import {useNetInfo} from '@react-native-community/netinfo';
+import {checkAndSyncPendingSycableItems} from 'src/services/SyncService/SyncService';
 
 const Welcome = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -27,6 +30,22 @@ const Welcome = ({navigation, route}: any) => {
   const fadeInDelay = 500;
   const fadeInValue = new Animated.Value(0);
   const spinValue = new Animated.Value(0);
+  const {isConnected, isInternetReachable} = useNetInfo();
+
+  /** Hooks for checking if user turned off bluetooth power */
+  useEffect(() => {
+    if (isConnected && token) {
+      consoleLog(
+        'Welcome useEffect __checkAndSyncPendingSycableItems called==>',
+        {isConnected},
+      );
+      __checkAndSyncPendingSycableItems();
+    }
+  }, [isConnected, token]);
+
+  const __checkAndSyncPendingSycableItems = async () => {
+    // checkAndSyncPendingSycableItems(token).then(() => {});
+  };
 
   useEffect(() => {
     __checkAllRequiredPermissions();
@@ -40,11 +59,14 @@ const Welcome = ({navigation, route}: any) => {
         true,
       );
 
-      consoleLog('WelcomeScreen __checkAllRequiredPermissions requiredPermissionCount==>', {
-        requiredPermissionCount,
-        API_LEVEL: constants.API_LEVEL,
-        TOTAL_PERMISSION_REQUIRED: constants.TOTAL_PERMISSION_REQUIRED,
-      });
+      consoleLog(
+        'WelcomeScreen __checkAllRequiredPermissions requiredPermissionCount==>',
+        {
+          requiredPermissionCount,
+          API_LEVEL: constants.API_LEVEL,
+          TOTAL_PERMISSION_REQUIRED: constants.TOTAL_PERMISSION_REQUIRED,
+        },
+      );
 
       if (requiredPermissionCount >= constants.TOTAL_PERMISSION_REQUIRED) {
         setTimeout(() => {
@@ -116,14 +138,14 @@ const Welcome = ({navigation, route}: any) => {
         <Wrap autoMargin={false} style={styles.section2}>
           <Typography
             size={17}
-            text="Welcome"
+            text={I18n.t('welcome.WELCOME_TITLE')}
             style={{textAlign: 'left', marginTop: 0}}
             color={Theme.colors.primaryColor}
             ff={Theme.fonts.ThemeFontBold}
           />
           <Typography
             size={13}
-            text="Please tap on the blue button below to begin. You will be redirected to our website to continue."
+            text={I18n.t('welcome.WELCOME_DESCRIPTION')}
             style={{textAlign: 'left', marginTop: 10}}
             color={Theme.colors.black}
             ff={Theme.fonts.ThemeFontRegular}
@@ -134,7 +156,7 @@ const Welcome = ({navigation, route}: any) => {
           <Wrap autoMargin={false} style={styles.section3}>
             <Wrap autoMargin={false} style={[{marginTop: 10}]}>
               <Button
-                title="LOGIN / REGISTER"
+                title={I18n.t('welcome.BTN_LOGIN_REGISTER')}
                 onPress={() => {
                   NavigationService.navigate('Login');
                 }}
@@ -143,11 +165,9 @@ const Welcome = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={[{marginTop: 10}]}>
               <Button
                 type={'link'}
-                title="HELP"
+                title={I18n.t('welcome.BTN_HELP')}
                 onPress={() => {
                   NavigationService.navigate('Help');
-                  // NavigationService.navigate('Terms');
-                  // NavigationService.navigate('Invitation');
                 }}
               />
             </Wrap>

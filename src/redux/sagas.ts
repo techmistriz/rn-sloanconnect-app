@@ -21,7 +21,7 @@ function* rootSaga() {
     verifyEmailRequestSaga(),
     userProfileRequestSaga(),
     changePasswordRequestSaga(),
-    settingsRequestSaga(),
+    // settingsRequestSaga(),
   ]);
 }
 

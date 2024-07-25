@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React from 'react';
 import Theme from 'src/theme';
 import Typography from 'src/components/Typography';
 import {Wrap} from 'src/components/Common';
@@ -6,6 +6,7 @@ import AppInfo from 'src/components/@ProjectComponent/AppInfo';
 import {styles} from './styles';
 import AppContainer from 'src/components/AppContainer';
 import Loader from 'src/components/Loader';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   return (
@@ -21,14 +22,14 @@ const Index = ({navigation, route}: any) => {
             />
             <Typography
               size={18}
-              text={`Connecting`}
+              text={I18n.t('connecting.HEADING')}
               style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontMedium}
             />
             <Typography
               size={12}
-              text={`Connecting to your Sloan Faucet\n Might take a few seconds.`}
+              text={I18n.t('connecting.SUB_MSG')}
               style={{textAlign: 'center', marginTop: 10, lineHeight: 20}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontLight}

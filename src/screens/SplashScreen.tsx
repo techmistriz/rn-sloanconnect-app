@@ -36,9 +36,16 @@ const SplashScreen = ({navigation}: any) => {
       }, 1500);
     } else {
       setTimeout(() => {
-        navigation.replace('Welcome', {
-          referrer: 'SplashScreen',
-        });
+        if (!settings?.hasIntroCompleted) {
+          navigation.replace('Language', {
+            referrer: 'SplashScreen',
+          });
+        } else {
+          navigation.replace('Welcome', {
+            referrer: 'SplashScreen',
+          });
+        }
+
         // navigation.replace('Login');
       }, 1500);
     }

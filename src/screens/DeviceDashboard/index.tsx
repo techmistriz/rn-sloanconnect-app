@@ -57,9 +57,9 @@ import {
 import NotesList from 'src/components/@ProjectComponent/DeviceSettingsList/NotesList';
 import LoaderOverlayController from 'src/components/LoaderOverlay3/LoaderOverlayController';
 import {BLEReport} from 'src/services/BLEService/BLEReport';
+import I18n from 'src/locales/Transaltions';
 
 let hasSettingsChanged: boolean = false;
-
 const Index = ({navigation}: any) => {
   const dispatch = useDispatch();
   const {user, token} = useSelector((state: any) => state?.AuthReducer);
@@ -72,8 +72,9 @@ const Index = ({navigation}: any) => {
   const [applied, setApplied] = useState<boolean>(false);
   const [showApplySettingButton, setShowApplySettingButton] =
     useState<boolean>(true);
-  const [applyingLoadingText, setApplyingLoadingText] =
-    useState<string>('Applying...');
+  const [applyingLoadingText, setApplyingLoadingText] = useState<string>(
+    I18n.t('device_dashboard.APPLIYING_MSG'),
+  );
   const [loadPreviosSettingsModal, setLoadPreviosSettingsModal] =
     useState<boolean>(false);
   const [deviceData, setDeviceData] = useState<any>();
@@ -95,6 +96,7 @@ const Index = ({navigation}: any) => {
     const backAction = () => {
       if (navigation.isFocused()) {
         setDisconnectModal(true);
+        // NavigationService.navigate('DeviceDisconnectStack');
         return true;
       }
     };
@@ -746,7 +748,7 @@ const Index = ({navigation}: any) => {
     if (!isObjectEmpty(savedSettingsGen1?.data)) {
       onApplySettingPress(savedSettingsGen1, false, true);
     } else {
-      showToastMessage('No previously saved settings found.');
+      showToastMessage(I18n.t('device_dashboard.NO_PREVIOUS_SETTINGS_FOUND'));
     }
   };
 
@@ -794,10 +796,9 @@ const Index = ({navigation}: any) => {
     var timeout = 2000;
 
     const __hasSensorRangeSetting = hasSensorRangeSetting(__deviceSettingsData);
-    let __applyingLoadingText = 'Applying...';
+    let __applyingLoadingText = I18n.t('device_dashboard.APPLIYING_MSG');
     if (__hasSensorRangeSetting) {
-      __applyingLoadingText =
-        'Adaptive sensing in progress. Water may be dispensed. Please wait.';
+      __applyingLoadingText = I18n.t('device_dashboard.ADAPTIVE_SENSING_MSG');
       timeout = 10000;
     }
     setApplyingLoadingText(__applyingLoadingText);
@@ -1101,7 +1102,7 @@ const Index = ({navigation}: any) => {
                   </Row>
                   <Typography
                     size={10}
-                    text={'BATTERY POWER'}
+                    text={I18n.t('device_dashboard.BATTERY_POWER')}
                     style={{
                       textAlign: 'center',
                     }}
@@ -1157,7 +1158,7 @@ const Index = ({navigation}: any) => {
                   </Row>
                   <Typography
                     size={10}
-                    text={'TOTAL WATER USAGE'}
+                    text={I18n.t('device_dashboard.TOTAL_WATER_USAGE')}
                     style={{
                       textAlign: 'center',
                     }}
@@ -1180,7 +1181,7 @@ const Index = ({navigation}: any) => {
                 <Wrap autoMargin={false} style={{flex: 1}}>
                   <Button
                     type={'link'}
-                    title="DISPENSE WATER"
+                    title={I18n.t('device_dashboard.DISPENSE_WATER')}
                     onPress={() => {
                       dispenseWater();
                     }}
@@ -1218,7 +1219,7 @@ const Index = ({navigation}: any) => {
                   ]}>
                   <Typography
                     size={10}
-                    text={'FAUCET SETTINGS'}
+                    text={I18n.t('device_dashboard.FAUCET_SETTINGS')}
                     style={{
                       textAlign: 'left',
                     }}
@@ -1240,7 +1241,7 @@ const Index = ({navigation}: any) => {
                   <Wrap autoMargin={false}>
                     <Button
                       type={'link'}
-                      title="LOAD PREVIOUS SETTINGS"
+                      title={I18n.t('device_dashboard.LOAD_PREVIOUS_SETTINGS')}
                       onPress={() => {
                         setLoadPreviosSettingsModal(true);
                       }}
@@ -1273,7 +1274,9 @@ const Index = ({navigation}: any) => {
                     {applied ? (
                       <Button
                         type={'success'}
-                        title="CHANGES APPLIED"
+                        title={I18n.t(
+                          'device_dashboard.CHANGES_APPLIED_HEADING',
+                        )}
                         onPress={() => {}}
                         textStyle={{
                           fontSize: 12,
@@ -1283,7 +1286,9 @@ const Index = ({navigation}: any) => {
                     ) : (
                       <Button
                         type={'warning'}
-                        title="APPLY SETTINGS TO FAUCET"
+                        title={I18n.t(
+                          'device_dashboard.APPLY_SETTINGS_TO_FAUCET',
+                        )}
                         onPress={() => {
                           onApplySettingPress(deviceSettingsData);
                         }}
@@ -1301,7 +1306,7 @@ const Index = ({navigation}: any) => {
             <Wrap autoMargin={false}>
               <ActivationModeList
                 settings={{
-                  title: 'Activation Mode',
+                  title: I18n.t('device_dashboard.ACTIVATION_MODE'),
                   route: 'ActivationMode',
                   name: 'ActivationMode',
                 }}
@@ -1314,7 +1319,7 @@ const Index = ({navigation}: any) => {
 
               <LineFlushList
                 settings={{
-                  title: 'Line Flush',
+                  title: I18n.t('device_dashboard.LINE_FLUSH'),
                   route: 'LineFlush',
                   name: 'LineFlush',
                   serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
@@ -1329,7 +1334,7 @@ const Index = ({navigation}: any) => {
 
               <FlowRateList
                 settings={{
-                  title: 'Confirm Flow Rate',
+                  title: I18n.t('device_dashboard.CONFIRM_FLOW_RATE'),
                   route: 'FlowRate',
                   name: 'FlowRate',
                   // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
@@ -1344,7 +1349,7 @@ const Index = ({navigation}: any) => {
 
               <SensorRangeList
                 settings={{
-                  title: 'Sensor Range',
+                  title: I18n.t('device_dashboard.SENSOR_RANGE'),
                   name: 'SensorRange',
                   route: 'SensorRange',
                   sensorRangeConfig: {min: 1, max: 5, step: 1},
@@ -1362,7 +1367,7 @@ const Index = ({navigation}: any) => {
                 <NotesList
                   settings={{
                     id: 4,
-                    title: 'Notes',
+                    title: I18n.t('device_dashboard.NOTES'),
                     subTitle: 'DEVICE NOTES',
                     route: 'Notes',
                     name: 'Note',
@@ -1381,14 +1386,14 @@ const Index = ({navigation}: any) => {
 
       <AlertBox
         visible={loadPreviosSettingsModal}
-        title="Load Previous Settings"
+        title={I18n.t('device_dashboard.LOAD_PREVIOUS_SETTINGS')}
         // message={`Activation Mode On Demand / 30 sec\nLine Flush: OFF\nFlowRate: 0.5 gpm\nSensor Range: 3`}
         message={
           savedSettingsGen1?.text
             ? savedSettingsGen1?.text
-            : 'No previous saved settings found'
+            : I18n.t('device_dashboard.NO_PREVIOUS_SETTINGS_FOUND')
         }
-        okayText={'CONFIRM'}
+        okayText={I18n.t('button_labels.CONFIRM')}
         onCancelPress={() => {
           setLoadPreviosSettingsModal(false);
         }}
@@ -1399,8 +1404,8 @@ const Index = ({navigation}: any) => {
       />
       <AlertBox
         visible={disconnectModal}
-        title="Disconnect"
-        message={'Are you sure you want to disconnect?'}
+        title={I18n.t('device_dashboard.DISCONNECTING_HEADING')}
+        message={I18n.t('device_dashboard.DISCONNECTING_MSG')}
         onCancelPress={() => {
           setDisconnectModal(false);
         }}
@@ -1409,7 +1414,6 @@ const Index = ({navigation}: any) => {
           NavigationService.navigate('DeviceDisconnect');
         }}
       />
-      {/* <LoaderOverlay2 loading={applying} loadingText={applyingLoadingText} /> */}
     </AppContainer>
   );
 };

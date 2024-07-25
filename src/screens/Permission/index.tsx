@@ -29,6 +29,7 @@ import RNExitApp from 'react-native-exit-app';
 import {checkAllRequiredPermissions} from './helper';
 import PermissionList from 'src/components/@ProjectComponent/PermissionList';
 import AppContainer from 'src/components/AppContainer';
+import I18n from 'src/locales/Transaltions';
 
 let timeoutIDForPermissionCheckiOS: any = null;
 const IOS_PERMISSION_CHECKING_TIMEOUT_MS = 2000;
@@ -338,14 +339,14 @@ const Permission = ({navigation, route}: any) => {
 
             <Typography
               size={17}
-              text="Permission"
+              text={I18n.t('permission.PERMISSION_TITLE')}
               style={{textAlign: 'left', marginTop: 20}}
               color={Theme.colors.primaryColor}
               ff={Theme.fonts.ThemeFontBold}
             />
             <Typography
               size={13}
-              text="Please allow required permissions"
+              text={I18n.t('permission.PERMISSION_SUBTITLE')}
               style={{textAlign: 'left'}}
               color={Theme.colors.black}
               ff={Theme.fonts.ThemeFontRegular}
@@ -353,7 +354,7 @@ const Permission = ({navigation, route}: any) => {
 
             <Typography
               size={10}
-              text="You wouldn't be able to proceed if any of these permissions not allowed"
+              text={I18n.t('permission.PERMISSION_DESCRIPTION')}
               style={{textAlign: 'left', marginBottom: 20}}
               color={Theme.colors.black}
               ff={Theme.fonts.ThemeFontRegular}
@@ -361,9 +362,8 @@ const Permission = ({navigation, route}: any) => {
 
             <PermissionList
               item={{
-                title: 'Nearby Devices',
-                description:
-                  'App needed Nearby Devices permission to search nearby devices',
+                title: I18n.t('permission.NEARBY_DEVICES_TITLE'),
+                description: I18n.t('permission.NEARBY_DEVICES_DESC'),
                 allowed: nearbyDevicesPermissionStatus,
               }}
               onAllowedPress={() => {
@@ -376,8 +376,8 @@ const Permission = ({navigation, route}: any) => {
 
             <PermissionList
               item={{
-                title: 'Bluetooth',
-                description: 'App needed Bluetooth to search devices',
+                title: I18n.t('permission.BLUETOOTH_TITLE'),
+                description: I18n.t('permission.BLUETOOTH_DESC'),
                 allowed: bluetoothStateStatus,
               }}
               onAllowedPress={() => {
@@ -395,9 +395,8 @@ const Permission = ({navigation, route}: any) => {
             {constants.isAndroid && constants.API_LEVEL <= 30 && (
               <PermissionList
                 item={{
-                  title: 'Location',
-                  description:
-                    'App needed Location permission to search nearby devices',
+                  title: I18n.t('permission.LOCATION_TITLE'),
+                  description: I18n.t('permission.LOCATION_DESC'),
                   allowed: locationPermissionStatus,
                 }}
                 onAllowedPress={() => {
@@ -412,9 +411,8 @@ const Permission = ({navigation, route}: any) => {
             {constants.isAndroid && constants.API_LEVEL <= 30 && (
               <PermissionList
                 item={{
-                  title: 'GEO Location',
-                  description:
-                    'App needed GEO Location permission to search nearby devices',
+                  title: I18n.t('permission.GEO_LOCATION_TTILE'),
+                  description: I18n.t('permission.GEO_LOCATION_DESC'),
                   allowed: geoPermissionStatus,
                 }}
                 onAllowedPress={() => {
@@ -430,7 +428,7 @@ const Permission = ({navigation, route}: any) => {
           <Wrap autoMargin={false} style={styles.section3}>
             <Wrap autoMargin={false} style={[{marginTop: 10}]}>
               <Button
-                title="Next"
+                title={I18n.t('permission.BTN_NEXT')}
                 onPress={() => {
                   onNextPress();
                 }}
@@ -450,11 +448,11 @@ const Permission = ({navigation, route}: any) => {
             status: false,
           });
         }}
-        cancelText="CLOSE"
+        cancelText={I18n.t('button_labels.CLOSE_BUTTON_LABEL')}
         onOkayPress={() => {
           handlePermissionPopup();
         }}
-        okayText="ENABLE"
+        okayText={I18n.t('button_labels.ENABLE_BUTTON_LABEL')}
       />
 
       <AlertBox
@@ -464,7 +462,7 @@ const Permission = ({navigation, route}: any) => {
         onCancelPress={() => {
           setSettingModal(false);
         }}
-        cancelText="CLOSE"
+        cancelText={I18n.t('button_labels.CLOSE_BUTTON_LABEL')}
         onOkayPress={() => {
           setSettingModal({
             status: false,
@@ -473,22 +471,24 @@ const Permission = ({navigation, route}: any) => {
           });
           openSettings();
         }}
-        okayText="OPEN SETTINGS"
+        okayText={I18n.t('button_labels.OPEN_SETTING_BUTTON_LABEL')}
       />
 
       <AlertBox
         visible={iosBluetoothSettingsModel}
-        title={`${constants.APP_NAME} would like to use Bluetooth for new connections`}
-        message={`You can allow new connections in Settings`}
+        title={`${constants.APP_NAME} ${I18n.t(
+          'permission.ALLOWE_PERMISSION_TITLE',
+        )}`}
+        message={I18n.t('permission.ALLOWE_PERMISSION_MSG')}
         onCancelPress={() => {
           setIosBluetoothSettingsModel(false);
         }}
-        cancelText="CLOSE"
+        cancelText={I18n.t('button_labels.CLOSE_BUTTON_LABEL')}
         onOkayPress={() => {
           setIosBluetoothSettingsModel(false);
           openBluetoothSettings();
         }}
-        okayText="OPEN SETTINGS"
+        okayText={I18n.t('button_labels.OPEN_SETTING_BUTTON_LABEL')}
       />
     </AppContainer>
   );

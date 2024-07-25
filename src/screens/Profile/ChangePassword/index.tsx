@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
 import Input from 'src/components/InputPaper';
 import {changePasswordRequestAction} from 'src/redux/actions';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();

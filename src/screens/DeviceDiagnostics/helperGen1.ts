@@ -9,6 +9,7 @@ import {
   base64ToText,
   hexToDecimal,
 } from 'src/utils/Helpers/encryption';
+import I18n from 'src/locales/Transaltions';
 
 /** Function comments */
 export const readingDiagnostic = async () => {
@@ -28,6 +29,7 @@ export const readingDiagnostic = async () => {
   if (__characteristicSensor) {
     RESULTS.push({
       name: 'Sensor',
+      nameLocale: I18n.t('diagnostic_page.SENSOR_TITLE'),
       value: base64EncodeDecode(__characteristicSensor?.value, 'decode'),
       showInList: true,
     });
@@ -47,6 +49,7 @@ export const readingDiagnostic = async () => {
   if (__characteristicValve) {
     RESULTS.push({
       name: 'Valve',
+      nameLocale: I18n.t('diagnostic_page.VALVE_TITLE'),
       value: base64EncodeDecode(__characteristicValve?.value, 'decode'),
       showInList: true,
     });
@@ -69,6 +72,7 @@ export const readingDiagnostic = async () => {
     );
     RESULTS.push({
       name: 'Turbine',
+      nameLocale: I18n.t('diagnostic_page.TURBINE_TITLE'),
       value: base64EncodeDecode(__characteristicTurbine__?.value, 'decode'),
       showInList: true,
     });
@@ -116,6 +120,7 @@ export const readingDiagnostic = async () => {
     RESULTS.push({
       // ...__characteristicBattery__,
       name: 'Battery Level at Diagnostic',
+      nameLocale: I18n.t('diagnostic_page.BATTERY_LEVEL_AT_DIAGNOSTIC_TITLE'),
       value:
         Number(hexEncodeValue) > 100
           ? Number(hexEncodeValue)

@@ -25,7 +25,11 @@ const DeviceSettingList = ({
           <Wrap autoMargin={false} style={styles.leftStyle}>
             <Typography
               size={12}
-              text={item?.name?.toUpperCase()}
+              text={
+                item?.nameLocale
+                  ? item?.nameLocale?.toUpperCase()
+                  : item?.name?.toUpperCase()
+              }
               style={{
                 textAlign: 'left',
               }}

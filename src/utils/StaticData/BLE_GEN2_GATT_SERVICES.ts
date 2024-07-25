@@ -57,6 +57,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 11,
                 name: {
                   name: 'Date of last factory reset',
+                  nameLocaleKey: 'DATE_OF_LAST_FACTORY_RESET_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -81,6 +82,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 22,
                 name: {
                   name: 'Date of last range change',
+                  nameLocaleKey: 'DATE_OF_LAST_FLOW_RATE_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -105,6 +107,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 13,
                 name: {
                   name: 'Date of last mode change',
+                  nameLocaleKey: 'DATE_OF_LAST_MODE_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -129,6 +132,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 14,
                 name: {
                   name: 'Date of last meter run time change',
+                  nameLocaleKey: 'DATE_OF_LAST_METERED_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -153,6 +157,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 15,
                 name: {
                   name: 'Date of last On-Demand timeout change',
+                  nameLocaleKey: 'DATE_OF_LAST_ONDEMAND_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -177,6 +182,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 16,
                 name: {
                   name: 'Date of last flush Enable change',
+                  nameLocaleKey: 'DATE_OF_LAST_FLUSH_ENABLE_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -251,6 +257,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 19,
                 name: {
                   name: 'Date of last flush time change',
+                  nameLocaleKey: 'DATE_OF_LAST_FLUSH_TIME_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -275,6 +282,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 20,
                 name: {
                   name: 'Date of last flush interval change',
+                  nameLocaleKey: 'DATE_OF_LAST_FLUSH_INTERVAL_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -1144,6 +1152,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 name: {
                   name: 'Sensor Serial Number',
                   nameOG: 'AD Serial Number',
+                  nameLocaleKey: 'SENSOR_SERIAL_NUMBER_LABEL',
                   size: 3,
                   type: 'String',
                 },
@@ -1166,6 +1175,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 name: {
                   name: 'Control Box Serial Number',
                   nameOG: 'BD Serial Number',
+                  nameLocaleKey: 'CONTROL_BOX_SERIAL_NUMBER_LABEL',
                   size: 3,
                   type: 'String',
                 },
@@ -1188,6 +1198,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 name: {
                   name: 'Sensor Manufacturing Date',
                   nameOG: 'AD Manufacturing Date',
+                  nameLocaleKey: 'SENSOR_MANUF_DATE_LABEL',
                   size: 3,
                   type: 'String',
                 },
@@ -1213,6 +1224,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 name: {
                   name: 'Control Box Manufacturing Date',
                   nameOG: 'BD Manufacturing Date',
+                  nameLocaleKey: 'CONTROL_BOX_MANUF_DATE_LABEL',
                   size: 3,
                   type: 'String',
                 },
@@ -1237,6 +1249,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 4,
                 name: {
                   name: 'Sensor Hardware Version',
+                  nameLocaleKey: 'SENSOR_HARDWARE_VER_LABEL',
                   size: 3,
                   type: 'String',
                 },
@@ -1259,6 +1272,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 name: {
                   name: 'Sensor Firmware Version',
                   nameOG: 'AD Firmware Version',
+                  nameLocaleKey: 'SENSOR_FIRMWARE_VER_LABEL',
                   size: 3,
                   type: 'String',
                 },
@@ -1281,6 +1295,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 name: {
                   name: 'Control Box Hardware Version',
                   nameOG: 'BD Hardware Version',
+                  nameLocaleKey: 'CONTROL_BOX_HARDWARE_VER_LABEL',
                   size: 3,
                   type: 'String',
                 },
@@ -1303,6 +1318,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 name: {
                   name: 'Control Box Firmware Version',
                   nameOG: 'BD Firmware Version',
+                  nameLocaleKey: 'CONTROL_BOX_FIRMWARE_VER_LABEL',
                   size: 3,
                   type: 'String',
                 },
@@ -1551,6 +1567,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 0,
                 name: {
                   name: 'Activations since last change',
+                  nameLocaleKey: 'ACTIVATIONS_SINCE_LAST_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -1661,6 +1678,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 0,
                 name: {
                   name: 'Number of BLE connections',
+                  nameLocaleKey: 'NUMBER_OF_BLE_CONNECTION_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },

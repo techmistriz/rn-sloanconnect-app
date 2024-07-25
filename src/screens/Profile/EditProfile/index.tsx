@@ -27,6 +27,7 @@ import DropdownPicker from 'src/components/DropdownPicker';
 import Network from 'src/network/Network';
 import constants from 'src/common/constants';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -205,59 +206,60 @@ const Index = ({route, navigation}: any) => {
    * validation checking for email and password
    */
   const checkValidation = () => {
-
-    consoleLog("statestate==>", state);
+    consoleLog('statestate==>', state);
     if (firstName.trim() === '') {
-      showSimpleAlert('Please enter your first name');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_FIRST_NAME'));
       return false;
     } else if (lastName.trim() === '') {
-      showSimpleAlert('Please enter your last name');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_LAST_NAME'));
       return false;
     } else if (title.trim() === '') {
-      showSimpleAlert('Please enter your job title');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_JOB_TITLE'));
       return false;
     } else if (company.trim() === '') {
-      showSimpleAlert('Please enter your company');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_COMPANY'));
       return false;
     } else if (industry?.name === '') {
-      showSimpleAlert('Please select your industry');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_INDUSTRY'));
       return false;
     } else if (phoneNumber.trim() === '') {
-      showSimpleAlert('Please enter your phone number');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_PHONE_NUMBER'));
       return false;
     } else if (!country?.name) {
-      showSimpleAlert('Please select your country');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_COUNTRY'));
       return false;
     } else if (statesMaster?.length > 0 && !state?.state_name) {
-      showSimpleAlert('Please select your state');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_STATE'));
       return false;
     } else if (statesMaster?.length == 0 && stateInput?.trim() === '') {
-      showSimpleAlert('Please select your state');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_STATE'));
       return false;
     } else if (city.trim() === '') {
-      showSimpleAlert('Please enter your city');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_CITY'));
       return false;
     } else if (address.trim() === '') {
-      showSimpleAlert('Please enter your address');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_ADDRESS'));
       return false;
     } else if (zip.trim() === '') {
-      showSimpleAlert('Please enter your zipcode');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_ZIPCODE'));
       return false;
     } else if (timezone?.format === '') {
-      showSimpleAlert('Please enter your address');
+      showSimpleAlert(I18n.t('register.VALIDATION_MSG_EMPTY_TIMEZONE'));
       return false;
     }
 
     let isPasswordFilled = password.trim().length;
     if (isPasswordFilled > 0) {
       if (password.trim() && password.trim().length < 6) {
-        showSimpleAlert('Password must contain at least minimum 6 characters');
+        showSimpleAlert(I18n.t('register.VALIDATION_MSG_MINIMUM_PASSWORD'));
         return false;
       } else if (password.trim() && passwordConfirmation.trim() == '') {
-        showSimpleAlert('Please enter your confirm password');
+        showSimpleAlert(
+          I18n.t('register.VALIDATION_MSG_EMPTY_CONFIRM_PASSWORD'),
+        );
         return false;
       } else if (password.trim() !== passwordConfirmation.trim()) {
-        showSimpleAlert('Password and confirm password should same');
+        showSimpleAlert(I18n.t('register.VALIDATION_MSG_SAME_PASSWORD'));
         return false;
       }
     }
@@ -326,7 +328,7 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={true} style={styles.formWrapper}>
                 <Typography
                   size={20}
-                  text="Edit Profile"
+                  text={I18n.t('profile.EDIT_PROFILE_HEADING')}
                   style={{
                     textAlign: 'center',
                     marginBottom: 20,
@@ -355,7 +357,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="First Name"
+                        placeholder={`${I18n.t('register.LABEL_FIRST_NAME')}`}
                         value={firstName}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -376,7 +378,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Last Name"
+                        placeholder={`${I18n.t('register.LABEL_LAST_NAME')}`}
                         value={lastName}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -397,7 +399,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Job Title"
+                        placeholder={`${I18n.t('register.LABEL_JOB_TITLE')}`}
                         value={title}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -418,7 +420,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Company"
+                        placeholder={`${I18n.t('register.LABEL_COMPANY')}`}
                         value={company}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -439,7 +441,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Industry"
+                        placeholder={`${I18n.t('register.LABEL_INDUSTRY')}`}
                         value={industry?.name}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -473,7 +475,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Phone Number"
+                        placeholder={`${I18n.t('register.LABEL_PHONE_NUMBER')}`}
                         value={phoneNumber}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -496,7 +498,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Country"
+                        placeholder={`${I18n.t('register.LABEL_COUNTRY')}`}
                         value={country?.name}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -531,7 +533,9 @@ const Index = ({route, navigation}: any) => {
                           returnKeyType="next"
                           blurOnSubmit={false}
                           keyboardType="default"
-                          placeholder="State/Province"
+                          placeholder={`${I18n.t(
+                            'register.LABEL_STATE_PROVINCE',
+                          )}`}
                           value={state?.state_name}
                           inputContainerStyle={styles.inputContainer}
                           inputStyle={styles.textInput}
@@ -563,7 +567,9 @@ const Index = ({route, navigation}: any) => {
                           returnKeyType="next"
                           blurOnSubmit={false}
                           keyboardType="default"
-                          placeholder="State/Province"
+                          placeholder={`${I18n.t(
+                            'register.LABEL_STATE_PROVINCE',
+                          )}`}
                           value={stateInput}
                           inputContainerStyle={styles.inputContainer}
                           inputStyle={styles.textInput}
@@ -585,7 +591,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="City"
+                        placeholder={`${I18n.t('register.LABEL_CITY')}`}
                         value={city}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -606,7 +612,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Address"
+                        placeholder={`${I18n.t('register.LABEL_ADDRESS')}`}
                         value={address}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -627,7 +633,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Zip/Postal"
+                        placeholder={`${I18n.t('register.LABEL_ZIPCODE')}`}
                         value={zip}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -648,7 +654,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Timezone"
+                        placeholder={`${I18n.t('register.LABEL_TIMEZONE')}`}
                         value={timezone?.format}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -681,7 +687,7 @@ const Index = ({route, navigation}: any) => {
                     <Wrap autoMargin={false} style={styles.inputWrapper}>
                       <Typography
                         size={13}
-                        text="If you wish to change the password, please fill in the below field; otherwise, leave it empty."
+                        text={`${I18n.t('profile.PASSWORD_CHANGE_MSG')}`}
                         style={{paddingLeft: 5}}
                         color={Theme.colors.darkGray}
                         ff={Theme.fonts.ThemeFontMedium}
@@ -700,7 +706,7 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="next"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Password"
+                        placeholder={`${I18n.t('register.LABEL_PASSWORD')}`}
                         value={password}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -734,7 +740,9 @@ const Index = ({route, navigation}: any) => {
                         returnKeyType="done"
                         blurOnSubmit={false}
                         keyboardType="default"
-                        placeholder="Confirm Password"
+                        placeholder={`${I18n.t(
+                          'register.LABEL_CONFIRM_PASSWORD',
+                        )}`}
                         value={passwordConfirmation}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={styles.textInput}
@@ -762,7 +770,7 @@ const Index = ({route, navigation}: any) => {
                   autoMargin={false}
                   style={[styles.inputWrapper, {marginTop: 20}]}>
                   <Button
-                    title="Update Profile"
+                    title={`${I18n.t('profile.UPDATE_PROFILE_BTN')}`}
                     onPress={() => {
                       onUpdateProfilePress();
                     }}
@@ -778,7 +786,7 @@ const Index = ({route, navigation}: any) => {
           <DropdownPicker
             dialogVisible={industriesDropdownModal}
             setDialogVisible={() => setIndustriesDropdownModal(false)}
-            title={'Select Industry'}
+            title={`${I18n.t('register.LABEL_SELECT_INDUSTRY')}`}
             data={industriesMaster}
             onSelectedItem={(item: any) => {
               setIndustriesDropdownModal(false);
@@ -791,7 +799,7 @@ const Index = ({route, navigation}: any) => {
           <DropdownPicker
             dialogVisible={countriesDropdownModal}
             setDialogVisible={() => setCountriesDropdownModal(false)}
-            title={'Select Country'}
+            title={`${I18n.t('register.LABEL_SELECT_COUNTY')}`}
             data={countriesMaster}
             onSelectedItem={(item: any) => {
               setCountriesDropdownModal(false);
@@ -804,7 +812,7 @@ const Index = ({route, navigation}: any) => {
           <DropdownPicker
             dialogVisible={statesDropdownModal}
             setDialogVisible={() => setStatesDropdownModal(false)}
-            title={'Select State'}
+            title={`${I18n.t('register.LABEL_SELECT_STATE')}`}
             data={statesMaster}
             onSelectedItem={(item: any) => {
               setStatesDropdownModal(false);
@@ -817,7 +825,7 @@ const Index = ({route, navigation}: any) => {
           <DropdownPicker
             dialogVisible={timezonesDropdownModal}
             setDialogVisible={() => setTimezonesDropdownModal(false)}
-            title={'Select Timezone'}
+            title={`${I18n.t('register.LABEL_SELECT_TIMEZONE')}`}
             data={timezonesMaster}
             onSelectedItem={(item: any) => {
               setTimezonesDropdownModal(false);

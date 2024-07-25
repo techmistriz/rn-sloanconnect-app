@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   BackHandler,
   Dimensions,
@@ -16,19 +16,19 @@ import Divider from 'src/components/Divider';
 import HTMLView from 'react-native-htmlview';
 import RenderHtml from '@jtreact/react-native-render-html';
 import {constants} from 'src/common';
-import {
-  TROUBLESHOOTING_HTML,
-  EULA_HTML,
-  FAQS_HTML,
-} from 'src/utils/StaticData/CMS_DATA';
+import {TROUBLESHOOTING_HTML} from 'src/utils/StaticData/HTML';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Header from 'src/components/Header';
+import {useFocusEffect} from '@react-navigation/native';
+import LoaderOverlay from 'src/components/LoaderOverlay';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const {referrer} = route?.params || {referrer: undefined};
   const {loading} = useSelector((state: any) => state?.AuthReducer);
   const {settings} = useSelector((state: any) => state?.SettingsReducer);
+  const [isReady, setIsReady] = React.useState(false);
 
   /** component hooks method for hardwareBackPress */
   useEffect(() => {
@@ -52,7 +52,6 @@ const Index = ({route, navigation}: any) => {
 
   /** component hooks method for dynamic header for back button */
   useEffect(() => {
-
     // If came from DeviceDiagnostics when tapping on 'NO' button, then need to back 2 screen back.
     if (referrer == 'DeviceDiagnostics') {
       navigation.setOptions({
@@ -67,6 +66,23 @@ const Index = ({route, navigation}: any) => {
     }
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      setTimeout(() => setIsReady(true), 100);
+
+      return () => setIsReady(false);
+    }, []),
+  );
+
+  if (!isReady) {
+    return (
+      <LoaderOverlay
+        loading={true}
+        loadingText={I18n.t('common.LOADING_TEXT')}
+      />
+    );
+  }
+
   return (
     <AppContainer
       backgroundType="solid"
@@ -79,7 +95,7 @@ const Index = ({route, navigation}: any) => {
       <Wrap autoMargin={false} style={styles.container}>
         <RenderHtml
           contentWidth={constants.screenWidth}
-          source={TROUBLESHOOTING_HTML}
+          source={TROUBLESHOOTING_HTML?.[settings?.language ?? 'en']}
         />
       </Wrap>
     </AppContainer>

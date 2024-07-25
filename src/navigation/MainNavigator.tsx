@@ -22,6 +22,7 @@ import Profile from 'src/screens/Profile';
 import EditProfile from 'src/screens/Profile/EditProfile';
 import ChangePassword from 'src/screens/Profile/ChangePassword';
 import SyncReport from 'src/screens/SyncReport';
+import Language from 'src/screens/Profile/Language';
 
 //Cms
 import Help from 'src/screens/Cms/Help';
@@ -319,6 +320,15 @@ const MainNavigator = () => {
             headerShown: true,
             // headerRight: () => <Header route={route?.params?.image} />
             header: () => <Header title="Sync Report" />,
+          }}
+        />
+        <Stack.Screen
+          name="Language"
+          component={Language}
+          options={{
+            headerShown: true,
+            // headerRight: () => <Header route={route?.params?.image} />
+            header: () => <Header title="Language" />,
           }}
         />
       </Stack.Navigator>

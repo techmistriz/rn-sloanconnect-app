@@ -12,6 +12,7 @@ import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
 import {useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
+import I18n from 'src/locales/Transaltions';
 
 const DeviceSettingList = ({
   settings,
@@ -155,7 +156,7 @@ const DeviceSettingList = ({
                     : modeSelection == '1'
                     ? metered
                     : ''
-                } Sec`}
+                } ${I18n.t('device_dashboard.SECONDS')}`}
                 style={{
                   textAlign: 'right',
                 }}

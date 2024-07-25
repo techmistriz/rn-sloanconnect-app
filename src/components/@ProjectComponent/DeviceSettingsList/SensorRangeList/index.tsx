@@ -1,33 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {styles} from './styles';
 import {DeviceSettingListProps} from './types';
 import Theme from 'src/theme';
 import Typography from 'src/components/Typography';
-import {Wrap, Row, TochableWrap} from 'src/components/Common';
+import {Wrap, Row} from 'src/components/Common';
 import TouchableItem from 'src/components/TouchableItem';
 import VectorIcon from 'src/components/VectorIcon';
-import Divider from 'src/components/Divider';
 import NavigationService from 'src/services/NavigationService/NavigationService';
-import {BLEService} from 'src/services';
-import {
-  cleanCharacteristic,
-  getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID,
-  getDeviceModelData,
-  getDeviceService,
-  mapValue,
-} from 'src/utils/Helpers/project';
-import {
-  consoleLog,
-  getImgSource,
-  getTimezone,
-  parseDateHumanFormat,
-} from 'src/utils/Helpers/HelperFunction';
-import {base64EncodeDecode} from 'src/utils/Helpers/encryption';
-import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
-import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import I18n from 'src/locales/Transaltions';
 
 // DeviceSettingList
 const DeviceSettingList = ({
@@ -38,7 +20,7 @@ const DeviceSettingList = ({
   style,
   navigation,
   applied = false,
-  showApplySettingButton
+  showApplySettingButton,
 }: DeviceSettingListProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
@@ -97,7 +79,7 @@ const DeviceSettingList = ({
             />
             <Typography
               size={10}
-              text={'Units'}
+              text={I18n.t('device_dashboard.UNITS')}
               style={{
                 textAlign: 'left',
               }}
@@ -118,7 +100,8 @@ const DeviceSettingList = ({
                 ff={Theme.fonts.ThemeFontLight}
               />
 
-              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) && showApplySettingButton ? (
+              {!isObjectEmpty(deviceSettingsData?.[settings?.name]) &&
+              showApplySettingButton ? (
                 <>
                   {applied ? (
                     <VectorIcon

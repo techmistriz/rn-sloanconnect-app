@@ -23,14 +23,21 @@ import {BLEService} from 'src/services';
 import {Button} from 'src/components/Button';
 import Network from 'src/network/Network';
 import {constants} from 'src/common';
+import LANGUAGES from 'src/locales/languages.json';
+import I18n from 'src/locales/Transaltions';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const {user, token, type} = useSelector((state: any) => state?.AuthReducer);
+  const {settings} = useSelector((state: any) => state?.SettingsReducer);
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
   const [deleteAccountModal, setDeleteAccountModal] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
+
+  const selectedLanguage = React.useMemo(() => {
+    return LANGUAGES.find((o: any) => o.code === settings?.language);
+  }, [settings]);
 
   /** compoment hooks method */
   useEffect(() => {
@@ -75,7 +82,7 @@ const Index = ({route, navigation}: any) => {
         <Row autoMargin={false} style={styles.profileContentContainerRow}>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Name: `}
+              text={`${I18n.t('profile.NAME_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -90,7 +97,7 @@ const Index = ({route, navigation}: any) => {
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Email: `}
+              text={`${I18n.t('profile.EMAIL_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -108,7 +115,7 @@ const Index = ({route, navigation}: any) => {
         <Row autoMargin={false} style={styles.profileContentContainerRow}>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Phone Number: `}
+              text={`${I18n.t('profile.PHONE_NUMBER_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -123,7 +130,7 @@ const Index = ({route, navigation}: any) => {
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Timezone: `}
+              text={`${I18n.t('profile.TIMEZONE_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -143,7 +150,7 @@ const Index = ({route, navigation}: any) => {
         <Row autoMargin={false} style={styles.profileContentContainerRow}>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Company: `}
+              text={`${I18n.t('profile.COMPANY_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -158,7 +165,7 @@ const Index = ({route, navigation}: any) => {
           </Wrap>
           <Wrap autoMargin={false} style={styles.profileContentContainer}>
             <Typography
-              text={`Industry: `}
+              text={`${I18n.t('profile.INDUSTRY_TITLE')}: `}
               style={styles.profileName}
               color={Theme?.colors?.black}
               size={16}
@@ -185,7 +192,7 @@ const Index = ({route, navigation}: any) => {
               style={styles.item}>
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
-                  text="Edit Profile"
+                  text={`${I18n.t('profile.EDIT_PROFILE_MENU_TITLE')}`}
                   color={Theme?.colors?.black}
                   size={16}
                 />
@@ -210,7 +217,7 @@ const Index = ({route, navigation}: any) => {
               style={styles.item}>
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
-                  text="Sync Report"
+                  text={`${I18n.t('profile.SYNC_REPORT_MENU_TITLE')}`}
                   color={Theme?.colors?.black}
                   size={16}
                 />
@@ -220,6 +227,40 @@ const Index = ({route, navigation}: any) => {
                   color={Theme.colors.black}
                   size={20}
                 />
+              </Wrap>
+            </TouchableItem>
+          </Wrap>
+
+          <Wrap autoMargin={false} style={[styles.itemContainer]}>
+            <TouchableItem
+              onPress={() => {
+                NavigationService.navigate('Language', {
+                  referrer: 'ProfileScreen',
+                  type: type,
+                });
+              }}
+              style={styles.item}>
+              <Wrap autoMargin={false} style={styles.itemRow}>
+                <Wrap autoMargin={false}>
+                  <Typography
+                    text={`${I18n.t('profile.LANGUAGE_MENU_TITLE')}`}
+                    color={Theme?.colors.black}
+                    size={16}
+                  />
+                </Wrap>
+                <Wrap autoMargin={false} style={styles.itemRow}>
+                  <Typography
+                    text={selectedLanguage?.name}
+                    color={Theme?.colors?.black}
+                    size={12}
+                  />
+                  <VectorIcon
+                    iconPack="Feather"
+                    name={'chevron-right'}
+                    color={Theme?.colors?.black}
+                    size={20}
+                  />
+                </Wrap>
               </Wrap>
             </TouchableItem>
           </Wrap>
@@ -256,7 +297,7 @@ const Index = ({route, navigation}: any) => {
               style={styles.item}>
               <Wrap autoMargin={false} style={styles.itemRow}>
                 <Typography
-                  text="Logout"
+                  text={`${I18n.t('profile.LOGOUT_MENU_TITLE')}`}
                   color={Theme?.colors?.black}
                   size={16}
                 />
@@ -279,7 +320,7 @@ const Index = ({route, navigation}: any) => {
                 style={[styles.itemRow, {justifyContent: 'center'}]}>
                 <Button
                   type={'danger'}
-                  title="DELETE ACCOUNT"
+                  title={`${I18n.t('profile.DELETE_ACCOUNT_BTN_LABEL')}`}
                   onPress={() => {
                     setDeleteAccountModal(true);
                   }}
@@ -291,9 +332,9 @@ const Index = ({route, navigation}: any) => {
 
           <AlertBox
             visible={logoutModal}
-            title="Logout"
-            message={`Are you sure you want to log out?`}
-            okayText={'CONFIRM'}
+            title={`${I18n.t('profile.LOGOUT_HEADING')}`}
+            message={`${I18n.t('profile.LOGOUT_MSG')}`}
+            okayText={I18n.t('button_labels.CONFIRM')}
             onCancelPress={() => {
               setLogoutModal(false);
             }}
@@ -305,9 +346,9 @@ const Index = ({route, navigation}: any) => {
 
           <AlertBox
             visible={deleteAccountModal}
-            title="Delete Account"
-            message={`Are you sure you want to Delete Account?`}
-            okayText={'CONFIRM'}
+            title={`${I18n.t('profile.DELETE_ACCOUNT_HEADING')}`}
+            message={`${I18n.t('profile.DELETE_ACCOUNT_MSG')}`}
+            okayText={I18n.t('button_labels.CONFIRM')}
             onCancelPress={() => {
               setDeleteAccountModal(false);
             }}

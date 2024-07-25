@@ -17,6 +17,7 @@ import {forgotPasswordRequestAction} from 'src/redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Copyright from 'src/components/@ProjectComponent/Copyright';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
@@ -95,7 +96,7 @@ const Index = ({route, navigation}: any) => {
             <Wrap autoMargin={false} style={styles.formWrapper}>
               <Typography
                 size={20}
-                text="Forgot Your Password?"
+                text={I18n.t('forgot_password.TITLE_FORGOT_YOUR_PASSWORD')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -105,7 +106,7 @@ const Index = ({route, navigation}: any) => {
               />
               <Typography
                 size={14}
-                text="If you forget your password, please enter your email address below to be emailed a OTP"
+                text={I18n.t('forgot_password.SUBTITLE_FORGOT_YOUR_PASSWORD')}
                 style={{
                   textAlign: 'center',
                   marginBottom: 20,
@@ -127,7 +128,7 @@ const Index = ({route, navigation}: any) => {
                   returnKeyType="next"
                   blurOnSubmit={false}
                   keyboardType="email-address"
-                  placeholder="Email Address"
+                  placeholder={I18n.t('forgot_password.LABEL_EMAIL')}
                   value={email}
                   inputContainerStyle={styles.inputContainer}
                   inputStyle={styles.textInput}
@@ -138,7 +139,7 @@ const Index = ({route, navigation}: any) => {
                 autoMargin={false}
                 style={[styles.inputWrapper, {marginTop: 10}]}>
                 <Button
-                  title="RESET PASSWORD"
+                  title={I18n.t('forgot_password.BTN_RESET_PASSWORD')}
                   onPress={() => {
                     onForgotPasswordPress();
                   }}
@@ -149,7 +150,7 @@ const Index = ({route, navigation}: any) => {
               <Wrap autoMargin={false} style={[styles.inputWrapper]}>
                 <Typography
                   size={13}
-                  text={'Return to login'}
+                  text={I18n.t('forgot_password.LABEL_RETURN_TO_LOGIN')}
                   style={{textAlign: 'center', textDecorationLine: 'underline'}}
                   color={Theme.colors.primaryColor}
                   ff={Theme.fonts.ThemeFontMedium}
