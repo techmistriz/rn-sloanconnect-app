@@ -1027,8 +1027,8 @@ export const BLE_GATT_SERVICES = {
       '984227f3-34fc-4045-a5d0-2c581f81a153': {
         uuid: '984227f3-34fc-4045-a5d0-2c581f81a153',
         name: 'OTA Data Transfer',
-        size: '1 bytes',
-        type: 'uint8_t',
+        size: '200 bytes',
+        type: 'uint8_t array',
         range: '0-1',
         initialValue: null,
         properties: ['W'],
