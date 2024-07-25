@@ -18,6 +18,7 @@ import I18n from 'src/locales/Transaltions';
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
+  const {referrer} = route?.params || {referrer: undefined};
   const {user, token, type} = useSelector((state: any) => state?.AuthReducer);
   const {settings} = useSelector((state: any) => state?.SettingsReducer);
   const [loading, setLoading] = useState(false);
@@ -46,11 +47,32 @@ const Index = ({route, navigation}: any) => {
         settings: {
           language: selectedLanguageState?.code,
           isNotification: settings?.isNotification,
+          hasIntroCompleted: true,
         },
       }),
     );
-    showToastMessage(I18n.t('profile.CHANGE_LANGUAGE_SUCCESS_MSG'), 'success');
-    NavigationService.goBack();
+
+    handleRedirect();
+  };
+
+  const handleRedirect = () => {
+    if (referrer == 'SplashScreen') {
+      if (typeof token != 'undefined' && token != null && token) {
+        navigation.replace('Welcome', {
+          referrer: 'Login',
+        });
+      } else {
+        navigation.replace('Welcome', {
+          referrer: 'SplashScreen',
+        });
+      }
+    } else {
+      showToastMessage(
+        I18n.t('profile.CHANGE_LANGUAGE_SUCCESS_MSG'),
+        'success',
+      );
+      NavigationService.goBack();
+    }
   };
 
   /** compoment render method */
