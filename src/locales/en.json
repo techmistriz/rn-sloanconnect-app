@@ -193,6 +193,7 @@
     "ADAPTIVE_SENSING_MSG": "Adaptive sensing in progress. Water may be dispensed. Please wait.",
 
     "ACTIVATION_MODE": "Activation Mode",
+    "ACTIVATION_TIME": "Activation Time",
     "LINE_FLUSH": "Line Flush",
     "CONFIRM_FLOW_RATE": "Confirm Flow Rate",
     "SENSOR_RANGE": "Sensor Range",

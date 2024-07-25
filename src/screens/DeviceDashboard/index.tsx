@@ -58,6 +58,8 @@ import NotesList from 'src/components/@ProjectComponent/DeviceSettingsList/Notes
 import LoaderOverlayController from 'src/components/LoaderOverlay3/LoaderOverlayController';
 import {BLEReport} from 'src/services/BLEService/BLEReport';
 import I18n from 'src/locales/Transaltions';
+import LineFlushListFlusher from 'src/components/@ProjectComponent/DeviceSettingsList/LineFlushListFlusher';
+import ActivationTimeListFlusher from 'src/components/@ProjectComponent/DeviceSettingsList/ActivationTimeListFlusher';
 
 let hasSettingsChanged: boolean = false;
 const Index = ({navigation}: any) => {
@@ -1322,8 +1324,8 @@ const Index = ({navigation}: any) => {
                   title: I18n.t('device_dashboard.LINE_FLUSH'),
                   route: 'LineFlush',
                   name: 'LineFlush',
-                  serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
+                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
                 }}
                 settingsData={flushSettings}
                 navigation={navigation}
@@ -1331,6 +1333,53 @@ const Index = ({navigation}: any) => {
                 applied={applied}
                 showApplySettingButton={showApplySettingButton}
               />
+
+              {/* <ActivationTimeListFlusher
+                settings={{
+                  title: I18n.t('device_dashboard.ACTIVATION_TIME'),
+                  route: 'ActivationTimeFlusher',
+                  name: 'ActivationTimeFlusher',
+                  lineFlushRangeConfig: {min: 8, max: 28, step: 4},
+                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
+                }}
+                settingsData={sensorSettings}
+                navigation={navigation}
+                borderBottom={<Divider color={Theme.colors.lightGray} />}
+                applied={applied}
+                showApplySettingButton={showApplySettingButton}
+              />
+              <LineFlushListFlusher
+                settings={{
+                  title: I18n.t('device_dashboard.LINE_FLUSH'),
+                  route: 'LineFlushFlusher',
+                  name: 'LineFlushFlusher',
+                  lineFlushRangeConfig: {min: 1, max: 7, step: 1},
+                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
+                }}
+                settingsData={sensorSettings}
+                navigation={navigation}
+                borderBottom={<Divider color={Theme.colors.lightGray} />}
+                applied={applied}
+                showApplySettingButton={showApplySettingButton}
+              /> */}
+
+              {/* <LineFlushListFlusher
+                settings={{
+                  title: I18n.t('device_dashboard.LINE_FLUSH'),
+                  name: 'LineFlushFlusher',
+                  route: 'LineFlushFlusher',
+                  sensorRangeConfig: {min: 1, max: 5, step: 1},
+                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c942',
+                }}
+                settingsData={sensorSettings}
+                navigation={navigation}
+                borderBottom={<Divider color={Theme.colors.lightGray} />}
+                applied={applied}
+                showApplySettingButton={showApplySettingButton}
+              /> */}
 
               <FlowRateList
                 settings={{

@@ -35,6 +35,8 @@ import DeviceDiagnosticTroubleshoot from 'src/screens/DeviceDiagnosticTroublesho
 import DeviceDisconnect from 'src/screens/DeviceDisconnect';
 import ActivationMode from 'src/screens/DeviceSettings/ActivationMode';
 import LineFlush from 'src/screens/DeviceSettings/LineFlush';
+import LineFlushFlusher from 'src/screens/DeviceSettings/LineFlushFlusher';
+import ActivationTimeFlusher from 'src/screens/DeviceSettings/ActivationTimeFlusher';
 import FlowRate from 'src/screens/DeviceSettings/FlowRate';
 import FlowRateInput from 'src/screens/DeviceSettings/FlowRate/FlowRateInput';
 import SensorRange from 'src/screens/DeviceSettings/SensorRange';
@@ -278,6 +280,22 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             header: () => <Header title="Line Flush" />,
+          }}
+        />
+        <Stack.Screen
+          name="LineFlushFlusher"
+          component={LineFlushFlusher}
+          options={{
+            headerShown: true,
+            header: () => <Header title="Line Flush" />,
+          }}
+        />
+        <Stack.Screen
+          name="ActivationTimeFlusher"
+          component={ActivationTimeFlusher}
+          options={{
+            headerShown: true,
+            header: () => <Header title="Activation Time" />,
           }}
         />
         <Stack.Screen
