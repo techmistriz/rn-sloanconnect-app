@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {TABS} from 'src/utils/StaticData/StaticData';
 import DeviceBottomTab from 'src/components/@ProjectComponent/DeviceBottomTab';
 import {constants} from 'src/common';
-import {FAQS_HTML} from 'src/utils/StaticData/CMS_DATA';
+import {FAQS_HTML} from 'src/utils/StaticData/HTML';
 import RenderHtml from '@jtreact/react-native-render-html';
 import {BLEReport} from 'src/services/BLEService/BLEReport';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
@@ -46,7 +46,7 @@ const Index = ({route, navigation}: any) => {
           // borderColor: 'green',
         }}>
         <Wrap autoMargin={false} style={styles.container}>
-          <RenderHtml contentWidth={constants.screenWidth} source={FAQS_HTML} />
+          <RenderHtml contentWidth={constants.screenWidth} source={FAQS_HTML?.[settings?.language ?? 'en']} />
         </Wrap>
       </AppContainer>
       <DeviceBottomTab tabs={TABS} />

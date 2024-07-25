@@ -100,7 +100,7 @@ const Index = ({route, navigation}: any) => {
                 <Button
                   title="CONTINUE"
                   onPress={() => {
-                    onLoginPress();
+                    // onLoginPress();
                   }}
                 />
               </Wrap>

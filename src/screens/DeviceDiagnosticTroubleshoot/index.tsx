@@ -16,11 +16,7 @@ import Divider from 'src/components/Divider';
 import HTMLView from 'react-native-htmlview';
 import RenderHtml from '@jtreact/react-native-render-html';
 import {constants} from 'src/common';
-import {
-  TROUBLESHOOTING_HTML,
-  EULA_HTML,
-  FAQS_HTML,
-} from 'src/utils/StaticData/CMS_DATA';
+import {TROUBLESHOOTING_HTML} from 'src/utils/StaticData/HTML';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Header from 'src/components/Header';
 
@@ -79,7 +75,7 @@ const Index = ({route, navigation}: any) => {
       <Wrap autoMargin={false} style={styles.container}>
         <RenderHtml
           contentWidth={constants.screenWidth}
-          source={TROUBLESHOOTING_HTML}
+          source={TROUBLESHOOTING_HTML?.[settings?.language ?? 'en']}
         />
       </Wrap>
     </AppContainer>
