@@ -506,11 +506,26 @@ export const BLE_DEVICE_MODELS = {
           displayName: 'ECOS Urinal-0.5 GPF',
           image: require('src/assets/images/products/gen1/faucet_etf_80.png'),
           notes: '',
-        }
+        },
+      ],
+    },
+    empty: {
+      name: 'UNKNOWN',
+      fullNameAllModel: 'UNKNOWN',
+      type: 'ADSKU',
+      version: '00',
+      generation: '01',
+      models: [
+        {
+          ETFModel: 'UNKNOWN FAUCET',
+          EBFModel: 'UNKNOWN FAUCET',
+          displayName: 'UNKNOWN FAUCET',
+          image: require('src/assets/images/products/empty/1.png'),
+          notes: '',
+        },
       ],
     },
   },
-  gen4: {},
   unknown: {
     empty: {
       name: 'UNKNOWN',
