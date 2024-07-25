@@ -4,6 +4,7 @@
     "APP_VERSION": "Version v 0.0.1",
     "WELCOME": "Bienvenido",
     "NO_INTERNET": "Sin conexión a Internet",
+    "LOADING_TEXT": "Loading...",
     "EOF": "EOF"
   },
   "button_labels": {

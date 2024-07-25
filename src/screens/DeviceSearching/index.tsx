@@ -429,7 +429,7 @@ const Index = ({navigation, route}: any) => {
                     <Loader
                       visible={true}
                       loadingText={I18n.t(
-                        'no_product_found.SEARCHING_HINT_TEXT',
+                        'activate_your_device.SEARCHING_HINT_TEXT',
                       )}
                     />
                   </Wrap>

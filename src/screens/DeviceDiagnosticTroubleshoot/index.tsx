@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   BackHandler,
   Dimensions,
@@ -19,12 +19,16 @@ import {constants} from 'src/common';
 import {TROUBLESHOOTING_HTML} from 'src/utils/StaticData/HTML';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import Header from 'src/components/Header';
+import {useFocusEffect} from '@react-navigation/native';
+import LoaderOverlay from 'src/components/LoaderOverlay';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
   const {referrer} = route?.params || {referrer: undefined};
   const {loading} = useSelector((state: any) => state?.AuthReducer);
   const {settings} = useSelector((state: any) => state?.SettingsReducer);
+  const [isReady, setIsReady] = React.useState(false);
 
   /** component hooks method for hardwareBackPress */
   useEffect(() => {
@@ -48,7 +52,6 @@ const Index = ({route, navigation}: any) => {
 
   /** component hooks method for dynamic header for back button */
   useEffect(() => {
-
     // If came from DeviceDiagnostics when tapping on 'NO' button, then need to back 2 screen back.
     if (referrer == 'DeviceDiagnostics') {
       navigation.setOptions({
@@ -62,6 +65,23 @@ const Index = ({route, navigation}: any) => {
       });
     }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      setTimeout(() => setIsReady(true), 1000);
+
+      return () => setIsReady(false);
+    }, []),
+  );
+
+  if (!isReady) {
+    return (
+      <LoaderOverlay
+        loading={true}
+        loadingText={I18n.t('common.LOADING_TEXT')}
+      />
+    );
+  }
 
   return (
     <AppContainer
