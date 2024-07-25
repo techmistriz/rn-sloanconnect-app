@@ -265,6 +265,12 @@
     "TURBINE_TITLE": "Turbine",
     "BATTERY_LEVEL_AT_DIAGNOSTIC_TITLE": "Valve",
     "LAST_DIAGNOSTIC_RESULT_HEADING": "LAST DIAGNOSTIC RESULTS",
+    "FLUSHOMETERSTEP_1_TTILE": "Please stand within 30\" of sensor to begin dianostics.",
+    "FLUSHOMETERSTEP_1_SUBTTILE": "Do you see blinking LED?",
+    "FLUSHOMETERSTEP_2_TTILE": "Please step out the sensor range.",
+    "FLUSHOMETERSTEP_2_SUBTTILE": "Did the LED stop blinking?",
+    "FLUSHOMETERSTEP_3_TTILE": "",
+    "FLUSHOMETERSTEP_3_SUBTTILE": "Did your flushometer flush?",
     "EOF": "EOF"
   },
   "profile": {

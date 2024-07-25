@@ -32,6 +32,27 @@ import {mappingDeviceDataIntegersGen2} from '../DeviceDashboard/helperGen2';
 import LoaderOverlay from 'src/components/LoaderOverlay';
 import I18n from 'src/locales/Transaltions';
 
+const flushometerSteps = [
+  {
+    id: 1,
+    title: I18n.t('diagnostic_page.FLUSHOMETERSTEP_1_TTILE'),
+    subtitle: I18n.t('diagnostic_page.FLUSHOMETERSTEP_1_SUBTTILE'),
+    image: '',
+  },
+  {
+    id: 2,
+    title: I18n.t('diagnostic_page.FLUSHOMETERSTEP_2_TTILE'),
+    subtitle: I18n.t('diagnostic_page.FLUSHOMETERSTEP_2_SUBTTILE'),
+    image: '',
+  },
+  {
+    id: 3,
+    title: '',
+    subtitle: I18n.t('diagnostic_page.FLUSHOMETERSTEP_2_SUBTTILE'),
+    image: '',
+  },
+];
+
 const Index = ({navigation, route}: any) => {
   const connectedDevice = BLEService.getDevice();
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,6 +61,9 @@ const Index = ({navigation, route}: any) => {
     referrer: undefined,
     previousScreen: undefined,
   };
+
+  const [flushometerStepStatus, setflushometerStepStatus] = useState();
+  const [flushometerStepIndex, setflushometerStepIndex] = useState(0);
 
   /** component hooks method for hardwareBackPress */
   useEffect(() => {
@@ -124,8 +148,8 @@ const Index = ({navigation, route}: any) => {
       initlizeAppGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       initlizeAppGen2();
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      initlizeAppFlusher();
     } else if (BLEService.deviceGeneration == 'gen4') {
       // Code need to be implemented
     }
@@ -225,6 +249,11 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** Function comments */
+  const initlizeAppFlusher = async () => {
+    // code here
+  };
+
+  /** Function comments */
   const finishDiagnostics = async (waterDispensed: number) => {
     if (BLEService.deviceGeneration == 'gen1') {
       if (waterDispensed) {
@@ -254,8 +283,8 @@ const Index = ({navigation, route}: any) => {
           referrer: 'DeviceDiagnostics',
         });
       }
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      finishDiagnosticsFlusher(waterDispensed);
     } else if (BLEService.deviceGeneration == 'gen4') {
       // Code need to be implemented
     }
@@ -421,6 +450,78 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** Function comments */
+  const finishDiagnosticsFlusher = async (waterDispensed: number) => {
+    // Battery level at diagnostic
+    const batteryLevelInHex = fromHexStringUint8Array(
+      decimalToHex(BLEService.batteryLevel?.toString()),
+    );
+
+    await BLEService.writeCharacteristicWithResponseForDevice2(
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1
+        .DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_CHARACTERISTIC_UUID,
+      batteryLevelInHex,
+    );
+
+    // D/T of last diagnostic
+    const diagnosticDateTimestampInHex = fromHexStringUint8Array(
+      decimalToHex(timestampInSec()),
+    );
+
+    await BLEService.writeCharacteristicWithResponseForDevice2(
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1
+        .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
+      diagnosticDateTimestampInHex,
+    );
+
+    setTimeout(async () => {
+      const RESULTS = await readingDiagnostic();
+
+      consoleLog('finishDiagnosticsGen1 readingDiagnostic RESULTS==>', RESULTS);
+      const sensorResult = findObject('Sensor', RESULTS, {searchKey: 'name'});
+      const dateResult = findObject('D/T of last diagnostic', RESULTS, {
+        searchKey: 'name',
+      });
+      const dateLastResult = findObject(
+        'D/T of last diagnostic',
+        diagnosticResults,
+        {
+          searchKey: 'name',
+        },
+      );
+
+      await BLEService.writeCharacteristicWithResponseForDevice(
+        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
+        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+        '0',
+      );
+
+      // const __initDiagnosticResponse = cleanCharacteristic(
+      //   initDiagnosticResponse,
+      // );
+
+      // consoleLog(
+      //   'finishDiagnosticsGen1 __initDiagnosticResponse==>',
+      //   __initDiagnosticResponse,
+      // );
+
+      // consoleLog("sensorResult==>", sensorResult);
+      setLoading(false);
+      NavigationService.navigate('DeviceDiagnosticResults', {
+        referrer: 'DeviceDiagnostic',
+        previousScreen: previousScreen,
+        previousDiagnosticResults: diagnosticResults,
+        diagnosticResults: RESULTS,
+        waterDispensed: waterDispensed,
+        sensorResult: sensorResult,
+        dateResult: dateResult,
+        dateLastResult: dateLastResult,
+      });
+    }, 2000);
+  };
+
+  /** Function comments */
   const __mappingDeviceDataIntegersGen2SetupMonitor = async () => {
     // consoleLog('__mappingDeviceDataIntegersGen2SetupMonitor called');
     var __characteristicMonitorDeviceDataIntegers: string[] = [];
@@ -469,6 +570,98 @@ const Index = ({navigation, route}: any) => {
       mappingDeviceDataIntegersGen2Response;
   };
 
+  const onNextPress = (type: number = 0, __flushometerStepIndex: number) => {
+    if (__flushometerStepIndex == 3) {
+      //
+    } else {
+      setflushometerStepIndex(__flushometerStepIndex + 1);
+    }
+  };
+
+  if (
+    BLEService.deviceGeneration == 'gen1' ||
+    BLEService.deviceGeneration == 'gen2'
+  ) {
+    return (
+      <Wrap autoMargin={false} style={styles.mainContainer}>
+        <Image
+          // @ts-ignore
+          source={getImgSource(Images?.activateFaucet)}
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            opacity: 0.7,
+          }}
+          resizeMode="cover"
+          // blurRadius={1}
+        />
+        <Header hasBackButton headerBackgroundType="transparent" />
+        <Wrap autoMargin={false} style={styles.sectionContainer}>
+          <Wrap autoMargin={false} style={styles.section1}>
+            <Wrap autoMargin={false}>
+              <Typography
+                size={22}
+                text={I18n.t('diagnostic_page.DIAGNOSING_HEADING')}
+                style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
+                color={Theme.colors.white}
+                ff={Theme.fonts.ThemeFontMedium}
+              />
+              <Typography
+                size={14}
+                text={I18n.t('diagnostic_page.DIAGNOSE_SUB_TEXT')}
+                style={{textAlign: 'center', marginTop: 15, lineHeight: 20}}
+                color={Theme.colors.white}
+                ff={Theme.fonts.ThemeFontLight}
+              />
+
+              <Typography
+                size={14}
+                text={I18n.t('diagnostic_page.DID_YOU_SEE_WATER')}
+                style={{textAlign: 'center', marginTop: 20, lineHeight: 20}}
+                color={Theme.colors.white}
+                ff={Theme.fonts.ThemeFontLight}
+              />
+            </Wrap>
+          </Wrap>
+          <Wrap autoMargin={false} style={styles.section2}>
+            <Wrap autoMargin={false} style={styles.container}>
+              <Row autoMargin={false} style={styles.row}>
+                <Col autoMargin={false} style={[styles.col, {paddingRight: 5}]}>
+                  <Button
+                    type={'secondary'}
+                    title={I18n.t('button_labels.NO_BUTTON_LABEL')}
+                    onPress={() => {
+                      finishDiagnostics(0);
+                    }}
+                    textStyle={{
+                      fontSize: 10,
+                      fontFamily: Theme.fonts.ThemeFontMedium,
+                    }}
+                  />
+                </Col>
+                <Col autoMargin={false} style={[styles.col, {paddingLeft: 5}]}>
+                  <Button
+                    type={'secondary'}
+                    title={I18n.t('button_labels.YES_BUTTON_LABEL')}
+                    onPress={() => {
+                      finishDiagnostics(1);
+                    }}
+                    textStyle={{
+                      fontSize: 10,
+                      fontFamily: Theme.fonts.ThemeFontMedium,
+                    }}
+                  />
+                </Col>
+              </Row>
+            </Wrap>
+          </Wrap>
+        </Wrap>
+        <LoaderOverlay loading={loading} />
+      </Wrap>
+    );
+  }
+
   return (
     <Wrap autoMargin={false} style={styles.mainContainer}>
       <Image
@@ -487,27 +680,25 @@ const Index = ({navigation, route}: any) => {
       <Wrap autoMargin={false} style={styles.sectionContainer}>
         <Wrap autoMargin={false} style={styles.section1}>
           <Wrap autoMargin={false}>
-            <Typography
+            {/* <Typography
               size={22}
               text={I18n.t('diagnostic_page.DIAGNOSING_HEADING')}
               style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontMedium}
-            />
+            /> */}
             <Typography
               size={14}
-              text={
-                I18n.t('diagnostic_page.DIAGNOSE_SUB_TEXT')
-              }
-              style={{textAlign: 'center', marginTop: 15, lineHeight: 20}}
+              text={flushometerSteps?.[flushometerStepIndex]?.title}
+              style={{textAlign: 'center', marginTop: 15, lineHeight: 15}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontLight}
             />
 
             <Typography
-              size={14}
-              text={I18n.t('diagnostic_page.DID_YOU_SEE_WATER')}
-              style={{textAlign: 'center', marginTop: 20, lineHeight: 20}}
+              size={22}
+              text={flushometerSteps?.[flushometerStepIndex]?.subtitle}
+              style={{textAlign: 'center', marginTop: 30, lineHeight: 30}}
               color={Theme.colors.white}
               ff={Theme.fonts.ThemeFontLight}
             />
@@ -521,7 +712,7 @@ const Index = ({navigation, route}: any) => {
                   type={'secondary'}
                   title={I18n.t('button_labels.NO_BUTTON_LABEL')}
                   onPress={() => {
-                    finishDiagnostics(0);
+                    onNextPress(0, flushometerStepIndex);
                   }}
                   textStyle={{
                     fontSize: 10,
@@ -534,7 +725,7 @@ const Index = ({navigation, route}: any) => {
                   type={'secondary'}
                   title={I18n.t('button_labels.YES_BUTTON_LABEL')}
                   onPress={() => {
-                    finishDiagnostics(1);
+                    onNextPress(1, flushometerStepIndex);
                   }}
                   textStyle={{
                     fontSize: 10,
