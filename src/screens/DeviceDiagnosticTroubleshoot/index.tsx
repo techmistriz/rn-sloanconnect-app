@@ -68,7 +68,7 @@ const Index = ({route, navigation}: any) => {
 
   useFocusEffect(
     useCallback(() => {
-      setTimeout(() => setIsReady(true), 1000);
+      setTimeout(() => setIsReady(true), 100);
 
       return () => setIsReady(false);
     }, []),
