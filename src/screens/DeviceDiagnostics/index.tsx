@@ -250,7 +250,23 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const initlizeAppFlusher = async () => {
-    // code here
+    setLoading(true);
+    // const RESULTS = await readingDiagnostic();
+    // consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
+    // setDiagnosticResults(RESULTS);
+
+    // const initDiagnosticResponse =
+    await BLEService.writeCharacteristicWithResponseForDevice(
+      BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
+      BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+      '1',
+    );
+
+    // consoleLog(
+    //   'initialize __initDiagnosticResponse==>',
+    //   cleanCharacteristic(initDiagnosticResponse),
+    // );
+    setLoading(false);
   };
 
   /** Function comments */
@@ -579,8 +595,8 @@ const Index = ({navigation, route}: any) => {
   };
 
   if (
-    BLEService.deviceGeneration == 'gen1' ||
-    BLEService.deviceGeneration == 'gen2'
+    BLEService.deviceGeneration == 'gen11' ||
+    BLEService.deviceGeneration == 'gen21'
   ) {
     return (
       <Wrap autoMargin={false} style={styles.mainContainer}>

@@ -24,7 +24,9 @@ import {
   getBleDeviceGeneration,
   getBleDeviceVersion,
   getDeviceModelData,
-  getTotalWaterUsase, initFlusherSecurityKey, intiFlusherSecurityKey,
+  getTotalWaterUsase,
+  initFlusherSecurityKey,
+  intiFlusherSecurityKey,
   intiGen2SecurityKey,
 } from 'src/utils/Helpers/project';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
@@ -375,10 +377,13 @@ class BLEServiceInstance {
         this.device.id,
         serviceUUID,
         characteristicUUID,
-        (value),
+        value,
       )
       .catch(error => {
-        consoleLog('writeCharacteristicWithResponseForDevice error: ', JSON.stringify(error));
+        consoleLog(
+          'writeCharacteristicWithResponseForDevice error: ',
+          JSON.stringify(error),
+        );
         this.onError(error);
       });
   };
@@ -407,7 +412,10 @@ class BLEServiceInstance {
         base64EncodeFromByteArray(value),
       )
       .catch(error => {
-        consoleLog('writeCharacteristicWithResponseForDevice2 error => ', error);
+        consoleLog(
+          'writeCharacteristicWithResponseForDevice2 error => ',
+          error,
+        );
         this.onError(error);
       });
   };
@@ -1102,9 +1110,14 @@ class BLEServiceInstance {
     await intiGen2SecurityKey();
     await this.setDeviceModelData();
   };
+
   initDeviceDataFlusher = async () => {
     await initFlusherSecurityKey();
+    // await this.getSetBatteryLevel();
+    // await this.getSetTotalWaterUsase();
+    // await this.setDeviceModelData();
   };
+
   initDeviceDataGen4 = async () => {};
 }
 

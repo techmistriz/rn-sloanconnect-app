@@ -9,8 +9,10 @@ import {
   decimalToHex,
   fromHexStringUint8Array,
   getTimestampInSeconds,
-  getTimestampInYMDFormat, hexToByte,
-  hexToDecimal, hexToString,
+  getTimestampInYMDFormat,
+  hexToByte,
+  hexToDecimal,
+  hexToString,
   toHexString,
 } from './encryption';
 import {BLEService} from 'src/services';
@@ -1506,15 +1508,15 @@ async function computeFlusherUnlockKey(BDSN: string, cloudKey: any) {
   const ukArray2 = Array.from(unlockKeyFirstShaUintArraySHA);
   let unlockKeySecondShaHex = await sha256Bytes(ukArray2);
 
-  return (unlockKeySecondShaHex);
+  return unlockKeySecondShaHex;
 }
 
 export const initFlusherSecurityKey = async () => {
   try {
     const FLUSHER_APP_IDENTIFICATION_SERVICE_UUID =
-        BLE_CONSTANTS?.FLUSHER?.FLUSHER_APP_IDENTIFICATION_SERVICE_UUID;
+      BLE_CONSTANTS?.FLUSHER?.FLUSHER_APP_IDENTIFICATION_SERVICE_UUID;
     const FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID =
-        BLE_CONSTANTS?.FLUSHER?.FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID;
+      BLE_CONSTANTS?.FLUSHER?.FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID;
 
     let timestamp = getTimestampInSeconds();
     //let timestampYmd = '180905';
@@ -1537,16 +1539,17 @@ export const initFlusherSecurityKey = async () => {
       // Now write timestamp to device
       await sleep(2000);
       const FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID =
-          BLE_CONSTANTS?.FLUSHER?.FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID;
+        BLE_CONSTANTS?.FLUSHER?.FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID;
 
       const readSingleWifiShortBase64 = hexToByte(timestampHex); //Buffer.from(timestampHex, "hex").toString("base64");
       consoleLog('readSingleWifiShortBase64', readSingleWifiShortBase64);
 
-      let writeResponse = await BLEService.writeCharacteristicWithResponseForDevice2(
+      let writeResponse =
+        await BLEService.writeCharacteristicWithResponseForDevice2(
           FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
           FLUSHER_TIMESTAMP_CHARACTERISTIC_UUID,
           readSingleWifiShortBase64,
-      );
+        );
 
       consoleLog('FlusherTimestampWriteResponse=>', writeResponse);
 
@@ -1560,51 +1563,52 @@ export const initFlusherSecurityKey = async () => {
 
       // Now send unlock key to device
       const FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID =
-          BLE_CONSTANTS?.FLUSHER?.FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID;
+        BLE_CONSTANTS?.FLUSHER?.FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID;
       const readSingleWifiShortBase6422 = hexToByte(unlockKeyHex);
-      let keyWriteResponse = await BLEService.writeCharacteristicWithResponseForDevice2(
+      let keyWriteResponse =
+        await BLEService.writeCharacteristicWithResponseForDevice2(
           FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
           FLUSHER_UNLOCK_KEY_CHARACTERISTIC_UUID,
           readSingleWifiShortBase6422,
-      ).then((response) => {
-        consoleLog('unlockKeyWriteCallback', response);
-      });
+        ).then(response => {
+          consoleLog('unlockKeyWriteCallback', response);
+        });
 
       consoleLog('FlusherUnlockKeyWriteResponse=>', keyWriteResponse);
       await sleep(1000);
       // now read unlock status
 
       const lockStatusResponse = await BLEService.readCharacteristicForDevice(
-          FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
-          FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID,
+        FLUSHER_APP_IDENTIFICATION_SERVICE_UUID,
+        FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID,
       );
       consoleLog('lockStatusResponse=>', lockStatusResponse);
 
       const notesResponse = await BLEService.readCharacteristicForDevice(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-          'f89f13e7-83f8-4b7c-9e8b-364576d88346',
+        'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+        'f89f13e7-83f8-4b7c-9e8b-364576d88346',
       );
 
       await sleep(1000);
       consoleLog('flusherNote=>', notesResponse);
 
-      let notesWriteResponse = await BLEService.writeCharacteristicWithResponseForDevice2(
+      let notesWriteResponse =
+        await BLEService.writeCharacteristicWithResponseForDevice2(
           'f89f13e7-83f8-4b7c-9e8b-364576d88340',
           'f89f13e7-83f8-4b7c-9e8b-364576d88346',
           hexToByte(asciiToHex('ABCD')),
-      ).then((response) => {
-        consoleLog('unlockKeyWriteCallback', response);
-      });
+        ).then(response => {
+          consoleLog('unlockKeyWriteCallback', response);
+        });
 
       consoleLog('flusherNoteResponse=>', notesWriteResponse);
 
       const notesAfterWrite = await BLEService.readCharacteristicForDevice(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-          'f89f13e7-83f8-4b7c-9e8b-364576d88346',
+        'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+        'f89f13e7-83f8-4b7c-9e8b-364576d88346',
       );
 
       consoleLog('notes After Write =>', notesAfterWrite);
-
     } else {
       consoleLog('Unable to read the BDSN', {bdsnResponse});
     }
