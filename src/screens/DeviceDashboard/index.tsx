@@ -1334,7 +1334,7 @@ const Index = ({navigation}: any) => {
                 showApplySettingButton={showApplySettingButton}
               />
 
-              {/* <ActivationTimeListFlusher
+              <ActivationTimeListFlusher
                 settings={{
                   title: I18n.t('device_dashboard.ACTIVATION_TIME'),
                   route: 'ActivationTimeFlusher',
@@ -1363,7 +1363,7 @@ const Index = ({navigation}: any) => {
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
                 showApplySettingButton={showApplySettingButton}
-              /> */}
+              />
 
               {/* <LineFlushListFlusher
                 settings={{
