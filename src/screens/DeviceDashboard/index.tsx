@@ -1423,8 +1423,8 @@ const Index = ({navigation}: any) => {
                   // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
                   // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
                 }}
-                settingsData={sensorSettings}
-                // settingsData={activationTimeFlusherSettings}
+                // settingsData={sensorSettings}
+                settingsData={activationTimeFlusherSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
@@ -1439,8 +1439,8 @@ const Index = ({navigation}: any) => {
                   // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
                   // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
                 }}
-                settingsData={sensorSettings}
-                // settingsData={flushFlusherSettings}
+                // settingsData={sensorSettings}
+                settingsData={flushFlusherSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}

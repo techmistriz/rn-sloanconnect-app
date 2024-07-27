@@ -537,6 +537,13 @@ export const saveSettings = async (
                   element?.characteristicUUID,
                   fromHexStringUint8Array(element?.modfiedNewValue),
                 );
+            } else if (BLEService.deviceGeneration == 'flusher') {
+              promise =
+                await BLEService.writeCharacteristicWithResponseForDevice2(
+                  element?.serviceUUID,
+                  element?.characteristicUUID,
+                  fromHexStringUint8Array(element?.modfiedNewValue),
+                );
             } else {
               promise =
                 await BLEService.writeCharacteristicWithResponseForDevice(
