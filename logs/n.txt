@@ -1,0 +1,42 @@
+BD (BLE Device) => Control Box
+AD (Flusher OR Focet) => Sensor
+
+yarn remove react-native-gifted-chat @twotalltotems/react-native-otp-input react-native-ble-manager react-native-document-picker react-native-file-viewer react-native-fs rn-fetch-blob
+
+yarn add @notifee/react-native @react-native-async-storage/async-storage @react-native-community/checkbox @react-native-community/datetimepicker @react-native-community/netinfo @react-native-firebase/app @react-native-firebase/crashlytics @react-native-firebase/messaging @react-navigation/compat @react-navigation/drawer @react-navigation/native @react-navigation/native-stack @shopify/flash-list @twotalltotems/react-native-otp-input axios lodash moment react-native-device-info react-native-document-picker react-native-file-viewer react-native-flash-message react-native-fs react-native-gesture-handler react-native-gifted-chat react-native-htmlview react-native-iap react-native-image-crop-picker react-native-image-viewing react-native-linear-gradient react-native-permissions react-native-reanimated react-native-safe-area-context react-native-screens react-native-vector-icons react-redux redux-persist redux-saga rn-fetch-blob
+<Header title={I18n.t('about.HEADER_TITLE')}></Header>
+
+RNDateTimePickerShadowView.m:28 YGNodeConstRef
+
++  BLUETOOTH: 'android.permission.BLUETOOTH',
++  BLUETOOTH_ADMIN: 'android.permission.BLUETOOTH_ADMIN',
+
+npx react-native-asset
+yarn react-native build-android --mode=release
+yarn run android -- --mode="release"
+adb -d install -r ./android/app/build/outputs/apk/release/app-release.apk
+keytool -genkeypair -v -storetype PKCS12 -keystore baby-name-finder-key.keystore -alias baby-name-finder-key-alias -keyalg RSA -keysize 2048 -validity 10000
+
+D:\system\Android\Sdk\tools\emulator -list-avds
+D:\system\Android\Sdk\tools\emulator -avd Pixel_5_API_30
+
+  // const createHeaderRightIcon = () => {
+  //   const {navigation} = props;
+  //   navigation.setOptions({
+  //     headerRight: (_props: any) => (
+  //       <TouchableItem style={{padding: 10}} onPress={() => {}}>
+  //         <Typography size={16} text="Skip" color={Theme.primaryColor} />
+  //       </TouchableItem>
+  //     ),
+  //   });
+  // };
+
+{
+    "message": "Cannot start scanning operation",
+    "errorCode": 600,
+    "attErrorCode": null,
+    "iosErrorCode": null,
+    "androidErrorCode": null,
+    "reason": "Undocumented scan throttle (code 2147483646), suggested retry date is Mon Apr 01 22:40:42 GMT+05:30 2024",
+    "name": "BleError"
+}

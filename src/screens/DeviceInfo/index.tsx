@@ -25,6 +25,7 @@ import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import LoaderOverlay from 'src/components/LoaderOverlay';
 import I18n from 'src/locales/Transaltions';
+import {getDeviceInfoNormalFlusher} from './helperGenFlusher';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -63,8 +64,8 @@ const Index = ({navigation, route}: any) => {
       initializeGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       initializeGen2();
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // code need to be implemented
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      initializeFlusher();
     } else if (BLEService.deviceGeneration == 'gen4') {
       // code need to be implemented
     }
@@ -85,6 +86,15 @@ const Index = ({navigation, route}: any) => {
       initializeNormalGen2();
     } else {
       initializeAdvanceGen2();
+    }
+  };
+
+  /** Function comments */
+  const initializeFlusher = () => {
+    if (!viewAdvanceDetails) {
+      initializeNormalFlusher();
+    } else {
+      // initializeAdvanceFlusher();
     }
   };
 
@@ -616,6 +626,103 @@ const Index = ({navigation, route}: any) => {
       var userData = await getUserData();
       setDeviceDetails([...sortedObjs, ...appInfo, ...userData]);
     } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /** This is for gen1 */
+  const initializeNormalFlusher = async () => {
+    try {
+      setLoading(true);
+      const deviceStaticData = BLEService.connectedDeviceStaticData;
+      consoleLog('initializeNormal deviceStaticData==>', deviceStaticData);
+      // setDeviceData(deviceStaticData);
+      var deviceInfoNormal = await getDeviceInfoNormalFlusher();
+      // consoleLog('ADBDInformationARR', ADBDInformationARR);
+
+      if (deviceStaticData) {
+        deviceInfoNormal.push({
+          name: I18n.t('device_details.FAUCET_MODEL_LABEL'),
+          value: deviceStaticData?.fullNameAllModel,
+          uuid: null,
+          position: 0,
+        });
+      }
+
+      deviceInfoNormal.push({
+        name: I18n.t('device_details.BATTERY_STATUS_LABEL'),
+        value: `${BLEService.batteryLevel}%`,
+        uuid: null,
+        position: 3,
+      });
+
+      const sortedDeviceInfoNormal = _.sortBy(deviceInfoNormal, 'position');
+      setDeviceDetails(sortedDeviceInfoNormal);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /** This is for gen1 */
+  const initializeAdvanceFlusher = async () => {
+    try {
+      setLoading(true);
+      var deviceInfoAdvance = await getDeviceInfoAdvance();
+      var appInfo = await getAppInfo();
+      var userData = await getUserData();
+      // consoleLog('initializeAdvance deviceInfoAdvance==>', deviceInfoAdvance);
+
+      const resultObj = findObject(
+        'Date of last factory reset',
+        deviceInfoAdvance,
+        {
+          searchKey: 'name',
+        },
+      );
+      consoleLog('initializeAdvance resultObj==>', resultObj);
+
+      const sortedDeviceInfoAdvancel = _.sortBy(deviceInfoAdvance, 'position');
+
+      if (!isObjectEmpty(resultObj) && resultObj?.value == 'MANUAL') {
+        // Hours Of Operation -> d0aba888-fb10-4dc9-9b17-bdd8f490c911
+        const resultObj2 = findObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+          },
+        );
+        consoleLog('initializeAdvance resultObj2==>', resultObj2);
+
+        // Date of last factory reset -> d0aba888-fb10-4dc9-9b17-bdd8f490c921
+        const resultObj3 = deviceInfoAdvance.findIndex((item: any) => {
+          return item?.uuid == 'd0aba888-fb10-4dc9-9b17-bdd8f490c921';
+        });
+
+        consoleLog('initializeAdvance resultObj3==>', resultObj3);
+        if (!isObjectEmpty(resultObj2) && resultObj3 >= 0) {
+          const formattedDate = moment(Date.now())
+            .subtract(resultObj2?.value, 's')
+            .format('YYYY/MM/DD');
+          // console.log('formattedDate', formattedDate);
+
+          deviceInfoAdvance[resultObj3] = {
+            ...resultObj,
+            value: formattedDate,
+          };
+
+          consoleLog(
+            'initializeAdvance deviceInfoAdvance[resultObj3]==>',
+            deviceInfoAdvance[resultObj3],
+          );
+        }
+      }
+
+      setDeviceDetails([...sortedDeviceInfoAdvancel, ...appInfo, ...userData]);
+    } catch (error) {
+      //
     } finally {
       setLoading(false);
     }
