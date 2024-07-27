@@ -6,7 +6,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-export type LineFlushListFlusherProps = {
+export type ActivationTimeFlusherProps = {
   settings: any;
   settingsData: any;
   style?: ViewStyle | ViewStyle[];

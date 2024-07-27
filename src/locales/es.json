@@ -199,6 +199,8 @@
     "SENSOR_RANGE": "Rango del sensor",
     "UNITS": "Unidades",
     "SECONDS": "Sec",
+    "EVERY": "Every",
+    "DAYS": "Days",
     "NOTES": "Notas",
     "DISCONNECTING_HEADING": "Disconnect",
     "DISCONNECTING_MSG": "Are you sure you want to disconnect?"

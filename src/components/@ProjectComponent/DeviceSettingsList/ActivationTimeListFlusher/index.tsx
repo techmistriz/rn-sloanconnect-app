@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {styles} from './styles';
-import {LineFlushListFlusherProps} from './types';
+import {ActivationTimeFlusherProps} from './types';
 import Theme from 'src/theme';
 import Typography from 'src/components/Typography';
 import {Wrap, Row} from 'src/components/Common';
@@ -12,8 +12,8 @@ import {useSelector} from 'react-redux';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import I18n from 'src/locales/Transaltions';
 
-// LineFlushListFlusher
-const LineFlushListFlusher = ({
+// ActivationTimeListFlusher
+const ActivationTimeListFlusher = ({
   settings,
   settingsData,
   borderTop,
@@ -22,23 +22,12 @@ const LineFlushListFlusher = ({
   navigation,
   applied = false,
   showApplySettingButton,
-}: LineFlushListFlusherProps) => {
+}: ActivationTimeFlusherProps) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
   );
 
-  const [flush, setFlush] = useState<any>('');
-  const [flushTime, setFlushTime] = useState<any>('');
-  const [flushInterval, setFlushInterval] = useState<any>('');
-
-  /** component hooks method */
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     // initlizeApp();
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
+  const [activationTime, setActivationTime] = useState<any>('');
 
   /** component hooks method */
   useEffect(() => {
@@ -51,47 +40,26 @@ const LineFlushListFlusher = ({
    * @returns value
    */
   const initlizeApp = async () => {
-    let __flush = settingsData?.flush?.value ?? '';
-    let __flushTime = settingsData?.flushTime?.value ?? '';
-    let __flushInterval = settingsData?.flushInterval?.value ?? '';
+    let __activationTime = settingsData?.activationTime?.value ?? '';
 
     // consoleLog('initlizeApp==>', {
-    //   __flush,
-    //   __flushTime,
-    //   __flushInterval,
+    //   __activationTime,
     // });
+
     // Handle unsaved value which were changed
-    const resultObj = findObject('flush', deviceSettingsData?.LineFlush, {
-      searchKey: 'name',
-    });
-    // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
-
-    if (!isObjectEmpty(resultObj)) {
-      __flush = resultObj?.newValue;
-    }
-
-    const resultObj2 = findObject('flushTime', deviceSettingsData?.LineFlush, {
-      searchKey: 'name',
-    });
-
-    if (!isObjectEmpty(resultObj2)) {
-      __flushTime = resultObj2?.newValue;
-    }
-    const resultObj3 = findObject(
-      'flushInterval',
-      deviceSettingsData?.LineFlush,
+    const resultObj2 = findObject(
+      'activationTime',
+      deviceSettingsData?.ActivationTime,
       {
         searchKey: 'name',
       },
     );
 
-    if (!isObjectEmpty(resultObj3)) {
-      __flushInterval = resultObj3?.newValue;
+    if (!isObjectEmpty(resultObj2)) {
+      __activationTime = resultObj2?.newValue;
     }
 
-    setFlush(__flush);
-    setFlushTime(__flushTime);
-    setFlushInterval(__flushInterval);
+    setActivationTime(__activationTime);
   };
 
   return (
@@ -118,52 +86,19 @@ const LineFlushListFlusher = ({
               color={Theme.colors.black}
               ff={Theme.fonts.ThemeFontLight}
             />
-            <Typography
-              size={10}
-              text={flush == '1' ? 'On' : flush == '0' ? 'Off' : ''}
-              style={{
-                textAlign: 'left',
-              }}
-              color={Theme.colors.darkGray}
-              ff={Theme.fonts.ThemeFontLight}
-            />
           </Wrap>
 
           <Wrap autoMargin={false} style={styles.rightStyle}>
             <Row autoMargin={false} style={styles.innerRow}>
-              {flush == '1' ? (
-                <>
-                  <Typography
-                    size={16}
-                    text={`${flushTime} ${I18n.t('device_dashboard.SECONDS')}`}
-                    style={{
-                      textAlign: 'right',
-                    }}
-                    color={Theme.colors.primaryColor}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                  <Typography
-                    size={16}
-                    text={` - ${flushInterval} Hrs`}
-                    style={{
-                      textAlign: 'right',
-                    }}
-                    color={Theme.colors.primaryColor}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </>
-              ) : (
-                <Typography
-                  size={16}
-                  text={`-`}
-                  style={{
-                    textAlign: 'right',
-                  }}
-                  color={Theme.colors.primaryColor}
-                  ff={Theme.fonts.ThemeFontLight}
-                />
-              )}
-
+              <Typography
+                size={16}
+                text={`${activationTime} ${I18n.t('device_dashboard.SECONDS')}`}
+                style={{
+                  textAlign: 'right',
+                }}
+                color={Theme.colors.primaryColor}
+                ff={Theme.fonts.ThemeFontLight}
+              />
               {!isObjectEmpty(deviceSettingsData?.[settings?.name]) &&
               showApplySettingButton ? (
                 <>
@@ -212,4 +147,4 @@ const LineFlushListFlusher = ({
   );
 };
 
-export default LineFlushListFlusher;
+export default ActivationTimeListFlusher;

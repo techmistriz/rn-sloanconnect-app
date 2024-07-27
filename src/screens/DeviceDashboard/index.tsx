@@ -60,6 +60,12 @@ import {BLEReport} from 'src/services/BLEService/BLEReport';
 import I18n from 'src/locales/Transaltions';
 import LineFlushListFlusher from 'src/components/@ProjectComponent/DeviceSettingsList/LineFlushListFlusher';
 import ActivationTimeListFlusher from 'src/components/@ProjectComponent/DeviceSettingsList/ActivationTimeListFlusher';
+import {
+  getActivationTimeFlusherSettings,
+  getFlushFlusherSettings,
+  getNoteFlusherSettings,
+  getSensorFlusherSettings,
+} from './helperFlusher';
 
 let hasSettingsChanged: boolean = false;
 const Index = ({navigation}: any) => {
@@ -91,6 +97,14 @@ const Index = ({navigation}: any) => {
   const [flowRateSettings, setFlowRateSettings] = useState<any>();
   const [sensorSettings, setSensorSettings] = useState<any>();
   const [noteSettings, setNoteSettings] = useState<any>();
+
+  /** Var for flusher */
+  const [activationTimeFlusherSettings, setActivationTimeFlusherSettings] =
+    useState<any>();
+  const [flushFlusherSettings, setFlushFlusherSettings] = useState<any>();
+  const [sensorFlusherSettings, setSensorFlusherSettings] = useState<any>();
+  const [noteFlusherSettings, setNoteFlusherSettings] = useState<any>();
+
   // const [hasSettingsChanged, setHasSettingsChanged] = useState<boolean>(false);
 
   /** component hooks method for hardwareBackPress */
@@ -177,7 +191,7 @@ const Index = ({navigation}: any) => {
       initlizeAppGen2();
       // settingsMappingGen2();
     } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
+      initlizeAppFLusher();
     } else if (BLEService.deviceGeneration == 'gen4') {
       // Code need to be implemented
     }
@@ -717,6 +731,72 @@ const Index = ({navigation}: any) => {
         setBatteryLevel(batteryLevel);
       }
     }
+    setLoading(false);
+  };
+
+  /** Function comments */
+  const initlizeAppFLusher = async () => {
+    setLoading(true);
+    __getBatteryLevel();
+    __getTotalWaterUsase();
+    __getSavedSettingsGen1();
+    getActivationTimeFlusherSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog(
+        //   'initlizeAppGen1 getActivationTimeFlusherSettings response==>',
+        //   response,
+        // );
+
+        // if (JSON.stringify(activationModeSettings) != JSON.stringify(response)) {
+        setActivationTimeFlusherSettings(response);
+        BLEReport.mapFaucetSettings(
+          'ActivationTimeFlusher',
+          response,
+          hasSettingsChanged,
+        );
+        // }
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getActivationModeSettings error==>', error);
+      });
+
+    getFlushFlusherSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog('initlizeAppGen1 getFlushSettings response==>', response);
+        setFlushFlusherSettings(response);
+        BLEReport.mapFaucetSettings(
+          'LineFlushFlusher',
+          response,
+          hasSettingsChanged,
+        );
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getFlushSettings error==>', error);
+      });
+    getSensorFlusherSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
+        setSensorFlusherSettings(response);
+        BLEReport.mapFaucetSettings(
+          'SensorRange',
+          response,
+          hasSettingsChanged,
+        );
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
+      });
+
+    getNoteFlusherSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
+        setNoteFlusherSettings(response);
+        BLEReport.mapFaucetSettings('NoteRange', response, hasSettingsChanged);
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
+      });
+
     setLoading(false);
   };
 
@@ -1339,11 +1419,12 @@ const Index = ({navigation}: any) => {
                   title: I18n.t('device_dashboard.ACTIVATION_TIME'),
                   route: 'ActivationTimeFlusher',
                   name: 'ActivationTimeFlusher',
-                  lineFlushRangeConfig: {min: 8, max: 28, step: 4},
+                  activationTimeRangeConfig: {min: 8, max: 28, step: 4},
                   // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
                   // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
                 }}
                 settingsData={sensorSettings}
+                // settingsData={activationTimeFlusherSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
@@ -1359,27 +1440,12 @@ const Index = ({navigation}: any) => {
                   // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
                 }}
                 settingsData={sensorSettings}
+                // settingsData={flushFlusherSettings}
                 navigation={navigation}
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
                 showApplySettingButton={showApplySettingButton}
               />
-
-              {/* <LineFlushListFlusher
-                settings={{
-                  title: I18n.t('device_dashboard.LINE_FLUSH'),
-                  name: 'LineFlushFlusher',
-                  route: 'LineFlushFlusher',
-                  sensorRangeConfig: {min: 1, max: 5, step: 1},
-                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c942',
-                }}
-                settingsData={sensorSettings}
-                navigation={navigation}
-                borderBottom={<Divider color={Theme.colors.lightGray} />}
-                applied={applied}
-                showApplySettingButton={showApplySettingButton}
-              /> */}
 
               <FlowRateList
                 settings={{

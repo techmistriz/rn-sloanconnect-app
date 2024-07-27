@@ -199,6 +199,8 @@
     "SENSOR_RANGE": "Plage du capteur",
     "UNITS": "Unités",
     "SECONDS": "Sec",
+    "EVERY": "Every",
+    "DAYS": "Days",
     "NOTES": "Remarques",
     "DISCONNECTING_HEADING": "Disconnect",
     "DISCONNECTING_MSG": "Are you sure you want to disconnect?"

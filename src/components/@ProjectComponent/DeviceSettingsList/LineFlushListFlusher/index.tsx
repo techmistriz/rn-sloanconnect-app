@@ -29,16 +29,7 @@ const LineFlushListFlusher = ({
 
   const [flush, setFlush] = useState<any>('');
   const [flushTime, setFlushTime] = useState<any>('');
-  const [flushInterval, setFlushInterval] = useState<any>('');
-
-  /** component hooks method */
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     // initlizeApp();
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
+  const [flushVolume, setFlushVolume] = useState<any>('');
 
   /** component hooks method */
   useEffect(() => {
@@ -51,14 +42,14 @@ const LineFlushListFlusher = ({
    * @returns value
    */
   const initlizeApp = async () => {
-    let __flush = settingsData?.flush?.value ?? '';
+    let __flush = settingsData?.flush?.value ?? '1';
     let __flushTime = settingsData?.flushTime?.value ?? '';
-    let __flushInterval = settingsData?.flushInterval?.value ?? '';
+    let __flushVolume = settingsData?.flushVolume?.value ?? '';
 
     // consoleLog('initlizeApp==>', {
     //   __flush,
     //   __flushTime,
-    //   __flushInterval,
+    //   __flushVolume,
     // });
     // Handle unsaved value which were changed
     const resultObj = findObject('flush', deviceSettingsData?.LineFlush, {
@@ -78,7 +69,7 @@ const LineFlushListFlusher = ({
       __flushTime = resultObj2?.newValue;
     }
     const resultObj3 = findObject(
-      'flushInterval',
+      'flushVolume',
       deviceSettingsData?.LineFlush,
       {
         searchKey: 'name',
@@ -86,12 +77,12 @@ const LineFlushListFlusher = ({
     );
 
     if (!isObjectEmpty(resultObj3)) {
-      __flushInterval = resultObj3?.newValue;
+      __flushVolume = resultObj3?.newValue;
     }
 
     setFlush(__flush);
     setFlushTime(__flushTime);
-    setFlushInterval(__flushInterval);
+    setFlushVolume(__flushVolume);
   };
 
   return (
@@ -135,16 +126,9 @@ const LineFlushListFlusher = ({
                 <>
                   <Typography
                     size={16}
-                    text={`${flushTime} ${I18n.t('device_dashboard.SECONDS')}`}
-                    style={{
-                      textAlign: 'right',
-                    }}
-                    color={Theme.colors.primaryColor}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                  <Typography
-                    size={16}
-                    text={` - ${flushInterval} Hrs`}
+                    text={`${I18n.t(
+                      'device_dashboard.EVERY',
+                    )} ${flushTime} ${I18n.t('device_dashboard.DAYS')}`}
                     style={{
                       textAlign: 'right',
                     }}

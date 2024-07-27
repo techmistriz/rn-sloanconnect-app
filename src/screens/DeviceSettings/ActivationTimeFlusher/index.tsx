@@ -23,10 +23,8 @@ import {ActivationTimeFlusherProps} from './types';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {mapValueGen2} from 'src/utils/Helpers/project';
-import Toggle from 'src/components/Toggle';
 
-const defaultLineFlushRangeConfig = {min: 8, max: 28, step: 4};
+const defaultActivationTimeRangeConfig = {min: 8, max: 28, step: 4};
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -35,18 +33,16 @@ const Index = ({navigation, route}: any) => {
     (state: any) => state?.DeviceSettingsReducer,
   );
   const {referrer, settings, settingsData} = route?.params;
-
-  const [flush, setFlush] = useState<any>('1');
-  const [sensorRange, setSensorRange] = useState('');
-  const [sensorRangeConfig, setSensorRangeConfig] =
+  const [activationTime, setActivationTime] = useState('');
+  const [activationTimeConfig, setActivationTimeConfig] =
     useState<ActivationTimeFlusherProps>(
-      settings?.lineFlushRangeConfig ?? defaultLineFlushRangeConfig,
+      settings?.activationTimeRangeConfig ?? defaultActivationTimeRangeConfig,
     );
   const [sliderOneValue, setSliderOneValue] = React.useState([1]);
 
   const sliderOneValuesChange = (values: any) => {
     if (Array.isArray(values) && values?.length > 0) {
-      setSensorRange(values?.[0]?.toString());
+      setActivationTime(values?.[0]?.toString());
     }
   };
 
@@ -55,11 +51,11 @@ const Index = ({navigation, route}: any) => {
     const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
       (error, device) => {
         consoleLog(
-          'sensorRange useEffect BLEService.onDeviceDisconnected error==>',
+          'activationTime useEffect BLEService.onDeviceDisconnected error==>',
           error,
         );
         // consoleLog(
-        //   'sensorRange useEffect BLEService.onDeviceDisconnected device==>',
+        //   'activationTime useEffect BLEService.onDeviceDisconnected device==>',
         //   device,
         // );
         if (error || error == null) {
@@ -77,76 +73,63 @@ const Index = ({navigation, route}: any) => {
   }, []);
 
   const initlizeApp = async () => {
-    let __sensorRange = settingsData?.sensorRange?.value ?? '';
+    let __activationTime = settingsData?.activationTime?.value ?? '';
 
     // Handle unsaved value which were changed
     const resultObj = findObject(
-      'sensorRange',
-      deviceSettingsData?.SensorRange,
+      'activationTime',
+      deviceSettingsData?.ActivationTime,
       {
         searchKey: 'name',
       },
     );
 
     if (!isObjectEmpty(resultObj)) {
-      __sensorRange = resultObj?.newValue;
+      __activationTime = resultObj?.newValue;
     }
-    // setSensorRangeOld(__sensorRange);
-    setSensorRange(__sensorRange);
-    setSliderOneValue([parseInt(__sensorRange)]);
+    // setActivationTimeOld(__activationTime);
+    setActivationTime(__activationTime);
+    setSliderOneValue([parseInt(__activationTime)]);
   };
 
   const onDonePress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
-      if (BLEService.deviceGeneration == 'gen1') {
-        onDonePressGen1();
-      } else if (BLEService.deviceGeneration == 'gen2') {
-        // Code need to be implemented
-      } else if (BLEService.deviceGeneration == 'gen3') {
-        // Code need to be implemented
-      } else if (BLEService.deviceGeneration == 'gen4') {
-        // Code need to be implemented
+      if (BLEService.deviceGeneration == 'flusher') {
+        onDonePressFlusher();
       }
     }
   };
 
-  const onDonePressGen1 = async () => {
+  const onDonePressFlusher = async () => {
     var params = [];
     const dateFormat = 'YYMMDDHHmm';
-    if (settingsData?.sensorRange?.value != sensorRange) {
+    if (settingsData?.activationTime?.value != activationTime) {
       params.push({
-        name: 'sensorRange',
-        serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_SERVICE_UUID,
-        characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_CHARACTERISTIC_UUID,
-        oldValue: settingsData?.sensorRange?.value,
-        newValue: sensorRange,
+        name: 'activationTime',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.ACTIVATION_TIME_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.ACTIVATION_TIME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.activationTime?.value,
+        newValue: activationTime,
       });
 
       params.push({
-        name: 'sensorRangeDate',
-        serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_SERVICE_UUID,
-        characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_CHARACTERISTIC_UUID,
+        name: 'activationTimeDate',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.ACTIVATION_TIME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.ACTIVATION_TIME_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
-
-      // params.push({
-      //   name: 'sensorRangePhone',
-      //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_SERVICE_UUID,
-      //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_CHARACTERISTIC_UUID,
-      //   oldValue: null,
-      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
-      //   allowedInPreviousSettings: false,
-      // });
     }
 
     if (params.length) {
       dispatch(
         deviceSettingsSuccessAction({
-          data: {SensorRange: params},
+          data: {ActivationTime: params},
         }),
       );
     }
@@ -158,14 +141,14 @@ const Index = ({navigation, route}: any) => {
 
   /**validation checking for email */
   const checkValidation = () => {
-    if (sensorRange.trim() === '') {
-      showSimpleAlert('Please select sensor range');
+    if (activationTime.trim() === '') {
+      showSimpleAlert('Please select activation time');
       return false;
-    } else if (Number(sensorRange) < 1) {
-      showSimpleAlert('Sensor range seconds can`t be less than 1');
+    } else if (Number(activationTime) < 8) {
+      showSimpleAlert('Activation time seconds can`t be less than 8');
       return false;
-    } else if (Number(sensorRange) > 5) {
-      showSimpleAlert('Sensor range seconds can`t be greater than 5');
+    } else if (Number(activationTime) > 28) {
+      showSimpleAlert('Activation time seconds can`t be greater than 28');
       return false;
     } else {
       return true;
@@ -189,9 +172,9 @@ const Index = ({navigation, route}: any) => {
               <Input
                 onRef={input => {
                   // @ts-ignore
-                  sensorRangeTextInputRef = input;
+                  activationTimeTextInputRef = input;
                 }}
-                onChangeText={text => setSensorRange(text)}
+                onChangeText={text => setActivationTime(text)}
                 onSubmitEditing={() => {
                   // @ts-ignore
                   Keyboard.dismiss();
@@ -200,7 +183,7 @@ const Index = ({navigation, route}: any) => {
                 blurOnSubmit={false}
                 keyboardType="numeric"
                 placeholder=""
-                value={sensorRange}
+                value={activationTime}
                 editable={false}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.textInput}
@@ -221,9 +204,9 @@ const Index = ({navigation, route}: any) => {
               <MultiSlider
                 values={sliderOneValue}
                 snapped={true}
-                min={sensorRangeConfig?.min ?? 8}
-                max={sensorRangeConfig?.max ?? 28}
-                step={sensorRangeConfig?.step ?? 4}
+                min={activationTimeConfig?.min ?? 8}
+                max={activationTimeConfig?.max ?? 28}
+                step={activationTimeConfig?.step ?? 4}
                 // enableLabel={true}
                 enabledTwo={false}
                 allowOverlap={true}

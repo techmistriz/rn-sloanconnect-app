@@ -37,16 +37,17 @@ const Index = ({navigation, route}: any) => {
   const {referrer, settings, settingsData} = route?.params;
 
   const [flush, setFlush] = useState<any>('1');
-  const [sensorRange, setSensorRange] = useState('');
-  const [sensorRangeConfig, setSensorRangeConfig] =
-    useState<LineFlushRangeProps>(
-      settings?.lineFlushRangeConfig ?? defaultLineFlushRangeConfig,
-    );
+  const [flushTime, setFlushTime] = useState('');
+  const [flushVolume, setFlushVolume] = useState('');
+  const [flushTimeConfig, setFlushTimeConfig] = useState<LineFlushRangeProps>(
+    settings?.lineFlushRangeConfig ?? defaultLineFlushRangeConfig,
+  );
   const [sliderOneValue, setSliderOneValue] = React.useState([1]);
 
+  /**Function comment */
   const sliderOneValuesChange = (values: any) => {
     if (Array.isArray(values) && values?.length > 0) {
-      setSensorRange(values?.[0]?.toString());
+      setFlushTime(values?.[0]?.toString());
     }
   };
 
@@ -55,11 +56,11 @@ const Index = ({navigation, route}: any) => {
     const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
       (error, device) => {
         consoleLog(
-          'sensorRange useEffect BLEService.onDeviceDisconnected error==>',
+          'flushTime useEffect BLEService.onDeviceDisconnected error==>',
           error,
         );
         // consoleLog(
-        //   'sensorRange useEffect BLEService.onDeviceDisconnected device==>',
+        //   'flushTime useEffect BLEService.onDeviceDisconnected device==>',
         //   device,
         // );
         if (error || error == null) {
@@ -76,77 +77,100 @@ const Index = ({navigation, route}: any) => {
     initlizeApp();
   }, []);
 
+  /**Function comment */
   const initlizeApp = async () => {
-    let __sensorRange = settingsData?.sensorRange?.value ?? '';
+    let __flushTime = settingsData?.flushTime?.value ?? '';
+    let __flushVolume = settingsData?.flushVolume?.value ?? '';
 
     // Handle unsaved value which were changed
     const resultObj = findObject(
-      'sensorRange',
-      deviceSettingsData?.SensorRange,
+      'flushTime',
+      deviceSettingsData?.LineFlushFlusher,
       {
         searchKey: 'name',
       },
     );
 
     if (!isObjectEmpty(resultObj)) {
-      __sensorRange = resultObj?.newValue;
+      __flushTime = resultObj?.newValue;
     }
-    // setSensorRangeOld(__sensorRange);
-    setSensorRange(__sensorRange);
-    setSliderOneValue([parseInt(__sensorRange)]);
+
+    // Handle unsaved value which were changed
+    const resultObj2 = findObject(
+      'flushVolume',
+      deviceSettingsData?.LineFlushFlusher,
+      {
+        searchKey: 'name',
+      },
+    );
+
+    if (!isObjectEmpty(resultObj2)) {
+      __flushVolume = resultObj2?.newValue;
+    }
+    // setFlushTimeOld(__flushTime);
+    setFlushTime(__flushTime);
+    setFlushVolume(__flushVolume);
+    setSliderOneValue([parseInt(__flushTime)]);
   };
 
   const onDonePress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
-      if (BLEService.deviceGeneration == 'gen1') {
-        onDonePressGen1();
-      } else if (BLEService.deviceGeneration == 'gen2') {
-        // Code need to be implemented
-      } else if (BLEService.deviceGeneration == 'gen3') {
-        // Code need to be implemented
-      } else if (BLEService.deviceGeneration == 'gen4') {
-        // Code need to be implemented
+      if (BLEService.deviceGeneration == 'flusher') {
+        onDonePressFlusher();
       }
     }
   };
 
-  const onDonePressGen1 = async () => {
+  /**Function comment */
+  const onDonePressFlusher = async () => {
     var params = [];
     const dateFormat = 'YYMMDDHHmm';
-    if (settingsData?.sensorRange?.value != sensorRange) {
+    if (settingsData?.flushTime?.value != flushTime) {
       params.push({
-        name: 'sensorRange',
-        serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_SERVICE_UUID,
-        characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_CHARACTERISTIC_UUID,
-        oldValue: settingsData?.sensorRange?.value,
-        newValue: sensorRange,
+        name: 'flushTime',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_TIME_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.FLUSH_TIME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flushTime?.value,
+        newValue: flushTime,
       });
 
       params.push({
-        name: 'sensorRangeDate',
-        serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_SERVICE_UUID,
-        characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_DATE_CHARACTERISTIC_UUID,
+        name: 'flushTimeDate',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_TIME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.FLUSH_TIME_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
 
-      // params.push({
-      //   name: 'sensorRangePhone',
-      //   serviceUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_SERVICE_UUID,
-      //   characteristicUUID: BLE_CONSTANTS.GEN1.SENSOR_PHONE_CHARACTERISTIC_UUID,
-      //   oldValue: null,
-      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
-      //   allowedInPreviousSettings: false,
-      // });
+      params.push({
+        name: 'flushVolume',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flushVolume?.value,
+        newValue: flushVolume,
+      });
+
+      params.push({
+        name: 'flushVolumeDate',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
     }
 
     if (params.length) {
       dispatch(
         deviceSettingsSuccessAction({
-          data: {SensorRange: params},
+          data: {LineFlushFlusher: params},
         }),
       );
     }
@@ -158,14 +182,14 @@ const Index = ({navigation, route}: any) => {
 
   /**validation checking for email */
   const checkValidation = () => {
-    if (sensorRange.trim() === '') {
-      showSimpleAlert('Please select sensor range');
+    if (flushTime.trim() === '') {
+      showSimpleAlert('Please select flush time');
       return false;
-    } else if (Number(sensorRange) < 1) {
-      showSimpleAlert('Sensor range seconds can`t be less than 1');
+    } else if (Number(flushTime) < 1) {
+      showSimpleAlert('Flush time seconds can`t be less than 1');
       return false;
-    } else if (Number(sensorRange) > 5) {
-      showSimpleAlert('Sensor range seconds can`t be greater than 5');
+    } else if (Number(flushTime) > 7) {
+      showSimpleAlert('Flush time seconds can`t be greater than 7');
       return false;
     } else {
       return true;
@@ -206,9 +230,9 @@ const Index = ({navigation, route}: any) => {
               <Input
                 onRef={input => {
                   // @ts-ignore
-                  sensorRangeTextInputRef = input;
+                  flushTimeTextInputRef = input;
                 }}
-                onChangeText={text => setSensorRange(text)}
+                onChangeText={text => setFlushTime(text)}
                 onSubmitEditing={() => {
                   // @ts-ignore
                   Keyboard.dismiss();
@@ -217,7 +241,7 @@ const Index = ({navigation, route}: any) => {
                 blurOnSubmit={false}
                 keyboardType="numeric"
                 placeholder=""
-                value={sensorRange}
+                value={flushTime}
                 editable={false}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.textInput}
@@ -238,9 +262,9 @@ const Index = ({navigation, route}: any) => {
               <MultiSlider
                 values={sliderOneValue}
                 snapped={true}
-                min={sensorRangeConfig?.min ?? 1}
-                max={sensorRangeConfig?.max ?? 5}
-                step={sensorRangeConfig?.step ?? 1}
+                min={flushTimeConfig?.min ?? 1}
+                max={flushTimeConfig?.max ?? 5}
+                step={flushTimeConfig?.step ?? 1}
                 // enableLabel={true}
                 enabledTwo={false}
                 allowOverlap={true}

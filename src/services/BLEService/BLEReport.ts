@@ -437,11 +437,23 @@ class BLEReportInstance {
         __FAUCET_SETTINGS.metered_run_time = response?.metered?.value ?? null;
         break;
 
+      /** Using in flusher device */
+      case 'ActivationTimeFlusher':
+        __FAUCET_SETTINGS.activation_time =
+          response?.activationTime?.value ?? null;
+        break;
+
       case 'LineFlush':
         __FAUCET_SETTINGS.flush_enable = response?.flush?.value ?? null;
         __FAUCET_SETTINGS.flush_duration = response?.flushTime?.value ?? null;
         __FAUCET_SETTINGS.flush_interval =
           response?.flushInterval?.value ?? null;
+        break;
+
+      /** Using in flusher device */
+      case 'LineFlushFlusher':
+        __FAUCET_SETTINGS.flush_time = response?.flushTime?.value ?? null;
+        __FAUCET_SETTINGS.flush_volume = response?.flushVolume?.value ?? null;
         break;
 
       case 'SensorRange':
