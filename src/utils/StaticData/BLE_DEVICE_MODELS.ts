@@ -372,7 +372,7 @@ export const BLE_DEVICE_MODELS = {
     },
   },
   basys: {
-    '01': {
+    '20': {
       name: 'BASYS/Aquis Faucets',
       fullNameAllModel: 'EFX1XX, EFX2XX, EFX3XX, EFX6XX, EFX8XX',
       type: 'ADSKU',
