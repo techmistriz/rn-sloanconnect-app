@@ -14,15 +14,15 @@
     "TROUBLESHOOT": "Solucionar problemas",
     "SEND_REPORT": "Enviar informe",
     "SEARCH_AGAIN": "Buscar de nuevo",
-    "OK": "Ok",
+    "OK": "De acuerdo",
     "CANCEL": "Cancelar",
-    "CONFIRM": "CONFIRM",
-    "DONE_BUTTON_LABEL": "DONE",
+    "CONFIRM": "CONFIRMAR",
+    "DONE_BUTTON_LABEL": "Hecha",
     "YES_BUTTON_LABEL": "Sí",
     "NO_BUTTON_LABEL": "No",
-    "ENABLE_BUTTON_LABEL": "ENABLE",
-    "CLOSE_BUTTON_LABEL": "CLOSE",
-    "OPEN_SETTING_BUTTON_LABEL": "OPEN SETTINGS",
+    "ENABLE_BUTTON_LABEL": "PERMITIR",
+    "CLOSE_BUTTON_LABEL": "CERCA",
+    "OPEN_SETTING_BUTTON_LABEL": "CONFIGURACIÓN ABIERTA",
     "EOF": "EOF"
   },
   "welcome": {
@@ -34,20 +34,20 @@
     "EOF": "EOF"
   },
   "permission": {
-    "PERMISSION_TITLE": "Permission",
-    "PERMISSION_SUBTITLE": "Please allow required permissions",
-    "PERMISSION_DESCRIPTION": "You wouldn't be able to proceed if any of these permissions not allowed",
-    "NEARBY_DEVICES_TITLE": "Nearby Devices",
-    "NEARBY_DEVICES_DESC": "App needed Nearby Devices permission to search nearby devices",
-    "BLUETOOTH_TITLE": "Bluetooth",
-    "BLUETOOTH_DESC": "App needed Bluetooth to search devices",
-    "LOCATION_TITLE": "Location",
-    "LOCATION_DESC": "App needed Location permission to search nearby devices",
-    "GEO_LOCATION_TTILE": "GEO Location",
-    "GEO_LOCATION_DESC": "App needed GEO Location permission to search nearby devices",
-    "BTN_NEXT": "Next",
-    "ALLOWE_PERMISSION_TITLE": "would like to use Bluetooth for new connections",
-    "ALLOWE_PERMISSION_MSG": "You can allow new connections in Settings",
+    "PERMISSION_TITLE": "Permission es",
+    "PERMISSION_SUBTITLE": "Please allow required permissions es",
+    "PERMISSION_DESCRIPTION": "You wouldn't be able to proceed if any of these permissions not allowed es",
+    "NEARBY_DEVICES_TITLE": "Nearby Devices es",
+    "NEARBY_DEVICES_DESC": "App needed Nearby Devices permission to search nearby devices es",
+    "BLUETOOTH_TITLE": "Bluetooth es",
+    "BLUETOOTH_DESC": "App needed Bluetooth to search devices es",
+    "LOCATION_TITLE": "Location es",
+    "LOCATION_DESC": "App needed Location permission to search nearby devices es",
+    "GEO_LOCATION_TTILE": "GEO Location es",
+    "GEO_LOCATION_DESC": "App needed GEO Location permission to search nearby devices es",
+    "BTN_NEXT": "Next es",
+    "ALLOWE_PERMISSION_TITLE": "would like to use Bluetooth for new connections es",
+    "ALLOWE_PERMISSION_MSG": "You can allow new connections in Settings es",
     "EOF": "EOF"
   },
   "login": {
@@ -177,7 +177,7 @@
     "BTN_SEEARCH_AGAIN": "BUSCA DE NUEVO"
   },
   "device_landing": {
-    "TAB_HOME": "Home",
+    "TAB_HOME": "Hogar",
     "TAB_DIAGNOSTICS": "Diagnósticos",
     "TAB_DETAILS": "Detalles",
     "TAB_HELP": "Ayuda",
@@ -208,7 +208,10 @@
     "DAYS": "Días",
     "NOTES": "Notas",
     "DISCONNECTING_HEADING": "Desconectar",
-    "DISCONNECTING_MSG": "¿Estás segura de que quieres desconectar?"
+    "DISCONNECTING_MSG": "¿Estás segura de que quieres desconectar?",
+    "WATER_DISPENSE_MSG": "El agua se dispensó correctamente",
+
+    "EOF": "EOF"
   },
   "device_details": {
     "DEVICE_DETAILS_HEADING": "Detalles del dispositivo",
@@ -327,7 +330,7 @@
     "CHANGE_LANGUAGE_BTN": "Cambiar idioma",
     "CHANGE_LANGUAGE_SUCCESS_MSG": "El idioma se cambió correctamente.",
     "EDIT_PROFILE_HEADING": "Editar perfil",
-    "PASSWORD_CHANGE_MSG": "If you wish to change the password, please fill in the below field; otherwise, leave it empty.",
+    "PASSWORD_CHANGE_MSG": "Si desea cambiar la contraseña, complete el campo a continuación; de lo contrario, déjelo vacío.",
     "CHANGE_PROFILE_SUCCESS_MSG": "perfil actualizado con éxito.",
 
     "END": "END"
@@ -340,6 +343,16 @@
     "DISCONNECTING_MSG3": "Desconectarse de su",
     "SYNC_MGS": "Por favor espere, el sistema está verificando y sincronizando informes con el servidor",
     "SYNC_ERROR_MGS": "Algo salió mal con el proceso de sincronización"
+  },
+  "sync_page": {
+    "REPORT_SENT_MSG": "Informe enviado con éxito.",
+    "REPORT_DELETED_MSG": "Informe eliminado de la lista sin conexión.",
+    "DATE": "Fecha",
+    "SYNCING_MSG": "Sincronización...",
+    "FAILED_MGS": "Fallida",
+    "NO_DATA_HEADING": "Ya están todos al día",
+    "NO_DATA_MGS": "Aquí verá todos los informes pendientes de sincronizar en el servidor.",
+    "END": "END"
   },
   "static_pages": {
     "HELP_PAGE_TITLE": "AYUDA",

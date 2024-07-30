@@ -14,15 +14,15 @@
     "TROUBLESHOOT": "Dépannage",
     "SEND_REPORT": "Envoyer le rapport",
     "SEARCH_AGAIN": "Rechercher à nouveau",
-    "OK": "Ok",
+    "OK": "D'accord",
     "CANCEL": "Annuler",
-    "CONFIRM": "CONFIRM",
-    "DONE_BUTTON_LABEL": "DONE",
+    "CONFIRM": "CONFIRMER",
+    "DONE_BUTTON_LABEL": "FAITE",
     "YES_BUTTON_LABEL": "Oui",
     "NO_BUTTON_LABEL": "Non",
-    "ENABLE_BUTTON_LABEL": "ENABLE",
-    "CLOSE_BUTTON_LABEL": "CLOSE",
-    "OPEN_SETTING_BUTTON_LABEL": "OPEN SETTINGS",
+    "ENABLE_BUTTON_LABEL": "ACTIVER",
+    "CLOSE_BUTTON_LABEL": "FERMER",
+    "OPEN_SETTING_BUTTON_LABEL": "OUVRIR LES PARAMÈTRES",
     "EOF": "EOF"
   },
   "welcome": {
@@ -34,20 +34,20 @@
     "EOF": "EOF"
   },
   "permission": {
-    "PERMISSION_TITLE": "Permission",
-    "PERMISSION_SUBTITLE": "Please allow required permissions",
-    "PERMISSION_DESCRIPTION": "You wouldn't be able to proceed if any of these permissions not allowed",
-    "NEARBY_DEVICES_TITLE": "Nearby Devices",
-    "NEARBY_DEVICES_DESC": "App needed Nearby Devices permission to search nearby devices",
-    "BLUETOOTH_TITLE": "Bluetooth",
-    "BLUETOOTH_DESC": "App needed Bluetooth to search devices",
-    "LOCATION_TITLE": "Location",
-    "LOCATION_DESC": "App needed Location permission to search nearby devices",
-    "GEO_LOCATION_TTILE": "GEO Location",
-    "GEO_LOCATION_DESC": "App needed GEO Location permission to search nearby devices",
-    "BTN_NEXT": "Next",
-    "ALLOWE_PERMISSION_TITLE": "would like to use Bluetooth for new connections",
-    "ALLOWE_PERMISSION_MSG": "You can allow new connections in Settings",
+    "PERMISSION_TITLE": "Permission fr",
+    "PERMISSION_SUBTITLE": "Please allow required permissions fr",
+    "PERMISSION_DESCRIPTION": "You wouldn't be able to proceed if any of these permissions not allowed fr",
+    "NEARBY_DEVICES_TITLE": "Nearby Devices fr",
+    "NEARBY_DEVICES_DESC": "App needed Nearby Devices permission to search nearby devices fr",
+    "BLUETOOTH_TITLE": "Bluetooth fr",
+    "BLUETOOTH_DESC": "App needed Bluetooth to search devices fr",
+    "LOCATION_TITLE": "Location fr",
+    "LOCATION_DESC": "App needed Location permission to search nearby devices fr",
+    "GEO_LOCATION_TTILE": "GEO Location fr",
+    "GEO_LOCATION_DESC": "App needed GEO Location permission to search nearby devices fr",
+    "BTN_NEXT": "Next fr",
+    "ALLOWE_PERMISSION_TITLE": "would like to use Bluetooth for new connections fr",
+    "ALLOWE_PERMISSION_MSG": "You can allow new connections in Settings fr",
     "EOF": "EOF"
   },
   "login": {
@@ -177,8 +177,8 @@
     "BTN_SEEARCH_AGAIN": "CHERCHER À NOUVEAU"
   },
   "device_landing": {
-    "TAB_HOME": "Home",
-    "TAB_DIAGNOSTICS": "Diagnostics",
+    "TAB_HOME": "Maison",
+    "TAB_DIAGNOSTICS": "Diagnostique",
     "TAB_DETAILS": "Détails",
     "TAB_HELP": "Aide",
     "TAB_DISCONNECT": "Déconnecter"
@@ -208,7 +208,10 @@
     "DAYS": "Jours",
     "NOTES": "Remarques",
     "DISCONNECTING_HEADING": "Déconnecter",
-    "DISCONNECTING_MSG": "Etes-vous sûr de vouloir vous déconnecter ?"
+    "DISCONNECTING_MSG": "Etes-vous sûr de vouloir vous déconnecter ?",
+    "WATER_DISPENSE_MSG": "L'eau a été distribuée avec succès",
+
+    "EOF": "EOF"
   },
   "device_details": {
     "DEVICE_DETAILS_HEADING": "Détails de l'appareil",
@@ -341,6 +344,16 @@
     "DISCONNECTING_MSG3": "Déconnexion de votre",
     "SYNC_MGS": "Veuillez patienter, le système vérifie et synchronise les rapports avec le serveur",
     "SYNC_ERROR_MGS": "Une erreur s'est produite lors du processus de synchronisation"
+  },
+  "sync_page": {
+    "REPORT_SENT_MSG": "Rapport envoyé avec succès.",
+    "REPORT_DELETED_MSG": "Rapport supprimé de la liste hors ligne.",
+    "DATE": "Date",
+    "SYNCING_MSG": "Synchronisation...",
+    "FAILED_MGS": "Échoué",
+    "NO_DATA_HEADING": "Vous êtes tous à jour",
+    "NO_DATA_MGS": "C'est ici que vous verrez tous les rapports en attente de synchronisation sur le serveur.",
+    "END": "END"
   },
   "static_pages": {
     "HELP_PAGE_TITLE": "AIDE",

@@ -209,6 +209,7 @@
     "NOTES": "Notes",
     "DISCONNECTING_HEADING": "Disconnect",
     "DISCONNECTING_MSG": "Are you sure you want to disconnect?",
+    "WATER_DISPENSE_MSG": "Water dispensed successfully",
 
     "EOF": "EOF"
   },
@@ -342,6 +343,16 @@
     "DISCONNECTING_MSG3": "Disconnecting to your",
     "SYNC_MGS": "Please wait, system checking and syncing reports to server",
     "SYNC_ERROR_MGS": "Something went wrong with sync process"
+  },
+  "sync_page": {
+    "REPORT_SENT_MSG": "Report sent successfully.",
+    "REPORT_DELETED_MSG": "Report deleted from offline list.",
+    "DATE": "Date",
+    "SYNCING_MSG": "Syncing...",
+    "FAILED_MGS": "Failed",
+    "NO_DATA_HEADING": "You're all caught up",
+    "NO_DATA_MGS": "This is where you'll see all pending report to be synced on server.",
+    "END": "END"
   },
   "static_pages": {
     "HELP_PAGE_TITLE": "HELP",

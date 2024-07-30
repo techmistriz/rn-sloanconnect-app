@@ -332,6 +332,7 @@ const Index = ({route, navigation}: any) => {
             title={`${I18n.t('profile.LOGOUT_HEADING')}`}
             message={`${I18n.t('profile.LOGOUT_MSG')}`}
             okayText={I18n.t('button_labels.CONFIRM')}
+            cancelText={I18n.t('button_labels.CANCEL')}
             onCancelPress={() => {
               setLogoutModal(false);
             }}

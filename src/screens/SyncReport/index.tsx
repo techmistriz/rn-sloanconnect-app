@@ -38,30 +38,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {useDispatch, useSelector} from 'react-redux';
 import {BLEService} from 'src/services';
 import DeviceInfo from 'react-native-device-info';
-
-const initReports = [
-  {
-    id: 1,
-    name: 'Diagnostic report 1',
-    value: 'go to shop',
-    status: 0,
-    dateTime: timestampInSec(),
-  },
-  {
-    id: 2,
-    name: 'Diagnostic report 2',
-    value: 'eat at least a one healthy foods',
-    status: 0,
-    dateTime: timestampInSec(),
-  },
-  {
-    id: 3,
-    name: 'Diagnostic report 2',
-    value: 'Do some exercises',
-    status: 0,
-    dateTime: timestampInSec(),
-  },
-];
+import I18n from 'src/locales/Transaltions';
 
 const Index = () => {
   const [reports, setReports] = useState<ReportItemModel[]>([]);
@@ -90,7 +67,7 @@ const Index = () => {
         setReports(storedReportItems);
       } else {
         // await saveReportItems(db, initReports);
-        consoleLog('loadDataCallback saveReportItems==>', initReports);
+        consoleLog('loadDataCallback saveReportItems==>');
         setReports([]);
       }
 
@@ -117,7 +94,7 @@ const Index = () => {
     try {
       const state = await NetInfo.fetch();
       if (state.isConnected == false) {
-        showToastMessage('No internet connection.', 'danger');
+        showToastMessage(I18n.t('common.NO_INTERNET'), 'danger');
         return false;
       }
 
@@ -133,13 +110,13 @@ const Index = () => {
 
       if (response?.status) {
         await deleteReportItem(db, item?.id);
-        showToastMessage('Report sent successfully.', 'success');
+        showToastMessage(I18n.t('sync_page.REPORT_SENT_MSG'), 'success');
         loadDataCallback();
       } else {
         await updateReportItem(db, item, 2);
         loadDataCallback();
         showToastMessage(
-          response?.message ?? 'Something went wrong!',
+          response?.message ?? I18n.t('common.SOMETHING_WENT_WRONG'),
           'danger',
         );
       }
@@ -154,7 +131,7 @@ const Index = () => {
     const db = await getDBConnection();
     await deleteReportItem(db, item?.id);
     loadDataCallback();
-    showToastMessage('Report deleted from offline list.', 'success');
+    showToastMessage(I18n.t('sync_page.REPORT_DELETED_MSG'), 'success');
   };
 
   /**Flatlist render method */
@@ -183,7 +160,9 @@ const Index = () => {
               />
               <Typography
                 size={12}
-                text={`Date: ${parseDateHumanFormatFromUnix(
+                text={`${I18n.t(
+                  'sync_page.DATE',
+                )}: ${parseDateHumanFormatFromUnix(
                   item?.dateTime,
                   'DD/MM/YYYY HH:mm:ss a z',
                 )}`}
@@ -244,7 +223,7 @@ const Index = () => {
 
                   <Typography
                     size={12}
-                    text={`Syncing...`}
+                    text={I18n.t('sync_page.SYNCING_MSG')}
                     style={{
                       textAlign: 'left',
                       marginTop: 10,
@@ -278,7 +257,7 @@ const Index = () => {
                   </Row>
                   <Typography
                     size={12}
-                    text={`Failed`}
+                    text={I18n.t('sync_page.FAILED')}
                     style={{
                       textAlign: 'left',
                       marginTop: 10,
@@ -331,8 +310,8 @@ const Index = () => {
                     }}>
                     <EmptyComponent
                       image={Images.noNotification}
-                      title="You're all cought up"
-                      message="This is where you'll see all pending report to be synced on server."
+                      title={I18n.t('sync_page.NO_DATA_HEADING')}
+                      message={I18n.t('sync_page.NO_DATA_MGS')}
                     />
                   </Wrap>
                 ) : (

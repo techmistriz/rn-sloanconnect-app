@@ -26,7 +26,7 @@ import {
   getDeviceModelData,
   getTotalWaterUsase,
   initFlusherSecurityKey,
-  intiFlusherSecurityKey,
+  // intiFlusherSecurityKey,
   intiGen2SecurityKey,
 } from 'src/utils/Helpers/project';
 import {BLE_DEVICE_MODELS} from 'src/utils/StaticData/BLE_DEVICE_MODELS';
@@ -35,6 +35,7 @@ import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {consoleLog, showToastMessage} from 'src/utils/Helpers/HelperFunction';
 import {DeviceExtendedProps} from 'src/screens/DeviceSearching/types';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import I18n from 'src/locales/Transaltions';
 
 const deviceNotConnectedErrorText = 'Device is not connected';
 
@@ -992,7 +993,7 @@ class BLEServiceInstance {
         BLE_CONSTANTS.GEN1.WATER_DISPENCE_CHARACTERISTIC_UUID,
         '1',
       );
-    showToastMessage('Water dispensed successfully', 'success');
+    showToastMessage(I18n.t("device_dashboard.WATER_DISPENSE_MSG"), 'success');
     consoleLog(
       'dispenseWater writeCharacteristicWithResponseForDevice==>',
       JSON.stringify(writeCharacteristicWithResponseForDevice),
@@ -1020,7 +1021,7 @@ class BLEServiceInstance {
       JSON.stringify(writeDataResponse),
     );
 
-    showToastMessage('Water dispensed successfully', 'success');
+    showToastMessage(I18n.t("device_dashboard.WATER_DISPENSE_MSG"), 'success');
   };
 
   /**
