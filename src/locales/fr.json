@@ -4,7 +4,10 @@
     "APP_VERSION": "Version v 0.0.1",
     "WELCOME": "Bienvenue",
     "NO_INTERNET": "Pas de connexion Internet",
-    "LOADING_TEXT": "Loading...",
+    "LOADING_TEXT": "Chargement...",
+    "PLEAE_WAIT_TEXT": "S'il vous plaît, attendez...",
+    "APPLIYING_TEXT": "Postuler...",
+    "SOMETHING_WENT_WRONG": "Une erreur s'est produite !",
     "EOF": "EOF"
   },
   "button_labels": {
@@ -190,7 +193,8 @@
     "APPLY_SETTINGS_TO_FAUCET": "APPLIQUER LES PARAMÈTRES AU ROBINET",
     "NO_PREVIOUS_SETTINGS_FOUND": "Aucun paramètre précédent trouvé",
     "APPLIYING_MSG": "Applying...",
-    "ADAPTIVE_SENSING_MSG": "Adaptive sensing in progress. Water may be dispensed. Please wait.",
+    "ADAPTIVE_SENSING_MSG": "Détection adaptative en cours. L'eau peut être distribuée. Veuillez patienter.",
+    "PREVIOUS_SETTINGS_APPLIED_MESSAGE": "Les paramètres précédents ont été appliqués avec succès",
 
     "ACTIVATION_MODE": "Mode d'activation",
     "ACTIVATION_TIME": "Activation Time",
@@ -253,6 +257,34 @@
     "USER_TITLE_LABEL": "Titre de l'utilisateur",
     "USER_EMAIL_LABEL": "Courriel de l'utilisateur"
   },
+
+  "settings": {
+    "ACTIVATION_MODE_TITLE": "Activation Mode fr",
+    "ACTIVATION_TIME_TITLE": "Activation Time fr",
+    "LINE_FLUSH_TITLE": "Line Flush fr",
+    "CONFIRM_FLOW_RATE_TITLE": "Confirm Flow Rate fr",
+    "SENSOR_RANGE_TITLE": "Sensor Range fr",
+    "NOTE_TITLE": "Note fr",
+    "VALIDATION_MSG_EMPTY_TIMEOUT": "Please enter timeout in seconds fr",
+    "VALIDATION_MSG_LESS_TIMEOUT": "Timeout seconds can`t be less than  fr",
+    "VALIDATION_MSG_GREATER_TIMEOUT": "Timeout seconds can`t be greater than  fr",
+    "ACTIVATION_MODE_MESSAGE_1": "Set on demand timeout between\n3 and 1200 seconds fr",
+    "ACTIVATION_MODE_MESSAGE_2": "Set meter timeout between\n3 and 120 seconds fr",
+    "SECONDS": "Seconds fr",
+    "EVERY": "every fr",
+    "HOURS": "Hours fr",
+    "CLOSER": "Closer fr",
+    "FARTHER": "Farther fr",
+    "DAYS": "Days fr",
+    "CONFIRM_FLOW_RATE_MESSAGE_1": "Set flow rate to between 1.3 and 9.9\n liters per minute fr",
+    "CONFIRM_FLOW_RATE_MESSAGE_2": "Set flow rate to between 0.3 and 2.6\n gallons per minute fr",
+    "LINE_FLUSH_MESSAGE": "Set duration and frequency fr",
+    "SENSOR_RANGE_MESSAGE": "Note: Sensor range changes may\nrequire 10 seconds to update. fr",
+    "ACTIVATION_TIME_SET_MESSAGE": "Activation time set to fr",
+    "LINE_FLUSH_FLUSHER": "Flush once every fr",
+
+    "EOF": "EOF"
+  },
   "diagnostic_page": {
     "DIAGNOSING_HEADING": "Diagnostic",
     "DIAGNOSE_SUB_TEXT": "Placez votre main devant le \nrobinet pendant au moins 3 secondes.",
@@ -287,25 +319,27 @@
     "LANGUAGE_MENU_TITLE": "Changer de langue",
     "LOGOUT_MENU_TITLE": "Déconnexion",
     "DELETE_ACCOUNT_BTN_LABEL": "Supprimer le compte",
-    "LOGOUT_HEADING": "Logout",
-    "LOGOUT_MSG": "Are you sure you want to log out?",
-    "DELETE_ACCOUNT_HEADING": "Delete Account",
-    "DELETE_ACCOUNT_MSG": "Are you sure you want to Delete Account?",
+    "LOGOUT_HEADING": "Se déconnecter",
+    "LOGOUT_MSG": "Êtes-vous sûr de vouloir vous déconnecter?",
+    "DELETE_ACCOUNT_HEADING": "Supprimer le compte",
+    "DELETE_ACCOUNT_MSG": "Êtes-vous sûr de vouloir supprimer le compte ?",
     "UPDATE_PROFILE_BTN": "Mettre à jour le profil",
     "CHANGE_LANGUAGE_BTN": "Changer de langue",
-    "CHANGE_LANGUAGE_SUCCESS_MSG": "Language changed sucessfully.",
-    "EDIT_PROFILE_HEADING": "Language changed sucessfully.",
-    "PASSWORD_CHANGE_MSG": "If you wish to change the password, please fill in the below field; otherwise, leave it empty.",
+    "CHANGE_LANGUAGE_SUCCESS_MSG": "La langue a été modifiée avec succès.",
+    "EDIT_PROFILE_HEADING": "Editer le profil",
+    "PASSWORD_CHANGE_MSG": "Si vous souhaitez modifier le mot de passe, veuillez remplir le champ ci-dessous ; sinon, laissez-le vide.",
+    "CHANGE_PROFILE_SUCCESS_MSG": "Mise à jour du profil réussie.",
+
     "END": "END"
   },
   "disconnect": {
     "POPUP_HEADING": "Déconnexion",
     "SUB_MSG": "Êtes-vous sûr de vouloir vous déconnecter?",
-    "DISCONNECTING_MSG1": "Disconnecting",
-    "DISCONNECTING_MSG2": "Disconnecting to your",
-    "DISCONNECTING_MSG3": "Disconnecting to your",
-    "SYNC_MGS": "Please wait, system checking and syncing reports to server",
-    "SYNC_ERROR_MGS": "Something went wrong with sync process"
+    "DISCONNECTING_MSG1": "Déconnexion",
+    "DISCONNECTING_MSG2": "Déconnexion de votre",
+    "DISCONNECTING_MSG3": "Déconnexion de votre",
+    "SYNC_MGS": "Veuillez patienter, le système vérifie et synchronise les rapports avec le serveur",
+    "SYNC_ERROR_MGS": "Une erreur s'est produite lors du processus de synchronisation"
   },
   "static_pages": {
     "HELP_PAGE_TITLE": "AIDE",

@@ -16,6 +16,7 @@ import Input from 'src/components/Input';
 import VectorIcon from 'src/components/VectorIcon';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {BLEService} from 'src/services';
+import I18n from 'src/locales/Transaltions';
 
 const NUMBER_PAD = [
   {
@@ -296,7 +297,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={{paddingTop: 10}}>
               <Button
                 type={'link'}
-                title="DONE"
+                title={I18n.t('button_labels.DONE_BUTTON_LABEL')}
                 onPress={() => {
                   onDonePress();
                 }}

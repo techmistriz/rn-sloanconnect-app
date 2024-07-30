@@ -22,6 +22,7 @@ import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {mapValueGen2} from 'src/utils/Helpers/project';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -397,7 +398,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={styles.row}>
               <Typography
                 size={18}
-                text={`Line Flush`}
+                text={I18n.t('settings.LINE_FLUSH_TITLE')}
                 style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontMedium}
@@ -425,7 +426,7 @@ const Index = ({navigation, route}: any) => {
               <Wrap autoMargin={true} style={[styles.row, {marginTop: 40}]}>
                 <Typography
                   size={12}
-                  text={`Set duration and frequency`}
+                  text={I18n.t('settings.LINE_FLUSH_MESSAGE')}
                   style={{textAlign: 'center', marginBottom: 10}}
                   color={Theme.colors.white}
                   ff={Theme.fonts.ThemeFontLight}
@@ -453,7 +454,7 @@ const Index = ({navigation, route}: any) => {
                     />
                     <Typography
                       size={12}
-                      text={`Seconds`}
+                      text={I18n.t('settings.SECONDS')}
                       style={{textAlign: 'center', marginTop: 5}}
                       color={Theme.colors.white}
                       ff={Theme.fonts.ThemeFontLight}
@@ -463,7 +464,7 @@ const Index = ({navigation, route}: any) => {
                     <Input inputContainerStyle={{opacity: 0}} />
                     <Typography
                       size={12}
-                      text={`every`}
+                      text={I18n.t('settings.EVERY')}
                       style={{textAlign: 'center', marginTop: 5}}
                       color={Theme.colors.white}
                       ff={Theme.fonts.ThemeFontLight}
@@ -490,7 +491,7 @@ const Index = ({navigation, route}: any) => {
                     />
                     <Typography
                       size={12}
-                      text={`Hours`}
+                      text={I18n.t('settings.HOURS')}
                       style={{textAlign: 'center', marginTop: 5}}
                       color={Theme.colors.white}
                       ff={Theme.fonts.ThemeFontLight}
@@ -505,7 +506,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={{}}>
               <Button
                 type={'link'}
-                title="DONE"
+                title={I18n.t('button_labels.DONE_BUTTON_LABEL')}
                 onPress={() => {
                   onDonePress();
                 }}

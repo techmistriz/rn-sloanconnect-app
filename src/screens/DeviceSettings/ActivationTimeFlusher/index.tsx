@@ -23,6 +23,7 @@ import {ActivationTimeFlusherProps} from './types';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
+import I18n from 'src/locales/Transaltions';
 
 const defaultActivationTimeRangeConfig = {min: 8, max: 28, step: 4};
 
@@ -163,7 +164,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={true} style={[styles.row]}>
               <Typography
                 size={12}
-                text={`Activation time set to`}
+                text={I18n.t('settings.ACTIVATION_TIME_SET_MESSAGE')}
                 style={{textAlign: 'center', marginTop: 40, marginBottom: 10}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontLight}
@@ -191,7 +192,7 @@ const Index = ({navigation, route}: any) => {
 
               <Typography
                 size={12}
-                text={`Seconds`}
+                text={I18n.t('settings.SECONDS')}
                 style={{textAlign: 'center', marginTop: 10, marginBottom: 10}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontLight}
@@ -331,7 +332,7 @@ const Index = ({navigation, route}: any) => {
                 <Wrap autoMargin={false}>
                   <Typography
                     size={12}
-                    text={`Closer`}
+                    text={I18n.t('settings.CLOSER')}
                     style={{textAlign: 'center'}}
                     color={Theme.colors.white}
                     ff={Theme.fonts.ThemeFontLight}
@@ -340,7 +341,7 @@ const Index = ({navigation, route}: any) => {
                 <Wrap autoMargin={false}>
                   <Typography
                     size={12}
-                    text={`Farther`}
+                    text={I18n.t('settings.FARTHER')}
                     style={{textAlign: 'center'}}
                     color={Theme.colors.white}
                     ff={Theme.fonts.ThemeFontLight}
@@ -354,7 +355,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={{}}>
               <Button
                 type={'link'}
-                title="DONE"
+                title={I18n.t('button_labels.DONE_BUTTON_LABEL')}
                 onPress={() => {
                   onDonePress();
                 }}

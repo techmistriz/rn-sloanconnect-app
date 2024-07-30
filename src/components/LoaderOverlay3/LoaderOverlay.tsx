@@ -13,11 +13,12 @@ import {LoaderOverlayRefProp} from './types';
 import LoaderOverlayController from './LoaderOverlayController';
 import {Icons} from 'src/assets';
 import {consoleLog, getImgSource} from 'src/utils/Helpers/HelperFunction';
+import I18n from 'src/locales/Transaltions';
 
 const LoaderOverlay = () => {
   const loaderOverlayRef = useRef<LoaderOverlayRefProp>();
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('Loading...');
+  const [message, setMessage] = useState(I18n.t('common.LOADING_TEXT'));
 
   useLayoutEffect(() => {
     LoaderOverlayController.setLoaderOverlayRef(loaderOverlayRef);
@@ -26,7 +27,7 @@ const LoaderOverlay = () => {
   useImperativeHandle(
     loaderOverlayRef,
     () => ({
-      showLoaderOverlay: (message = 'Loading...') => {
+      showLoaderOverlay: (message = I18n.t('common.LOADING_TEXT')) => {
         consoleLog(
           'LoaderOverlay useImperativeHandle setLoaderOverlayRef called',
         );

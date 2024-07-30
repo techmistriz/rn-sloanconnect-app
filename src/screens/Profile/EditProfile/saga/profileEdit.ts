@@ -9,6 +9,7 @@ import {
 import {showToastMessage} from 'src/utils/Helpers/HelperFunction';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
+import I18n from 'src/locales/Transaltions';
 
 function* __userProfileRequestSaga({
   payload,
@@ -27,7 +28,7 @@ function* __userProfileRequestSaga({
           user: response,
         }),
       );
-      showToastMessage('Profile updated successfully', 'success');
+      showToastMessage(I18n.t('profile.CHANGE_PROFILE_SUCCESS_MSG'), 'success');
       NavigationService.goBack();
     } else {
       yield put(userProfileFailureAction({}));

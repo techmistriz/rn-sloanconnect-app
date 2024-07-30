@@ -13,6 +13,7 @@ import Theme from 'src/theme';
 import Typography from 'src/components/Typography';
 import {Icons} from 'src/assets';
 import {consoleLog, getImgSource} from 'src/utils/Helpers/HelperFunction';
+import I18n from 'src/locales/Transaltions';
 
 // LoadMoreLoaderText Props
 type LoaderProps = {
@@ -28,7 +29,7 @@ type LoaderProps = {
 // LoadMore
 const Index = ({
   visible = false,
-  loadingText = 'Loading...',
+  loadingText = I18n.t('common.LOADING_TEXT'),
   loadingContainerStyle,
   activityIndicatorColor = Theme.colors.primaryColor,
   activityIndicatorStyle,

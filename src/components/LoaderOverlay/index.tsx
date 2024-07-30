@@ -3,10 +3,11 @@ import React, {useRef, useState} from 'react';
 import {View, ActivityIndicator, Text} from 'react-native';
 import {styles} from './styles';
 import Theme from 'src/theme';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({
   loading,
-  loadingText = 'Please wait...',
+  loadingText = I18n.t('common.PLEAE_WAIT_TEXT'),
 }: {
   loading: boolean;
   loadingText?: string;

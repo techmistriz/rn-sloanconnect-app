@@ -22,6 +22,7 @@ import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import {mapValueGen2, mapValueGenTextToHex} from 'src/utils/Helpers/project';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {cleanString, cleanString2} from 'src/utils/Helpers/encryption';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();

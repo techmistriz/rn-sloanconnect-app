@@ -25,6 +25,7 @@ import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {mapValueGen2} from 'src/utils/Helpers/project';
 import Toggle from 'src/components/Toggle';
+import I18n from 'src/locales/Transaltions';
 
 const defaultLineFlushRangeConfig = {min: 1, max: 7, step: 1};
 
@@ -221,7 +222,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={true} style={[styles.row]}>
               <Typography
                 size={12}
-                text={`Flush once every`}
+                text={I18n.t('settings.LINE_FLUSH_FLUSHER')}
                 style={{textAlign: 'center', marginTop: 40, marginBottom: 10}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontLight}
@@ -249,7 +250,7 @@ const Index = ({navigation, route}: any) => {
 
               <Typography
                 size={12}
-                text={`Days`}
+                text={I18n.t('settings.DAYS')}
                 style={{textAlign: 'center', marginTop: 10, marginBottom: 10}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontLight}
@@ -406,7 +407,7 @@ const Index = ({navigation, route}: any) => {
                 <Wrap autoMargin={false}>
                   <Typography
                     size={12}
-                    text={`Closer`}
+                    text={I18n.t('settings.CLOSER')}
                     style={{textAlign: 'center'}}
                     color={Theme.colors.white}
                     ff={Theme.fonts.ThemeFontLight}
@@ -415,7 +416,7 @@ const Index = ({navigation, route}: any) => {
                 <Wrap autoMargin={false}>
                   <Typography
                     size={12}
-                    text={`Farther`}
+                    text={I18n.t('settings.FARTHER')}
                     style={{textAlign: 'center'}}
                     color={Theme.colors.white}
                     ff={Theme.fonts.ThemeFontLight}
@@ -429,7 +430,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={{}}>
               <Button
                 type={'link'}
-                title="DONE"
+                title={I18n.t('button_labels.DONE_BUTTON_LABEL')}
                 onPress={() => {
                   onDonePress();
                 }}

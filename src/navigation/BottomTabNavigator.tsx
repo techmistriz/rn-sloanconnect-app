@@ -207,6 +207,8 @@ const CustomTabBar = ({state, descriptors, navigation}: any) => {
         visible={disconnectModal}
         title={I18n.t('device_dashboard.DISCONNECTING_HEADING')}
         message={I18n.t('device_dashboard.DISCONNECTING_MSG')}
+        okayText={I18n.t('button_labels.OK')}
+        cancelText={I18n.t('button_labels.CANCEL')}
         onCancelPress={() => {
           setDisconnectModal(false);
         }}

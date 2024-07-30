@@ -5,10 +5,11 @@ import {styles} from './styles';
 import Theme from 'src/theme';
 import {Icons} from 'src/assets';
 import {consoleLog, getImgSource} from 'src/utils/Helpers/HelperFunction';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({
   loading,
-  loadingText = 'Applying...',
+  loadingText = I18n.t('common.APPLIYING_TEXT'),
 }: {
   loading: boolean;
   loadingText?: string;

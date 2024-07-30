@@ -21,6 +21,7 @@ import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {mapValueGen2} from 'src/utils/Helpers/project';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   const dispatch = useDispatch();
@@ -115,7 +116,7 @@ const Index = ({navigation, route}: any) => {
     if (parseInt(val) == 0) {
       if (flowRateType == '1') {
         NavigationService.navigate('FlowRateInput', {
-          title: `Set flow rate to between 1.3 and 9.9\n liters per minute`,
+          title: I18n.t('settings.CONFIRM_FLOW_RATE_MESSAGE_1'),
           subTitle: 'LPM',
           minValue: 1.3,
           maxValue: 9.9,
@@ -123,7 +124,7 @@ const Index = ({navigation, route}: any) => {
         });
       } else {
         NavigationService.navigate('FlowRateInput', {
-          title: `Set flow rate to between 0.3 and 2.6\n gallons per minute`,
+          title: I18n.t('settings.CONFIRM_FLOW_RATE_MESSAGE_2'),
           subTitle: 'GPM',
           minValue: 0.3,
           maxValue: 2.6,
@@ -292,7 +293,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={styles.row}>
               <Typography
                 size={18}
-                text={`Confirm Flow Rate`}
+                text={I18n.t('settings.CONFIRM_FLOW_RATE_TITLE')}
                 style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontMedium}
@@ -341,7 +342,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={{}}>
               <Button
                 type={'link'}
-                title="DONE"
+                title={I18n.t('button_labels.DONE_BUTTON_LABEL')}
                 onPress={() => {
                   onDonePress();
                 }}

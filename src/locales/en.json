@@ -5,6 +5,9 @@
     "WELCOME": "Welcome",
     "NO_INTERNET": "No Internet Connection",
     "LOADING_TEXT": "Loading...",
+    "PLEAE_WAIT_TEXT": "Please wait...",
+    "APPLIYING_TEXT": "Applying...",
+    "SOMETHING_WENT_WRONG": "Something went wrong!",
     "EOF": "EOF"
   },
   "button_labels": {
@@ -191,6 +194,7 @@
     "NO_PREVIOUS_SETTINGS_FOUND": "No previous saved settings found",
     "APPLIYING_MSG": "Applying...",
     "ADAPTIVE_SENSING_MSG": "Adaptive sensing in progress. Water may be dispensed. Please wait.",
+    "PREVIOUS_SETTINGS_APPLIED_MESSAGE": "Previous settings applied successfully.",
 
     "ACTIVATION_MODE": "Activation Mode",
     "ACTIVATION_TIME": "Activation Time",
@@ -203,7 +207,9 @@
     "DAYS": "Days",
     "NOTES": "Notes",
     "DISCONNECTING_HEADING": "Disconnect",
-    "DISCONNECTING_MSG": "Are you sure you want to disconnect?"
+    "DISCONNECTING_MSG": "Are you sure you want to disconnect?",
+
+    "EOF": "EOF"
   },
   "device_details": {
     "DEVICE_DETAILS_HEADING": "Device Details",
@@ -251,7 +257,35 @@
     "USER_PHONE_LABEL": "User Phone #",
     "USER_COMPANY_LABEL": "User Company",
     "USER_TITLE_LABEL": "User Title",
-    "USER_EMAIL_LABEL": "User Email"
+    "USER_EMAIL_LABEL": "User Email",
+    "EOF": "EOF"
+  },
+  "settings": {
+    "ACTIVATION_MODE_TITLE": "Activation Mode",
+    "ACTIVATION_TIME_TITLE": "Activation Time",
+    "LINE_FLUSH_TITLE": "Line Flush",
+    "CONFIRM_FLOW_RATE_TITLE": "Confirm Flow Rate",
+    "SENSOR_RANGE_TITLE": "Sensor Range",
+    "NOTE_TITLE": "Note",
+    "VALIDATION_MSG_EMPTY_TIMEOUT": "Please enter timeout in seconds",
+    "VALIDATION_MSG_LESS_TIMEOUT": "Timeout seconds can`t be less than ",
+    "VALIDATION_MSG_GREATER_TIMEOUT": "Timeout seconds can`t be greater than ",
+    "ACTIVATION_MODE_MESSAGE_1": "Set on demand timeout between\n3 and 1200 seconds",
+    "ACTIVATION_MODE_MESSAGE_2": "Set meter timeout between\n3 and 120 seconds",
+    "SECONDS": "Seconds",
+    "EVERY": "every",
+    "HOURS": "Hours",
+    "CLOSER": "Closer",
+    "FARTHER": "Farther",
+    "DAYS": "Days",
+    "CONFIRM_FLOW_RATE_MESSAGE_1": "Set flow rate to between 1.3 and 9.9\n liters per minute",
+    "CONFIRM_FLOW_RATE_MESSAGE_2": "Set flow rate to between 0.3 and 2.6\n gallons per minute",
+    "LINE_FLUSH_MESSAGE": "Set duration and frequency",
+    "SENSOR_RANGE_MESSAGE": "Note: Sensor range changes may\nrequire 10 seconds to update.",
+    "ACTIVATION_TIME_SET_MESSAGE": "Activation time set to",
+    "LINE_FLUSH_FLUSHER": "Flush once every",
+
+    "EOF": "EOF"
   },
   "diagnostic_page": {
     "DIAGNOSING_HEADING": "Diagnosing",
@@ -293,9 +327,10 @@
     "DELETE_ACCOUNT_MSG": "Are you sure you want to Delete Account?",
     "UPDATE_PROFILE_BTN": "Update Profile",
     "CHANGE_LANGUAGE_BTN": "Change Language",
-    "CHANGE_LANGUAGE_SUCCESS_MSG": "Language changed sucessfully.",
-    "EDIT_PROFILE_HEADING": "Language changed sucessfully.",
+    "CHANGE_LANGUAGE_SUCCESS_MSG": "Language changed successfully.",
+    "EDIT_PROFILE_HEADING": "Edit Profile",
     "PASSWORD_CHANGE_MSG": "If you wish to change the password, please fill in the below field; otherwise, leave it empty.",
+    "CHANGE_PROFILE_SUCCESS_MSG": "Profile updated successfully.",
     "END": "END"
   },
   "disconnect": {

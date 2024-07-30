@@ -24,6 +24,7 @@ import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {mapValueGen2} from 'src/utils/Helpers/project';
+import I18n from 'src/locales/Transaltions';
 
 const defaultSensorRangeConfig = {min: 1, max: 5, step: 1};
 
@@ -239,7 +240,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={styles.row}>
               <Typography
                 size={18}
-                text={`Sensor Range`}
+                text={I18n.t('settings.SENSOR_RANGE_TITLE')}
                 style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontMedium}
@@ -249,7 +250,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={true} style={[styles.row]}>
               <Typography
                 size={12}
-                text={`Note: Sensor range changes may\nrequire 10 seconds to update.`}
+                text={I18n.t('settings.SENSOR_RANGE_MESSAGE')}
                 style={{textAlign: 'center', marginBottom: 40}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontLight}
@@ -392,7 +393,7 @@ const Index = ({navigation, route}: any) => {
                 <Wrap autoMargin={false}>
                   <Typography
                     size={12}
-                    text={`Closer`}
+                    text={I18n.t('settings.CLOSER')}
                     style={{textAlign: 'center'}}
                     color={Theme.colors.white}
                     ff={Theme.fonts.ThemeFontLight}
@@ -401,7 +402,7 @@ const Index = ({navigation, route}: any) => {
                 <Wrap autoMargin={false}>
                   <Typography
                     size={12}
-                    text={`Farther`}
+                    text={I18n.t('settings.FARTHER')}
                     style={{textAlign: 'center'}}
                     color={Theme.colors.white}
                     ff={Theme.fonts.ThemeFontLight}
@@ -415,7 +416,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={{}}>
               <Button
                 type={'link'}
-                title="DONE"
+                title={I18n.t('button_labels.DONE_BUTTON_LABEL')}
                 onPress={() => {
                   onDonePress();
                 }}

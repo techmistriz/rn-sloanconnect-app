@@ -955,7 +955,7 @@ const Index = ({navigation}: any) => {
         showToastMessage(
           'Success',
           'success',
-          'Previous settings applied successfully.',
+          I18n.t('device_dashboard.PREVIOUS_SETTINGS_APPLIED_MESSAGE'),
         );
       }
     }, timeout + 3000);
@@ -1414,7 +1414,7 @@ const Index = ({navigation}: any) => {
                 showApplySettingButton={showApplySettingButton}
               />
 
-              <ActivationTimeListFlusher
+              {/* <ActivationTimeListFlusher
                 settings={{
                   title: I18n.t('device_dashboard.ACTIVATION_TIME'),
                   route: 'ActivationTimeFlusher',
@@ -1445,7 +1445,7 @@ const Index = ({navigation}: any) => {
                 borderBottom={<Divider color={Theme.colors.lightGray} />}
                 applied={applied}
                 showApplySettingButton={showApplySettingButton}
-              />
+              /> */}
 
               <FlowRateList
                 settings={{
@@ -1509,6 +1509,7 @@ const Index = ({navigation}: any) => {
             : I18n.t('device_dashboard.NO_PREVIOUS_SETTINGS_FOUND')
         }
         okayText={I18n.t('button_labels.CONFIRM')}
+        cancelText={I18n.t('button_labels.CANCEL')}
         onCancelPress={() => {
           setLoadPreviosSettingsModal(false);
         }}
@@ -1521,6 +1522,8 @@ const Index = ({navigation}: any) => {
         visible={disconnectModal}
         title={I18n.t('device_dashboard.DISCONNECTING_HEADING')}
         message={I18n.t('device_dashboard.DISCONNECTING_MSG')}
+        okayText={I18n.t('button_labels.OK')}
+        cancelText={I18n.t('button_labels.CANCEL')}
         onCancelPress={() => {
           setDisconnectModal(false);
         }}

@@ -22,6 +22,7 @@ import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {mapValueGen2} from 'src/utils/Helpers/project';
+import I18n from 'src/locales/Transaltions';
 
 const Index = ({navigation, route}: any) => {
   const {referrer, settings, settingsData} = route?.params;
@@ -446,23 +447,31 @@ const Index = ({navigation, route}: any) => {
     const min = 3;
     const max = modeSelection == '1' ? 120 : 1200;
     if (modeSelection == '0' && activationOnDemandSec?.trim() === '') {
-      showSimpleAlert('Please enter timeout in seconds');
+      showSimpleAlert(I18n.t('settings.VALIDATION_MSG_EMPTY_TIMEOUT'));
       return false;
     } else if (modeSelection == '0' && Number(activationOnDemandSec) < min) {
-      showSimpleAlert('Timeout seconds can`t be less than ' + min);
+      showSimpleAlert(
+        I18n.t('settings.VALIDATION_MSG_LESS_TIMEOUT') + min,
+      );
       return false;
     } else if (modeSelection == '0' && Number(activationOnDemandSec) > max) {
-      showSimpleAlert('Timeout seconds can`t be greater than ' + max);
+      showSimpleAlert(
+        I18n.t('settings.VALIDATION_MSG_GREATER_TIMEOUT') + max,
+      );
       return false;
     }
     if (modeSelection == '1' && activationMeteredSec?.trim() === '') {
-      showSimpleAlert('Please enter timeout in seconds');
+      showSimpleAlert(I18n.t('settings.VALIDATION_MSG_EMPTY_TIMEOUT'));
       return false;
     } else if (modeSelection == '1' && Number(activationMeteredSec) < min) {
-      showSimpleAlert('Timeout seconds can`t be less than ' + min);
+      showSimpleAlert(
+        I18n.t('settings.VALIDATION_MSG_LESS_TIMEOUT') + min,
+      );
       return false;
     } else if (modeSelection == '1' && Number(activationMeteredSec) > max) {
-      showSimpleAlert('Timeout seconds can`t be greater than ' + max);
+      showSimpleAlert(
+        I18n.t('settings.VALIDATION_MSG_GREATER_TIMEOUT') + max,
+      );
       return false;
     } else {
       return true;
@@ -477,7 +486,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={styles.row}>
               <Typography
                 size={18}
-                text={`Activation Mode`}
+                text={I18n.t('settings.ACTIVATION_MODE_TITLE')}
                 style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontMedium}
@@ -506,8 +515,8 @@ const Index = ({navigation, route}: any) => {
                 size={12}
                 text={`${
                   modeSelection == '0'
-                    ? `Set on demand timeout between\n3 and 1200 seconds`
-                    : `Set meter timeout between\n3 and 120 seconds`
+                    ? I18n.t('settings.ACTIVATION_MODE_MESSAGE_1')
+                    : I18n.t('settings.ACTIVATION_MODE_MESSAGE_2')
                 }`}
                 style={{textAlign: 'center', marginBottom: 10}}
                 color={Theme.colors.white}
@@ -558,7 +567,7 @@ const Index = ({navigation, route}: any) => {
 
               <Typography
                 size={12}
-                text={`Seconds`}
+                text={I18n.t('settings.SECONDS')}
                 style={{textAlign: 'center', marginTop: 5}}
                 color={Theme.colors.white}
                 ff={Theme.fonts.ThemeFontLight}
@@ -570,7 +579,7 @@ const Index = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={{}}>
               <Button
                 type={'link'}
-                title="DONE"
+                title={I18n.t('button_labels.DONE_BUTTON_LABEL')}
                 onPress={() => {
                   onDonePress();
                 }}

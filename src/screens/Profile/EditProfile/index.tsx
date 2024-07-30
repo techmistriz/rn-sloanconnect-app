@@ -158,7 +158,7 @@ const Index = ({route, navigation}: any) => {
       }
     } catch (error) {
       consoleLog('getRegisterMasters error==>', error);
-      showToastMessage('Something went wrong!');
+      showToastMessage(I18n.t('common.SOMETHING_WENT_WRONG'));
     } finally {
       __setLoading(false);
     }
