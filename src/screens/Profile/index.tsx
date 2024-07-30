@@ -29,7 +29,7 @@ import I18n from 'src/locales/Transaltions';
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
   const dispatch = useDispatch();
-  const {user, token, type} = useSelector((state: any) => state?.AuthReducer);
+  const {user, token} = useSelector((state: any) => state?.AuthReducer);
   const {settings} = useSelector((state: any) => state?.SettingsReducer);
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
   const [deleteAccountModal, setDeleteAccountModal] = useState<boolean>(false);
@@ -186,7 +186,6 @@ const Index = ({route, navigation}: any) => {
               onPress={() => {
                 NavigationService.navigate('EditProfile', {
                   referrer: 'ProfileScreen',
-                  type: type,
                 });
               }}
               style={styles.item}>
@@ -211,7 +210,6 @@ const Index = ({route, navigation}: any) => {
               onPress={() => {
                 NavigationService.navigate('SyncReport', {
                   referrer: 'ProfileScreen',
-                  type: type,
                 });
               }}
               style={styles.item}>
@@ -236,7 +234,6 @@ const Index = ({route, navigation}: any) => {
               onPress={() => {
                 NavigationService.navigate('Language', {
                   referrer: 'ProfileScreen',
-                  type: type,
                 });
               }}
               style={styles.item}>

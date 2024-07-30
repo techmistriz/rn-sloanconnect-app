@@ -30,6 +30,7 @@
     "WELCOME_DESCRIPTION": "Veuillez appuyer sur le bouton bleu ci-dessous pour commencer. Vous serez redirigé vers notre site Web pour continuer.",
     "BTN_LOGIN_REGISTER": "CONNEXION / INSCRIPTION",
     "BTN_HELP": "AIDE",
+    "BTN_LANGUAGE": "Changer de langue",
     "EOF": "EOF"
   },
   "permission": {
@@ -166,14 +167,14 @@
     "SEARCHING_HINT_TEXT": "Recherche d'appareils à proximité..."
   },
   "connecting": {
-    "HEADING": "Connecting",
-    "SUB_MSG": "Connecting to your Sloan Faucet\n Might take a few seconds."
+    "HEADING": "De liaison",
+    "SUB_MSG": "La connexion à votre robinet Sloan\n peut prendre quelques secondes."
   },
   "no_product_found": {
     "HEADING": "Aucun produit trouvé",
     "SUB_MSG": "Veuillez vous assurer que le Bluetooth est activé et réessayez.",
-    "BTN_TROUBLESHOOT": "TROUBLESHOOT",
-    "BTN_SEEARCH_AGAIN": "SEARCH AGAIN"
+    "BTN_TROUBLESHOOT": "DÉPANNAGE",
+    "BTN_SEEARCH_AGAIN": "CHERCHER À NOUVEAU"
   },
   "device_landing": {
     "TAB_HOME": "Home",
@@ -192,22 +193,22 @@
     "CHANGES_APPLIED_HEADING": "MODIFICATIONS APPLIQUÉES",
     "APPLY_SETTINGS_TO_FAUCET": "APPLIQUER LES PARAMÈTRES AU ROBINET",
     "NO_PREVIOUS_SETTINGS_FOUND": "Aucun paramètre précédent trouvé",
-    "APPLIYING_MSG": "Applying...",
+    "APPLIYING_MSG": "Postuler...",
     "ADAPTIVE_SENSING_MSG": "Détection adaptative en cours. L'eau peut être distribuée. Veuillez patienter.",
     "PREVIOUS_SETTINGS_APPLIED_MESSAGE": "Les paramètres précédents ont été appliqués avec succès",
 
     "ACTIVATION_MODE": "Mode d'activation",
-    "ACTIVATION_TIME": "Activation Time",
+    "ACTIVATION_TIME": "Heure d'activation",
     "LINE_FLUSH": "Rinçage de la ligne",
     "CONFIRM_FLOW_RATE": "Confirmer le débit",
     "SENSOR_RANGE": "Plage du capteur",
     "UNITS": "Unités",
-    "SECONDS": "Sec",
-    "EVERY": "Every",
-    "DAYS": "Days",
+    "SECONDS": "Seconde",
+    "EVERY": "Chaque",
+    "DAYS": "Jours",
     "NOTES": "Remarques",
-    "DISCONNECTING_HEADING": "Disconnect",
-    "DISCONNECTING_MSG": "Are you sure you want to disconnect?"
+    "DISCONNECTING_HEADING": "Déconnecter",
+    "DISCONNECTING_MSG": "Etes-vous sûr de vouloir vous déconnecter ?"
   },
   "device_details": {
     "DEVICE_DETAILS_HEADING": "Détails de l'appareil",

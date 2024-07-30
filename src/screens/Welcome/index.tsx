@@ -165,6 +165,17 @@ const Welcome = ({navigation, route}: any) => {
             <Wrap autoMargin={false} style={[{marginTop: 10}]}>
               <Button
                 type={'link'}
+                title={I18n.t('welcome.BTN_LANGUAGE')}
+                onPress={() => {
+                  NavigationService.navigate('Language', {
+                    referrer: 'ProfileScreen',
+                  });
+                }}
+              />
+            </Wrap>
+            <Wrap autoMargin={false} style={[{marginTop: 10}]}>
+              <Button
+                type={'link'}
                 title={I18n.t('welcome.BTN_HELP')}
                 onPress={() => {
                   NavigationService.navigate('Help');

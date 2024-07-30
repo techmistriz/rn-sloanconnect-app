@@ -30,6 +30,7 @@
     "WELCOME_DESCRIPTION": "Please tap on the blue button below to begin. You will be redirected to our website to continue.",
     "BTN_LOGIN_REGISTER": "LOGIN / REGISTER",
     "BTN_HELP": "HELP",
+    "BTN_LANGUAGE": "Change Language",
     "EOF": "EOF"
   },
   "permission": {

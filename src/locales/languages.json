@@ -2,16 +2,19 @@
   {
     "id": "1",
     "name": "English",
+    "convertedName": "English",
     "code": "en"
   },
   {
     "id": "3",
     "name": "Spanish",
+    "convertedName": "Española",
     "code": "es"
   },
   {
     "id": "3",
-    "name": "Francis",
+    "name": "Franch",
+    "convertedName": "Franquicia",
     "code": "fr"
   }
 ]

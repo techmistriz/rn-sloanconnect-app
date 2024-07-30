@@ -32,16 +32,24 @@ const Index = ({route, navigation}: any) => {
   );
 
   /** compoment hooks method */
-  useEffect(() => {}, []);
+  useEffect(() => {
+    consoleLog('useEffect selectedLanguageState==>', selectedLanguageState);
+  }, []);
 
   /** action for logout */
   const onLanguageChange = async (item: any) => {
     setSelectedLanguageState(item);
+    // consoleLog('onLanguageChange item==>', item);
   };
 
   /** action for logout */
   const onSaveLanguage = async () => {
+    consoleLog(
+      'onSaveLanguage selectedLanguageState==>',
+      selectedLanguageState,
+    );
     I18n.locale = selectedLanguageState?.code ?? 'en';
+
     dispatch(
       settingsSuccessAction({
         settings: {
@@ -94,9 +102,14 @@ const Index = ({route, navigation}: any) => {
                   <Wrap autoMargin={false} style={styles.itemRow}>
                     <Wrap autoMargin={false}>
                       <Typography
-                        text={item?.name}
+                        text={item?.convertedName}
                         color={Theme?.colors.black}
                         size={16}
+                      />
+                      <Typography
+                        text={item?.name}
+                        color={Theme?.colors.black}
+                        size={10}
                       />
                     </Wrap>
                     <Wrap autoMargin={false} style={styles.itemRow}>
