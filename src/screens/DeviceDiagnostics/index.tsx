@@ -595,8 +595,8 @@ const Index = ({navigation, route}: any) => {
   };
 
   if (
-    BLEService.deviceGeneration == 'gen11' ||
-    BLEService.deviceGeneration == 'gen21'
+    BLEService.deviceGeneration == 'gen1' ||
+    BLEService.deviceGeneration == 'gen2'
   ) {
     return (
       <Wrap autoMargin={false} style={styles.mainContainer}>

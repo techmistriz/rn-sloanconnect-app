@@ -164,13 +164,17 @@ const Index = ({navigation, route}: any) => {
       await checkAndSyncPendingSycableItems(token);
 
       // showToast && showToastMessage('Report sent', 'success');
-
       if (isReportManual == 'yes') {
         setReportSentStatus(true);
+        setTimeout(() => {
+          setReportSentStatus(false);
+        }, 5000);
       }
 
       return true;
     } catch (error) {
+      consoleLog('handleSendReport error==>', error);
+      showToastMessage('Something went wrong.');
       return true;
     } finally {
       setLoading(false);

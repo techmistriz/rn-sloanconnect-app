@@ -17,7 +17,7 @@ import {
 export const checkAndSyncPendingSycableItems = async (
   token: string,
 ): Promise<boolean> => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   try {
     const state = await NetInfo.fetch();
@@ -49,7 +49,7 @@ export const checkAndSyncPendingSycableItems = async (
         storedReportItems.length,
       );
 
-      dispatch(syncReportRequestAction({status: 1}));
+      // dispatch(syncReportRequestAction({status: 1}));
 
       for (let index = 0; index < storedReportItems.length; index++) {
         const item = storedReportItems[index];
@@ -72,7 +72,7 @@ export const checkAndSyncPendingSycableItems = async (
       // wait for all the promises in the promises array to resolve
       Promise.all(promises).then(results => {
         // all the fetch requests have completed, and the results are in the "results" array
-        dispatch(syncReportSuccessAction({status: 0}));
+        // dispatch(syncReportSuccessAction({status: 0}));
         return true;
       });
     }
