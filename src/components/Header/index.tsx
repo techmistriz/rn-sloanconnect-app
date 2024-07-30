@@ -21,6 +21,7 @@ import AlertBox from 'src/components/AlertBox';
 import {BLEService} from 'src/services/BLEService/BLEService';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {useDispatch, useSelector} from 'react-redux';
+import I18n from 'src/locales/Transaltions';
 
 // Header Props
 type HeaderProps = {
@@ -251,9 +252,10 @@ const Header = ({
 
       <AlertBox
         visible={logoutModal}
-        title="Logout"
-        message={`Are you sure you want to log out?`}
-        okayText={'CONFIRM'}
+        title={`${I18n.t('profile.LOGOUT_HEADING')}`}
+        message={`${I18n.t('profile.LOGOUT_MSG')}`}
+        okayText={I18n.t('button_labels.CONFIRM')}
+        cancelText={I18n.t('button_labels.CANCEL')}
         onCancelPress={() => {
           setLogoutModal(false);
         }}
