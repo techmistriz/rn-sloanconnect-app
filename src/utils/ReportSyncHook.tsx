@@ -33,7 +33,7 @@ const useReportSync = () => {
     return () => {
       subscription?.remove();
     };
-  }, [isConnected, isInternetReachable]);
+  }, [isConnected, isInternetReachable, token]);
 
   /**componet render method */
   const checkAndSyncPendingSycableItems = async () => {
