@@ -5,6 +5,7 @@ import {
   getDBConnection,
   checkTableExistance,
   getReportItems,
+  deleteReportItems,
 } from 'src/services/DBService/SQLiteDBService';
 import {syncToServer} from 'src/services/SyncService/SyncService';
 import {consoleLog} from './Helpers/HelperFunction';
@@ -19,6 +20,7 @@ const useReportSync = () => {
   const {isConnected, isInternetReachable} = useNetInfo();
   const {token} = useSelector((state: any) => state?.AuthReducer);
 
+  /**componet render method */
   useEffect(() => {
     consoleLog('useReportSync called', {
       isConnected,
@@ -26,14 +28,15 @@ const useReportSync = () => {
     });
     let subscription: any;
     if (isConnected && isInternetReachable && token) {
-      __checkAndSyncPendingSycableItems();
+      checkAndSyncPendingSycableItems();
     }
     return () => {
       subscription?.remove();
     };
   }, [isConnected, isInternetReachable]);
 
-  const __checkAndSyncPendingSycableItems = async () => {
+  /**componet render method */
+  const checkAndSyncPendingSycableItems = async () => {
     const db = await getDBConnection();
     consoleLog('useReportSync checkAndSyncPendingSycableItems db==>', db);
     const isTableExistance = await checkTableExistance(db, 'table_reports');
@@ -73,7 +76,7 @@ const useReportSync = () => {
       Promise.all(promises).then(results => {
         // all the fetch requests have completed, and the results are in the "results" array
         dispatch(syncReportSuccessAction({status: 0}));
-        // deleteReportItems(__db, deletableIds);
+        deleteReportItems(db, deletableIds);
         consoleLog('checkAndSyncPendingSycableItems2 romise.all called');
         return true;
       });
