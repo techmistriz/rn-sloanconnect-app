@@ -17,7 +17,6 @@ import {checkAllRequiredPermissions} from 'src/screens/Permission/helper';
 import {BLEService} from 'src/services';
 import I18n from 'src/locales/Transaltions';
 import {useNetInfo} from '@react-native-community/netinfo';
-import {checkAndSyncPendingSycableItems} from 'src/services/SyncService/SyncService';
 
 const Welcome = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -30,22 +29,6 @@ const Welcome = ({navigation, route}: any) => {
   const fadeInDelay = 500;
   const fadeInValue = new Animated.Value(0);
   const spinValue = new Animated.Value(0);
-  const {isConnected, isInternetReachable} = useNetInfo();
-
-  /** Hooks for checking if user turned off bluetooth power */
-  useEffect(() => {
-    if (isConnected && token) {
-      consoleLog(
-        'Welcome useEffect __checkAndSyncPendingSycableItems called==>',
-        {isConnected},
-      );
-      __checkAndSyncPendingSycableItems();
-    }
-  }, [isConnected, token]);
-
-  const __checkAndSyncPendingSycableItems = async () => {
-    // checkAndSyncPendingSycableItems(token).then(() => {});
-  };
 
   useEffect(() => {
     __checkAllRequiredPermissions();

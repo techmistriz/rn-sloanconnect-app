@@ -6,6 +6,7 @@ import {
   checkTableExistance,
   getReportItems,
   deleteReportItem,
+  deleteReportItems,
 } from 'src/services/DBService/SQLiteDBService';
 import NetInfo from '@react-native-community/netinfo';
 import {useDispatch} from 'react-redux';
@@ -64,8 +65,8 @@ export const checkAndSyncPendingSycableItems = async (
 
         promises.push(syncStatus);
         if (syncStatus) {
-          const deleteStatus = await deleteReportItem(db, item.id);
-          promises.push(deleteStatus);
+          // const deleteStatus = await deleteReportItem(db, item.id);
+          // promises.push(deleteStatus);
         }
       }
 
@@ -111,3 +112,48 @@ export const syncToServer = async (
     //
   }
 };
+
+// export const checkAndSyncPendingSycableItems2 = async (
+//   token: string,
+//   __db: any,
+//   __storedReportItems: any,
+// ): Promise<boolean> => {
+//   // const dispatch = useDispatch();
+//   consoleLog('checkAndSyncPendingSycableItems2 called');
+//   try {
+//     const promises: any = [];
+//     const deletableIds: number[] = [];
+
+//     // dispatch(syncReportRequestAction({status: 1}));
+
+//     for (let index = 0; index < __storedReportItems.length; index++) {
+//       const item = __storedReportItems[index];
+
+//       const payload =
+//         typeof item?.value === 'string' ? JSON.parse(item?.value) : item?.value;
+//       // consoleLog('onSync payload==>', payload);
+//       const ss = syncToServer(payload, token);
+//       promises.push(ss);
+//       deletableIds.push(item.id);
+
+//       consoleLog('checkAndSyncPendingSycableItems2 item.id==>', item.id);
+//       // syncToServer(payload, token).then(syncStatus => {
+//       //   promises.push(ss);
+//       //   deletableIds.push(item.id);
+//       // });
+//     }
+
+//     // wait for all the promises in the promises array to resolve
+//     Promise.all(promises).then(results => {
+//       // all the fetch requests have completed, and the results are in the "results" array
+//       // dispatch(syncReportSuccessAction({status: 0}));
+//       // deleteReportItems(__db, deletableIds);
+//       consoleLog('checkAndSyncPendingSycableItems2 romise.all called');
+//       return true;
+//     });
+//   } catch (error) {
+//     return false;
+//   } finally {
+//     return false;
+//   }
+// };

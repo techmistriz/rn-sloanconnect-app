@@ -27,7 +27,11 @@ const Index = ({}: ActivateDeviceProps) => {
         resizeMode="cover"
         // blurRadius={1}
       />
-      <Header hasLogOutButton headerBackgroundType="transparent" />
+      <Header
+        hasLogOutButton
+        headerBackgroundType="transparent"
+        hasOnlineOfflineIcon={true}
+      />
       <Wrap autoMargin={false} style={styles.sectionContainer}>
         <Wrap autoMargin={false} style={styles.section1}>
           <Typography

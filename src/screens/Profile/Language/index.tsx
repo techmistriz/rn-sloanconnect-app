@@ -63,6 +63,7 @@ const Index = ({route, navigation}: any) => {
     handleRedirect();
   };
 
+  /** action for logout */
   const handleRedirect = () => {
     if (referrer == 'SplashScreen') {
       if (typeof token != 'undefined' && token != null && token) {

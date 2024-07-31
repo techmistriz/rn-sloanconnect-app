@@ -28,6 +28,7 @@ const Index = ({route, navigation}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
   const {loading} = useSelector((state: any) => state?.AuthReducer);
   const {settings} = useSelector((state: any) => state?.SettingsReducer);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   // const [email, setEmail] = useState(__DEV__ ? 'deepakmaurya@hotmail.com' : '');
   // const [password, setPassword] = useState(__DEV__ ? 'Maurya@2019' : '');
@@ -36,12 +37,13 @@ const Index = ({route, navigation}: any) => {
   const [email, setEmail] = useState(__DEV__ ? 'pk836746+11@gmail.com' : '');
   const [password, setPassword] = useState(__DEV__ ? '123456' : '');
 
+  /** Function comment */
   useEffect(() => {
     consoleLog('AuthReducer Login Screen==>', {loading, settings});
     checkIfComeFromUnauthenticated();
   }, []);
 
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  /** Function comment */
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -62,6 +64,7 @@ const Index = ({route, navigation}: any) => {
     };
   }, []);
 
+  /** Function comment */
   const checkIfComeFromUnauthenticated = () => {
     if (referrer === 'Unauthenticated') {
       dispatch(loginResetDataAction());
@@ -70,6 +73,7 @@ const Index = ({route, navigation}: any) => {
     }
   };
 
+  /** Function comment */
   const onLoginPress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();

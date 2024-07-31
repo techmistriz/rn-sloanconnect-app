@@ -25,8 +25,6 @@ import NoDeviceFound from 'src/components/@ProjectComponent/NoDeviceFound';
 import {filterBLEDevices} from './helper';
 import {DeviceExtendedProps, ScanningProps} from './types';
 import ActivateDevice from 'src/components/@ProjectComponent/ActivateDevice';
-import {initFlusherSecurityKey} from "src/utils/Helpers/project";
-import * as console from "console";
 import I18n from 'src/locales/Transaltions';
 
 let timeoutID: any = null;
@@ -45,7 +43,7 @@ const Index = ({navigation, route}: any) => {
   const connectedDevice: any = BLEService.getDevice();
   const [searchAgainFlag, setSearchAgain] = useState(0);
   const [isDeviceConnectTimedout, setDeviceConnectTimeout] = useState(false);
-
+  
   /** Hooks for checking if user turned off bluetooth power */
   useEffect(() => {
     const subscription = BLEService.manager.onStateChange(state => {

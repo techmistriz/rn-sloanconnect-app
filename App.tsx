@@ -25,6 +25,7 @@ import {constants} from 'src/common';
 import LoaderOverlay from 'src/components/LoaderOverlay';
 import LoaderOverlay3 from 'src/components/LoaderOverlay3';
 import {SafeAreaView as SafeAreaViewCustom} from 'react-native-safe-area-context';
+import ReportSyncHook from 'src/utils/ReportSyncHook';
 
 enableScreens();
 // TODO: Remove when fixed
@@ -84,6 +85,8 @@ function App() {
             <MainNavigator />
             <FlashMessage position="bottom" />
             <LoaderOverlay3 />
+            <ReportSyncHook />
+
             {/* <NetworkLost
               isInternet={isInternet}
               setIsInternet={setIsInternet}

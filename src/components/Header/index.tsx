@@ -22,6 +22,8 @@ import {BLEService} from 'src/services/BLEService/BLEService';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {useDispatch, useSelector} from 'react-redux';
 import I18n from 'src/locales/Transaltions';
+import {useReportSync} from 'src/utils/ReportSyncHook';
+import {Animated, Easing} from 'react-native';
 
 // Header Props
 type HeaderProps = {
@@ -70,6 +72,7 @@ const Header = ({
     NavigationService.resetAllAction('Welcome');
   };
 
+  /** action for logout */
   const checkDevice = async () => {
     dispatch(deviceSettingsResetDataAction());
     // if (BLEService?.deviceGeneration == 'gen2') {
@@ -82,7 +85,21 @@ const Header = ({
     } catch (error) {}
   };
 
-  // consoleLog('Header onBackButtonPress==>', onBackButtonPress);
+  // Next, interpolate beginning and end values (in this case 0 and 1)
+  const spinValue = new Animated.Value(0);
+  Animated.loop(
+    Animated.timing(spinValue, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }),
+  ).start();
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   return (
     <Row
@@ -212,12 +229,17 @@ const Header = ({
           <TouchableItem disabled>
             <>
               {status == 1 ? (
-                <VectorIcon
-                  iconPack="Ionicons"
-                  name={'sync-outline'}
-                  size={20}
-                  color={Theme.colors.green}
-                />
+                <Animated.View
+                  style={{
+                    transform: [{rotate: spin}],
+                  }}>
+                  <VectorIcon
+                    iconPack="Ionicons"
+                    name={'sync-outline'}
+                    size={20}
+                    color={Theme.colors.green}
+                  />
+                </Animated.View>
               ) : (
                 <VectorIcon
                   iconPack="Octicons"

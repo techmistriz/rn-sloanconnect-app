@@ -113,3 +113,13 @@ export const deleteReportItem = async (
   const deleteQuery = `DELETE from ${__tableName} where rowid = ${id}`;
   return await db.executeSql(deleteQuery);
 };
+
+export const deleteReportItems = async (
+  db: SQLiteDatabase,
+  ids: number[],
+): Promise<any> => {
+  const __tableName = 'table_reports';
+
+  const deleteQuery = `DELETE from ${__tableName} where rowid IN ( ${ids?.toString()} )`;
+  return await db.executeSql(deleteQuery);
+};
