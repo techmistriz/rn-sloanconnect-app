@@ -2,7 +2,7 @@ import moment from 'moment';
 import {Device} from 'react-native-ble-plx';
 import {BLEService} from 'src/services';
 import {consoleLog, timestampInSec} from 'src/utils/Helpers/HelperFunction';
-import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
+import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {base64EncodeDecode, hexToDecimal} from 'src/utils/Helpers/encryption';
 import {
   formatCharateristicValue,
@@ -11,7 +11,7 @@ import {
   getDeviceModelData,
 } from 'src/utils/Helpers/project';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
-import {BLE_GATT_SERVICES_FLUSHER} from 'src/utils/StaticData/BLE_GATT_SERVICES_FLUSHER';
+import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
 import I18n from 'src/locales/Transaltions';
 
 const connectedDevice = BLEService.getDevice();
@@ -24,50 +24,9 @@ export const getDeviceInfoNormalFlusher = async () => {
 
 /** getDeviceInfoAdvanceFlusher method for advance */
 export const getDeviceInfoAdvanceFlusher = async () => {
-  var statisticsInformationArr = await getStatisticsInformationDataFlusher();
-  var settingLogs = await getSettingLogsDataFlusher();
+  const statisticsInformationArr = await getStatisticsInformationDataFlusher();
+  const settingLogs = await getSettingLogsDataFlusher();
   // consoleLog('getDeviceInfoAdvanceFlusher settingLogs==>', settingLogs);
-
-  const resultObj = findObject('Date of last factory reset', settingLogs, {
-    searchKey: 'name',
-  });
-  consoleLog('getDeviceInfoAdvanceFlusher resultObj==>', resultObj);
-
-  if (!isObjectEmpty(resultObj) && resultObj?.value == 'MANUAL') {
-    // Hours Of Operation -> f89f13e7-83f8-4b7c-9e8b-364576d88312
-    const resultObj2 = findObject(
-      'f89f13e7-83f8-4b7c-9e8b-364576d88312',
-      statisticsInformationArr,
-      {
-        searchKey: 'uuid',
-      },
-    );
-    consoleLog('getDeviceInfoAdvanceFlusher resultObj2==>', resultObj2);
-
-    // Date of last factory reset -> f89f13e7-83f8-4b7c-9e8b-364576d88321
-    const resultObj3 = settingLogs.findIndex((item: any) => {
-      return item?.uuid == 'f89f13e7-83f8-4b7c-9e8b-364576d88321';
-    });
-
-    consoleLog('getDeviceInfoAdvanceFlusher resultObj3==>', resultObj3);
-    if (!isObjectEmpty(resultObj2) && resultObj3 >= 0) {
-      const formattedDate = moment(Date.now())
-        .subtract(resultObj2?.value, 's')
-        .format('YYYY/MM/DD');
-      // console.log('formattedDate', formattedDate);
-
-      settingLogs[resultObj3] = {
-        ...resultObj,
-        value: formattedDate,
-      };
-
-      consoleLog(
-        'getDeviceInfoAdvanceFlusher settingLogs[resultObj3]==>',
-        settingLogs[resultObj3],
-      );
-    }
-  }
-
   return [...statisticsInformationArr, ...settingLogs];
 };
 
@@ -77,7 +36,7 @@ const getBDInformationDataFlusher = () => {
     const serviceUUID = 'f89f13e7-83f8-4b7c-9e8b-364576d88300';
     const allServices = getDeviceCharacteristicsByServiceUUID(
       serviceUUID,
-      BLE_GATT_SERVICES_FLUSHER,
+      BLE_GATT_SERVICES,
     );
 
     var data = [];
@@ -117,9 +76,7 @@ const getBDInformationDataFlusher = () => {
         // consoleLog('dateOfInstallTimestamp==>', dateOfInstallTimestamp);
         data.push({
           name: 'Date of Installation',
-          nameLocale: `${I18n.t(
-            'device_details.FLUSHER.LABEL_DATE_OF_INSTALLATION',
-          )}`,
+          nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
           prefix: null,
           postfix: null,
           uuid: null,
@@ -148,7 +105,7 @@ const getBDInformationDataFlusher = () => {
 
     data.push({
       name: 'Number Of flushes since day 1',
-      nameLocale: `${I18n.t('device_details.FLUSHER.LABEL_NUMBER_OF_FLUSHES')}`,
+      nameLocale: `${I18n.t('device_details.LINE_FLUSHES_SINCE_DAY_1_LABEL')}`,
       prefix: null,
       postfix: null,
       uuid: null,
@@ -167,9 +124,7 @@ const getBDInformationDataFlusher = () => {
     } Gal`;
     data.push({
       name: 'Accumulated water usage',
-      nameLocale: `${I18n.t(
-        'device_details.FLUSHER.LABEL_ACCUMULATED_WATER_USAGE',
-      )}`,
+      nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
       uuid: null,
       position: 6,
       value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
@@ -202,9 +157,7 @@ const getBDInformationDataFlusher = () => {
 
           data.push({
             name: value?.name,
-            nameLocale: `${I18n.t(
-              'device_details.FLUSHER.' + value?.nameLocaleKey,
-            )}`,
+            nameLocale: `${I18n.t('device_details.' + value?.nameLocaleKey)}`,
             uuid: value?.uuid,
             position: value?.position,
             value: formatCharateristicValue(value, decodeValue),
@@ -228,7 +181,7 @@ const getStatisticsInformationDataFlusher = () => {
     const serviceUUID = 'f89f13e7-83f8-4b7c-9e8b-364576d88310';
     const allServices = getDeviceCharacteristicsByServiceUUID(
       serviceUUID,
-      BLE_GATT_SERVICES_FLUSHER,
+      BLE_GATT_SERVICES,
     );
 
     var data = [];
@@ -245,9 +198,7 @@ const getStatisticsInformationDataFlusher = () => {
 
       data.push({
         name: 'BLE Serial Number',
-        nameLocale: `${I18n.t(
-          'device_details.FLUSHER.LABEL_BLE_DEVICE_SERIAL_NUMBER',
-        )}`,
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
         prefix: null,
         postfix: null,
         uuid: null,
@@ -268,9 +219,7 @@ const getStatisticsInformationDataFlusher = () => {
 
       data.push({
         name: 'BLE Hardware Version',
-        nameLocale: `${I18n.t(
-          'device_details.FLUSHER.LABEL_BLE_DEVICE_HARDWARE_VERSION',
-        )}`,
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
         prefix: null,
         postfix: null,
         uuid: null,
@@ -291,9 +240,7 @@ const getStatisticsInformationDataFlusher = () => {
 
       data.push({
         name: 'BLE Firmware Version',
-        nameLocale: `${I18n.t(
-          'device_details.FLUSHER.LABEL_BLE_DEVICE_FIREWARE_VERSION',
-        )}`,
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
         prefix: null,
         postfix: null,
         uuid: null,
@@ -314,9 +261,7 @@ const getStatisticsInformationDataFlusher = () => {
 
       data.push({
         name: 'BLE Device Manufacturing Date',
-        nameLocale: `${I18n.t(
-          'device_details.FLUSHER.LABEL_BLE_DEVICE_MANUFACTURING_DATE',
-        )}`,
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
         prefix: null,
         postfix: null,
         uuid: null,
@@ -337,9 +282,7 @@ const getStatisticsInformationDataFlusher = () => {
 
       data.push({
         name: 'Flusher Manufacturing Date',
-        nameLocale: `${I18n.t(
-          'device_details.FLUSHER.LABEL_FLUSHER_MANUFACTURING_DATE',
-        )}`,
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
         prefix: null,
         postfix: null,
         uuid: null,
@@ -360,9 +303,7 @@ const getStatisticsInformationDataFlusher = () => {
 
       data.push({
         name: 'Flusher Serial Number',
-        nameLocale: `${I18n.t(
-          'device_details.FLUSHER.LABEL_FLUSHER_SERIAL_NUMBER',
-        )}`,
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
         prefix: null,
         postfix: null,
         uuid: null,
@@ -376,7 +317,7 @@ const getStatisticsInformationDataFlusher = () => {
      */
     data.push({
       name: 'Flush Volume',
-      nameLocale: `${I18n.t('device_details.FLUSHER.LABEL_FLUSHER_VOLUME')}`,
+      // nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
       uuid: null,
       position: 8,
       value: `${0} gal (${0} L)`,
@@ -387,9 +328,7 @@ const getStatisticsInformationDataFlusher = () => {
      */
     data.push({
       name: 'Engineering Data 1',
-      nameLocale: `${I18n.t(
-        'device_details.FLUSHER.LABEL_ENGINEERING_DATA_1',
-      )}`,
+      // nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
       uuid: null,
       position: 11,
       value: `N/A`,
@@ -400,9 +339,7 @@ const getStatisticsInformationDataFlusher = () => {
      */
     data.push({
       name: 'Engineering Data 2',
-      nameLocale: `${I18n.t(
-        'device_details.FLUSHER.LABEL_ENGINEERING_DATA_2',
-      )}`,
+      // nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
       uuid: null,
       position: 12,
       value: `N/A`,
@@ -411,21 +348,220 @@ const getStatisticsInformationDataFlusher = () => {
     /**
      * Low Battery Activations
      */
+    data.push({
+      name: 'Low Battery Activations',
+      // nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
+      uuid: null,
+      position: 13,
+      value: `N/A`,
+    });
+
+    /** Date of last factory reset  */
     const charResponse7: any = await BLEService.readCharacteristicForDevice(
-      'f89f13e7-83f8-4b7c-9e8b-364576d88300',
-      'f89f13e7-83f8-4b7c-9e8b-364576d88304',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88321',
     );
 
     if (!isObjectEmpty(charResponse7)) {
       const decodeValue = base64EncodeDecode(charResponse7?.value, 'decode');
       consoleLog('charResponse7 decodeValue==>', charResponse7);
+
       data.push({
-        name: 'Low Battery Activations',
-        nameLocale: `${I18n.t(
-          'device_details.FLUSHER.LABEL_LOW_BATTERY_ACTIVATIONS',
-        )}`,
+        name: 'Date of last factory reset',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
         uuid: null,
-        position: 13,
+        position: 14,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Date of last Dianogstic  */
+    const charResponse8: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88325',
+    );
+
+    if (!isObjectEmpty(charResponse8)) {
+      const decodeValue = base64EncodeDecode(charResponse8?.value, 'decode');
+      consoleLog('charResponse8 decodeValue==>', charResponse8);
+
+      data.push({
+        name: 'Date of last Dianogstic',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 14,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Phone of last Dianogstic  */
+    const charResponse9: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88325',
+    );
+
+    if (!isObjectEmpty(charResponse9)) {
+      const decodeValue = base64EncodeDecode(charResponse9?.value, 'decode');
+      consoleLog('charResponse9 decodeValue==>', charResponse9);
+
+      data.push({
+        name: 'Phone of last Dianogstic',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 15,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Date of last range change  */
+    const charResponse10: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88322',
+    );
+
+    if (!isObjectEmpty(charResponse10)) {
+      const decodeValue = base64EncodeDecode(charResponse10?.value, 'decode');
+      consoleLog('charResponse10 decodeValue==>', charResponse10);
+
+      data.push({
+        name: 'Date of last range change',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 16,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Phone of last range change  */
+    const charResponse11: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88332',
+    );
+
+    if (!isObjectEmpty(charResponse11)) {
+      const decodeValue = base64EncodeDecode(charResponse11?.value, 'decode');
+      consoleLog('charResponse11 decodeValue==>', charResponse11);
+
+      data.push({
+        name: 'Phone of last range change',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 17,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Date of last Activation time change  */
+    const charResponse12: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88327',
+    );
+
+    if (!isObjectEmpty(charResponse12)) {
+      const decodeValue = base64EncodeDecode(charResponse12?.value, 'decode');
+      consoleLog('charResponse12 decodeValue==>', charResponse12);
+
+      data.push({
+        name: 'Date of last Activation time change',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 16,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Phone of last Activation time change  */
+    const charResponse13: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88337',
+    );
+
+    if (!isObjectEmpty(charResponse13)) {
+      const decodeValue = base64EncodeDecode(charResponse13?.value, 'decode');
+      consoleLog('charResponse13 decodeValue==>', charResponse13);
+
+      data.push({
+        name: 'Phone of last Activation time change',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 17,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Date of last Flush Interval Change => D/T of last Line (Sentinel) Flush change  */
+    const charResponse14: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88323',
+    );
+
+    if (!isObjectEmpty(charResponse14)) {
+      const decodeValue = base64EncodeDecode(charResponse14?.value, 'decode');
+      consoleLog('charResponse14 decodeValue==>', charResponse14);
+
+      data.push({
+        name: 'Date of last Flush Interval Change',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 18,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Phone of last Flush Interval Change => Phone of last Line (Sentinel) Flush change  */
+    const charResponse15: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88333',
+    );
+
+    if (!isObjectEmpty(charResponse15)) {
+      const decodeValue = base64EncodeDecode(charResponse15?.value, 'decode');
+      consoleLog('charResponse15 decodeValue==>', charResponse15);
+
+      data.push({
+        name: 'Phone of last Flush Interval Change',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 19,
+        value: decodeValue ?? 'N/A',
+      });
+    }
+
+    /** Phone of last Flush Interval Change => Phone of last Line (Sentinel) Flush change  */
+    const charResponse16: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88333',
+    );
+
+    if (!isObjectEmpty(charResponse16)) {
+      const decodeValue = base64EncodeDecode(charResponse16?.value, 'decode');
+      consoleLog('charResponse16 decodeValue==>', charResponse16);
+
+      data.push({
+        name: 'Phone of last Flush Interval Change',
+        // nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
+        prefix: null,
+        postfix: null,
+        uuid: null,
+        position: 19,
         value: decodeValue ?? 'N/A',
       });
     }
@@ -441,8 +577,8 @@ const getStatisticsInformationDataFlusher = () => {
      */
     var characteristicStaticHoursOfOperation: any =
       await BLEService.readCharacteristicForDevice(
-        'f89f13e7-83f8-4b7c-9e8b-364576d88310 ',
-        'f89f13e7-83f8-4b7c-9e8b-364576d88312',
+        'd0aba888-fb10-4dc9-9b17-bdd8f490c910',
+        'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
       );
 
     if (!isObjectEmpty(characteristicStaticHoursOfOperation)) {
@@ -465,13 +601,11 @@ const getStatisticsInformationDataFlusher = () => {
         // consoleLog('dateOfInstallTimestamp==>', dateOfInstallTimestamp);
         data.push({
           name: 'Date of Installation',
-          nameLocale: `${I18n.t(
-            'device_details.FLUSHER.LABEL_DATE_OF_INSTALLATION',
-          )}`,
+          nameLocale: `${I18n.t('device_details.DATE_OF_INSTALLATION_LABEL')}`,
           prefix: null,
           postfix: null,
           uuid: null,
-          position: 25,
+          position: 1,
           value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
         });
       }
@@ -495,9 +629,7 @@ const getStatisticsInformationDataFlusher = () => {
           if (typeof characteristic != 'undefined') {
             data.push({
               name: value?.name,
-              nameLocale: `${I18n.t(
-                'device_details.FLUSHER.' + value?.nameLocaleKey,
-              )}`,
+              nameLocale: `${I18n.t('device_details.' + value?.nameLocaleKey)}`,
               prefix: value?.prefix,
               postfix: value?.postfix,
               uuid: value?.uuid,
@@ -522,10 +654,10 @@ const getStatisticsInformationDataFlusher = () => {
 /** BDInformationData method for advance */
 const getSettingLogsDataFlusher = () => {
   return new Promise<any>(async resolve => {
-    const serviceUUID = 'f89f13e7-83f8-4b7c-9e8b-364576d88320';
+    const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c920';
     const allServices = getDeviceCharacteristicsByServiceUUID(
       serviceUUID,
-      BLE_GATT_SERVICES_FLUSHER,
+      BLE_GATT_SERVICES,
     );
 
     var data = [];
@@ -545,17 +677,59 @@ const getSettingLogsDataFlusher = () => {
               serviceUUID,
               value?.uuid,
             );
+
             // consoleLog('getSettingLogsDataFlusher characteristic==>', characteristic);
 
             var decodeValue = 'N/A';
             if (!isObjectEmpty(characteristic) && characteristic?.value) {
               decodeValue = base64EncodeDecode(characteristic?.value, 'decode');
             }
+
+            // var extra = undefined;
+            // if (value?.name == 'D/T of last factory reset') {
+            //   // Phone of last factory reset
+            //   var characteristic1 =
+            //     await BLEService.readCharacteristicForDevice(
+            //       'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
+            //       'd0aba888-fb10-4dc9-9b17-bdd8f490c929',
+            //     );
+
+            //   // consoleLog('characteristic1==>', characteristic1?.value);
+            //   if (!isObjectEmpty(characteristic1) && characteristic1?.value) {
+            //     var decodeValue1 = base64EncodeDecode(
+            //       characteristic1?.value,
+            //       'decode',
+            //     );
+
+            //     // consoleLog('characteristic1 decodeValue1==>', decodeValue1);
+
+            //     if (decodeValue1 == 'MANUAL') {
+            //       // Operating hours since install
+            //       var characteristic2 =
+            //         await BLEService.readCharacteristicForDevice(
+            //           'd0aba888-fb10-4dc9-9b17-bdd8f490c910',
+            //           'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
+            //         );
+
+            //       // consoleLog('characteristic2==>', characteristic2?.value);
+
+            //       if (
+            //         !isObjectEmpty(characteristic2) &&
+            //         characteristic2?.value
+            //       ) {
+            //         var decodeValue2 = hexToDecimal(
+            //           base64EncodeDecode(characteristic2?.value, 'decode'),
+            //         );
+            //         // consoleLog('characteristic1 decodeValue2==>', decodeValue2);
+            //         extra = decodeValue2;
+            //       }
+            //     }
+            //   }
+            // }
+
             data.push({
               name: value?.name,
-              nameLocale: `${I18n.t(
-                'device_details.FLUSHER.' + value?.nameLocaleKey,
-              )}`,
+              nameLocale: `${I18n.t('device_details.' + value?.nameLocaleKey)}`,
               uuid: value?.uuid,
               position: value?.position,
               value: formatCharateristicValue(value, decodeValue),

@@ -25,7 +25,10 @@ import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import NavigationService from 'src/services/NavigationService/NavigationService';
 import LoaderOverlay from 'src/components/LoaderOverlay';
 import I18n from 'src/locales/Transaltions';
-import {getDeviceInfoNormalFlusher} from './helperGenFlusher';
+import {
+  getDeviceInfoAdvanceFlusher,
+  getDeviceInfoNormalFlusher,
+} from './helperGenFlusher';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -94,7 +97,7 @@ const Index = ({navigation, route}: any) => {
     if (!viewAdvanceDetails) {
       initializeNormalFlusher();
     } else {
-      // initializeAdvanceFlusher();
+      initializeAdvanceFlusher();
     }
   };
 
@@ -669,57 +672,11 @@ const Index = ({navigation, route}: any) => {
   const initializeAdvanceFlusher = async () => {
     try {
       setLoading(true);
-      var deviceInfoAdvance = await getDeviceInfoAdvance();
+      var deviceInfoAdvance = await getDeviceInfoAdvanceFlusher();
       var appInfo = await getAppInfo();
       var userData = await getUserData();
       // consoleLog('initializeAdvance deviceInfoAdvance==>', deviceInfoAdvance);
-
-      const resultObj = findObject(
-        'Date of last factory reset',
-        deviceInfoAdvance,
-        {
-          searchKey: 'name',
-        },
-      );
-      consoleLog('initializeAdvance resultObj==>', resultObj);
-
       const sortedDeviceInfoAdvancel = _.sortBy(deviceInfoAdvance, 'position');
-
-      if (!isObjectEmpty(resultObj) && resultObj?.value == 'MANUAL') {
-        // Hours Of Operation -> d0aba888-fb10-4dc9-9b17-bdd8f490c911
-        const resultObj2 = findObject(
-          'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
-          deviceInfoAdvance,
-          {
-            searchKey: 'uuid',
-          },
-        );
-        consoleLog('initializeAdvance resultObj2==>', resultObj2);
-
-        // Date of last factory reset -> d0aba888-fb10-4dc9-9b17-bdd8f490c921
-        const resultObj3 = deviceInfoAdvance.findIndex((item: any) => {
-          return item?.uuid == 'd0aba888-fb10-4dc9-9b17-bdd8f490c921';
-        });
-
-        consoleLog('initializeAdvance resultObj3==>', resultObj3);
-        if (!isObjectEmpty(resultObj2) && resultObj3 >= 0) {
-          const formattedDate = moment(Date.now())
-            .subtract(resultObj2?.value, 's')
-            .format('YYYY/MM/DD');
-          // console.log('formattedDate', formattedDate);
-
-          deviceInfoAdvance[resultObj3] = {
-            ...resultObj,
-            value: formattedDate,
-          };
-
-          consoleLog(
-            'initializeAdvance deviceInfoAdvance[resultObj3]==>',
-            deviceInfoAdvance[resultObj3],
-          );
-        }
-      }
-
       setDeviceDetails([...sortedDeviceInfoAdvancel, ...appInfo, ...userData]);
     } catch (error) {
       //
