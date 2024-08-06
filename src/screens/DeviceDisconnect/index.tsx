@@ -55,10 +55,10 @@ const Index = ({navigation, route}: any) => {
         NavigationService.resetAllAction('DeviceSearching');
       }, 1000);
     } catch (error) {
-      showToastMessage(
-        error?.message ?? I18n.t('disconnect.SYNC_ERROR_MGS'),
-        'danger',
-      );
+      // showToastMessage(
+      //   error?.message ?? I18n.t('disconnect.SYNC_ERROR_MGS'),
+      //   'danger',
+      // );
       NavigationService.goBack();
       setLoading(false);
     } finally {
@@ -68,7 +68,7 @@ const Index = ({navigation, route}: any) => {
 
   const handleReport = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const allReports = await BLEReport.prepareReport(user);
       consoleLog('DeviceDisconnect initlizeApp==>', allReports);
       const currentTimestamp = timestampInSec();
@@ -97,7 +97,7 @@ const Index = ({navigation, route}: any) => {
     } catch (error) {
       return true;
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -106,8 +106,9 @@ const Index = ({navigation, route}: any) => {
       scroll={false}
       scrollViewStyle={{}}
       backgroundType="gradient"
-      loading={loading}
-      loadingText={I18n.t('disconnect.SYNC_MGS')}>
+      // loading={loading}
+      // loadingText={I18n.t('disconnect.SYNC_MGS')}
+      >
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
