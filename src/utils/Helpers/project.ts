@@ -89,6 +89,8 @@ export function getBleDeviceGeneration(str: string | null | undefined = '') {
     return 'gen2';
   } else if (str?.toUpperCase()?.includes('FLUSHER')) {
     return 'flusher';
+  } else if (str?.toUpperCase()?.includes('BASYS')) {
+    return 'basys';
   } else {
     return 'unknown';
   }
@@ -148,7 +150,7 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
         result = __version.replace(/[^0-9]/g, '');
       }
     }
-  } else if (gen == 'gen4') {
+  } else if (gen == 'basys') {
     var arr = str.split(' ');
 
     if (Array.isArray(arr) && arr.length > 1) {

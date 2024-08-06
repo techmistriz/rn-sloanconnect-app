@@ -974,10 +974,10 @@ class BLEServiceInstance {
       this.dispenseWaterGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       this.dispenseWaterGen2(characteristicHex);
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
-    } else if (BLEService.deviceGeneration == 'gen4') {
-      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      this.dispenseWaterFlusher();
+    } else if (BLEService.deviceGeneration == 'basys') {
+      this.dispenseWaterBasys();
     }
   };
 
@@ -993,7 +993,7 @@ class BLEServiceInstance {
         BLE_CONSTANTS.GEN1.WATER_DISPENCE_CHARACTERISTIC_UUID,
         '1',
       );
-    showToastMessage(I18n.t("device_dashboard.WATER_DISPENSE_MSG"), 'success');
+    showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
     consoleLog(
       'dispenseWater writeCharacteristicWithResponseForDevice==>',
       JSON.stringify(writeCharacteristicWithResponseForDevice),
@@ -1021,7 +1021,34 @@ class BLEServiceInstance {
       JSON.stringify(writeDataResponse),
     );
 
-    showToastMessage(I18n.t("device_dashboard.WATER_DISPENSE_MSG"), 'success');
+    showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
+  };
+
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
+  dispenseWaterFlusher = async () => {
+    // water dispense uuid not available in flusher
+  };
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
+  dispenseWaterBasys = async () => {
+    const writeCharacteristicWithResponseForDevice =
+      await BLEService.writeCharacteristicWithResponseForDevice(
+        BLE_CONSTANTS.BASYS.WATER_DISPENCE_SERVICE_UUID,
+        BLE_CONSTANTS.BASYS.WATER_DISPENCE_CHARACTERISTIC_UUID,
+        '1',
+      );
+    showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
+    consoleLog(
+      'dispenseWater writeCharacteristicWithResponseForDevice==>',
+      JSON.stringify(writeCharacteristicWithResponseForDevice),
+    );
   };
 
   /**
@@ -1096,7 +1123,7 @@ class BLEServiceInstance {
       await this.initDeviceDataGen2();
     } else if (BLEService.deviceGeneration == 'flusher') {
       await this.initDeviceDataFlusher();
-    } else if (BLEService.deviceGeneration == 'gen4') {
+    } else if (BLEService.deviceGeneration == 'basys') {
       await this.initDeviceDataGen4();
     }
   };
@@ -1119,7 +1146,11 @@ class BLEServiceInstance {
     // await this.setDeviceModelData();
   };
 
-  initDeviceDataGen4 = async () => {};
+  initDeviceDataGen4 = async () => {
+    // await this.getSetBatteryLevel();
+    // await this.getSetTotalWaterUsase();
+    // await this.setDeviceModelData();
+  };
 }
 
 const navigateToDeviceSearch = () => {

@@ -190,10 +190,10 @@ const Index = ({navigation}: any) => {
     } else if (BLEService.deviceGeneration == 'gen2') {
       initlizeAppGen2();
       // settingsMappingGen2();
-    } else if (BLEService.deviceGeneration == 'gen3') {
+    } else if (BLEService.deviceGeneration == 'flusher') {
       initlizeAppFLusher();
-    } else if (BLEService.deviceGeneration == 'gen4') {
-      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'basys') {
+      initlizeAppBasys();
     }
   };
 
@@ -801,6 +801,67 @@ const Index = ({navigation}: any) => {
   };
 
   /** Function comments */
+  const initlizeAppBasys = async () => {
+    setLoading(true);
+    __getBatteryLevel();
+    __getTotalWaterUsase();
+    __getSavedSettingsGen1();
+    getActivationModeSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog(
+        //   'initlizeAppGen1 getActivationModeSettings response==>',
+        //   response,
+        // );
+
+        // if (JSON.stringify(activationModeSettings) != JSON.stringify(response)) {
+        setActivationModeSettings(response);
+        BLEReport.mapFaucetSettings(
+          'ActivationMode',
+          response,
+          hasSettingsChanged,
+        );
+        // }
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getActivationModeSettings error==>', error);
+      });
+
+    getFlushSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog('initlizeAppGen1 getFlushSettings response==>', response);
+        setFlushSettings(response);
+        BLEReport.mapFaucetSettings('LineFlush', response, hasSettingsChanged);
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getFlushSettings error==>', error);
+      });
+    getSensorSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
+        setSensorSettings(response);
+        BLEReport.mapFaucetSettings(
+          'SensorRange',
+          response,
+          hasSettingsChanged,
+        );
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
+      });
+    getFlowSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog('initlizeAppGen1 getFlowSettings response==>', response);
+        setFlowRateSettings(response);
+        BLEReport.mapFaucetSettings('FlowRate', response, hasSettingsChanged);
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getFlowSettings error==>', error);
+      });
+
+    setLoading(false);
+  };
+
+  /** Function comments */
   const __getBatteryLevel = async () => {
     setBatteryLevel(BLEService.batteryLevel);
   };
@@ -1386,66 +1447,71 @@ const Index = ({navigation}: any) => {
             </CollapsableContainer>
 
             <Wrap autoMargin={false}>
-              <ActivationModeList
-                settings={{
-                  title: I18n.t('device_dashboard.ACTIVATION_MODE'),
-                  route: 'ActivationMode',
-                  name: 'ActivationMode',
-                }}
-                settingsData={activationModeSettings}
-                navigation={navigation}
-                borderBottom={<Divider color={Theme.colors.lightGray} />}
-                applied={applied}
-                showApplySettingButton={showApplySettingButton}
-              />
+              {BLEService.deviceGeneration == 'flusher' ? (
+                <ActivationTimeListFlusher
+                  settings={{
+                    title: I18n.t('device_dashboard.ACTIVATION_TIME'),
+                    route: 'ActivationTimeFlusher',
+                    name: 'ActivationTimeFlusher',
+                    activationTimeRangeConfig: {min: 8, max: 28, step: 4},
+                    // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                    // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
+                  }}
+                  // settingsData={sensorSettings}
+                  settingsData={activationTimeFlusherSettings}
+                  navigation={navigation}
+                  borderBottom={<Divider color={Theme.colors.lightGray} />}
+                  applied={applied}
+                  showApplySettingButton={showApplySettingButton}
+                />
+              ) : (
+                <ActivationModeList
+                  settings={{
+                    title: I18n.t('device_dashboard.ACTIVATION_MODE'),
+                    route: 'ActivationMode',
+                    name: 'ActivationMode',
+                  }}
+                  settingsData={activationModeSettings}
+                  navigation={navigation}
+                  borderBottom={<Divider color={Theme.colors.lightGray} />}
+                  applied={applied}
+                  showApplySettingButton={showApplySettingButton}
+                />
+              )}
 
-              <LineFlushList
-                settings={{
-                  title: I18n.t('device_dashboard.LINE_FLUSH'),
-                  route: 'LineFlush',
-                  name: 'LineFlush',
-                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
-                }}
-                settingsData={flushSettings}
-                navigation={navigation}
-                borderBottom={<Divider color={Theme.colors.lightGray} />}
-                applied={applied}
-                showApplySettingButton={showApplySettingButton}
-              />
-
-              {/* <ActivationTimeListFlusher
-                settings={{
-                  title: I18n.t('device_dashboard.ACTIVATION_TIME'),
-                  route: 'ActivationTimeFlusher',
-                  name: 'ActivationTimeFlusher',
-                  activationTimeRangeConfig: {min: 8, max: 28, step: 4},
-                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
-                }}
-                // settingsData={sensorSettings}
-                settingsData={activationTimeFlusherSettings}
-                navigation={navigation}
-                borderBottom={<Divider color={Theme.colors.lightGray} />}
-                applied={applied}
-                showApplySettingButton={showApplySettingButton}
-              />
-              <LineFlushListFlusher
-                settings={{
-                  title: I18n.t('device_dashboard.LINE_FLUSH'),
-                  route: 'LineFlushFlusher',
-                  name: 'LineFlushFlusher',
-                  lineFlushRangeConfig: {min: 1, max: 7, step: 1},
-                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
-                }}
-                // settingsData={sensorSettings}
-                settingsData={flushFlusherSettings}
-                navigation={navigation}
-                borderBottom={<Divider color={Theme.colors.lightGray} />}
-                applied={applied}
-                showApplySettingButton={showApplySettingButton}
-              /> */}
+              {BLEService.deviceGeneration == 'flusher' ? (
+                <LineFlushListFlusher
+                  settings={{
+                    title: I18n.t('device_dashboard.LINE_FLUSH'),
+                    route: 'LineFlushFlusher',
+                    name: 'LineFlushFlusher',
+                    lineFlushRangeConfig: {min: 1, max: 7, step: 1},
+                    // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                    // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
+                  }}
+                  // settingsData={sensorSettings}
+                  settingsData={flushFlusherSettings}
+                  navigation={navigation}
+                  borderBottom={<Divider color={Theme.colors.lightGray} />}
+                  applied={applied}
+                  showApplySettingButton={showApplySettingButton}
+                />
+              ) : (
+                <LineFlushList
+                  settings={{
+                    title: I18n.t('device_dashboard.LINE_FLUSH'),
+                    route: 'LineFlush',
+                    name: 'LineFlush',
+                    // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                    // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
+                  }}
+                  settingsData={flushSettings}
+                  navigation={navigation}
+                  borderBottom={<Divider color={Theme.colors.lightGray} />}
+                  applied={applied}
+                  showApplySettingButton={showApplySettingButton}
+                />
+              )}
 
               <FlowRateList
                 settings={{
