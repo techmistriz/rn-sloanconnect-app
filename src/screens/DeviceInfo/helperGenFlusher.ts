@@ -393,28 +393,44 @@ const getStatisticsInformationDataFlusher = () => {
     /**
      * Engineering Data 1
      */
-    data.push({
-      name: 'Engineering Data 1',
-      nameLocale: `${I18n.t(
-        'device_details.FLUSHER.LABEL_ENGINEERING_DATA_1',
-      )}`,
-      uuid: null,
-      position: 11,
-      value: `N/A`,
-    });
+    const charResponse66: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88370',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88371',
+    );
+
+    if (!isObjectEmpty(charResponse66)) {
+      const decodeValue = base64EncodeDecode(charResponse66?.value, 'decode');
+      data.push({
+        name: 'Engineering Data 1',
+        nameLocale: `${I18n.t(
+          'device_details.FLUSHER.LABEL_ENGINEERING_DATA_1',
+        )}`,
+        uuid: null,
+        position: 11,
+        value: decodeValue ?? 'N/A',
+      });
+    }
 
     /**
      * Engineering Data 2
      */
-    data.push({
-      name: 'Engineering Data 2',
-      nameLocale: `${I18n.t(
-        'device_details.FLUSHER.LABEL_ENGINEERING_DATA_2',
-      )}`,
-      uuid: null,
-      position: 12,
-      value: `N/A`,
-    });
+    const charResponse666: any = await BLEService.readCharacteristicForDevice(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88370',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88372',
+    );
+
+    if (!isObjectEmpty(charResponse666)) {
+      const decodeValue = base64EncodeDecode(charResponse666?.value, 'decode');
+      data.push({
+        name: 'Engineering Data 2',
+        nameLocale: `${I18n.t(
+          'device_details.FLUSHER.LABEL_ENGINEERING_DATA_2',
+        )}`,
+        uuid: null,
+        position: 12,
+        value: decodeValue ?? 'N/A',
+      });
+    }
 
     /**
      * Low Battery Activations
