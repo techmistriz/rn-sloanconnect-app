@@ -915,10 +915,18 @@ const Index = ({navigation}: any) => {
         shouldUpdatePreviosSettings,
         shouldShowToast,
       );
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
-    } else if (BLEService.deviceGeneration == 'gen4') {
-      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      __onApplySettingPress(
+        __deviceSettingsData,
+        shouldUpdatePreviosSettings,
+        shouldShowToast,
+      );
+    } else if (BLEService.deviceGeneration == 'basys') {
+      __onApplySettingPress(
+        __deviceSettingsData,
+        shouldUpdatePreviosSettings,
+        shouldShowToast,
+      );
     }
   };
 

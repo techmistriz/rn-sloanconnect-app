@@ -66,6 +66,7 @@ const Index = ({navigation, route}: any) => {
     initlizeApp();
   }, []);
 
+  /**function comment */
   const initlizeApp = async () => {
     let __note = settingsData?.note?.value ?? '';
 
@@ -81,6 +82,7 @@ const Index = ({navigation, route}: any) => {
     setNote(cleanString2(cleanString(__note)));
   };
 
+  /**function comment */
   const onDonePress = () => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
@@ -89,14 +91,15 @@ const Index = ({navigation, route}: any) => {
         onDonePressGen1();
       } else if (BLEService.deviceGeneration == 'gen2') {
         onDonePressGen2();
-      } else if (BLEService.deviceGeneration == 'gen3') {
-        // Code need to be implemented
-      } else if (BLEService.deviceGeneration == 'gen4') {
-        // Code need to be implemented
+      } else if (BLEService.deviceGeneration == 'flusher') {
+        onDonePressFlusher();
+      } else if (BLEService.deviceGeneration == 'basys') {
+        onDonePressBasys();
       }
     }
   };
 
+  /**function comment */
   const onDonePressGen1 = async () => {
     var params: any = [];
     const dateFormat = 'YYMMDDHHmm';
@@ -139,6 +142,7 @@ const Index = ({navigation, route}: any) => {
     }, 100);
   };
 
+  /**function comment */
   const onDonePressGen2 = async () => {
     var params = [];
     const dateFormat = 'YYMMDDHHmm';
@@ -186,7 +190,96 @@ const Index = ({navigation, route}: any) => {
     }, 100);
   };
 
-  /**validation checking for email */
+  /**function comment */
+  const onDonePressFlusher = async () => {
+    var params: any = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.note?.value != note) {
+      params.push({
+        name: 'note',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.SENSOR_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.FLUSHER.SENSOR_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.note?.value,
+        newValue: note,
+      });
+      params.push({
+        name: 'noteDate',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.SENSOR_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.SENSOR_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      params.push({
+        name: 'notePhone',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.SENSOR_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.SENSOR_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
+        allowedInPreviousSettings: false,
+      });
+    }
+
+    if (params && params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {Note: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  /**function comment */
+  const onDonePressBasys = async () => {
+    var params: any = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.note?.value != note) {
+      params.push({
+        name: 'note',
+        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.SENSOR_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.note?.value,
+        newValue: note,
+      });
+      params.push({
+        name: 'noteDate',
+        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_DATE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.SENSOR_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      params.push({
+        name: 'notePhone',
+        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.SENSOR_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
+        allowedInPreviousSettings: false,
+      });
+    }
+
+    if (params && params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {Note: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  /**function comment */
   const checkValidation = () => {
     if (note.trim() === '') {
       showSimpleAlert('Please enter note');

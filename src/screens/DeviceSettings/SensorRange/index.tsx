@@ -120,9 +120,9 @@ const Index = ({navigation, route}: any) => {
       } else if (BLEService.deviceGeneration == 'gen2') {
         onDonePressGen2();
       } else if (BLEService.deviceGeneration == 'gen3') {
-        // Code need to be implemented
+        onDonePressFlusher();
       } else if (BLEService.deviceGeneration == 'gen4') {
-        // Code need to be implemented
+        onDonePressBasys();
       }
     }
   };
@@ -200,6 +200,97 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DATE_OF_LAST_RANGE_CHANGE,
           timestampInSec(),
         ),
+      });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {SensorRange: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressFlusher = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.sensorRange?.value != sensorRange) {
+      params.push({
+        name: 'sensorRange',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.SENSOR_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.FLUSHER.SENSOR_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.sensorRange?.value,
+        newValue: sensorRange,
+      });
+
+      params.push({
+        name: 'sensorRangeDate',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.SENSOR_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.SENSOR_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+
+      params.push({
+        name: 'sensorRangePhone',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.SENSOR_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.SENSOR_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
+        allowedInPreviousSettings: false,
+      });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {SensorRange: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressBasys = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.sensorRange?.value != sensorRange) {
+      params.push({
+        name: 'sensorRange',
+        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.SENSOR_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.sensorRange?.value,
+        newValue: sensorRange,
+      });
+
+      params.push({
+        name: 'sensorRangeDate',
+        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_DATE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.SENSOR_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+
+      params.push({
+        name: 'sensorRangePhone',
+        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.SENSOR_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
+        allowedInPreviousSettings: false,
       });
     }
 
