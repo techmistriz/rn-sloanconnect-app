@@ -112,6 +112,9 @@ export const BLE_GATT_SERVICES_FLUSHER = {
         postfix: null,
         position: 0,
         displayInList: false,
+        valueFormat: 'YYMMDD',
+        valueType: 'Date',
+        dateFormat: 'YY/MM/DD',
       },
       'f89f13e7-83f8-4b7c-9e8b-364576d88304': {
         uuid: 'f89f13e7-83f8-4b7c-9e8b-364576d88304',
@@ -130,6 +133,9 @@ export const BLE_GATT_SERVICES_FLUSHER = {
         postfix: null,
         position: 0,
         displayInList: false,
+        valueFormat: 'YYMMDD',
+        valueType: 'Date',
+        dateFormat: 'YY/MM/DD',
       },
       'f89f13e7-83f8-4b7c-9e8b-364576d88305': {
         uuid: 'f89f13e7-83f8-4b7c-9e8b-364576d88305',
@@ -560,6 +566,9 @@ export const BLE_GATT_SERVICES_FLUSHER = {
         prefix: null,
         postfix: null,
         position: 23,
+        valueFormat: 'YYMMDDHHmm',
+        valueType: 'DateTime',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92D': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92D',

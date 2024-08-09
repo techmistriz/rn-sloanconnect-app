@@ -321,7 +321,11 @@ const getStatisticsInformationDataFlusher = () => {
         postfix: null,
         uuid: null,
         position: 5,
-        value: decodeValue ?? 'N/A',
+        // value: decodeValue ?? 'N/A',
+        value: formatCharateristicValue(
+          {valueFormat: 'YYMMDD', valueType: 'Date', dateFormat: 'YY/MM/DD'},
+          decodeValue,
+        ),
       });
     }
 
@@ -344,7 +348,11 @@ const getStatisticsInformationDataFlusher = () => {
         postfix: null,
         uuid: null,
         position: 6,
-        value: decodeValue ?? 'N/A',
+        // value: decodeValue ?? 'N/A',
+        value: formatCharateristicValue(
+          {valueFormat: 'YYMMDD', valueType: 'Date', dateFormat: 'YY/MM/DD'},
+          decodeValue,
+        ),
       });
     }
 
