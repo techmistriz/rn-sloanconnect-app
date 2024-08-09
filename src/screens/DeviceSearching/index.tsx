@@ -228,7 +228,7 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** Function comments */
-  const onDeviceConnectingPress = (item: any) => {
+  const onDeviceConnectingPress = (item: any, retries: Number = 1) => {
     consoleLog('onDeviceConnectingPress intervalID & timeoutID==>', {
       timeoutID,
       intervalID,
@@ -242,10 +242,23 @@ const Index = ({navigation, route}: any) => {
         try {
           await onConnectSuccess(item?.id);
         } catch (e) {
-          await onConnectFail({}, item?.id);
+          if (retries < 2) {
+            clearTimeout(timeoutIDForConnecting);
+            onDeviceConnectingPress(item, 2);
+          } else {
+            await onConnectFail({}, item?.id);
+          }
         }
       })
-      .catch(onConnectFail);
+      .catch(async error => {
+        if (retries < 2) {
+          clearTimeout(timeoutIDForConnecting);
+          onDeviceConnectingPress(item, 2);
+        } else {
+          await onConnectFail(error);
+        }
+      });
+
     timeoutIDForConnecting = setTimeout(() => {
       setDeviceConnectTimeout(true);
       setFoundDevices([]);

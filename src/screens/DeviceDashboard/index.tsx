@@ -776,7 +776,7 @@ const Index = ({navigation}: any) => {
     getSensorFlusherSettings(deviceSettingsData)
       .then(response => {
         // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
-        setSensorFlusherSettings(response);
+        setSensorSettings(response);
         BLEReport.mapFaucetSettings(
           'SensorRange',
           response,
@@ -790,7 +790,7 @@ const Index = ({navigation}: any) => {
     getNoteFlusherSettings(deviceSettingsData)
       .then(response => {
         // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
-        setNoteFlusherSettings(response);
+        setNoteSettings(response);
         BLEReport.mapFaucetSettings('NoteRange', response, hasSettingsChanged);
       })
       .catch(error => {
@@ -1513,20 +1513,22 @@ const Index = ({navigation}: any) => {
                 />
               )}
 
-              <FlowRateList
-                settings={{
-                  title: I18n.t('device_dashboard.CONFIRM_FLOW_RATE'),
-                  route: 'FlowRate',
-                  name: 'FlowRate',
-                  // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
-                  // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
-                }}
-                settingsData={flowRateSettings}
-                navigation={navigation}
-                borderBottom={<Divider color={Theme.colors.lightGray} />}
-                applied={applied}
-                showApplySettingButton={showApplySettingButton}
-              />
+              {BLEService.deviceGeneration != 'flusher' ? (
+                <FlowRateList
+                  settings={{
+                    title: I18n.t('device_dashboard.CONFIRM_FLOW_RATE'),
+                    route: 'FlowRate',
+                    name: 'FlowRate',
+                    // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                    // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
+                  }}
+                  settingsData={flowRateSettings}
+                  navigation={navigation}
+                  borderBottom={<Divider color={Theme.colors.lightGray} />}
+                  applied={applied}
+                  showApplySettingButton={showApplySettingButton}
+                />
+              ) : null}
 
               <SensorRangeList
                 settings={{

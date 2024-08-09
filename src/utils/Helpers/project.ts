@@ -1593,31 +1593,31 @@ export const initFlusherSecurityKey = async () => {
       );
       consoleLog('lockStatusResponse=>', lockStatusResponse);
 
-      const notesResponse = await BLEService.readCharacteristicForDevice(
-        'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-        'f89f13e7-83f8-4b7c-9e8b-364576d88346',
-      );
-
-      await sleep(1000);
-      consoleLog('flusherNote=>', notesResponse);
-
-      let notesWriteResponse =
-        await BLEService.writeCharacteristicWithResponseForDevice2(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-          'f89f13e7-83f8-4b7c-9e8b-364576d88346',
-          hexToByte(asciiToHex('ABCD')),
-        ).then(response => {
-          consoleLog('unlockKeyWriteCallback', response);
-        });
-
-      consoleLog('flusherNoteResponse=>', notesWriteResponse);
-
-      const notesAfterWrite = await BLEService.readCharacteristicForDevice(
-        'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-        'f89f13e7-83f8-4b7c-9e8b-364576d88346',
-      );
-
-      consoleLog('notes After Write =>', notesAfterWrite);
+      // const notesResponse = await BLEService.readCharacteristicForDevice(
+      //   'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+      //   'f89f13e7-83f8-4b7c-9e8b-364576d88346',
+      // );
+      //
+      // await sleep(1000);
+      // consoleLog('flusherNote=>', notesResponse);
+      //
+      // let notesWriteResponse =
+      //   await BLEService.writeCharacteristicWithResponseForDevice2(
+      //     'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+      //     'f89f13e7-83f8-4b7c-9e8b-364576d88346',
+      //     hexToByte(asciiToHex('ABCD')),
+      //   ).then(response => {
+      //     consoleLog('unlockKeyWriteCallback', response);
+      //   });
+      //
+      // consoleLog('flusherNoteResponse=>', notesWriteResponse);
+      //
+      // const notesAfterWrite = await BLEService.readCharacteristicForDevice(
+      //   'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+      //   'f89f13e7-83f8-4b7c-9e8b-364576d88346',
+      // );
+      //
+      // consoleLog('notes After Write =>', notesAfterWrite);
     } else {
       consoleLog('Unable to read the BDSN', {bdsnResponse});
     }

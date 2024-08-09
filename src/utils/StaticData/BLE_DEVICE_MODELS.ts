@@ -498,7 +498,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'SOLIS Closet-1.6 GPF',
       type: 'ADSKU',
       version: '01',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'SOLIS 8111-1.6-BI',
@@ -515,7 +515,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'SOLIS Closet-1.28 GPF',
       type: 'ADSKU',
       version: '02',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'SOLIS 8111-1.28-BT',
@@ -532,7 +532,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'SOLIS 8111-1.1-BT',
       type: 'ADSKU',
       version: '03',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'SOLIS 8111- 1.1-BT',
@@ -549,7 +549,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'G2 Closet-1.6 GPF',
       type: 'ADSKU',
       version: '04',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'G2 8111-1.6- BI',
@@ -566,7 +566,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'G2 Closet- 1.28 GPF',
       type: 'ADSKU',
       version: '05',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'G2 8111-1.28-BT',
@@ -583,7 +583,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'ECOS Closet- 1.28 GPF',
       type: 'ADSKU',
       version: '06',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'ECOS 8111-1.28-BT',
@@ -600,7 +600,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'ECOS Closet- 1.1 GPF',
       type: 'ADSKU',
       version: '07',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'ECOS 8111- 1.1-BI',
@@ -617,7 +617,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'SOLIS Closet-1.6/1.1 GPF',
       type: 'ADSKU',
       version: '08',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'SOLIS 8111-1.6/1.1-BT',
@@ -634,7 +634,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'ECOS Closet-1.6/1.1 GPF',
       type: 'ADSKU',
       version: '09',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'ECOS 8111-1.6/1.1-BT',
@@ -651,7 +651,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'SOLIS Urinal-0.25 GPF',
       type: 'ADSKU',
       version: '10',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'SOLIS 8186-0.125-BT',
@@ -668,7 +668,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'SOLIS Urinal-0.25 GPF',
       type: 'ADSKU',
       version: '11',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'SOLIS 8186-0.25-BT',
@@ -685,7 +685,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'SOLIS Urinal-0.5 GPF',
       type: 'ADSKU',
       version: '12',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'SOLIS 8186-0.5-BT',
@@ -702,7 +702,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'SOLIS Urinal-1.0 GPF',
       type: 'ADSKU',
       version: '13',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'SOLIS 8186-1.0-BT',
@@ -719,7 +719,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'ECOS Closet-1.28/1.1 GPF',
       type: 'ADSKU',
       version: '14',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'ECOS 8111-1.28/1.1',
@@ -736,7 +736,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'G2 Urinal-0.25 GPF',
       type: 'ADSKU',
       version: '15',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'G2 8186-0.25-BT',
@@ -753,7 +753,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'G2 Urinal-0.5GPF',
       type: 'ADSKU',
       version: '16',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'G2 8186-0.5-BI',
@@ -770,7 +770,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'G2 Urinal-1.0GPF',
       type: 'ADSKU',
       version: '17',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'G2 8186-1.0-BI',
@@ -787,7 +787,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'ECOS Urinal-0.125 GPF',
       type: 'ADSKU',
       version: '18',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'ECOS 8186-0.125-BT',
@@ -804,7 +804,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'ECOS Urinal-0.25 GPF',
       type: 'ADSKU',
       version: '19',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'ECOS 8186-0.25-BT',
@@ -821,7 +821,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'ECOS Urinal-0.5 GPF',
       type: 'ADSKU',
       version: '19',
-      generation: 'flusher',
+      generation: '01',
       models: [
         {
           ETFModel: 'ECOS 8186-0.5-BT',
