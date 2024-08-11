@@ -145,10 +145,10 @@ const Index = ({navigation, route}: any) => {
         onDonePressGen1();
       } else if (BLEService.deviceGeneration == 'gen2') {
         onDonePressGen2();
-      } else if (BLEService.deviceGeneration == 'gen3') {
-        // Code need to be implemented
-      } else if (BLEService.deviceGeneration == 'gen4') {
-        // Code need to be implemented
+      } else if (BLEService.deviceGeneration == 'flusher') {
+        // This setting is no longer using for flusher
+      } else if (BLEService.deviceGeneration == 'basys') {
+        onDonePressBasys();
       }
     }
   };
@@ -442,6 +442,129 @@ const Index = ({navigation, route}: any) => {
     }, 100);
   };
 
+  const onDonePressBasys = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+
+    // consoleLog('onDonePressBasys', {
+    //   old: settingsData?.modeSelection?.value,
+    //   modeSelection,
+    //   activationOnDemandSecOld,
+    //   activationOnDemandSec,
+    // });
+    // return false;
+
+    if (
+      settingsData?.modeSelection?.value != modeSelection
+      // || activationOnDemandSecOld != activationOnDemandSec
+    ) {
+      params.push({
+        name: 'modeSelection',
+        serviceUUID: BLE_CONSTANTS.BASYS.MODE_SELECTION_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.MODE_SELECTION_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.modeSelection?.value,
+        newValue: modeSelection,
+      });
+
+      params.push({
+        name: 'modeSelectionDate',
+        serviceUUID: BLE_CONSTANTS.BASYS.MODE_SELECTION_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.MODE_SELECTION_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      // params.push({
+      //   name: 'modeSelectionPhone',
+      //   serviceUUID: BLE_CONSTANTS.BASYS.MODE_SELECTION_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.BASYS.MODE_SELECTION_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
+    }
+
+    if (
+      // settingsData?.modeSelection?.value != modeSelection ||
+      activationOnDemandSecOld != activationOnDemandSec &&
+      modeSelection == '0'
+    ) {
+      params.push({
+        name: 'onDemand',
+        serviceUUID: BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.modeSelection?.value,
+        newValue: activationOnDemandSec,
+      });
+
+      params.push({
+        name: 'onDemandDate',
+        serviceUUID: BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      // params.push({
+      //   name: 'onDemandPhone',
+      //   serviceUUID: BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
+    } else if (
+      activationMeteredSecOld != activationMeteredSec &&
+      modeSelection == '1'
+    ) {
+      params.push({
+        name: 'metered',
+        serviceUUID: BLE_CONSTANTS.BASYS.METERED_RUNTIME_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.METERED_RUNTIME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.modeSelection?.value,
+        newValue: activationMeteredSec,
+      });
+
+      params.push({
+        name: 'meteredDate',
+        serviceUUID: BLE_CONSTANTS.BASYS.METERED_RUNTIME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.METERED_RUNTIME_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      // params.push({
+      //   name: 'meteredPhone',
+      //   serviceUUID: BLE_CONSTANTS.BASYS.METERED_RUNTIME_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.BASYS.METERED_RUNTIME_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {ActivationMode: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
   /**validation checking for email */
   const checkValidation = () => {
     const min = 3;
@@ -450,28 +573,20 @@ const Index = ({navigation, route}: any) => {
       showSimpleAlert(I18n.t('settings.VALIDATION_MSG_EMPTY_TIMEOUT'));
       return false;
     } else if (modeSelection == '0' && Number(activationOnDemandSec) < min) {
-      showSimpleAlert(
-        I18n.t('settings.VALIDATION_MSG_LESS_TIMEOUT') + min,
-      );
+      showSimpleAlert(I18n.t('settings.VALIDATION_MSG_LESS_TIMEOUT') + min);
       return false;
     } else if (modeSelection == '0' && Number(activationOnDemandSec) > max) {
-      showSimpleAlert(
-        I18n.t('settings.VALIDATION_MSG_GREATER_TIMEOUT') + max,
-      );
+      showSimpleAlert(I18n.t('settings.VALIDATION_MSG_GREATER_TIMEOUT') + max);
       return false;
     }
     if (modeSelection == '1' && activationMeteredSec?.trim() === '') {
       showSimpleAlert(I18n.t('settings.VALIDATION_MSG_EMPTY_TIMEOUT'));
       return false;
     } else if (modeSelection == '1' && Number(activationMeteredSec) < min) {
-      showSimpleAlert(
-        I18n.t('settings.VALIDATION_MSG_LESS_TIMEOUT') + min,
-      );
+      showSimpleAlert(I18n.t('settings.VALIDATION_MSG_LESS_TIMEOUT') + min);
       return false;
     } else if (modeSelection == '1' && Number(activationMeteredSec) > max) {
-      showSimpleAlert(
-        I18n.t('settings.VALIDATION_MSG_GREATER_TIMEOUT') + max,
-      );
+      showSimpleAlert(I18n.t('settings.VALIDATION_MSG_GREATER_TIMEOUT') + max);
       return false;
     } else {
       return true;

@@ -143,10 +143,10 @@ const Index = ({navigation, route}: any) => {
       onDonePressGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       onDonePressGen2();
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
-    } else if (BLEService.deviceGeneration == 'gen4') {
-      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      // This setting is no longer using for flusher
+    } else if (BLEService.deviceGeneration == 'basys') {
+      onDonePressBasys();
     }
   };
 
@@ -226,6 +226,52 @@ const Index = ({navigation, route}: any) => {
           timestampInSec(),
         ),
       });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {FlowRate: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressBasys = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+    if (settingsData?.flowRate?.value != flowRate) {
+      params.push({
+        name: 'flowRate',
+        serviceUUID: BLE_CONSTANTS.BASYS.FLOW_RATE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.FLOW_RATE_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flowRate?.value,
+        newValue: flowRate,
+      });
+
+      // params.push({
+      //   name: 'flowRateRangeDate',
+      //   serviceUUID: BLE_CONSTANTS.BASYS.FLOW_RATE_DATE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.BASYS.FLOW_RATE_DATE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      //   allowedInPreviousSettings: false,
+      // });
+
+      // params.push({
+      //   name: 'flowRateRangePhone',
+      //   serviceUUID: BLE_CONSTANTS.BASYS.FLOW_RATE_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.BASYS.FLOW_RATE_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     }
 
     if (params.length) {

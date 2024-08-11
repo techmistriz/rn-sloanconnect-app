@@ -37,28 +37,28 @@ const Index = ({navigation, route}: any) => {
   const [flushTime, setFlushTime] = useState<any>('');
   const [flushInterval, setFlushInterval] = useState<any>('');
 
-    /** component hooks method for device disconnect checking */
-    useEffect(() => {
-      const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
-        (error, device) => {
-          consoleLog(
-            'LineFlush useEffect BLEService.onDeviceDisconnected error==>',
-            error,
-          );
-          // consoleLog(
-          //   'LineFlush useEffect BLEService.onDeviceDisconnected device==>',
-          //   device,
-          // );
-          if (error || error == null) {
-            showToastMessage('Your device was disconnected', 'danger');
-            NavigationService.resetAllAction('DeviceSearching');
-          }
-        },
-      );
-  
-      return () => deviceDisconnectionListener?.remove();
-    }, []);
-    
+  /** component hooks method for device disconnect checking */
+  useEffect(() => {
+    const deviceDisconnectionListener = BLEService.onDeviceDisconnected(
+      (error, device) => {
+        consoleLog(
+          'LineFlush useEffect BLEService.onDeviceDisconnected error==>',
+          error,
+        );
+        // consoleLog(
+        //   'LineFlush useEffect BLEService.onDeviceDisconnected device==>',
+        //   device,
+        // );
+        if (error || error == null) {
+          showToastMessage('Your device was disconnected', 'danger');
+          NavigationService.resetAllAction('DeviceSearching');
+        }
+      },
+    );
+
+    return () => deviceDisconnectionListener?.remove();
+  }, []);
+
   /** component hooks method */
   useEffect(() => {
     // consoleLog('DeviceSettingsList deviceSettingsData', deviceSettingsData);
@@ -119,10 +119,10 @@ const Index = ({navigation, route}: any) => {
         onDonePressGen1();
       } else if (BLEService.deviceGeneration == 'gen2') {
         onDonePressGen2();
-      } else if (BLEService.deviceGeneration == 'gen3') {
-        // Code need to be implemented
-      } else if (BLEService.deviceGeneration == 'gen4') {
-        // Code need to be implemented
+      } else if (BLEService.deviceGeneration == 'flusher') {
+        // This setting is no longer using for flusher
+      } else if (BLEService.deviceGeneration == 'basys') {
+        onDonePressBasys();
       }
     }
   };
@@ -347,6 +347,123 @@ const Index = ({navigation, route}: any) => {
           timestampInSec(),
         ),
       });
+    }
+
+    if (params.length) {
+      dispatch(
+        deviceSettingsSuccessAction({
+          data: {LineFlush: params},
+        }),
+      );
+    }
+    // deviceSettingsData
+    setTimeout(() => {
+      NavigationService.goBack();
+    }, 100);
+  };
+
+  const onDonePressBasys = async () => {
+    var params = [];
+    const dateFormat = 'YYMMDDHHmm';
+
+    // consoleLog('onDonePressGen1', {
+    //   old: settingsData?.flush?.value,
+    //   flush,
+    //   activationModeSecOld,
+    //   activationModeSec,
+    // });
+    // return false;
+
+    if (settingsData?.flush?.value != flush) {
+      params.push({
+        name: 'flush',
+        serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.FLUSH_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flush?.value,
+        newValue: flush,
+      });
+
+      params.push({
+        name: 'flushDate',
+        serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_DATE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.FLUSH_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      // params.push({
+      //   name: 'flushPhone',
+      //   serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_PHONE_SERVICE_UUID,
+      //   characteristicUUID: BLE_CONSTANTS.BASYS.FLUSH_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
+    }
+
+    if (
+      // settingsData?.flush?.value != flush ||
+      settingsData?.flushTime?.value != flushTime
+    ) {
+      params.push({
+        name: 'flushTime',
+        serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_TIME_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.FLUSH_TIME_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flushTime?.value,
+        newValue: flushTime,
+      });
+
+      params.push({
+        name: 'flushTimeDate',
+        serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_TIME_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.FLUSH_TIME_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      // params.push({
+      //   name: 'flushTimePhone',
+      //   serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_TIME_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.BASYS.FLUSH_TIME_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
+    }
+
+    if (
+      // settingsData?.flush?.value != flush ||
+      settingsData?.flushInterval?.value != flushInterval
+    ) {
+      params.push({
+        name: 'flushInterval',
+        serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_CHARACTERISTIC_UUID,
+        oldValue: settingsData?.flushInterval?.value,
+        newValue: flushInterval,
+      });
+
+      params.push({
+        name: 'flushIntervalDate',
+        serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_DATE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_DATE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: parseDateTimeInFormat(new Date(), dateFormat),
+        allowedInPreviousSettings: false,
+      });
+      // params.push({
+      //   name: 'flushIntervalPhone',
+      //   serviceUUID: BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_PHONE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_PHONE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: user?.user_metadata?.phone_number ?? '0123456789',
+      //   allowedInPreviousSettings: false,
+      // });
     }
 
     if (params.length) {
