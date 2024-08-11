@@ -52,7 +52,7 @@ const LineFlushListFlusher = ({
     //   __flushVolume,
     // });
     // Handle unsaved value which were changed
-    const resultObj = findObject('flush', deviceSettingsData?.LineFlush, {
+    const resultObj = findObject('flush', deviceSettingsData?.LineFlushFlusher, {
       searchKey: 'name',
     });
     // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
@@ -61,7 +61,7 @@ const LineFlushListFlusher = ({
       __flush = resultObj?.newValue;
     }
 
-    const resultObj2 = findObject('flushTime', deviceSettingsData?.LineFlush, {
+    const resultObj2 = findObject('flushTime', deviceSettingsData?.LineFlushFlusher, {
       searchKey: 'name',
     });
 
@@ -70,7 +70,7 @@ const LineFlushListFlusher = ({
     }
     const resultObj3 = findObject(
       'flushVolume',
-      deviceSettingsData?.LineFlush,
+      deviceSettingsData?.LineFlushFlusher,
       {
         searchKey: 'name',
       },

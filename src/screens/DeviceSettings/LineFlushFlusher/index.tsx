@@ -109,7 +109,7 @@ const Index = ({navigation, route}: any) => {
       __flushVolume = resultObj2?.newValue;
     }
     // setFlushTimeOld(__flushTime);
-    setFlushTime(__flushTime);
+    setFlushTime(__flushTime?.toString());
     setFlushVolume(__flushVolume);
     setSliderOneValue([parseInt(__flushTime)]);
   };
@@ -136,6 +136,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.FLUSHER.FLUSH_TIME_CHARACTERISTIC_UUID,
         oldValue: settingsData?.flushTime?.value,
         newValue: flushTime,
+        convertToType: 'hex',
       });
 
       params.push({
@@ -146,6 +147,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
+        convertToType: 'hex',
       });
 
       params.push({
@@ -155,6 +157,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_CHARACTERISTIC_UUID,
         oldValue: settingsData?.flushVolume?.value,
         newValue: flushVolume,
+        convertToType: 'hex',
       });
 
       params.push({
@@ -165,6 +168,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
+        convertToType: 'hex',
       });
     }
 

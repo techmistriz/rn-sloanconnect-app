@@ -38,8 +38,9 @@ import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {
-  base64ToHex,
-  fromHexStringUint8Array,
+  asciiToHex,
+  base64ToHex, decimalToHex,
+  fromHexStringUint8Array, hexToByte, hexToDecimal,
 } from 'src/utils/Helpers/encryption';
 import {
   mappingDataCollectionGen2,
@@ -1460,7 +1461,7 @@ const Index = ({navigation}: any) => {
                   settings={{
                     title: I18n.t('device_dashboard.ACTIVATION_TIME'),
                     route: 'ActivationTimeFlusher',
-                    name: 'ActivationTimeFlusher',
+                    name: 'ActivationTime',
                     activationTimeRangeConfig: {min: 8, max: 28, step: 4},
                     // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
                     // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c946',
