@@ -24,6 +24,7 @@ import {
   getBleDeviceGeneration,
   getBleDeviceVersion,
   getDeviceModelData,
+  getSetTotalWaterUsaseBasys,
   getTotalWaterUsase,
   getTotalWaterUsaseFlusher,
   initFlusherSecurityKey,
@@ -1112,6 +1113,18 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
+  getSetTotalWaterUsaseBasys = async () => {
+    this.totalWaterUsase = await getSetTotalWaterUsaseBasys(
+      BLE_CONSTANTS.BASYS.FLOW_RATE_SERVICE_UUID,
+      BLE_CONSTANTS.BASYS.FLOW_RATE_CHARACTERISTIC_UUID,
+    );
+  };
+
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
   async setDeviceModelData() {
     var deviceStaticData = null;
 
@@ -1167,15 +1180,15 @@ class BLEServiceInstance {
   initDeviceDataFlusher = async () => {
     await initFlusherSecurityKey();
     await this.getSetBatteryLevel();
-    await this.getSetTotalWaterUsaseFlusher();
+    // await this.getSetTotalWaterUsaseFlusher();
     await this.setDeviceModelData();
   };
 
   initDeviceDataGenBasys = async () => {
-    // await initFlusherSecurityKey();
-    // await this.getSetBatteryLevel();
-    // await this.getSetTotalWaterUsaseFlusher();
-    // await this.setDeviceModelData();
+    await initFlusherSecurityKey();
+    await this.getSetBatteryLevel();
+    await this.getSetTotalWaterUsaseBasys();
+    await this.setDeviceModelData();
   };
 }
 

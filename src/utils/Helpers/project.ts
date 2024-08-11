@@ -586,6 +586,86 @@ export const getTotalWaterUsaseFlusher = async (
 
 /**
  *
+ * @param {*} param1
+ * @param {*} param2
+ * @returns result
+ */
+export const getSetTotalWaterUsaseBasys = async (
+  serviceUUID: string,
+  characteristicUUID: string,
+) => {
+  // const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
+  // const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c949';
+  var totalWaterUsage = 0;
+  const __flowRate = await BLEService.readCharacteristicForDevice(
+    serviceUUID,
+    characteristicUUID,
+  );
+  // consoleLog(
+  //   'getTotalWaterUsase __flowRate==>',
+  //   JSON.stringify(__flowRate?.value),
+  // );
+
+  if (__flowRate?.value) {
+    const flowRateDecodedValue = base64EncodeDecode(
+      __flowRate?.value,
+      'decode',
+    );
+
+    // consoleLog(
+    //   'getTotalWaterUsase flowRateDecodedValue==>',
+    //   flowRateDecodedValue,
+    // );
+
+    if (flowRateDecodedValue) {
+      const __activationsDuration =
+        await BLEService.readCharacteristicForDevice(
+          BLE_CONSTANTS.BASYS.ACTIVATION_DURATION_SERVICE_UUID,
+          BLE_CONSTANTS.BASYS.ACTIVATION_DURATION_CHARACTERISTIC_UUID,
+        );
+
+      // consoleLog(
+      //   'getTotalWaterUsase __activationsDuration==>',
+      //   JSON.stringify(__activationsDuration?.value),
+      // );
+      if (__activationsDuration?.value) {
+        const activationsDurationDecodedValue = base64ToDecimal(
+          __activationsDuration?.value,
+        );
+
+        // consoleLog(
+        //   'getTotalWaterUsase activationsDurationDecodedValue==>',
+        //   activationsDurationDecodedValue,
+        // );
+
+        var __flowRateDecodedValue = 0;
+        var __activationsDurationHexEncodeValue = 0;
+
+        if (flowRateDecodedValue) {
+          __flowRateDecodedValue = Number(flowRateDecodedValue);
+        }
+
+        if (activationsDurationDecodedValue) {
+          __activationsDurationHexEncodeValue = Number(
+            activationsDurationDecodedValue,
+          );
+        }
+
+        if (__activationsDurationHexEncodeValue) {
+          const __totalWaterUsage =
+            (__flowRateDecodedValue / 10 / 60) *
+            __activationsDurationHexEncodeValue;
+          totalWaterUsage = Number(__totalWaterUsage.toFixed(2));
+        }
+      }
+    }
+  }
+
+  return totalWaterUsage;
+};
+
+/**
+ *
  * @param {*} deviceSettingsData
  * @returns result
  */
