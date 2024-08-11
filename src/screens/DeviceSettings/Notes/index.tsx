@@ -205,8 +205,7 @@ const Index = ({navigation, route}: any) => {
       params.push({
         name: 'noteDate',
         serviceUUID: BLE_CONSTANTS.FLUSHER.NOTE_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.FLUSHER.NOTE_DATE_CHARACTERISTIC_UUID,
+        characteristicUUID: BLE_CONSTANTS.FLUSHER.NOTE_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
@@ -242,24 +241,23 @@ const Index = ({navigation, route}: any) => {
     if (settingsData?.note?.value != note) {
       params.push({
         name: 'note',
-        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_SERVICE_UUID,
-        characteristicUUID: BLE_CONSTANTS.BASYS.SENSOR_CHARACTERISTIC_UUID,
+        serviceUUID: BLE_CONSTANTS.BASYS.NOTE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.NOTE_CHARACTERISTIC_UUID,
         oldValue: settingsData?.note?.value,
         newValue: note,
       });
       params.push({
         name: 'noteDate',
-        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_DATE_SERVICE_UUID,
-        characteristicUUID: BLE_CONSTANTS.BASYS.SENSOR_DATE_CHARACTERISTIC_UUID,
+        serviceUUID: BLE_CONSTANTS.BASYS.NOTE_DATE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.NOTE_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
       });
       params.push({
         name: 'notePhone',
-        serviceUUID: BLE_CONSTANTS.BASYS.SENSOR_PHONE_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.BASYS.SENSOR_PHONE_CHARACTERISTIC_UUID,
+        serviceUUID: BLE_CONSTANTS.BASYS.NOTE_PHONE_SERVICE_UUID,
+        characteristicUUID: BLE_CONSTANTS.BASYS.NOTE_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: user?.user_metadata?.phone_number ?? '0123456789',
         allowedInPreviousSettings: false,
