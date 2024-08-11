@@ -377,6 +377,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'EFX1XX, EFX2XX, EFX3XX, EFX6XX, EFX8XX',
       type: 'ADSKU',
       version: '20',
+      generation: '01',
       models: [
         {
           ETFModel: 'EFX1XX',
@@ -420,6 +421,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'EAF100',
       type: 'ADSKU',
       version: '21',
+      generation: '01',
       models: [
         {
           ETFModel: 'EAF100',
@@ -435,6 +437,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'EAF200 ',
       type: 'ADSKU',
       version: '22',
+      generation: '01',
       models: [
         {
           ETFModel: 'EAF200 ',
@@ -450,6 +453,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'EAF300 ',
       type: 'ADSKU',
       version: '23',
+      generation: '01',
       models: [
         {
           ETFModel: 'EAF300 ',
@@ -465,6 +469,7 @@ export const BLE_DEVICE_MODELS = {
       fullNameAllModel: 'EAF700 ',
       type: 'ADSKU',
       version: '24',
+      generation: '01',
       models: [
         {
           ETFModel: 'EAF700 ',

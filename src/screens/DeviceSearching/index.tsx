@@ -43,7 +43,7 @@ const Index = ({navigation, route}: any) => {
   const connectedDevice: any = BLEService.getDevice();
   const [searchAgainFlag, setSearchAgain] = useState(0);
   const [isDeviceConnectTimedout, setDeviceConnectTimeout] = useState(false);
-  
+
   /** Hooks for checking if user turned off bluetooth power */
   useEffect(() => {
     const subscription = BLEService.manager.onStateChange(state => {

@@ -1178,14 +1178,14 @@ class BLEServiceInstance {
   };
 
   initDeviceDataFlusher = async () => {
-    await initFlusherSecurityKey();
+    await initFlusherSecurityKey('flusher');
     await this.getSetBatteryLevel();
     // await this.getSetTotalWaterUsaseFlusher();
     await this.setDeviceModelData();
   };
 
   initDeviceDataGenBasys = async () => {
-    await initFlusherSecurityKey();
+    await initFlusherSecurityKey('basys');
     await this.getSetBatteryLevel();
     await this.getSetTotalWaterUsaseBasys();
     await this.setDeviceModelData();

@@ -39,8 +39,11 @@ import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {
   asciiToHex,
-  base64ToHex, decimalToHex,
-  fromHexStringUint8Array, hexToByte, hexToDecimal,
+  base64ToHex,
+  decimalToHex,
+  fromHexStringUint8Array,
+  hexToByte,
+  hexToDecimal,
 } from 'src/utils/Helpers/encryption';
 import {
   mappingDataCollectionGen2,
@@ -67,6 +70,12 @@ import {
   getNoteFlusherSettings,
   getSensorFlusherSettings,
 } from './helperFlusher';
+import {
+  getActivationModeSettingsBasys,
+  getFlowSettingsBasys, getFlushSettingsBasys,
+  getNoteFlusherSettingsBasys,
+  getSensorSettingsBasys
+} from 'src/screens/DeviceDashboard/helperBasys';
 
 let hasSettingsChanged: boolean = false;
 const Index = ({navigation}: any) => {
@@ -807,7 +816,7 @@ const Index = ({navigation}: any) => {
     __getBatteryLevel();
     __getTotalWaterUsase();
     __getSavedSettingsGen1();
-    getActivationModeSettings(deviceSettingsData)
+    getActivationModeSettingsBasys(deviceSettingsData)
       .then(response => {
         // consoleLog(
         //   'initlizeAppGen1 getActivationModeSettings response==>',
@@ -827,7 +836,7 @@ const Index = ({navigation}: any) => {
         consoleLog('initlizeAppGen1 getActivationModeSettings error==>', error);
       });
 
-    getFlushSettings(deviceSettingsData)
+    getFlushSettingsBasys(deviceSettingsData)
       .then(response => {
         // consoleLog('initlizeAppGen1 getFlushSettings response==>', response);
         setFlushSettings(response);
@@ -836,7 +845,7 @@ const Index = ({navigation}: any) => {
       .catch(error => {
         consoleLog('initlizeAppGen1 getFlushSettings error==>', error);
       });
-    getSensorSettings(deviceSettingsData)
+    getSensorSettingsBasys(deviceSettingsData)
       .then(response => {
         // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
         setSensorSettings(response);
@@ -849,7 +858,7 @@ const Index = ({navigation}: any) => {
       .catch(error => {
         consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
       });
-    getFlowSettings(deviceSettingsData)
+    getFlowSettingsBasys(deviceSettingsData)
       .then(response => {
         // consoleLog('initlizeAppGen1 getFlowSettings response==>', response);
         setFlowRateSettings(response);
@@ -857,6 +866,16 @@ const Index = ({navigation}: any) => {
       })
       .catch(error => {
         consoleLog('initlizeAppGen1 getFlowSettings error==>', error);
+      });
+
+    getNoteFlusherSettingsBasys(deviceSettingsData)
+      .then(response => {
+        // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
+        setNoteSettings(response);
+        BLEReport.mapFaucetSettings('NoteRange', response, hasSettingsChanged);
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 getNoteFlusherSettingsBasys error==>', error);
       });
 
     setLoading(false);

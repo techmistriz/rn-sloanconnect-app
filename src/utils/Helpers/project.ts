@@ -1697,7 +1697,7 @@ async function computeFlusherUnlockKey(BDSN: string, cloudKey: any) {
   return unlockKeySecondShaHex;
 }
 
-export const initFlusherSecurityKey = async () => {
+export const initFlusherSecurityKey = async (deviceType) => {
   try {
     const FLUSHER_APP_IDENTIFICATION_SERVICE_UUID =
       BLE_CONSTANTS?.FLUSHER?.FLUSHER_APP_IDENTIFICATION_SERVICE_UUID;
@@ -1709,9 +1709,14 @@ export const initFlusherSecurityKey = async () => {
     let timestampYmd = getTimestampInYMDFormat(timestamp);
     let timestampHex = asciiToHex(timestampYmd);
     consoleLog('initFlusherSecurityKey', {timestampHex, timestampYmd});
-    const FLUSHER_SERVICE_UUID = BLE_CONSTANTS?.FLUSHER?.FLUSHER_SERVICE_UUID;
-    const FLUSHER_BDSN_CHARACTERISTIC_UUID =
-      BLE_CONSTANTS?.FLUSHER?.BDSN_CHARACTERISTIC_UUID;
+    let FLUSHER_SERVICE_UUID = BLE_CONSTANTS?.FLUSHER?.FLUSHER_SERVICE_UUID;
+    let FLUSHER_BDSN_CHARACTERISTIC_UUID =
+        BLE_CONSTANTS?.FLUSHER?.BDSN_CHARACTERISTIC_UUID;
+    if (deviceType == 'basys') {
+      FLUSHER_SERVICE_UUID = BLE_CONSTANTS?.BASYS?.FAUCET_SERVICE_UUID;
+      FLUSHER_BDSN_CHARACTERISTIC_UUID =
+          BLE_CONSTANTS?.BASYS?.BDSN_CHARACTERISTIC_UUID;
+    }
     const bdsnResponse = await BLEService.readCharacteristicForDevice(
       FLUSHER_SERVICE_UUID,
       FLUSHER_BDSN_CHARACTERISTIC_UUID,
