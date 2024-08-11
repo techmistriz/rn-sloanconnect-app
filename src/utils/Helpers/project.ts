@@ -83,7 +83,19 @@ export function getBleDeviceGeneration(str: string | null | undefined = '') {
   }
   // if (str.search(/FAUCET/i) >= 0) {
   if (str?.toUpperCase()?.includes('FAUCET')) {
-    return 'gen1';
+    var result = 'gen1';
+    var arr = str.split(' ');
+    if (Array.isArray(arr) && arr.length > 1) {
+      var __version = arr[1];
+      if (__version) {
+        var __versionFinal = __version.replace(/[^0-9]/g, '');
+        if (parseInt(__versionFinal) >= 20) {
+          result = 'basys';
+        }
+      }
+    }
+
+    return result;
     // } else if (str.search(/SL/i) >= 0) {
   } else if (str?.toUpperCase()?.includes('SL')) {
     return 'gen2';
