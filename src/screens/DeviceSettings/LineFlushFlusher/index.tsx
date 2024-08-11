@@ -147,7 +147,18 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
-        convertToType: 'hex',
+        // convertToType: 'hex',
+      });
+
+      params.push({
+        name: 'flushTimePhone',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_TIME_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.FLUSH_TIME_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
+        allowedInPreviousSettings: false,
+        //convertToType: 'hex',
       });
 
       params.push({
@@ -168,7 +179,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
-        convertToType: 'hex',
+        // convertToType: 'hex',
       });
     }
 

@@ -187,6 +187,7 @@
     "BATTERY_POWER": "Energía de la batería",
     "TOTAL_WATER_USAGE": "Uso total de agua",
     "DISPENSE_WATER": "Dispensar agua",
+    "FLUSH_WATER": "Flush aqua",
     "FAUCET_SETTINGS": "Configuración del grifo",
     "LOAD_PREVIOUS_SETTINGS": "Cargar configuración anterior",
     "PREVIOUS_SETTING_SUCCESS_MSG": "Configuraciones anteriores aplicadas con éxito.",

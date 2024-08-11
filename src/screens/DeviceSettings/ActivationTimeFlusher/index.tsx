@@ -125,7 +125,18 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
-        convertToType: 'hex',
+        // convertToType: 'hex',
+      });
+
+      params.push({
+        name: 'activationTimePhone',
+        serviceUUID: BLE_CONSTANTS.FLUSHER.ACTIVATION_TIME_PHONE_SERVICE_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.ACTIVATION_TIME_PHONE_CHARACTERISTIC_UUID,
+        oldValue: null,
+        newValue: user?.user_metadata?.phone_number ?? '0123456789',
+        allowedInPreviousSettings: false,
+        //convertToType: 'hex',
       });
     }
 

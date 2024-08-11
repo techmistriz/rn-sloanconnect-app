@@ -1030,6 +1030,17 @@ class BLEServiceInstance {
    * @param characteristicUUID
    */
   dispenseWaterFlusher = async () => {
+    const writeCharacteristicWithResponseForDevice =
+        await BLEService.writeCharacteristicWithResponseForDevice2(
+            BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_SERVICE_UUID,
+            BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
+            fromHexStringUint8Array('01'),
+        );
+    showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
+    // consoleLog(
+    //     'dispenseWater writeCharacteristicWithResponseForDevice==>',
+    //     JSON.stringify(writeCharacteristicWithResponseForDevice),
+    // );
     // water dispense uuid not available in flusher
     // ask which uuid we need to use to flush
   };

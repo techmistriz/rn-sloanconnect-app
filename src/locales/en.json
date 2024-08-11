@@ -187,6 +187,7 @@
     "BATTERY_POWER": "Battery Power",
     "TOTAL_WATER_USAGE": "Total water usage",
     "DISPENSE_WATER": "Dispense Water",
+    "FLUSH_WATER": "Flush",
     "FAUCET_SETTINGS": "Faucet Settings",
     "LOAD_PREVIOUS_SETTINGS": "Load Previous Settings",
     "PREVIOUS_SETTING_SUCCESS_MSG": "Previous settings applied successfully.",

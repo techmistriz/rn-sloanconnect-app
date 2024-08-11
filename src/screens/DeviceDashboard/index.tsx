@@ -1333,7 +1333,11 @@ const Index = ({navigation}: any) => {
                 <Wrap autoMargin={false} style={{flex: 1}}>
                   <Button
                     type={'link'}
-                    title={I18n.t('device_dashboard.DISPENSE_WATER')}
+                    title={
+                      BLEService.deviceGeneration == 'flusher'
+                        ? I18n.t('device_dashboard.FLUSH_WATER')
+                        : I18n.t('device_dashboard.DISPENSE_WATER')
+                    }
                     onPress={() => {
                       dispenseWater();
                     }}

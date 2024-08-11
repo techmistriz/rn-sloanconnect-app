@@ -187,6 +187,7 @@
     "BATTERY_POWER": "Puissance de la batterie",
     "TOTAL_WATER_USAGE": "Consommation totale d'eau",
     "DISPENSE_WATER": "Distribuer de l'eau",
+    "FLUSH_WATER": "Flush leua",
     "FAUCET_SETTINGS": "Paramètres du robinet",
     "LOAD_PREVIOUS_SETTINGS": "Charger les paramètres précédents",
     "PREVIOUS_SETTING_SUCCESS_MSG": "Paramètres précédents appliqués avec succès.",
