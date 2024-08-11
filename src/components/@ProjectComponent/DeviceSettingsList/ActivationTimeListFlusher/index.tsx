@@ -45,6 +45,8 @@ const ActivationTimeListFlusher = ({
     // consoleLog('initlizeApp==>', {
     //   __activationTime,
     // });
+    //
+    // consoleLog('showApplySettingButton', {showApplySettingButton, applied, deviceSettingsData});
 
     // Handle unsaved value which were changed
     const resultObj2 = findObject(

@@ -107,7 +107,7 @@ const Index = ({navigation, route}: any) => {
       __sensorRange = resultObj?.newValue;
     }
     // setSensorRangeOld(__sensorRange);
-    setSensorRange(__sensorRange);
+    setSensorRange(__sensorRange?.toString());
     setSliderOneValue([parseInt(__sensorRange)]);
   };
 
@@ -119,9 +119,9 @@ const Index = ({navigation, route}: any) => {
         onDonePressGen1();
       } else if (BLEService.deviceGeneration == 'gen2') {
         onDonePressGen2();
-      } else if (BLEService.deviceGeneration == 'gen3') {
+      } else if (BLEService.deviceGeneration == 'flusher') {
         onDonePressFlusher();
-      } else if (BLEService.deviceGeneration == 'gen4') {
+      } else if (BLEService.deviceGeneration == 'basys') {
         onDonePressBasys();
       }
     }
@@ -226,6 +226,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID: BLE_CONSTANTS.FLUSHER.SENSOR_CHARACTERISTIC_UUID,
         oldValue: settingsData?.sensorRange?.value,
         newValue: sensorRange,
+        convertToType: 'hex',
       });
 
       params.push({
@@ -236,6 +237,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
+        convertToType: 'hex',
       });
 
       params.push({
@@ -246,6 +248,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: user?.user_metadata?.phone_number ?? '0123456789',
         allowedInPreviousSettings: false,
+        convertToType: 'hex',
       });
     }
 
@@ -272,6 +275,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID: BLE_CONSTANTS.BASYS.SENSOR_CHARACTERISTIC_UUID,
         oldValue: settingsData?.sensorRange?.value,
         newValue: sensorRange,
+        convertToType: 'hex',
       });
 
       params.push({
@@ -281,6 +285,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
+        convertToType: 'hex',
       });
 
       params.push({
@@ -291,6 +296,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: user?.user_metadata?.phone_number ?? '0123456789',
         allowedInPreviousSettings: false,
+        convertToType: 'hex',
       });
     }
 

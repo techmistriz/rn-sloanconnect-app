@@ -1031,6 +1031,7 @@ class BLEServiceInstance {
    */
   dispenseWaterFlusher = async () => {
     // water dispense uuid not available in flusher
+    // ask which uuid we need to use to flush
   };
   /**
    * project level function for BLE devices

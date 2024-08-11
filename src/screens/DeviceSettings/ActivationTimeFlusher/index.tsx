@@ -89,7 +89,7 @@ const Index = ({navigation, route}: any) => {
       __activationTime = resultObj?.newValue;
     }
     // setActivationTimeOld(__activationTime);
-    setActivationTime(__activationTime);
+    setActivationTime(__activationTime?.toString());
     setSliderOneValue([parseInt(__activationTime)]);
   };
 
@@ -114,6 +114,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.FLUSHER.ACTIVATION_TIME_CHARACTERISTIC_UUID,
         oldValue: settingsData?.activationTime?.value,
         newValue: activationTime,
+        convertToType: 'hex',
       });
 
       params.push({
@@ -124,6 +125,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
         allowedInPreviousSettings: false,
+        convertToType: 'hex',
       });
     }
 

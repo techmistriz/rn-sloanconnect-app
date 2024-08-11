@@ -3,7 +3,13 @@ import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {cleanCharacteristic} from 'src/utils/Helpers/project';
-import {base64EncodeDecode, base64ToText} from 'src/utils/Helpers/encryption';
+import {
+  __base64ToHex,
+  base64EncodeDecode,
+  base64ToDecimal,
+  base64ToText,
+  hexToDecimal
+} from 'src/utils/Helpers/encryption';
 
 /** Function comments */
 export const getActivationTimeFlusherSettings = async (
@@ -18,13 +24,13 @@ export const getActivationTimeFlusherSettings = async (
     BLE_CONSTANTS.FLUSHER.ACTIVATION_TIME_CHARACTERISTIC_UUID,
   );
 
-  // consoleLog(
-  //   'getActivationModeSettings modeSelectionResponse==>',
-  //   JSON.stringify(modeSelectionResponse),
-  // );
+  consoleLog(
+    'getActivationTimeFlusherSettings ==>',
+    JSON.stringify(modeSelectionResponse),
+  );
 
   if (!isObjectEmpty(modeSelectionResponse) && modeSelectionResponse?.value) {
-    modeSelectionResponse.value = base64ToText(modeSelectionResponse?.value);
+    modeSelectionResponse.value = hexToDecimal(__base64ToHex(modeSelectionResponse?.value));
     results.activationTime = cleanCharacteristic(modeSelectionResponse);
   }
 
@@ -45,13 +51,13 @@ export const getFlushFlusherSettings = async (
     BLE_CONSTANTS.FLUSHER.FLUSH_TIME_CHARACTERISTIC_UUID,
   );
 
-  // consoleLog(
-  //   'getFlushSettings flushTimeResponse==>',
-  //   JSON.stringify(flushTimeResponse),
-  // );
+  consoleLog(
+    'getFlushSettings flushTimeResponse==>',
+    JSON.stringify(flushTimeResponse),
+  );
 
   if (!isObjectEmpty(flushTimeResponse) && flushTimeResponse?.value) {
-    flushTimeResponse.value = base64ToText(flushTimeResponse?.value);
+    flushTimeResponse.value = hexToDecimal(__base64ToHex(flushTimeResponse?.value));
     results.flushTime = cleanCharacteristic(flushTimeResponse);
   }
 
@@ -66,7 +72,7 @@ export const getFlushFlusherSettings = async (
   // );
 
   if (!isObjectEmpty(flushIntervalResponse) && flushIntervalResponse?.value) {
-    flushIntervalResponse.value = base64ToText(flushIntervalResponse?.value);
+    flushIntervalResponse.value = hexToDecimal(__base64ToHex(flushIntervalResponse?.value));
     results.flushVolume = cleanCharacteristic(flushIntervalResponse);
   }
 
@@ -86,13 +92,13 @@ export const getSensorFlusherSettings = async (
     BLE_CONSTANTS.FLUSHER.SENSOR_CHARACTERISTIC_UUID,
   );
 
-  // consoleLog(
-  //   'getSensorSettings sensorResponse==>',
-  //   JSON.stringify(sensorResponse),
-  // );
+  consoleLog(
+    'getSensorSettings sensorResponse==>',
+    JSON.stringify(sensorResponse),
+  );
 
   if (!isObjectEmpty(sensorResponse) && sensorResponse?.value) {
-    sensorResponse.value = base64ToText(sensorResponse?.value);
+    sensorResponse.value = hexToDecimal(__base64ToHex(sensorResponse?.value));
     results.sensorRange = cleanCharacteristic(sensorResponse);
   }
 
@@ -112,10 +118,10 @@ export const getNoteFlusherSettings = async (
     BLE_CONSTANTS.FLUSHER.NOTE_CHARACTERISTIC_UUID,
   );
 
-  // consoleLog(
-  //   'getSensorSettings sensorResponse==>',
-  //   JSON.stringify(sensorResponse),
-  // );
+  consoleLog(
+    'getSensorSettings sensorResponse==>',
+    JSON.stringify(sensorResponse),
+  );
 
   if (!isObjectEmpty(sensorResponse) && sensorResponse?.value) {
     sensorResponse.value = base64ToText(sensorResponse?.value);
