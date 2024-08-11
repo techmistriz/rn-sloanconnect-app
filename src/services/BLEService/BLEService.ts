@@ -25,6 +25,7 @@ import {
   getBleDeviceVersion,
   getDeviceModelData,
   getTotalWaterUsase,
+  getTotalWaterUsaseFlusher,
   initFlusherSecurityKey,
   // intiFlusherSecurityKey,
   intiGen2SecurityKey,
@@ -1031,11 +1032,11 @@ class BLEServiceInstance {
    */
   dispenseWaterFlusher = async () => {
     const writeCharacteristicWithResponseForDevice =
-        await BLEService.writeCharacteristicWithResponseForDevice2(
-            BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_SERVICE_UUID,
-            BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
-            fromHexStringUint8Array('01'),
-        );
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_SERVICE_UUID,
+        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
+        fromHexStringUint8Array('01'),
+      );
     showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
     // consoleLog(
     //     'dispenseWater writeCharacteristicWithResponseForDevice==>',
@@ -1099,6 +1100,18 @@ class BLEServiceInstance {
    * @param serviceUUID
    * @param characteristicUUID
    */
+  getSetTotalWaterUsaseFlusher = async () => {
+    this.totalWaterUsase = await getTotalWaterUsaseFlusher(
+      BLE_CONSTANTS.GEN1.FLOW_RATE_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1.FLOW_RATE_CHARACTERISTIC_UUID,
+    );
+  };
+
+  /**
+   * project level function for BLE devices
+   * @param serviceUUID
+   * @param characteristicUUID
+   */
   async setDeviceModelData() {
     var deviceStaticData = null;
 
@@ -1136,7 +1149,7 @@ class BLEServiceInstance {
     } else if (BLEService.deviceGeneration == 'flusher') {
       await this.initDeviceDataFlusher();
     } else if (BLEService.deviceGeneration == 'basys') {
-      await this.initDeviceDataGen4();
+      await this.initDeviceDataGenBasys();
     }
   };
 
@@ -1154,13 +1167,14 @@ class BLEServiceInstance {
   initDeviceDataFlusher = async () => {
     await initFlusherSecurityKey();
     await this.getSetBatteryLevel();
-    // await this.getSetTotalWaterUsase();
+    await this.getSetTotalWaterUsaseFlusher();
     await this.setDeviceModelData();
   };
 
-  initDeviceDataGen4 = async () => {
+  initDeviceDataGenBasys = async () => {
+    // await initFlusherSecurityKey();
     // await this.getSetBatteryLevel();
-    // await this.getSetTotalWaterUsase();
+    // await this.getSetTotalWaterUsaseFlusher();
     // await this.setDeviceModelData();
   };
 }
