@@ -3,7 +3,7 @@ import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {cleanCharacteristic} from 'src/utils/Helpers/project';
-import {base64EncodeDecode, base64ToText} from 'src/utils/Helpers/encryption';
+import {__base64ToHex, base64EncodeDecode, base64ToText, hexToDecimal} from 'src/utils/Helpers/encryption';
 
 /** Function comments */
 export const getActivationModeSettingsBasys = async (
@@ -16,8 +16,8 @@ export const getActivationModeSettingsBasys = async (
   };
 
   var modeSelectionResponse = await BLEService.readCharacteristicForDevice(
-    BLE_CONSTANTS.GEN1.MODE_SELECTION_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.MODE_SELECTION_CHARACTERISTIC_UUID,
+    BLE_CONSTANTS.BASYS.MODE_SELECTION_SERVICE_UUID,
+    BLE_CONSTANTS.BASYS.MODE_SELECTION_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -31,8 +31,8 @@ export const getActivationModeSettingsBasys = async (
   }
 
   var meteredResponse = await BLEService.readCharacteristicForDevice(
-    BLE_CONSTANTS.GEN1.METERED_RUNTIME_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.METERED_RUNTIME_CHARACTERISTIC_UUID,
+    BLE_CONSTANTS.BASYS.METERED_RUNTIME_SERVICE_UUID,
+    BLE_CONSTANTS.BASYS.METERED_RUNTIME_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -41,13 +41,13 @@ export const getActivationModeSettingsBasys = async (
   // );
 
   if (!isObjectEmpty(meteredResponse) && meteredResponse?.value) {
-    meteredResponse.value = base64ToText(meteredResponse?.value);
+    meteredResponse.value = hexToDecimal(__base64ToHex(meteredResponse?.value));
     results.metered = cleanCharacteristic(meteredResponse);
   }
 
   const onDemandResponse = await BLEService.readCharacteristicForDevice(
-    BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.ON_DEMAND_RUNTIME_CHARACTERISTIC_UUID,
+    BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_SERVICE_UUID,
+    BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -56,7 +56,7 @@ export const getActivationModeSettingsBasys = async (
   // );
 
   if (!isObjectEmpty(onDemandResponse) && onDemandResponse?.value) {
-    onDemandResponse.value = base64ToText(onDemandResponse?.value);
+    onDemandResponse.value = hexToDecimal(__base64ToHex(onDemandResponse?.value));
     results.onDemand = cleanCharacteristic(onDemandResponse);
   }
 
@@ -72,8 +72,8 @@ export const getFlushSettingsBasys = async (unsavedDeviceSettingsData: any) => {
   };
 
   var flushResponse = await BLEService.readCharacteristicForDevice(
-    BLE_CONSTANTS.GEN1.FLUSH_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.FLUSH_CHARACTERISTIC_UUID,
+    BLE_CONSTANTS.BASYS.FLUSH_SERVICE_UUID,
+    BLE_CONSTANTS.BASYS.FLUSH_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -87,8 +87,8 @@ export const getFlushSettingsBasys = async (unsavedDeviceSettingsData: any) => {
   }
 
   var flushTimeResponse = await BLEService.readCharacteristicForDevice(
-    BLE_CONSTANTS.GEN1.FLUSH_TIME_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.FLUSH_TIME_CHARACTERISTIC_UUID,
+    BLE_CONSTANTS.BASYS.FLUSH_TIME_SERVICE_UUID,
+    BLE_CONSTANTS.BASYS.FLUSH_TIME_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -97,13 +97,13 @@ export const getFlushSettingsBasys = async (unsavedDeviceSettingsData: any) => {
   // );
 
   if (!isObjectEmpty(flushTimeResponse) && flushTimeResponse?.value) {
-    flushTimeResponse.value = base64ToText(flushTimeResponse?.value);
+    flushTimeResponse.value = hexToDecimal(__base64ToHex(flushTimeResponse?.value));
     results.flushTime = cleanCharacteristic(flushTimeResponse);
   }
 
   const flushIntervalResponse = await BLEService.readCharacteristicForDevice(
-    BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_SERVICE_UUID,
-    BLE_CONSTANTS.GEN1.FLUSH_INTERVAL_CHARACTERISTIC_UUID,
+    BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_SERVICE_UUID,
+    BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_CHARACTERISTIC_UUID,
   );
 
   // consoleLog(
@@ -112,7 +112,7 @@ export const getFlushSettingsBasys = async (unsavedDeviceSettingsData: any) => {
   // );
 
   if (!isObjectEmpty(flushIntervalResponse) && flushIntervalResponse?.value) {
-    flushIntervalResponse.value = base64ToText(flushIntervalResponse?.value);
+    flushIntervalResponse.value = hexToDecimal(__base64ToHex(flushIntervalResponse?.value));
     results.flushInterval = cleanCharacteristic(flushIntervalResponse);
   }
 
@@ -136,7 +136,7 @@ export const getFlowSettingsBasys = async (unsavedDeviceSettingsData: any) => {
   // );
 
   if (!isObjectEmpty(flowRateResponse) && flowRateResponse?.value) {
-    flowRateResponse.value = base64ToText(flowRateResponse?.value);
+    flowRateResponse.value = hexToDecimal(__base64ToHex(flowRateResponse?.value));
     results.flowRate = cleanCharacteristic(flowRateResponse);
   }
 
@@ -144,7 +144,9 @@ export const getFlowSettingsBasys = async (unsavedDeviceSettingsData: any) => {
 };
 
 /** Function comments */
-export const getSensorSettingsBasys = async (unsavedDeviceSettingsData: any) => {
+export const getSensorSettingsBasys = async (
+  unsavedDeviceSettingsData: any,
+) => {
   const results = {
     sensorRange: null,
   };
@@ -160,7 +162,7 @@ export const getSensorSettingsBasys = async (unsavedDeviceSettingsData: any) => 
   // );
 
   if (!isObjectEmpty(sensorResponse) && sensorResponse?.value) {
-    sensorResponse.value = base64ToText(sensorResponse?.value);
+    sensorResponse.value = hexToDecimal(__base64ToHex(sensorResponse?.value));
     results.sensorRange = cleanCharacteristic(sensorResponse);
   }
 
@@ -169,21 +171,21 @@ export const getSensorSettingsBasys = async (unsavedDeviceSettingsData: any) => 
 
 /** Function comments */
 export const getNoteFlusherSettingsBasys = async (
-    unsavedDeviceSettingsData: any,
+  unsavedDeviceSettingsData: any,
 ) => {
   const results = {
     note: null,
   };
 
   var sensorResponse = await BLEService.readCharacteristicForDevice(
-      BLE_CONSTANTS.BASYS.NOTE_SERVICE_UUID,
-      BLE_CONSTANTS.BASYS.NOTE_CHARACTERISTIC_UUID,
+    BLE_CONSTANTS.BASYS.NOTE_SERVICE_UUID,
+    BLE_CONSTANTS.BASYS.NOTE_CHARACTERISTIC_UUID,
   );
 
-  consoleLog(
-      'getSensorSettings sensorResponse==>',
-      JSON.stringify(sensorResponse),
-  );
+  // consoleLog(
+  //   'getNoteFlusherSettingsBasys sensorResponse==>',
+  //   JSON.stringify(sensorResponse),
+  // );
 
   if (!isObjectEmpty(sensorResponse) && sensorResponse?.value) {
     sensorResponse.value = base64ToText(sensorResponse?.value);

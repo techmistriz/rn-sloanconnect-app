@@ -38,12 +38,13 @@ import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {
-  asciiToHex,
-  base64ToHex,
+  __base64ToHex,
+  asciiToHex, base64ToDecimal,
+  base64ToHex, base64ToText,
   decimalToHex,
   fromHexStringUint8Array,
-  hexToByte,
-  hexToDecimal,
+  hexToByte, hexToByteSafe,
+  hexToDecimal, stringToByte,
 } from 'src/utils/Helpers/encryption';
 import {
   mappingDataCollectionGen2,
@@ -1063,7 +1064,86 @@ const Index = ({navigation}: any) => {
   };
 
   /** Function comments */
-  const dispenseWater = () => {
+  const dispenseWater = async () => {
+
+//     const sensorRangeResponse = await BLEService.readCharacteristicForDevice(
+//       'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//       'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
+//     );
+//
+//     consoleLog('sensorRangeResponse=>', {sensorRangeResponse, pad2: decimalToHex(500),  pad1: hexToByteSafe( '1F4', 4)});
+// // return;
+//     let sensorRangeWriteResponse =
+//       await BLEService.writeCharacteristicWithResponseForDevice2(
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
+//           hexToByteSafe(decimalToHex('57'))
+//           // fromHexStringUint8Array(decimalToHex('500', 8))
+//       ).then(response => {
+//         consoleLog('sensorRangeWriteResponseCallback', {response, zeroHex: asciiToHex('500'), zeroHex1: asciiToHex('1100', 2)});
+//       });
+//
+//     consoleLog('sensorRangeWriteResponse=>', sensorRangeWriteResponse);
+//
+//     const sensorRangeResponse1 = await BLEService.readCharacteristicForDevice(
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
+//     );
+//
+//     consoleLog('sensorRangeResponse1=>', {res: sensorRangeResponse1.value, convert: hexToDecimal(__base64ToHex(sensorRangeResponse1.value))});
+
+    // Mode change
+//     const sensorRangeResponse = await BLEService.readCharacteristicForDevice(
+//       'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//       'd0aba888-fb10-4dc9-9b17-bdd8f490c943',
+//     );
+//
+//     consoleLog('sensorRangeResponse=>', {sensorRangeResponse, hexTo: asciiToHex('1', 1)});
+// // return;
+//     let sensorRangeWriteResponse =
+//       await BLEService.writeCharacteristicWithResponseForDevice2(
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c943',
+//           hexToByte(asciiToHex('1', 2)),
+//       ).then(response => {
+//         consoleLog('sensorRangeWriteResponseCallback', {response, zeroHex: asciiToHex('1', 2)});
+//       });
+//
+//     consoleLog('sensorRangeWriteResponse=>', sensorRangeWriteResponse);
+//
+//     const sensorRangeResponse1 = await BLEService.readCharacteristicForDevice(
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c943',
+//     );
+//
+//     consoleLog('sensorRangeResponse1=>', sensorRangeResponse1);
+// return;
+//     const sensorRangeResponse = await BLEService.readCharacteristicForDevice(
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c945',
+//     );
+//
+//     consoleLog('sensorRangeResponse=>', sensorRangeResponse);
+// // return;
+//     let sensorRangeWriteResponse =
+//         await BLEService.writeCharacteristicWithResponseForDevice2(
+//             'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//             'd0aba888-fb10-4dc9-9b17-bdd8f490c945',
+//             hexToByte(asciiToHex('1100')),
+//         ).then(response => {
+//           consoleLog('sensorRangeWriteResponseCallback', response);
+//         });
+//
+//     consoleLog('sensorRangeWriteResponse=>', sensorRangeWriteResponse);
+//
+//     const sensorRangeResponse1 = await BLEService.readCharacteristicForDevice(
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+//         'd0aba888-fb10-4dc9-9b17-bdd8f490c945',
+//     );
+//
+//     consoleLog('sensorRangeResponse1=>', sensorRangeResponse1);
+
+  // return;
     /** @var characteristicHex for gen2*/
     var characteristicHex = '720a01321400000001CF';
     BLEService.dispenseWater(characteristicHex);

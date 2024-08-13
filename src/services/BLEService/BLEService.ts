@@ -399,7 +399,7 @@ class BLEServiceInstance {
   writeCharacteristicWithResponseForDevice2 = async (
     serviceUUID: UUID,
     characteristicUUID: UUID,
-    value: Uint8Array,
+    value: any,
   ) => {
     if (!this.device) {
       navigateToDeviceSearch();

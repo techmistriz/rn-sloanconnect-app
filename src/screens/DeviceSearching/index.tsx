@@ -204,6 +204,7 @@ const Index = ({navigation, route}: any) => {
     // consoleLog('addFoundDevice device==>', {
     //   deviceCustomName: device?.deviceCustomName,
     //   timestampInSec: timestampInSec(),
+    //   device: __device,
     // });
 
     setScanning(ScanningProps.DeviceFound);

@@ -155,6 +155,19 @@ export const hexToDecimal = (hex: any, base: number = 16) => {
   return parseInt(hex, base);
 };
 
+export const hexToByteSafe = (hex: any) => {
+  let bytes = [];
+  let addKeys = hex.length % 2 == 0 ? 0 : 1 ;
+  if (addKeys) {
+    hex = '0' + hex;
+  }
+  consoleLog('finalHex', hex);
+  for (let c = 0; c < hex.length; c += 2) {
+    bytes.push(parseInt(hex.substr(c, 2), 16));
+  }
+  return bytes;
+};
+
 export const hexToByte = (hex: any) => {
   let bytes = [];
   for (let c = 0; c < hex.length; c += 2) {
@@ -220,6 +233,15 @@ export function asciiToHex(str: string, padding = 8) {
   }
 
   return hex;
+}
+
+export function stringToByte(str: string) {
+  const bytes = [];
+  for (let ii = 0; ii < str.length; ii++) {
+    const code = str.charCodeAt(ii); // x00-xFFFF
+    bytes.push(code & 255, code >> 8); // low, high
+  }
+  return bytes;
 }
 
 /**

@@ -42,7 +42,7 @@ const DeviceSettingList = ({
 
   /** component hooks method */
   useEffect(() => {
-    // consoleLog('DeviceSettingsList deviceSettingsData', deviceSettingsData);
+    // consoleLog('lineflushlist DeviceSettingsList deviceSettingsData', deviceSettingsData);
     initlizeApp();
   }, [applied, settingsData]);
 
@@ -89,9 +89,9 @@ const DeviceSettingList = ({
       __flushInterval = resultObj3?.newValue;
     }
 
-    setFlush(__flush);
-    setFlushTime(__flushTime);
-    setFlushInterval(__flushInterval);
+    setFlush(__flush?.toString());
+    setFlushTime(__flushTime?.toString());
+    setFlushInterval(__flushInterval?.toString());
   };
 
   return (

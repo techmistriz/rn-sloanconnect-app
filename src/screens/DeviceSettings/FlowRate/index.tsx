@@ -251,6 +251,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID: BLE_CONSTANTS.BASYS.FLOW_RATE_CHARACTERISTIC_UUID,
         oldValue: settingsData?.flowRate?.value,
         newValue: flowRate,
+        convertToType: 'hex',
       });
 
       // params.push({

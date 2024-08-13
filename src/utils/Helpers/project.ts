@@ -10,7 +10,7 @@ import {
   fromHexStringUint8Array,
   getTimestampInSeconds,
   getTimestampInYMDFormat,
-  hexToByte,
+  hexToByte, hexToByteSafe,
   hexToDecimal,
   hexToString,
   toHexString,
@@ -123,7 +123,9 @@ export function getBleDeviceVersion(connectedDevice: Device, gen = 'gen1') {
   // if (str == 'FAUCET ADSKU02 T0123') {
   //   str = 'FAUCET ADSKU08 AYYSS';
   // }
-  if (!str) return '';
+  if (!str) {
+    return '';
+  }
   var result = 'empty';
   // return result;
   if (gen == 'gen1') {
@@ -685,7 +687,7 @@ export const saveSettings = async (
   deviceSettingsData: any,
 ): Promise<boolean | void> => {
   const promises = [];
-
+  // consoleLog('saveSettingsObject', deviceSettingsData);
   if (!isObjectEmpty(deviceSettingsData)) {
     // setLoading(true);
     for (const [key, value] of Object.entries(deviceSettingsData)) {
@@ -711,10 +713,7 @@ export const saveSettings = async (
                   element?.characteristicUUID,
                   fromHexStringUint8Array(element?.modfiedNewValue),
                 );
-            } else if (
-              BLEService.deviceGeneration == 'flusher' ||
-              BLEService.deviceGeneration == 'basys'
-            ) {
+            } else if (BLEService.deviceGeneration == 'flusher') {
               promise =
                 await BLEService.writeCharacteristicWithResponseForDevice2(
                   element?.serviceUUID,
@@ -722,6 +721,25 @@ export const saveSettings = async (
                   element?.convertToType == 'hex'
                     ? fromHexStringUint8Array(decimalToHex(element?.newValue))
                     : hexToByte(asciiToHex(element?.newValue)),
+                );
+            } else if (BLEService.deviceGeneration == 'basys') {
+              // consoleLog('basysWrite', {value: element?.convertToType == 'hex'
+              //       ? fromHexStringUint8Array(decimalToHex(element?.newValue))
+              //       : fromHexStringUint8Array(element?.newValue), characteristicUUID: element?.characteristicUUID});
+              promise =
+                await BLEService.writeCharacteristicWithResponseForDevice2(
+                  element?.serviceUUID,
+                  element?.characteristicUUID,
+                  element?.convertToType == 'hex'
+                    ? hexToByteSafe(decimalToHex(element?.newValue))
+                    : hexToByteSafe(
+                        asciiToHex(
+                          element?.newValue,
+                          typeof element.hexSize !== 'undefined'
+                            ? element.hexSize
+                            : 8,
+                        ),
+                      ),
                 );
             } else {
               promise =
@@ -1697,7 +1715,7 @@ async function computeFlusherUnlockKey(BDSN: string, cloudKey: any) {
   return unlockKeySecondShaHex;
 }
 
-export const initFlusherSecurityKey = async (deviceType) => {
+export const initFlusherSecurityKey = async deviceType => {
   try {
     const FLUSHER_APP_IDENTIFICATION_SERVICE_UUID =
       BLE_CONSTANTS?.FLUSHER?.FLUSHER_APP_IDENTIFICATION_SERVICE_UUID;
@@ -1711,11 +1729,11 @@ export const initFlusherSecurityKey = async (deviceType) => {
     consoleLog('initFlusherSecurityKey', {timestampHex, timestampYmd});
     let FLUSHER_SERVICE_UUID = BLE_CONSTANTS?.FLUSHER?.FLUSHER_SERVICE_UUID;
     let FLUSHER_BDSN_CHARACTERISTIC_UUID =
-        BLE_CONSTANTS?.FLUSHER?.BDSN_CHARACTERISTIC_UUID;
+      BLE_CONSTANTS?.FLUSHER?.BDSN_CHARACTERISTIC_UUID;
     if (deviceType == 'basys') {
       FLUSHER_SERVICE_UUID = BLE_CONSTANTS?.BASYS?.FAUCET_SERVICE_UUID;
       FLUSHER_BDSN_CHARACTERISTIC_UUID =
-          BLE_CONSTANTS?.BASYS?.BDSN_CHARACTERISTIC_UUID;
+        BLE_CONSTANTS?.BASYS?.BDSN_CHARACTERISTIC_UUID;
     }
     const bdsnResponse = await BLEService.readCharacteristicForDevice(
       FLUSHER_SERVICE_UUID,
@@ -1774,6 +1792,36 @@ export const initFlusherSecurityKey = async (deviceType) => {
         FLUSHER_LOCK_STATUS_CHARACTERISTIC_UUID,
       );
       consoleLog('lockStatusResponse=>', lockStatusResponse);
+
+      // let notesWriteResponse =
+      //   await BLEService.writeCharacteristicWithResponseForDevice2(
+      //     'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+      //     'f89f13e7-83f8-4b7c-9e8b-364576d88343',
+      //       hexToByte(asciiToHex('24')),
+      //   ).then(response => {
+      //     consoleLog('unlockKeyWriteCallback', response);
+      //   });
+      // consoleLog('flusherNoteResponse=>', notesWriteResponse);
+
+      // let notesWriteResponse1 =
+      //     await BLEService.writeCharacteristicWithResponseForDevice2(
+      //         'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+      //         'f89f13e7-83f8-4b7c-9e8b-364576d88344',
+      //         fromHexStringUint8Array('4'),
+      //     ).then(response => {
+      //       consoleLog('unlockKeyWriteCallback', response);
+      //     });
+      // consoleLog('flusherNoteResponse=>', notesWriteResponse1);
+      //
+      // let notesWriteResponse2 =
+      //     await BLEService.writeCharacteristicWithResponseForDevice2(
+      //         'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+      //         'f89f13e7-83f8-4b7c-9e8b-364576d88342',
+      //         fromHexStringUint8Array('4'),
+      //     ).then(response => {
+      //       consoleLog('unlockKeyWriteCallback', response);
+      //     });
+      // consoleLog('flusherNoteResponse=>', notesWriteResponse2);
 
       // const notesResponse = await BLEService.readCharacteristicForDevice(
       //   'f89f13e7-83f8-4b7c-9e8b-364576d88340',

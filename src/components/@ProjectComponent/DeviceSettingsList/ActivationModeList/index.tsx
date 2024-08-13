@@ -98,9 +98,9 @@ const DeviceSettingList = ({
       }
     }
 
-    setModeSelection(__modeSelection);
-    setOnDemand(__onDemand);
-    setMetered(__metered);
+    setModeSelection(__modeSelection?.toString());
+    setOnDemand(__onDemand?.toString());
+    setMetered(__metered?.toString());
   };
 
   return (
