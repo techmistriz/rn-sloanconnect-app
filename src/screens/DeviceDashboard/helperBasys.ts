@@ -41,7 +41,7 @@ export const getActivationModeSettingsBasys = async (
   // );
 
   if (!isObjectEmpty(meteredResponse) && meteredResponse?.value) {
-    meteredResponse.value = hexToDecimal(__base64ToHex(meteredResponse?.value));
+    meteredResponse.value = base64ToText(meteredResponse?.value);
     results.metered = cleanCharacteristic(meteredResponse);
   }
 
@@ -56,7 +56,7 @@ export const getActivationModeSettingsBasys = async (
   // );
 
   if (!isObjectEmpty(onDemandResponse) && onDemandResponse?.value) {
-    onDemandResponse.value = hexToDecimal(__base64ToHex(onDemandResponse?.value));
+    onDemandResponse.value = base64ToText(onDemandResponse?.value);
     results.onDemand = cleanCharacteristic(onDemandResponse);
   }
 
@@ -97,7 +97,7 @@ export const getFlushSettingsBasys = async (unsavedDeviceSettingsData: any) => {
   // );
 
   if (!isObjectEmpty(flushTimeResponse) && flushTimeResponse?.value) {
-    flushTimeResponse.value = hexToDecimal(__base64ToHex(flushTimeResponse?.value));
+    flushTimeResponse.value = base64ToText(flushTimeResponse?.value);
     results.flushTime = cleanCharacteristic(flushTimeResponse);
   }
 
@@ -112,7 +112,7 @@ export const getFlushSettingsBasys = async (unsavedDeviceSettingsData: any) => {
   // );
 
   if (!isObjectEmpty(flushIntervalResponse) && flushIntervalResponse?.value) {
-    flushIntervalResponse.value = hexToDecimal(__base64ToHex(flushIntervalResponse?.value));
+    flushIntervalResponse.value = base64ToText(flushIntervalResponse?.value);
     results.flushInterval = cleanCharacteristic(flushIntervalResponse);
   }
 
@@ -136,7 +136,7 @@ export const getFlowSettingsBasys = async (unsavedDeviceSettingsData: any) => {
   // );
 
   if (!isObjectEmpty(flowRateResponse) && flowRateResponse?.value) {
-    flowRateResponse.value = hexToDecimal(__base64ToHex(flowRateResponse?.value));
+    flowRateResponse.value = base64ToText(flowRateResponse?.value);
     results.flowRate = cleanCharacteristic(flowRateResponse);
   }
 
@@ -162,7 +162,7 @@ export const getSensorSettingsBasys = async (
   // );
 
   if (!isObjectEmpty(sensorResponse) && sensorResponse?.value) {
-    sensorResponse.value = hexToDecimal(__base64ToHex(sensorResponse?.value));
+    sensorResponse.value = base64ToText(sensorResponse?.value);
     results.sensorRange = cleanCharacteristic(sensorResponse);
   }
 

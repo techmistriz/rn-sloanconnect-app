@@ -381,7 +381,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID: BLE_CONSTANTS.BASYS.FLUSH_CHARACTERISTIC_UUID,
         oldValue: settingsData?.flush?.value,
         newValue: flush,
-        hexSize: 2,
+        byteSize: flush?.length * 2,
       });
 
       params.push({
@@ -412,8 +412,7 @@ const Index = ({navigation, route}: any) => {
         characteristicUUID: BLE_CONSTANTS.BASYS.FLUSH_TIME_CHARACTERISTIC_UUID,
         oldValue: settingsData?.flushTime?.value,
         newValue: flushTime,
-        hexSize: 8,
-        convertToType: 'hex',
+        byteSize: flushTime?.length * 2,
       });
 
       params.push({
@@ -447,7 +446,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.BASYS.FLUSH_INTERVAL_CHARACTERISTIC_UUID,
         oldValue: settingsData?.flushInterval?.value,
         newValue: flushInterval,
-        convertToType: 'hex',
+        byteSize: flushInterval?.length * 2,
       });
 
       params.push({

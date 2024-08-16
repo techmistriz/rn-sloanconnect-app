@@ -707,16 +707,9 @@ export const saveSettings = async (
                 await BLEService.writeCharacteristicWithResponseForDevice2(
                   element?.serviceUUID,
                   element?.characteristicUUID,
-                  element?.convertToType == 'hex'
-                    ? hexToByteSafe(decimalToHex(element?.newValue))
-                    : hexToByteSafe(
-                        asciiToHex(
-                          element?.newValue,
-                          typeof element.hexSize !== 'undefined'
-                            ? element.hexSize
-                            : 8,
-                        ),
-                      ),
+                  hexToByteSafe(
+                    asciiToHex(element?.newValue, element?.byteSize),
+                  ),
                 );
             } else {
               promise =

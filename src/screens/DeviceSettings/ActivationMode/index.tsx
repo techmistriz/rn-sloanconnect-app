@@ -465,8 +465,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.BASYS.MODE_SELECTION_CHARACTERISTIC_UUID,
         oldValue: settingsData?.modeSelection?.value,
         newValue: '' + modeSelection,
-        // convertToType: 'hex',
-        hexSize: 2,
+        byteSize: 2,
       });
 
       params.push({
@@ -501,7 +500,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.BASYS.ON_DEMAND_RUNTIME_CHARACTERISTIC_UUID,
         oldValue: settingsData?.modeSelection?.value,
         newValue: activationOnDemandSec,
-        convertToType: 'hex',
+        byteSize: activationOnDemandSec?.length * 2,
       });
 
       params.push({
@@ -533,7 +532,7 @@ const Index = ({navigation, route}: any) => {
           BLE_CONSTANTS.BASYS.METERED_RUNTIME_CHARACTERISTIC_UUID,
         oldValue: settingsData?.modeSelection?.value,
         newValue: activationMeteredSec,
-        convertToType: 'hex',
+        byteSize: activationMeteredSec?.length * 2,
       });
 
       params.push({
