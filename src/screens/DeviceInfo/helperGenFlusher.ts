@@ -162,7 +162,7 @@ const getBDInformationDataFlusher = () => {
     const totalWaterUsage = BLEService.totalWaterUsase; // In gallon
     const __totalWaterUsage = `${
       totalWaterUsage
-        ? (totalWaterUsage * 3.78541).toFixed(2)
+        ? (totalWaterUsage * 3.78541).toFixed(0)
         : 0
     }`;
     data.push({
@@ -172,7 +172,7 @@ const getBDInformationDataFlusher = () => {
       )}`,
       uuid: null,
       position: 6,
-      value: `${__totalWaterUsage} Gal (${totalWaterUsage} L)`,
+      value: `${totalWaterUsage} Gal (${__totalWaterUsage} L)`,
     });
 
     // consoleLog('allServices', allServices);

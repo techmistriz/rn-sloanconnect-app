@@ -27,7 +27,7 @@ export const filterBLEDevices = (deviceRaw: DeviceExtendedProps): any => {
       // true
       deviceName?.toUpperCase()?.includes('FAUCET') ||
       deviceName?.toUpperCase()?.includes('SL') ||
-      deviceName?.toUpperCase()?.includes('FLUSHER') || 
+      deviceName?.toUpperCase()?.includes('FLUSHER') ||
       deviceName?.toUpperCase()?.includes('BASYS')
     ) {
       const deviceTmp = {...device};

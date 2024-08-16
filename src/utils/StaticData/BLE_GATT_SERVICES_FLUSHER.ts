@@ -159,7 +159,7 @@ export const BLE_GATT_SERVICES_FLUSHER = {
         name: 'Firmware Version',
         nameOG: 'Flusher Firmware Version',
         nameLocaleKey: 'LABEL_FIREWARE_VERSION',
-        size: '6 bytes',
+        size: '4 bytes',
         type: 'string',
         range: null,
         initialValue: null,

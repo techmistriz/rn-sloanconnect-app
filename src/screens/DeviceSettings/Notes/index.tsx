@@ -204,7 +204,7 @@ const Index = ({navigation, route}: any) => {
       });
       params.push({
         name: 'noteDate',
-        serviceUUID: BLE_CONSTANTS.FLUSHER.NOTE_SERVICE_UUID,
+        serviceUUID: BLE_CONSTANTS.FLUSHER.NOTE_DATE_SERVICE_UUID,
         characteristicUUID: BLE_CONSTANTS.FLUSHER.NOTE_DATE_CHARACTERISTIC_UUID,
         oldValue: null,
         newValue: parseDateTimeInFormat(new Date(), dateFormat),
@@ -212,7 +212,7 @@ const Index = ({navigation, route}: any) => {
       });
       params.push({
         name: 'notePhone',
-        serviceUUID: BLE_CONSTANTS.FLUSHER.NOTE_SERVICE_UUID,
+        serviceUUID: BLE_CONSTANTS.FLUSHER.NOTE_PHONE_SERVICE_UUID,
         characteristicUUID:
           BLE_CONSTANTS.FLUSHER.NOTE_PHONE_CHARACTERISTIC_UUID,
         oldValue: null,
