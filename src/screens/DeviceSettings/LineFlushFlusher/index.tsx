@@ -110,7 +110,7 @@ const Index = ({navigation, route}: any) => {
     }
     // setFlushTimeOld(__flushTime);
     setFlushTime(__flushTime?.toString());
-    setFlushVolume(__flushVolume);
+    setFlushVolume(__flushVolume?.toString());
     setSliderOneValue([parseInt(__flushTime)]);
   };
 
@@ -137,6 +137,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: settingsData?.flushTime?.value,
         newValue: flushTime,
         convertToType: 'hex',
+        byteSize: 2,
       });
 
       params.push({
@@ -161,26 +162,27 @@ const Index = ({navigation, route}: any) => {
         //convertToType: 'hex',
       });
 
-      params.push({
-        name: 'flushVolume',
-        serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_CHARACTERISTIC_UUID,
-        oldValue: settingsData?.flushVolume?.value,
-        newValue: flushVolume,
-        convertToType: 'hex',
-      });
-
-      params.push({
-        name: 'flushVolumeDate',
-        serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_DATE_SERVICE_UUID,
-        characteristicUUID:
-          BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_DATE_CHARACTERISTIC_UUID,
-        oldValue: null,
-        newValue: parseDateTimeInFormat(new Date(), dateFormat),
-        allowedInPreviousSettings: false,
-        // convertToType: 'hex',
-      });
+      // Not changeable on Sloan App
+      // params.push({
+      //   name: 'flushVolume',
+      //   serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_CHARACTERISTIC_UUID,
+      //   oldValue: settingsData?.flushVolume?.value,
+      //   newValue: flushVolume,
+      //   convertToType: 'hex',
+      // });
+      //
+      // params.push({
+      //   name: 'flushVolumeDate',
+      //   serviceUUID: BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_DATE_SERVICE_UUID,
+      //   characteristicUUID:
+      //     BLE_CONSTANTS.FLUSHER.FLUSH_VOLUME_DATE_CHARACTERISTIC_UUID,
+      //   oldValue: null,
+      //   newValue: parseDateTimeInFormat(new Date(), dateFormat),
+      //   allowedInPreviousSettings: false,
+      //   // convertToType: 'hex',
+      // });
     }
 
     if (params.length) {

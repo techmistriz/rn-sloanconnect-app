@@ -10,7 +10,8 @@ import {
   fromHexStringUint8Array,
   getTimestampInSeconds,
   getTimestampInYMDFormat,
-  hexToByte, hexToByteSafe,
+  hexToByte,
+  hexToByteSafe,
   hexToDecimal,
   hexToString,
   toHexString,
@@ -524,78 +525,52 @@ export const getTotalWaterUsase = async (
  * @param {*} param2
  * @returns result
  */
-export const getTotalWaterUsaseFlusher = async (
-  serviceUUID: string,
-  characteristicUUID: string,
-) => {
+export const getTotalWaterUsaseFlusher = async () => {
   // const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
   // const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c949';
-  var totalWaterUsage = 0;
-  const __flowRate = await BLEService.readCharacteristicForDevice(
-    serviceUUID,
-    characteristicUUID,
+  let REDUCED_VOLUME = 1.1;
+  let gpf = [
+    0.0, // sku 0
+    1.6, // sku 1
+    1.28, // sku 2
+    1.1, // sku 3
+    1.6, // sku 4
+    1.28, // sku 5
+    1.28, // sku 6
+    1.1, // sku 7
+    1.6, // sku 8
+    1.6, // sku 9
+    0.125, // sku 10
+    0.25, // sku 11
+    0.5, // sku 12
+    1.0, // sku 13
+    1.28, // sku 14
+    0.25, // sku 15
+    0.5, // sku 16
+    1.0, // sku 17
+    0.125, // sku 18
+    0.25, // sku 19
+    0.5, // sku 20
+  ];
+
+  const deviceSku = BLEService.SKU;
+  const __activationsSinceInstall = await BLEService.readCharacteristicForDevice(
+      BLE_CONSTANTS.FLUSHER.STATISTICS_SERVICE_UUID,
+      BLE_CONSTANTS.FLUSHER.ACTIVATION_SINCE_INSTALL_CHARACTERISTIC_UUID,
   );
-  // consoleLog(
-  //   'getTotalWaterUsase __flowRate==>',
-  //   JSON.stringify(__flowRate?.value),
-  // );
 
-  if (__flowRate?.value) {
-    const flowRateDecodedValue = base64EncodeDecode(
-      __flowRate?.value,
-      'decode',
-    );
+  const __reducedFlushActivationsSinceInstall = await BLEService.readCharacteristicForDevice(
+      BLE_CONSTANTS.FLUSHER.STATISTICS_SERVICE_UUID,
+      BLE_CONSTANTS.FLUSHER.REDUCED_FLUSH_ACTIVATIONS_SINCE_INSTALL_CHARACTERISTIC_UUID,
+  );
 
-    // consoleLog(
-    //   'getTotalWaterUsase flowRateDecodedValue==>',
-    //   flowRateDecodedValue,
-    // );
+  let activations = base64ToDecimal(__activationsSinceInstall?.value);
+  let reducedCount = base64ToDecimal(__reducedFlushActivationsSinceInstall?.value);
+  let waterUsage =
+      (gpf[deviceSku] * (activations - reducedCount) + (reducedCount * REDUCED_VOLUME));
 
-    if (flowRateDecodedValue) {
-      const __activationsDuration =
-        await BLEService.readCharacteristicForDevice(
-          BLE_CONSTANTS.GEN1.ACTIVATION_DURATION_SERVICE_UUID,
-          BLE_CONSTANTS.GEN1.ACTIVATION_DURATION_CHARACTERISTIC_UUID,
-        );
-
-      // consoleLog(
-      //   'getTotalWaterUsase __activationsDuration==>',
-      //   JSON.stringify(__activationsDuration?.value),
-      // );
-      if (__activationsDuration?.value) {
-        const activationsDurationDecodedValue = base64ToDecimal(
-          __activationsDuration?.value,
-        );
-
-        // consoleLog(
-        //   'getTotalWaterUsase activationsDurationDecodedValue==>',
-        //   activationsDurationDecodedValue,
-        // );
-
-        var __flowRateDecodedValue = 0;
-        var __activationsDurationHexEncodeValue = 0;
-
-        if (flowRateDecodedValue) {
-          __flowRateDecodedValue = Number(flowRateDecodedValue);
-        }
-
-        if (activationsDurationDecodedValue) {
-          __activationsDurationHexEncodeValue = Number(
-            activationsDurationDecodedValue,
-          );
-        }
-
-        if (__activationsDurationHexEncodeValue) {
-          const __totalWaterUsage =
-            (__flowRateDecodedValue / 10 / 60) *
-            __activationsDurationHexEncodeValue;
-          totalWaterUsage = Number(__totalWaterUsage.toFixed(2));
-        }
-      }
-    }
-  }
-
-  return totalWaterUsage;
+  // consoleLog('waterUsageCalc', {deviceSku, activations, reducedCount, waterUsage, raw1: __activationsSinceInstall, raw2: __reducedFlushActivationsSinceInstall})
+  return waterUsage;
 };
 
 /**
@@ -719,7 +694,9 @@ export const saveSettings = async (
                   element?.serviceUUID,
                   element?.characteristicUUID,
                   element?.convertToType == 'hex'
-                    ? fromHexStringUint8Array(decimalToHex(element?.newValue))
+                    ? hexToByteSafe(
+                        asciiToHex(element?.newValue, element?.byteSize),
+                      )
                     : hexToByte(asciiToHex(element?.newValue)),
                 );
             } else if (BLEService.deviceGeneration == 'basys') {

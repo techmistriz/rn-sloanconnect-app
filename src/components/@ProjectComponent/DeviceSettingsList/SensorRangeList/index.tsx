@@ -50,7 +50,7 @@ const DeviceSettingList = ({
       __sensorRange = resultObj?.newValue;
     }
 
-    setSensorRange(__sensorRange);
+    setSensorRange(__sensorRange?.toString());
   };
 
   return (

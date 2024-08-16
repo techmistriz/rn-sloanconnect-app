@@ -4,7 +4,7 @@ import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  getSavedSettingsGen1,
+  getSavedSettingsGen1, getTotalWaterUsaseFlusher,
   hasLineFlushSetting,
   hasSensorRangeSetting,
   saveSettings,
@@ -1159,6 +1159,16 @@ const Index = ({navigation}: any) => {
     // }
   };
 
+  const totalWaterUsageGet = () => {
+    if (totalWaterUsage) {
+      if (BLEService.deviceGeneration == 'flusher') {
+        return totalWaterUsage;
+      }
+      return (totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA).toFixed(2);
+    }
+    return 0;
+  };
+
   return (
     <AppContainer
       scroll={true}
@@ -1392,13 +1402,7 @@ const Index = ({navigation}: any) => {
                     />
                     <Typography
                       size={22}
-                      text={`${
-                        totalWaterUsage
-                          ? (
-                              totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA
-                            ).toFixed(2)
-                          : 0
-                      } Gal`}
+                      text={`${totalWaterUsageGet()} Gal`}
                       style={{
                         textAlign: 'left',
                         marginLeft: 5,

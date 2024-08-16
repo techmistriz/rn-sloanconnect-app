@@ -85,10 +85,10 @@ const getBDInformationDataFlusher = () => {
     /**
      * For the date of installation, logic is this:
       For “Date of Installation”, this one is calculated from the Today date and the “Hours of Operation (Operating hours since install)”.
-      For example: 
+      For example:
       if current unix timestamp in the App is 1714752879, which means (Date and time (GMT): Friday, May 3, 2024 4:14:39 PM)
       “Hours of Operation” = 100 hours, which means 100*60*60 = 360000 seconds.
-      Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879 
+      Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879
       which means the “Date of Installation” is Monday, April 29, 2024  (GMT)
      */
     var characteristicStaticHoursOfOperation: any =
@@ -159,12 +159,12 @@ const getBDInformationDataFlusher = () => {
     /**
      * ACCUMULATED WATER USAGE -> Total water usage
      */
-    const totalWaterUsage = BLEService.totalWaterUsase;
+    const totalWaterUsage = BLEService.totalWaterUsase; // In gallon
     const __totalWaterUsage = `${
       totalWaterUsage
-        ? (totalWaterUsage / BLE_CONSTANTS.COMMON.GMP_FORMULA).toFixed(2)
+        ? (totalWaterUsage * 3.78541).toFixed(2)
         : 0
-    } Gal`;
+    }`;
     data.push({
       name: 'Accumulated water usage',
       nameLocale: `${I18n.t(
@@ -172,7 +172,7 @@ const getBDInformationDataFlusher = () => {
       )}`,
       uuid: null,
       position: 6,
-      value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
+      value: `${__totalWaterUsage} Gal (${totalWaterUsage} L)`,
     });
 
     // consoleLog('allServices', allServices);
@@ -457,10 +457,10 @@ const getStatisticsInformationDataFlusher = () => {
     /**
      * For the date of installation, logic is this:
       For “Date of Installation”, this one is calculated from the Today date and the “Hours of Operation (Operating hours since install)”.
-      For example: 
+      For example:
       if current unix timestamp in the App is 1714752879, which means (Date and time (GMT): Friday, May 3, 2024 4:14:39 PM)
       “Hours of Operation” = 100 hours, which means 100*60*60 = 360000 seconds.
-      Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879 
+      Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879
       which means the “Date of Installation” is Monday, April 29, 2024  (GMT)
      */
     var characteristicStaticHoursOfOperation: any =

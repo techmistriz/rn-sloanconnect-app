@@ -227,6 +227,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: settingsData?.sensorRange?.value,
         newValue: sensorRange,
         convertToType: 'hex',
+        byteSize: 2,
       });
 
       params.push({
@@ -276,6 +277,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: settingsData?.sensorRange?.value,
         newValue: sensorRange,
         convertToType: 'hex',
+        byteSize: 2,
       });
 
       params.push({

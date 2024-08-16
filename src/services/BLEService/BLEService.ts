@@ -52,6 +52,8 @@ class BLEServiceInstance {
 
   deviceGeneration: string;
 
+  SKU: number;
+
   deviceVersion: string;
 
   batteryLevel: number;
@@ -116,6 +118,7 @@ class BLEServiceInstance {
     this.characteristicMonitorRealTimeDataSubscriprion = null;
     this.manager = new BleManager();
     this.manager.setLogLevel(LogLevel.Verbose);
+    this.SKU = 0;
   }
 
   /**
@@ -1102,10 +1105,7 @@ class BLEServiceInstance {
    * @param characteristicUUID
    */
   getSetTotalWaterUsaseFlusher = async () => {
-    this.totalWaterUsase = await getTotalWaterUsaseFlusher(
-      BLE_CONSTANTS.GEN1.FLOW_RATE_SERVICE_UUID,
-      BLE_CONSTANTS.GEN1.FLOW_RATE_CHARACTERISTIC_UUID,
-    );
+    this.totalWaterUsase = await getTotalWaterUsaseFlusher();
   };
 
   /**
@@ -1155,6 +1155,8 @@ class BLEServiceInstance {
   }
 
   initDeviceData = async () => {
+    await this.setDeviceSku();
+    // return;
     if (BLEService.deviceGeneration == 'gen1') {
       await this.initDeviceDataGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
@@ -1165,6 +1167,18 @@ class BLEServiceInstance {
       await this.initDeviceDataGenBasys();
     }
   };
+
+  setDeviceSku = async () => {
+    let arr = BLEService.device.name.split(' ');
+    if (Array.isArray(arr) && arr.length > 1) {
+      let __version = arr[1];
+      if (__version) {
+        let __versionFinal = __version.replace(/[^0-9]/g, '');
+        BLEService.SKU = parseInt(__versionFinal);
+        consoleLog('SKU Set', BLEService.SKU);
+      }
+    }
+  }
 
   initDeviceDataGen1 = async () => {
     await this.getSetBatteryLevel();
@@ -1180,8 +1194,8 @@ class BLEServiceInstance {
   initDeviceDataFlusher = async () => {
     await initFlusherSecurityKey('flusher');
     await this.getSetBatteryLevel();
-    // await this.getSetTotalWaterUsaseFlusher();
     await this.setDeviceModelData();
+    await this.getSetTotalWaterUsaseFlusher();
   };
 
   initDeviceDataGenBasys = async () => {

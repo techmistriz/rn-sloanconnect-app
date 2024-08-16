@@ -221,6 +221,7 @@
     "VIEW_ADVANCED_DETAILS_BTN_LABEL": "Ver detalles avanzados",
 
     "FAUCET_MODEL_LABEL": "Modelo de grifo",
+    "SLOAN_MODEL_LABEL": "Modelo de sloan",
     "SENSOR_SERIAL_NUMBER_LABEL": "Número de serie del sensor",
     "SENSOR_MANUF_DATE_LABEL": "Fecha de fabricación del sensor",
     "SENSOR_HARDWARE_VER_LABEL": "Número de hardware del sensor",

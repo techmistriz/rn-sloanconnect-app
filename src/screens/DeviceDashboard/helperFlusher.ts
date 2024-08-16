@@ -30,7 +30,7 @@ export const getActivationTimeFlusherSettings = async (
   );
 
   if (!isObjectEmpty(modeSelectionResponse) && modeSelectionResponse?.value) {
-    modeSelectionResponse.value = hexToDecimal(__base64ToHex(modeSelectionResponse?.value));
+    modeSelectionResponse.value = base64ToText(modeSelectionResponse?.value);
     results.activationTime = cleanCharacteristic(modeSelectionResponse);
   }
 
@@ -57,7 +57,7 @@ export const getFlushFlusherSettings = async (
   );
 
   if (!isObjectEmpty(flushTimeResponse) && flushTimeResponse?.value) {
-    flushTimeResponse.value = hexToDecimal(__base64ToHex(flushTimeResponse?.value));
+    flushTimeResponse.value = base64ToText(flushTimeResponse?.value);
     results.flushTime = cleanCharacteristic(flushTimeResponse);
   }
 
@@ -72,7 +72,7 @@ export const getFlushFlusherSettings = async (
   // );
 
   if (!isObjectEmpty(flushIntervalResponse) && flushIntervalResponse?.value) {
-    flushIntervalResponse.value = hexToDecimal(__base64ToHex(flushIntervalResponse?.value));
+    flushIntervalResponse.value = base64ToText(flushIntervalResponse?.value);
     results.flushVolume = cleanCharacteristic(flushIntervalResponse);
   }
 
@@ -98,7 +98,7 @@ export const getSensorFlusherSettings = async (
   );
 
   if (!isObjectEmpty(sensorResponse) && sensorResponse?.value) {
-    sensorResponse.value = hexToDecimal(__base64ToHex(sensorResponse?.value));
+    sensorResponse.value = base64ToText(sensorResponse?.value);
     results.sensorRange = cleanCharacteristic(sensorResponse);
   }
 
@@ -119,7 +119,7 @@ export const getNoteFlusherSettings = async (
   );
 
   consoleLog(
-    'getSensorSettings sensorResponse==>',
+    'getSensorSettings sensorNoteResponse==>',
     JSON.stringify(sensorResponse),
   );
 

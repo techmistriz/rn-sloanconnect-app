@@ -221,6 +221,7 @@
     "VIEW_ADVANCED_DETAILS_BTN_LABEL": "Voir les détails avancés",
 
     "FAUCET_MODEL_LABEL": "Modèle de robinet",
+    "SLOAN_MODEL_LABEL": "Modèle de Sloan",
     "SENSOR_SERIAL_NUMBER_LABEL": "Numéro de série du capteur",
     "SENSOR_MANUF_DATE_LABEL": "Date de fabrication du capteur",
     "SENSOR_HARDWARE_VER_LABEL": "Numéro de matériel du capteur",

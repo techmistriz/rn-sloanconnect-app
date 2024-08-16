@@ -80,9 +80,9 @@ const LineFlushListFlusher = ({
       __flushVolume = resultObj3?.newValue;
     }
 
-    setFlush(__flush);
-    setFlushTime(__flushTime);
-    setFlushVolume(__flushVolume);
+    setFlush(__flush?.toString());
+    setFlushTime(__flushTime?.toString());
+    setFlushVolume(__flushVolume?.toString());
   };
 
   return (

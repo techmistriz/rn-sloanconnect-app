@@ -61,7 +61,7 @@ const ActivationTimeListFlusher = ({
       __activationTime = resultObj2?.newValue;
     }
 
-    setActivationTime(__activationTime);
+    setActivationTime(__activationTime?.toString());
   };
 
   return (

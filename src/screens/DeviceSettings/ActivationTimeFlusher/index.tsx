@@ -115,6 +115,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: settingsData?.activationTime?.value,
         newValue: activationTime,
         convertToType: 'hex',
+        byteSize: 4,
       });
 
       params.push({
