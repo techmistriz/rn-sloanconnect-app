@@ -26,7 +26,7 @@ const apiHeaderData = {
   language: 'en',
   device_id: DeviceInfo.getUniqueId(),
   default_auth_token:
-    '@#Slsjpoq$S1o08#MnbAiB%UVUV&Y*5EU@exS1o!08L9TSlsjpo#OBMD',
+    '@#Slsjpoq$S1o08#MnbAiB%UVUV&Y*5EU@exS1o!08L9TSlsjpo#SLOAN',
   device_token:
     'cdM92ZwXwUedvpfsPyUErR:APA91bGnnBtY8yAzviXw0TdJESND8la-Ajhdhurj7K5_EYKI7MnROU1OltjHU21_L-lgb5fIvaoQjna0Wotx4ubN71SAFy6fztGRwVuDqLMOR1UNz-YuNcEt_1HS0fgtSF5fN9brCRhp',
 };
@@ -38,16 +38,16 @@ const apiHeaderData = {
 const apiUrl = {
   localServerURL: `${constants.BASE_URL_LOCAL}api/v1/`,
   localServerAssetsURL:
-    'http://192.168.206.25/kays/webs/otterboutmyday-web/uploads/',
+    'http://192.168.206.25/kays/webs/example-web/uploads/',
   localSocketEndPoint: '',
   liveServerURL: `${constants.BASE_URL_LIVE}api/v1/`,
   liveSocketEndPoint: '',
   refresh_token: '',
-  privacyPolicyUrl: 'https://admin.obmd.app/privacy',
-  termsAndConditionUrl: 'https://admin.obmd.app/terms',
-  cancelSubscribtionUrlForIos: 'https://admin.obmd.app/cancel-ios-IAP',
-  cancelSubscribtionUrlForAndroid: 'https://admin.obmd.app/cancel-android-IAP',
-  switchPlanUrlForIos: 'https://admin.obmd.app/switch-paln-ios',
+  privacyPolicyUrl: 'https://example.com/privacy',
+  termsAndConditionUrl: 'https://example.com/terms',
+  cancelSubscribtionUrlForIos: 'https://example.com/cancel-ios-IAP',
+  cancelSubscribtionUrlForAndroid: 'https://example.com/cancel-android-IAP',
+  switchPlanUrlForIos: 'https://example.com/switch-paln-ios',
   serverURL: constants.API_URL,
   serverAssetsURL: constants.ASSETS_URL,
 };

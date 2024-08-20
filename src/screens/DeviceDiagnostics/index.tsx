@@ -26,6 +26,7 @@ import {
   decimalToHex,
   fromHexStringUint8Array,
   base64ToHex,
+  hexToByteSafe,
 } from 'src/utils/Helpers/encryption';
 import {mapValueGen2} from 'src/utils/Helpers/project';
 import {mappingDeviceDataIntegersGen2} from '../DeviceDashboard/helperGen2';
@@ -256,10 +257,10 @@ const Index = ({navigation, route}: any) => {
     // setDiagnosticResults(RESULTS);
 
     // const initDiagnosticResponse =
-    await BLEService.writeCharacteristicWithResponseForDevice(
+    await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-      '1',
+      hexToByteSafe(decimalToHex('1')),
     );
 
     // consoleLog(
@@ -586,7 +587,10 @@ const Index = ({navigation, route}: any) => {
       mappingDeviceDataIntegersGen2Response;
   };
 
-  const onNextPress = (type: number = 0, __flushometerStepIndex: number) => {
+  const onNextPress = (
+    buttonActionType: string = '',
+    __flushometerStepIndex: number,
+  ) => {
     if (__flushometerStepIndex == 3) {
       //
     } else {
@@ -729,7 +733,7 @@ const Index = ({navigation, route}: any) => {
                   type={'secondary'}
                   title={I18n.t('button_labels.NO_BUTTON_LABEL')}
                   onPress={() => {
-                    onNextPress(0, flushometerStepIndex);
+                    onNextPress('NO', flushometerStepIndex);
                   }}
                   textStyle={{
                     fontSize: 10,
@@ -742,7 +746,7 @@ const Index = ({navigation, route}: any) => {
                   type={'secondary'}
                   title={I18n.t('button_labels.YES_BUTTON_LABEL')}
                   onPress={() => {
-                    onNextPress(1, flushometerStepIndex);
+                    onNextPress('YES', flushometerStepIndex);
                   }}
                   textStyle={{
                     fontSize: 10,
