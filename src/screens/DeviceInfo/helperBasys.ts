@@ -18,16 +18,89 @@ const connectedDevice = BLEService.getDevice();
 
 /** getDeviceInfoNormal method for normal info */
 export const getDeviceInfoNormalBasys = async () => {
-  const ADBDInformationARR = await getBDInformationDataBasys();
-  return [...ADBDInformationARR];
+  const data = await getBDInformationDataBasys();
+  return [...data];
 };
 
 /** getDeviceInfoAdvance method for advance */
 export const getDeviceInfoAdvanceBasys = async () => {
+  var BDInformationArr = [];
+
+  /** BLE Device Manufacturing Date  */
+  const charResponse1: any = await BLEService.readCharacteristicForDevice(
+    'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+    'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
+  );
+
+  if (!isObjectEmpty(charResponse1)) {
+    const decodeValue = base64EncodeDecode(charResponse1?.value, 'decode');
+    consoleLog('charResponse1 decodeValue==>', charResponse1);
+
+    BDInformationArr.push({
+      name: 'BLE Device Manufacturing Date',
+      nameLocale: `${I18n.t('device_details.CONTROL_BOX_MANUF_DATE_LABEL')}`,
+      prefix: null,
+      postfix: null,
+      uuid: null,
+      position: 3,
+      // value: decodeValue ?? 'N/A',
+      value: formatCharateristicValue(
+        {valueFormat: 'YYMMDD', valueType: 'Date', dateFormat: 'YYYY/MM/DD'},
+        decodeValue,
+      ),
+    });
+  }
+
+  /** Sensor Manufacturing Date  */
+  const charResponse2: any = await BLEService.readCharacteristicForDevice(
+    'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+    'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
+  );
+
+  if (!isObjectEmpty(charResponse2)) {
+    const decodeValue = base64EncodeDecode(charResponse2?.value, 'decode');
+    consoleLog('charResponse2 decodeValue==>', charResponse2);
+
+    BDInformationArr.push({
+      name: 'Sensor Manufacturing Date',
+      nameLocale: `${I18n.t('device_details.SENSOR_MANUF_DATE_LABEL')}`,
+      prefix: null,
+      postfix: null,
+      uuid: null,
+      position: 4,
+      // value: decodeValue ?? 'N/A',
+      value: formatCharateristicValue(
+        {valueFormat: 'YYMMDD', valueType: 'Date', dateFormat: 'YYYY/MM/DD'},
+        decodeValue,
+      ),
+    });
+  }
+
+  /**Sensor Serial Number  */
+  const charResponse3: any = await BLEService.readCharacteristicForDevice(
+    'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+    'd0aba888-fb10-4dc9-9b17-bdd8f490c901',
+  );
+
+  if (!isObjectEmpty(charResponse3)) {
+    const decodeValue = base64EncodeDecode(charResponse3?.value, 'decode');
+    consoleLog('charResponse3 decodeValue==>', charResponse3);
+
+    BDInformationArr.push({
+      name: 'Sensor Serial Number',
+      nameLocale: `${I18n.t('device_details.SENSOR_SERIAL_NUMBER_LABEL')}`,
+      prefix: null,
+      postfix: null,
+      uuid: null,
+      position: 5,
+      value: decodeValue ?? 'N/A',
+    });
+  }
+
   const statisticsInformationArr = await getStatisticsInformationDataBasys();
-  const settingLogs = await getSettingLogsDataBasys();
+  const settingLogArr = await getSettingLogsDataBasys();
   // consoleLog('getDeviceInfoAdvance settingLogs==>', settingLogs);
-  return [...statisticsInformationArr, ...settingLogs];
+  return [...BDInformationArr, ...statisticsInformationArr, ...settingLogArr];
 };
 
 /** BDInformationData method for normal info */
@@ -139,6 +212,16 @@ const getStatisticsInformationDataBasys = () => {
           position: 1,
           value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
         });
+
+        // data.push({
+        //   name: 'HOURS DF OPERATION',
+        //   nameLocale: `${I18n.t('device_details.HOURS_OF_OPERATION_LABEL')}`,
+        //   prefix: null,
+        //   postfix: null,
+        //   uuid: null,
+        //   position: 2,
+        //   value: decodeValue,
+        // });
       }
     }
 
@@ -155,7 +238,7 @@ const getStatisticsInformationDataBasys = () => {
       name: 'Accumulated water usage',
       nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
       uuid: null,
-      position: 5,
+      position: 8,
       value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
     });
 
@@ -163,39 +246,6 @@ const getStatisticsInformationDataBasys = () => {
     if (typeof allServices != 'undefined' && Object.entries(allServices)) {
       for (const [key, value] of Object.entries(allServices)) {
         // console.log(`Key: ${key}, Value: ${JSON.stringify(value)}`);
-
-        // *******Custom************
-        // if (data?.length == 2) {
-        //   const characteristicStaticBDManufacturingDate =
-        //     await getCustomCharacteristic(
-        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
-        //     );
-
-        //   if (!isObjectEmpty(characteristicStaticBDManufacturingDate)) {
-        //     data.push(characteristicStaticBDManufacturingDate);
-        //   }
-
-        //   const characteristicStaticADManufacturingDate =
-        //     await getCustomCharacteristic(
-        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
-        //     );
-
-        //   if (!isObjectEmpty(characteristicStaticADManufacturingDate)) {
-        //     data.push(characteristicStaticADManufacturingDate);
-        //   }
-        //   const characteristicStaticBDSerialNumber =
-        //     await getCustomCharacteristic(
-        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-        //       'd0aba888-fb10-4dc9-9b17-bdd8f490c902',
-        //     );
-
-        //   if (!isObjectEmpty(characteristicStaticBDSerialNumber)) {
-        //     data.push(characteristicStaticBDSerialNumber);
-        //   }
-        // }
-
         if (
           typeof value?.uuid != 'undefined' &&
           value?.displayInList !== false &&
@@ -219,10 +269,6 @@ const getStatisticsInformationDataBasys = () => {
               ),
             });
           }
-          // consoleLog(
-          //   'DeviceInfo initialize characteristic==>',
-          //   JSON.stringify(characteristic),
-          // );
         }
       }
     }
@@ -264,49 +310,6 @@ const getSettingLogsDataBasys = () => {
             if (!isObjectEmpty(characteristic) && characteristic?.value) {
               decodeValue = base64EncodeDecode(characteristic?.value, 'decode');
             }
-
-            // var extra = undefined;
-            // if (value?.name == 'D/T of last factory reset') {
-            //   // Phone of last factory reset
-            //   var characteristic1 =
-            //     await BLEService.readCharacteristicForDevice(
-            //       'd0aba888-fb10-4dc9-9b17-bdd8f490c920',
-            //       'd0aba888-fb10-4dc9-9b17-bdd8f490c929',
-            //     );
-
-            //   // consoleLog('characteristic1==>', characteristic1?.value);
-            //   if (!isObjectEmpty(characteristic1) && characteristic1?.value) {
-            //     var decodeValue1 = base64EncodeDecode(
-            //       characteristic1?.value,
-            //       'decode',
-            //     );
-
-            //     // consoleLog('characteristic1 decodeValue1==>', decodeValue1);
-
-            //     if (decodeValue1 == 'MANUAL') {
-            //       // Operating hours since install
-            //       var characteristic2 =
-            //         await BLEService.readCharacteristicForDevice(
-            //           'd0aba888-fb10-4dc9-9b17-bdd8f490c910',
-            //           'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
-            //         );
-
-            //       // consoleLog('characteristic2==>', characteristic2?.value);
-
-            //       if (
-            //         !isObjectEmpty(characteristic2) &&
-            //         characteristic2?.value
-            //       ) {
-            //         var decodeValue2 = hexToDecimal(
-            //           base64EncodeDecode(characteristic2?.value, 'decode'),
-            //         );
-            //         // consoleLog('characteristic1 decodeValue2==>', decodeValue2);
-            //         extra = decodeValue2;
-            //       }
-            //     }
-            //   }
-            // }
-
             data.push({
               name: value?.name,
               nameLocale: `${I18n.t('device_details.' + value?.nameLocaleKey)}`,

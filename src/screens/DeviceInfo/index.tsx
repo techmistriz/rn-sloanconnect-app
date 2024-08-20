@@ -697,41 +697,34 @@ const Index = ({navigation, route}: any) => {
       initializeAdvanceBasys();
     }
   };
-  /** This is for gen1 */
+  /** This is for basys */
   const initializeNormalBasys = async () => {
     try {
       setLoading(true);
       const deviceStaticData = BLEService.connectedDeviceStaticData;
       consoleLog('initializeNormal deviceStaticData==>', deviceStaticData);
       // setDeviceData(deviceStaticData);
-      const deviceInfoNormal = await getDeviceInfoNormalBasys();
+      var deviceInfoNormal = await getDeviceInfoNormalBasys();
       // consoleLog('ADBDInformationARR', ADBDInformationARR);
-      const sortedDeviceInfoNormal = _.sortBy(deviceInfoNormal, 'position');
 
-      var sloanModel: any = [];
       if (deviceStaticData) {
-        sloanModel = [
-          {
-            name: I18n.t('device_details.FAUCET_MODEL_LABEL'),
-            value: deviceStaticData?.fullNameAllModel,
-            uuid: null,
-          },
-        ];
+        deviceInfoNormal.push({
+          name: I18n.t('device_details.FAUCET_MODEL_LABEL'),
+          value: deviceStaticData?.fullNameAllModel,
+          uuid: null,
+          position: 0,
+        });
       }
 
-      const batteryStatus = [
-        {
-          name: I18n.t('device_details.BATTERY_STATUS_LABEL'),
-          value: `${BLEService.batteryLevel}%`,
-          uuid: null,
-        },
-      ];
+      deviceInfoNormal.push({
+        name: I18n.t('device_details.BATTERY_STATUS_LABEL'),
+        value: `${BLEService.batteryLevel}%`,
+        uuid: null,
+        position: 6,
+      });
 
-      setDeviceDetails([
-        ...sloanModel,
-        ...sortedDeviceInfoNormal,
-        ...batteryStatus,
-      ]);
+      const sortedDeviceInfoNormal = _.sortBy(deviceInfoNormal, 'position');
+      setDeviceDetails(sortedDeviceInfoNormal);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -748,10 +741,10 @@ const Index = ({navigation, route}: any) => {
       // consoleLog('initializeAdvance deviceInfoAdvance==>', deviceInfoAdvance);
 
       const resultObj = findObject(
-        'Date of last factory reset',
+        'd0aba888-fb10-4dc9-9b17-bdd8f490c921',
         deviceInfoAdvance,
         {
-          searchKey: 'name',
+          searchKey: 'uuid',
         },
       );
       consoleLog('initializeAdvance resultObj==>', resultObj);
@@ -811,6 +804,7 @@ const Index = ({navigation, route}: any) => {
         uuid: '6',
         // value: `3.0.1 2022/11/22`,
         value: `${constants.APP_VERSION} ${constants.RELEASE_DATE}`,
+        position: 30,
       });
       data.push({
         name: 'App Installation Date',
@@ -819,6 +813,7 @@ const Index = ({navigation, route}: any) => {
         value: apiConfigs?.app_install_time
           ? moment(apiConfigs?.app_install_time).format('YYYY/MM/DD HH:MM')
           : 'N/A',
+        position: 21,
       });
       resolve(data);
     });
