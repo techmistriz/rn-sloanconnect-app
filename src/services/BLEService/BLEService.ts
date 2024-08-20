@@ -17,7 +17,9 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import {
   base64EncodeDecode,
   base64EncodeFromByteArray,
+  decimalToHex,
   fromHexStringUint8Array,
+  hexToByteSafe,
 } from 'src/utils/Helpers/encryption';
 import {
   getBatteryLevel,
@@ -1039,7 +1041,7 @@ class BLEServiceInstance {
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_SERVICE_UUID,
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
-        fromHexStringUint8Array('01'),
+        hexToByteSafe(decimalToHex('1')),
       );
     showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
     // consoleLog(
@@ -1056,10 +1058,10 @@ class BLEServiceInstance {
    */
   dispenseWaterBasys = async () => {
     const writeCharacteristicWithResponseForDevice =
-      await BLEService.writeCharacteristicWithResponseForDevice(
+      await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.BASYS.WATER_DISPENCE_SERVICE_UUID,
         BLE_CONSTANTS.BASYS.WATER_DISPENCE_CHARACTERISTIC_UUID,
-        '1',
+        hexToByteSafe(decimalToHex('1')),
       );
     showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
     consoleLog(
@@ -1178,7 +1180,7 @@ class BLEServiceInstance {
         consoleLog('SKU Set', BLEService.SKU);
       }
     }
-  }
+  };
 
   initDeviceDataGen1 = async () => {
     await this.getSetBatteryLevel();
