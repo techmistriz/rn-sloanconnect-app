@@ -150,8 +150,8 @@ const Index = ({navigation, route}: any) => {
       initlizeAppGen2();
     } else if (BLEService.deviceGeneration == 'flusher') {
       initlizeAppFlusher();
-    } else if (BLEService.deviceGeneration == 'gen4') {
-      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'basys') {
+      initlizeAppGen1();
     }
   };
 
@@ -596,7 +596,8 @@ const Index = ({navigation, route}: any) => {
 
   if (
     BLEService.deviceGeneration == 'gen1' ||
-    BLEService.deviceGeneration == 'gen2'
+    BLEService.deviceGeneration == 'gen2' ||
+    BLEService.deviceGeneration == 'basys'
   ) {
     return (
       <Wrap autoMargin={false} style={styles.mainContainer}>
