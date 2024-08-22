@@ -22,6 +22,7 @@ export const checkAndSyncPendingSycableItems = async (
 
   try {
     const state = await NetInfo.fetch();
+    consoleLog('isInternetAvailable', state);
     if (state.isConnected == false) {
       return false;
     }

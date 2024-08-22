@@ -175,7 +175,7 @@ const Index = ({navigation, route}: any) => {
         status: 0,
       };
       await saveReportItems(db, [payload]);
-      // await checkAndSyncPendingSycableItems(token);
+      await checkAndSyncPendingSycableItems(token);
 
       // showToast && showToastMessage('Report sent', 'success');
       if (isReportManual == 'yes') {

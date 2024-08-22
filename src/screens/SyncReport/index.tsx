@@ -257,7 +257,7 @@ const Index = () => {
                   </Row>
                   <Typography
                     size={12}
-                    text={I18n.t('sync_page.FAILED')}
+                    text={I18n.t('sync_page.FAILED_MGS')}
                     style={{
                       textAlign: 'left',
                       marginTop: 10,
