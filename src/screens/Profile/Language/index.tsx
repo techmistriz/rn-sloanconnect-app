@@ -14,6 +14,7 @@ import {Button} from 'src/components/Button';
 import {constants} from 'src/common';
 import LANGUAGES from 'src/locales/languages.json';
 import I18n from 'src/locales/Transaltions';
+import { DeviceEventEmitter } from 'react-native';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {
@@ -80,6 +81,7 @@ const Index = ({route, navigation}: any) => {
         I18n.t('profile.CHANGE_LANGUAGE_SUCCESS_MSG'),
         'success',
       );
+      DeviceEventEmitter.emit('LanguageChangedEvent', true);
       NavigationService.goBack();
     }
   };

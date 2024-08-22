@@ -1,5 +1,11 @@
 import React, {Component, Fragment, useEffect} from 'react';
-import {View, StyleSheet, Image, StatusBar} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  StatusBar,
+  DeviceEventEmitter,
+} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
@@ -29,6 +35,22 @@ const Welcome = ({navigation, route}: any) => {
   const fadeInDelay = 500;
   const fadeInValue = new Animated.Value(0);
   const spinValue = new Animated.Value(0);
+
+  /**
+   * Hooks method for LanguageChange Event
+   */
+  useEffect(() => {
+    DeviceEventEmitter.addListener('LanguageChangedEvent', eventPayload => {
+      if (eventPayload) {
+        setTimeout(() => {
+          NavigationService.replace('Welcome');
+        }, 200);
+      }
+    });
+    return () => {
+      DeviceEventEmitter.removeAllListeners('LanguageChangedEvent');
+    };
+  }, []);
 
   useEffect(() => {
     __checkAllRequiredPermissions();
