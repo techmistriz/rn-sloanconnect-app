@@ -23,6 +23,10 @@ import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
 import moment from 'moment';
 import {cleanString, cleanString2} from 'src/utils/Helpers/encryption';
+import {getDeviceInfoNormalFlusher} from 'src/screens/DeviceInfo/helperFlusher';
+import {getDeviceInfoNormalBasys} from 'src/screens/DeviceInfo/helperBasys';
+import {readingDiagnosticFlusher} from 'src/screens/DeviceDiagnostics/helperFlusher';
+import {readingDiagnosticBasys} from 'src/screens/DeviceDiagnostics/helperBasys';
 
 const __reportMappingStats = {
   report_created_at: '',
@@ -78,6 +82,9 @@ const __reportMappingStats = {
       flow_rate: '',
       sensor_range: '',
       bd_note: '',
+      activation_time: '',
+      flush_time: '',
+      flush_volume: '',
     },
     current: {
       mode_selection: '',
@@ -89,6 +96,9 @@ const __reportMappingStats = {
       flow_rate: '',
       sensor_range: '',
       bd_note: '',
+      activation_time: '',
+      flush_time: '',
+      flush_volume: '',
     },
   },
   diagnostic_report: {
@@ -96,6 +106,7 @@ const __reportMappingStats = {
       sensor: '',
       valve: '',
       turbine: '',
+      solenoid: '',
       battery: '',
       date_of_diagnostic: '',
     },
@@ -103,6 +114,7 @@ const __reportMappingStats = {
       sensor: '',
       valve: '',
       turbine: '',
+      solenoid: '',
       battery: '',
       date_of_diagnostic: '',
     },
@@ -204,6 +216,10 @@ class BLEReportInstance {
       await this.mapFaucetDeviceDetailsGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       await this.mapFaucetDeviceDetailsGen2();
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      await this.mapFaucetDeviceDetailsFlusher();
+    } else if (BLEService.deviceGeneration == 'basys') {
+      await this.mapFaucetDeviceDetailsBasys();
     }
   }
 
@@ -410,6 +426,248 @@ class BLEReportInstance {
     // );
   }
 
+  async mapFaucetDeviceDetailsFlusher() {
+    const deviceInfoNormal = await getDeviceInfoNormalFlusher();
+    // console.log('deviceInfoNormal==>', deviceInfoNormal);
+
+    // Sensor Serial Number
+    const resultObj1 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88301',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj1==>', resultObj1);
+
+    // Sensor Manufacturing Date
+    const resultObj2 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88303',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj2==>', resultObj2);
+
+    // Sensor Hardware Version
+    const resultObj3 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88305',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj3==>', resultObj3);
+
+    // Sensor Firmware Version
+    const resultObj4 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88306',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj4==>', resultObj4);
+
+    // Control box....
+    // Control Box Model
+    const resultObj5 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d8830A',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj5==>', resultObj5);
+
+    // Control Box Serial Number
+    const resultObj6 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88302',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj6==>', resultObj6);
+
+    // Control Box Manufacturing Date
+    const resultObj7 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88304',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj7==>', resultObj7);
+
+    // Control Box Hardware Version
+    const resultObj8 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88307',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj8==>', resultObj8);
+
+    // Control Box Firmware Version
+    const resultObj9 = findObject(
+      'f89f13e7-83f8-4b7c-9e8b-364576d88308',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj9==>', resultObj9);
+
+    const deviceStaticData = BLEService.connectedDeviceStaticData;
+    let __FAUCET_DEVICE_DETAILS = {
+      faucet_sensor_details: {
+        faucet_model: deviceStaticData?.fullNameAllModel,
+        sensor_serial_number: resultObj1?.value ?? null,
+        sensor_manufacturing_date: resultObj2?.value ?? null,
+        sensor_hardware_ver: resultObj3?.value ?? null,
+        sensor_firmware_ver: resultObj4?.value ?? null,
+      },
+      control_box_details: {
+        control_box_model: resultObj5?.value ?? null,
+        control_box_serial_number: resultObj6?.value ?? null,
+        control_box_manuf_date: resultObj7?.value ?? null,
+        control_box_hardware_ver: resultObj8?.value ?? null,
+        control_box_firmware_ver: resultObj9?.value ?? null,
+      },
+    };
+
+    this.reportMappingStats.faucet_device_details = __FAUCET_DEVICE_DETAILS;
+
+    consoleLog(
+      'this.reportMappingStats.faucet_device_details==>',
+      this.reportMappingStats.faucet_device_details,
+    );
+  }
+
+  async mapFaucetDeviceDetailsBasys() {
+    const deviceInfoNormal = await getDeviceInfoNormalBasys();
+    // console.log('deviceInfoNormal==>', deviceInfoNormal);
+
+    // Sensor Serial Number
+    const resultObj1 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c901',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj1==>', resultObj1);
+
+    // Sensor Manufacturing Date
+    const resultObj2 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj2==>', resultObj2);
+
+    // Sensor Hardware Version
+    const resultObj3 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c905',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj3==>', resultObj3);
+
+    // Sensor Firmware Version
+    const resultObj4 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c906',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj4==>', resultObj4);
+
+    // Control box....
+    // Control Box Model
+    const resultObj5 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c90A',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj5==>', resultObj5);
+
+    // Control Box Serial Number
+    const resultObj6 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c902',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj6==>', resultObj6);
+
+    // Control Box Manufacturing Date
+    const resultObj7 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj7==>', resultObj7);
+
+    // Control Box Hardware Version
+    const resultObj8 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c907',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj8==>', resultObj8);
+
+    // Control Box Firmware Version
+    const resultObj9 = findObject(
+      'd0aba888-fb10-4dc9-9b17-bdd8f490c908',
+      deviceInfoNormal,
+      {
+        searchKey: 'uuid',
+      },
+    );
+    // consoleLog('mapFaucetDeviceDetailsGen1 resultObj9==>', resultObj9);
+
+    const deviceStaticData = BLEService.connectedDeviceStaticData;
+    let __FAUCET_DEVICE_DETAILS = {
+      faucet_sensor_details: {
+        faucet_model: deviceStaticData?.fullNameAllModel,
+        sensor_serial_number: resultObj1?.value ?? null,
+        sensor_manufacturing_date: resultObj2?.value ?? null,
+        sensor_hardware_ver: resultObj3?.value ?? null,
+        sensor_firmware_ver: resultObj4?.value ?? null,
+      },
+      control_box_details: {
+        control_box_model: resultObj5?.value ?? null,
+        control_box_serial_number: resultObj6?.value ?? null,
+        control_box_manuf_date: resultObj7?.value ?? null,
+        control_box_hardware_ver: resultObj8?.value ?? null,
+        control_box_firmware_ver: resultObj9?.value ?? null,
+      },
+    };
+
+    this.reportMappingStats.faucet_device_details = __FAUCET_DEVICE_DETAILS;
+
+    consoleLog(
+      'this.reportMappingStats.faucet_device_details==>',
+      this.reportMappingStats.faucet_device_details,
+    );
+  }
+
   mapFaucetSettings(
     settingName: string,
     response: any,
@@ -495,6 +753,10 @@ class BLEReportInstance {
       await this.mapDiagnosticReportGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       await this.mapDiagnosticReportGen2();
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      await this.mapDiagnosticReportFlusher();
+    } else if (BLEService.deviceGeneration == 'basys') {
+      await this.mapDiagnosticReportBasys();
     }
   }
 
@@ -603,6 +865,114 @@ class BLEReportInstance {
     //     valueKey: 'value',
     //   },
     // );
+    __DIAGNOSTIC_REPORT.battery = findValueObject(
+      'Battery Level at Diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    if (hasSettingsChanged) {
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
+    } else {
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
+    }
+
+    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
+  }
+
+  async mapDiagnosticReportFlusher(hasSettingsChanged: boolean = false) {
+    const RESULTS = await readingDiagnosticFlusher();
+    consoleLog(
+      'mapDiagnosticReportFlusher readingDiagnosticFlusher RESULTS==>',
+      RESULTS,
+    );
+
+    let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
+
+    let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
+    let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
+
+    let __DIAGNOSTIC_REPORT = hasSettingsChanged
+      ? __DIAGNOSTIC_REPORT_ALL?.current
+      : __DIAGNOSTIC_REPORT_ALL?.prev;
+
+    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.solenoid = findValueObject('Solenoid', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.battery = findValueObject(
+      'Battery Level at Diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    if (hasSettingsChanged) {
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
+    } else {
+      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
+      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
+    }
+
+    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
+  }
+
+  async mapDiagnosticReportBasys(hasSettingsChanged: boolean = false) {
+    const RESULTS = await readingDiagnosticBasys();
+    consoleLog(
+      'mapDiagnosticReportBasys readingDiagnosticBasys RESULTS==>',
+      RESULTS,
+    );
+
+    let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
+
+    let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
+    let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
+
+    let __DIAGNOSTIC_REPORT = hasSettingsChanged
+      ? __DIAGNOSTIC_REPORT_ALL?.current
+      : __DIAGNOSTIC_REPORT_ALL?.prev;
+
+    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+
+    __DIAGNOSTIC_REPORT.solenoid = findValueObject('Solenoid', RESULTS, {
+      searchKey: 'name',
+      valueKey: 'value',
+    });
+    
     __DIAGNOSTIC_REPORT.battery = findValueObject(
       'Battery Level at Diagnostic',
       RESULTS,

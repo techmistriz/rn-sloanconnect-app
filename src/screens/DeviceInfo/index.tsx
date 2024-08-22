@@ -28,7 +28,7 @@ import I18n from 'src/locales/Transaltions';
 import {
   getDeviceInfoAdvanceFlusher,
   getDeviceInfoNormalFlusher,
-} from './helperGenFlusher';
+} from './helperFlusher';
 import {
   getDeviceInfoAdvanceBasys,
   getDeviceInfoNormalBasys,

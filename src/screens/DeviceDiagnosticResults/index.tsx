@@ -108,10 +108,10 @@ const Index = ({navigation, route}: any) => {
       initlizeAppGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       initlizeAppGen2();
-    } else if (BLEService.deviceGeneration == 'gen3') {
-      // Code need to be implemented
-    } else if (BLEService.deviceGeneration == 'gen4') {
-      // Code need to be implemented
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      initlizeAppFlusher();
+    } else if (BLEService.deviceGeneration == 'basys') {
+      initlizeAppBasys();
     }
   };
 
@@ -126,6 +126,20 @@ const Index = ({navigation, route}: any) => {
     if (waterDispensed == 1 && sensorResult?.value == '0') {
       setInfoModal(true);
     }
+    handleSendReport('no', false);
+  };
+
+  const initlizeAppFlusher = async () => {
+    // if (waterDispensed == 1 && sensorResult?.value == '0') {
+    //   setInfoModal(true);
+    // }
+    handleSendReport('no', false);
+  };
+
+  const initlizeAppBasys = async () => {
+    // if (waterDispensed == 1 && sensorResult?.value == '0') {
+    //   setInfoModal(true);
+    // }
     handleSendReport('no', false);
   };
 
