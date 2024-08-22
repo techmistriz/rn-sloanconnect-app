@@ -26,7 +26,8 @@ import {
   decimalToHex,
   fromHexStringUint8Array,
   base64ToHex,
-  hexToByteSafe, asciiToHex,
+  hexToByteSafe,
+  asciiToHex,
 } from 'src/utils/Helpers/encryption';
 import {mapValueGen2} from 'src/utils/Helpers/project';
 import {mappingDeviceDataIntegersGen2} from '../DeviceDashboard/helperGen2';
@@ -369,10 +370,10 @@ const Index = ({navigation, route}: any) => {
           finishDiagnosticsBasys(waterDispensed);
         }, 1000);
       } else {
-        await BLEService.writeCharacteristicWithResponseForDevice(
-          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
-          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-          '0',
+        await BLEService.writeCharacteristicWithResponseForDevice2(
+          BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_SERVICE_UUID,
+          BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+          hexToByteSafe(decimalToHex('0')),
         );
 
         NavigationService.navigate('DeviceDiagnosticTroubleshoot', {
@@ -679,10 +680,10 @@ const Index = ({navigation, route}: any) => {
         },
       );
 
-      await BLEService.writeCharacteristicWithResponseForDevice(
+      await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_SERVICE_UUID,
         BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-        '0',
+        hexToByteSafe(decimalToHex('0')),
       );
 
       // const __initDiagnosticResponse = cleanCharacteristic(
