@@ -614,7 +614,6 @@ const Index = ({navigation, route}: any) => {
 
   /** Function comments */
   const finishDiagnosticsBasys = async (waterDispensed: number) => {
-    
     // Battery level at diagnostic
     await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.BASYS.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
@@ -655,8 +654,8 @@ const Index = ({navigation, route}: any) => {
       );
 
       await BLEService.writeCharacteristicWithResponseForDevice(
-        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
-        BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+        BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_SERVICE_UUID,
+        BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
         '0',
       );
 
@@ -734,7 +733,7 @@ const Index = ({navigation, route}: any) => {
   };
 
   if (
-    BLEService.deviceGeneration == 'gen111' ||
+    BLEService.deviceGeneration == 'gen1' ||
     BLEService.deviceGeneration == 'gen2' ||
     BLEService.deviceGeneration == 'basys'
   ) {
