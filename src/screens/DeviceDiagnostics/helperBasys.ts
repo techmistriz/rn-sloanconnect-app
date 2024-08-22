@@ -4,10 +4,7 @@ import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {cleanCharacteristic} from 'src/utils/Helpers/project';
 import {
-  base64EncodeDecode,
-  base64ToHex,
-  base64ToText,
-  hexToDecimal,
+  base64ToHex, hexToDecimal, hexToString,
 } from 'src/utils/Helpers/encryption';
 import I18n from 'src/locales/Transaltions';
 
@@ -30,7 +27,7 @@ export const readingDiagnosticBasys = async () => {
     RESULTS.push({
       name: 'Sensor',
       nameLocale: I18n.t('diagnostic_page.SENSOR_TITLE'),
-      value: base64EncodeDecode(__characteristicSensor?.value, 'decode'),
+      value: hexToString(base64ToHex(__characteristicSensor?.value)),
       showInList: true,
     });
   }
@@ -53,7 +50,7 @@ export const readingDiagnosticBasys = async () => {
     RESULTS.push({
       name: 'Solenoid',
       nameLocale: I18n.t('diagnostic_page.SOLENOID_TITLE'),
-      value: base64EncodeDecode(__characteristicTurbine__?.value, 'decode'),
+      value: hexToString(base64ToHex(__characteristicTurbine__?.value)),
       showInList: true,
     });
   }
