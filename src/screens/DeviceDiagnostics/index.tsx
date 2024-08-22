@@ -362,7 +362,23 @@ const Index = ({navigation, route}: any) => {
       // Not in use, we use onNextPress fun
       // finishDiagnosticsFlusher();
     } else if (BLEService.deviceGeneration == 'basys') {
-      finishDiagnosticsBasys(waterDispensed);
+      // finishDiagnosticsBasys(waterDispensed);
+      if (waterDispensed) {
+        setLoading(true);
+        setTimeout(() => {
+          finishDiagnosticsBasys(waterDispensed);
+        }, 1000);
+      } else {
+        await BLEService.writeCharacteristicWithResponseForDevice(
+          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_SERVICE_UUID,
+          BLE_CONSTANTS.GEN1.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
+          '0',
+        );
+
+        NavigationService.navigate('DeviceDiagnosticTroubleshoot', {
+          referrer: 'DeviceDiagnostics',
+        });
+      }
     }
   };
 
