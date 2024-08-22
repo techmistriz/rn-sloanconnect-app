@@ -23,8 +23,8 @@ import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {formatCharateristicValue} from 'src/utils/Helpers/project';
 import moment from 'moment';
 import {cleanString, cleanString2} from 'src/utils/Helpers/encryption';
-import {getDeviceInfoNormalFlusher} from 'src/screens/DeviceInfo/helperFlusher';
-import {getDeviceInfoNormalBasys} from 'src/screens/DeviceInfo/helperBasys';
+import {getDeviceInfoAdvanceFlusher, getDeviceInfoNormalFlusher} from 'src/screens/DeviceInfo/helperFlusher';
+import {getDeviceInfoAdvanceBasys, getDeviceInfoNormalBasys} from 'src/screens/DeviceInfo/helperBasys';
 import {readingDiagnosticFlusher} from 'src/screens/DeviceDiagnostics/helperFlusher';
 import {readingDiagnosticBasys} from 'src/screens/DeviceDiagnostics/helperBasys';
 
@@ -1008,6 +1008,10 @@ class BLEReportInstance {
       await this.mapAdvanceDeviceDetailsGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
       await this.mapAdvanceDeviceDetailsGen2();
+    } else if (BLEService.deviceGeneration == 'flusher') {
+      await this.mapAdvanceDeviceDetailsFlusher();
+    } else if (BLEService.deviceGeneration == 'basys') {
+      await this.mapAdvanceDeviceDetailsBasys();
     }
   }
 
@@ -1296,6 +1300,322 @@ class BLEReportInstance {
     //   'this.reportMappingStats?.advanced_device_details==>',
     //   this.reportMappingStats,
     // );
+  }
+
+  async mapAdvanceDeviceDetailsFlusher() {
+    consoleLog('mapAdvanceDeviceDetails called');
+
+    try {
+      var deviceInfoAdvance = await getDeviceInfoAdvanceFlusher();
+
+      // consoleLog('deviceInfoAdvance==>', deviceInfoAdvance);
+
+      let __ADVANCED_DEVICE_DETAILS = {
+        battery_status: BLEService.batteryLevel,
+        date_of_installation: findValueObject(
+          'Date of Installation',
+          deviceInfoAdvance,
+          {
+            searchKey: 'name',
+            valueKey: 'value',
+          },
+        ),
+        hours_of_operation: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88312',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        activations_since_day_1: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88314',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_activation_time: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c914',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_water_usage: findValueObject(
+          'Accumulated water usage',
+          deviceInfoAdvance,
+          {
+            searchKey: 'name',
+            valueKey: 'value',
+          },
+        ),
+        activations_since_last_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c913',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        line_flushes_since_day1: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c916',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_flush_time: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c915',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        number_of_ble_connections: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c91A',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_factory: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c921',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_mode_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c923',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_metered_run_time_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c924',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_ondemand_timeout_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c925',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_enable_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c926',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_time_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c927',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_interval_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c928',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flow_rate_change: '',
+        date_of_last_range_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c922',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_bd_note_change: '',
+      };
+
+      this.reportMappingStats.advanced_device_details =
+        __ADVANCED_DEVICE_DETAILS;
+
+      consoleLog('this.reportMappingStats==>', this.reportMappingStats);
+    } catch (error) {
+      consoleLog('deviceInfoAdvance error==>', error);
+    }
+  }
+
+  async mapAdvanceDeviceDetailsBasys() {
+    consoleLog('mapAdvanceDeviceDetails called');
+    try {
+      var deviceInfoAdvance = await getDeviceInfoAdvanceBasys();
+      // consoleLog('deviceInfoAdvance==>', deviceInfoAdvance);
+
+      let __ADVANCED_DEVICE_DETAILS = {
+        battery_status: BLEService.batteryLevel,
+        date_of_installation: findValueObject(
+          'Date of Installation',
+          deviceInfoAdvance,
+          {
+            searchKey: 'name',
+            valueKey: 'value',
+          },
+        ),
+        hours_of_operation: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c911',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        activations_since_day_1: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c912',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_activation_time: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c914',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_water_usage: findValueObject(
+          'Accumulated water usage',
+          deviceInfoAdvance,
+          {
+            searchKey: 'name',
+            valueKey: 'value',
+          },
+        ),
+        activations_since_last_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c913',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        line_flushes_since_day1: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c916',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        accumulated_flush_time: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c915',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        number_of_ble_connections: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c91A',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_factory: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c921',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_mode_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c923',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_metered_run_time_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c924',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_ondemand_timeout_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c925',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_enable_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c926',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_time_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c927',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flush_interval_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c928',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flow_rate_change: '',
+        date_of_last_range_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c922',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_bd_note_change: '',
+      };
+
+      this.reportMappingStats.advanced_device_details =
+        __ADVANCED_DEVICE_DETAILS;
+
+      consoleLog('this.reportMappingStats==>', this.reportMappingStats);
+    } catch (error) {
+      consoleLog('deviceInfoAdvance error==>', error);
+    }
   }
 
   async prepareReport(

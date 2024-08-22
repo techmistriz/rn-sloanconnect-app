@@ -697,6 +697,7 @@ const Index = ({navigation, route}: any) => {
       initializeAdvanceBasys();
     }
   };
+
   /** This is for basys */
   const initializeNormalBasys = async () => {
     try {
@@ -725,6 +726,7 @@ const Index = ({navigation, route}: any) => {
 
       const sortedDeviceInfoNormal = _.sortBy(deviceInfoNormal, 'position');
       setDeviceDetails(sortedDeviceInfoNormal);
+      
     } catch (error) {
     } finally {
       setLoading(false);
