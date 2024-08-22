@@ -12,6 +12,7 @@ import {
 } from 'src/utils/Helpers/project';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {BLE_GATT_SERVICES} from 'src/utils/StaticData/BLE_GATT_SERVICES';
+import {BLE_GATT_SERVICES_BASYS} from 'src/utils/StaticData/BLE_GATT_SERVICES_BASYS';
 import I18n from 'src/locales/Transaltions';
 
 const connectedDevice = BLEService.getDevice();
@@ -109,7 +110,7 @@ const getBDInformationDataBasys = () => {
     const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c900';
     const allServices = getDeviceCharacteristicsByServiceUUID(
       serviceUUID,
-      BLE_GATT_SERVICES,
+      BLE_GATT_SERVICES_BASYS,
     );
 
     var data = [];
@@ -165,7 +166,7 @@ const getStatisticsInformationDataBasys = () => {
     const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c910';
     const allServices = getDeviceCharacteristicsByServiceUUID(
       serviceUUID,
-      BLE_GATT_SERVICES,
+      BLE_GATT_SERVICES_BASYS,
     );
 
     var data = [];
@@ -283,7 +284,7 @@ const getSettingLogsDataBasys = () => {
     const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c920';
     const allServices = getDeviceCharacteristicsByServiceUUID(
       serviceUUID,
-      BLE_GATT_SERVICES,
+      BLE_GATT_SERVICES_BASYS,
     );
 
     var data = [];
