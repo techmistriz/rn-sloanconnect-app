@@ -385,7 +385,7 @@ class BLEServiceInstance {
         this.device.id,
         serviceUUID,
         characteristicUUID,
-        value,
+        base64EncodeDecode(value),
       )
       .catch(error => {
         consoleLog(

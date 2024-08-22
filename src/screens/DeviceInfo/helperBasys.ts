@@ -173,10 +173,10 @@ const getStatisticsInformationDataBasys = () => {
     /**
      * For the date of installation, logic is this:
       For “Date of Installation”, this one is calculated from the Today date and the “Hours of Operation (Operating hours since install)”.
-      For example: 
+      For example:
       if current unix timestamp in the App is 1714752879, which means (Date and time (GMT): Friday, May 3, 2024 4:14:39 PM)
       “Hours of Operation” = 100 hours, which means 100*60*60 = 360000 seconds.
-      Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879 
+      Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879
       which means the “Date of Installation” is Monday, April 29, 2024  (GMT)
      */
     var characteristicStaticHoursOfOperation: any =
