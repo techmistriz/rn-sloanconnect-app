@@ -15,6 +15,9 @@ const images = {
   noInternet: require('./no-internet.png'),
   activateFaucet: require('./activate_faucet.jpg'),
   gen1product1: require('./products/gen1/product1.jpg'),
+  flusherDiagnosticBg1: require('./products/flusher/flusher_diagnostic_bg1.png'),
+  flusherDiagnosticBg2: require('./products/flusher/flusher_diagnostic_bg2.png'),
+  flusherDiagnosticBg3: require('./products/flusher/flusher_diagnostic_bg3.png'),
 };
 
 export default images;

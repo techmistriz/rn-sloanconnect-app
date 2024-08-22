@@ -32,28 +32,26 @@ import {mapValueGen2} from 'src/utils/Helpers/project';
 import {mappingDeviceDataIntegersGen2} from '../DeviceDashboard/helperGen2';
 import LoaderOverlay from 'src/components/LoaderOverlay';
 import I18n from 'src/locales/Transaltions';
-import {readingDiagnosticFlusher} from './helperFlusher';
-import {FlushometerStepResultProps} from './types';
-import {readingDiagnosticBasys} from './helperBasys';
+import {constants} from 'src/common';
 
 const flushometerSteps = [
   {
     id: 1,
     title: I18n.t('diagnostic_page.FLUSHOMETERSTEP_1_TTILE'),
     subtitle: I18n.t('diagnostic_page.FLUSHOMETERSTEP_1_SUBTTILE'),
-    image: Images?.flusherDiagnosticBg1,
+    image: '',
   },
   {
     id: 2,
     title: I18n.t('diagnostic_page.FLUSHOMETERSTEP_2_TTILE'),
     subtitle: I18n.t('diagnostic_page.FLUSHOMETERSTEP_2_SUBTTILE'),
-    image: Images?.flusherDiagnosticBg2,
+    image: '',
   },
   {
     id: 3,
     title: '',
     subtitle: I18n.t('diagnostic_page.FLUSHOMETERSTEP_2_SUBTTILE'),
-    image: Images?.flusherDiagnosticBg3,
+    image: '',
   },
 ];
 
@@ -66,12 +64,7 @@ const Index = ({navigation, route}: any) => {
     previousScreen: undefined,
   };
 
-  const [flushometerStepResult, setflushometerStepResult] =
-    useState<FlushometerStepResultProps>({
-      step1: 'No',
-      step2: 'No',
-      step3: 'No',
-    });
+  const [flushometerStepStatus, setflushometerStepStatus] = useState();
   const [flushometerStepIndex, setflushometerStepIndex] = useState(0);
 
   /** component hooks method for hardwareBackPress */
@@ -160,7 +153,7 @@ const Index = ({navigation, route}: any) => {
     } else if (BLEService.deviceGeneration == 'flusher') {
       initlizeAppFlusher();
     } else if (BLEService.deviceGeneration == 'basys') {
-      initlizeAppBasys();
+      initlizeAppGen1();
     }
   };
 
@@ -260,9 +253,9 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const initlizeAppFlusher = async () => {
     setLoading(true);
-    const RESULTS = await readingDiagnosticFlusher();
+    // const RESULTS = await readingDiagnostic();
     // consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
-    setDiagnosticResults(RESULTS);
+    // setDiagnosticResults(RESULTS);
 
     // const initDiagnosticResponse =
     await BLEService.writeCharacteristicWithResponseForDevice2(
@@ -276,53 +269,6 @@ const Index = ({navigation, route}: any) => {
     //   cleanCharacteristic(initDiagnosticResponse),
     // );
     setLoading(false);
-  };
-
-  /** Function comments */
-  const initlizeAppBasys = async () => {
-    setLoading(true);
-    const RESULTS = await readingDiagnosticBasys();
-    consoleLog('initlizeAppBasys readingDiagnostic RESULTS==>', RESULTS);
-    setDiagnosticResults(RESULTS);
-
-    // const initDiagnosticResponse =
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_SERVICE_UUID,
-      BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex('1')),
-    );
-
-    // consoleLog(
-    //   'initialize __initDiagnosticResponse==>',
-    //   cleanCharacteristic(initDiagnosticResponse),
-    // );
-    setLoading(false);
-  };
-
-  const onNextPress = (
-    buttonActionType: string = '',
-    __flushometerStepIndex: number,
-  ) => {
-    if (__flushometerStepIndex == 0) {
-      setflushometerStepResult({
-        ...flushometerStepResult,
-        step1: buttonActionType,
-      });
-
-      setflushometerStepIndex(__flushometerStepIndex + 1);
-    } else if (__flushometerStepIndex == 1) {
-      setflushometerStepResult({
-        ...flushometerStepResult,
-        step2: buttonActionType,
-      });
-    } else if (__flushometerStepIndex == 2) {
-      const __flushometerStepResult = {
-        ...flushometerStepResult,
-        step3: buttonActionType,
-      };
-      setflushometerStepResult(__flushometerStepResult);
-      finishDiagnosticsFlusher(__flushometerStepResult);
-    }
   };
 
   /** Function comments */
@@ -356,10 +302,9 @@ const Index = ({navigation, route}: any) => {
         });
       }
     } else if (BLEService.deviceGeneration == 'flusher') {
-      // Not in use, we use onNextPress fun
-      // finishDiagnosticsFlusher();
-    } else if (BLEService.deviceGeneration == 'basys') {
-      finishDiagnosticsBasys(waterDispensed);
+      finishDiagnosticsFlusher(waterDispensed);
+    } else if (BLEService.deviceGeneration == 'gen4') {
+      // Code need to be implemented
     }
   };
 
@@ -523,104 +468,17 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** Function comments */
-  const finishDiagnosticsFlusher = async (
-    __flushometerStepResult: FlushometerStepResultProps,
-  ) => {
-    // Sensor result
-    var sensorResult = 0;
-    if (
-      __flushometerStepResult?.step1 == 'Yes' &&
-      __flushometerStepResult?.step2 == 'No'
-    ) {
-      sensorResult = 1;
-    }
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_SENSOR_RESULT_SERVICE_UUID,
-      BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_SENSOR_RESULT_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex(sensorResult)),
-    );
-
-    // Solenoid Status
-    var solenoidStatus = 0;
-    if (__flushometerStepResult?.step3 == 'Yes') {
-      solenoidStatus = 1;
-    }
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_TURBINE_SERVICE_UUID,
-      BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_TURBINE_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex(solenoidStatus)),
-    );
-
+  const finishDiagnosticsFlusher = async (waterDispensed: number) => {
     // Battery level at diagnostic
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
-      BLE_CONSTANTS.FLUSHER
-        .DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex(BLEService.batteryLevel)),
+    const batteryLevelInHex = fromHexStringUint8Array(
+      decimalToHex(BLEService.batteryLevel?.toString()),
     );
 
-    // D/T of last diagnostic
     await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
-      BLE_CONSTANTS.FLUSHER
-        .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex(timestampInSec())),
-    );
-
-    setTimeout(async () => {
-      const RESULTS = await readingDiagnosticFlusher();
-
-      consoleLog(
-        'finishDiagnosticsFlusher readingDiagnostic RESULTS==>',
-        RESULTS,
-      );
-      const sensorResult = findObject('Sensor', RESULTS, {searchKey: 'name'});
-      const dateResult = findObject('D/T of last diagnostic', RESULTS, {
-        searchKey: 'name',
-      });
-      const dateLastResult = findObject(
-        'D/T of last diagnostic',
-        diagnosticResults,
-        {
-          searchKey: 'name',
-        },
-      );
-
-      await BLEService.writeCharacteristicWithResponseForDevice2(
-        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
-        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-        hexToByteSafe(decimalToHex('0')),
-      );
-
-      // consoleLog(
-      //   'finishDiagnosticsGen1 __initDiagnosticResponse==>',
-      //   __initDiagnosticResponse,
-      // );
-
-      // consoleLog("sensorResult==>", sensorResult);
-      setLoading(false);
-      NavigationService.navigate('DeviceDiagnosticResults', {
-        referrer: 'DeviceDiagnostic',
-        previousScreen: previousScreen,
-        previousDiagnosticResults: diagnosticResults,
-        diagnosticResults: RESULTS,
-        waterDispensed: 1,
-        sensorResult: sensorResult,
-        dateResult: dateResult,
-        dateLastResult: dateLastResult,
-      });
-    }, 2000);
-  };
-
-  /** Function comments */
-  const finishDiagnosticsBasys = async (waterDispensed: number) => {
-    
-    // Battery level at diagnostic
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.BASYS.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
-      BLE_CONSTANTS.BASYS
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1
         .DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex(BLEService.batteryLevel)),
+      batteryLevelInHex,
     );
 
     // D/T of last diagnostic
@@ -629,19 +487,16 @@ const Index = ({navigation, route}: any) => {
     );
 
     await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.BASYS.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
-      BLE_CONSTANTS.BASYS
+      BLE_CONSTANTS.GEN1.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
+      BLE_CONSTANTS.GEN1
         .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
       diagnosticDateTimestampInHex,
     );
 
     setTimeout(async () => {
-      const RESULTS = await readingDiagnosticBasys();
+      const RESULTS = await readingDiagnostic();
 
-      consoleLog(
-        'finishDiagnosticsBasys readingDiagnostic RESULTS==>',
-        RESULTS,
-      );
+      consoleLog('finishDiagnosticsGen1 readingDiagnostic RESULTS==>', RESULTS);
       const sensorResult = findObject('Sensor', RESULTS, {searchKey: 'name'});
       const dateResult = findObject('D/T of last diagnostic', RESULTS, {
         searchKey: 'name',
@@ -731,6 +586,17 @@ const Index = ({navigation, route}: any) => {
 
     BLEService.characteristicMonitorDeviceDataIntegersMapped =
       mappingDeviceDataIntegersGen2Response;
+  };
+
+  const onNextPress = (
+    buttonActionType: string = '',
+    __flushometerStepIndex: number,
+  ) => {
+    if (__flushometerStepIndex == 3) {
+      //
+    } else {
+      setflushometerStepIndex(__flushometerStepIndex + 1);
+    }
   };
 
   if (
@@ -827,63 +693,63 @@ const Index = ({navigation, route}: any) => {
           backgroundColor: Theme.colors.white,
         },
       ]}>
-      <Image
-        // @ts-ignore
-        source={getImgSource(flushometerSteps?.[flushometerStepIndex]?.image)}
-        style={{
-          width: '80%',
-          height: '80%',
-          position: 'absolute',
-        }}
-        resizeMode="contain"
-      />
       <Header hasBackButton headerBackgroundType="solid" />
       <Wrap autoMargin={false} style={styles.sectionContainer}>
-        <Wrap autoMargin={false} style={styles.sectionFake}></Wrap>
         <Wrap autoMargin={false} style={styles.section1}>
-          <Wrap autoMargin={false}>
-            <Typography
-              size={16}
-              text={flushometerSteps?.[flushometerStepIndex]?.title}
-              style={{textAlign: 'center', marginTop: 15}}
-              color={Theme.colors.primaryColor}
-              ff={Theme.fonts.ThemeFontLight}
-            />
+          {/* <Wrap autoMargin={false} style={styles.imageContainer}> */}
+          <Image
+            // @ts-ignore
+            source={getImgSource(Images?.flusherDiagnosticBg1)}
+            style={{
+              width: '100%',
+              height: 400,
+              borderWidth: 1,
+              borderColor: 'green',
+            }}
+            resizeMode="contain"
+          />
+          {/* </Wrap> */}
+          <Typography
+            size={16}
+            text={flushometerSteps?.[flushometerStepIndex]?.title}
+            style={{textAlign: 'center', marginTop: 15}}
+            color={Theme.colors.primaryColor}
+            ff={Theme.fonts.ThemeFontLight}
+          />
 
-            <Typography
-              size={25}
-              text={flushometerSteps?.[flushometerStepIndex]?.subtitle}
-              style={{textAlign: 'center', marginTop: 20}}
-              color={Theme.colors.black}
-              ff={Theme.fonts.ThemeFontLight}
-            />
-          </Wrap>
+          <Typography
+            size={25}
+            text={flushometerSteps?.[flushometerStepIndex]?.subtitle}
+            style={{textAlign: 'center', marginTop: 10}}
+            color={Theme.colors.black}
+            ff={Theme.fonts.ThemeFontLight}
+          />
         </Wrap>
         <Wrap autoMargin={false} style={styles.section2}>
           <Wrap autoMargin={false} style={styles.container}>
             <Row autoMargin={false} style={styles.row}>
               <Col autoMargin={false} style={[styles.col, {paddingRight: 5}]}>
                 <Button
-                  type={'link'}
+                  type={'secondary'}
                   title={I18n.t('button_labels.NO_BUTTON_LABEL')}
                   onPress={() => {
-                    onNextPress('No', flushometerStepIndex);
+                    onNextPress('NO', flushometerStepIndex);
                   }}
                   textStyle={{
-                    fontSize: 14,
+                    fontSize: 10,
                     fontFamily: Theme.fonts.ThemeFontMedium,
                   }}
                 />
               </Col>
               <Col autoMargin={false} style={[styles.col, {paddingLeft: 5}]}>
                 <Button
-                  type={'link'}
+                  type={'secondary'}
                   title={I18n.t('button_labels.YES_BUTTON_LABEL')}
                   onPress={() => {
-                    onNextPress('Yes', flushometerStepIndex);
+                    onNextPress('YES', flushometerStepIndex);
                   }}
                   textStyle={{
-                    fontSize: 14,
+                    fontSize: 10,
                     fontFamily: Theme.fonts.ThemeFontMedium,
                   }}
                 />
