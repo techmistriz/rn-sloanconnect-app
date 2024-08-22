@@ -30,6 +30,7 @@ import {readingDiagnosticBasys} from 'src/screens/DeviceDiagnostics/helperBasys'
 
 const __reportMappingStats = {
   report_created_at: '',
+  device_generation: '',
   is_report_manual: 'yes',
   user_info: {
     id: '',
@@ -41,8 +42,8 @@ const __reportMappingStats = {
     user_title: '',
   },
   mobile_device_info: {
-    os: 'ios/android',
-    model: 'SAM SG990',
+    os: '',
+    model: '',
     bluetooth_rssi: '',
     app_version: '',
     app_release_date: '',
@@ -1304,6 +1305,7 @@ class BLEReportInstance {
   ) {
     const currentTimestamp = timestampInSec();
     this.reportMappingStats.is_report_manual = isReportManual;
+    this.reportMappingStats.device_generation = BLEService.deviceGeneration;
 
     this.reportMappingStats.report_created_at = moment
       .unix(currentTimestamp)
