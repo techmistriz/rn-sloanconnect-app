@@ -26,7 +26,7 @@ import {
   decimalToHex,
   fromHexStringUint8Array,
   base64ToHex,
-  hexToByteSafe,
+  hexToByteSafe, asciiToHex,
 } from 'src/utils/Helpers/encryption';
 import {mapValueGen2} from 'src/utils/Helpers/project';
 import {mappingDeviceDataIntegersGen2} from '../DeviceDashboard/helperGen2';
@@ -52,7 +52,7 @@ const flushometerSteps = [
   {
     id: 3,
     title: '',
-    subtitle: I18n.t('diagnostic_page.FLUSHOMETERSTEP_2_SUBTTILE'),
+    subtitle: I18n.t('diagnostic_page.FLUSHOMETERSTEP_3_SUBTTILE'),
     image: Images?.flusherDiagnosticBg3,
   },
 ];
@@ -158,6 +158,7 @@ const Index = ({navigation, route}: any) => {
     } else if (BLEService.deviceGeneration == 'gen2') {
       initlizeAppGen2();
     } else if (BLEService.deviceGeneration == 'flusher') {
+      setflushometerStepIndex(0);
       initlizeAppFlusher();
     } else if (BLEService.deviceGeneration == 'basys') {
       initlizeAppBasys();
@@ -261,7 +262,7 @@ const Index = ({navigation, route}: any) => {
   const initlizeAppFlusher = async () => {
     setLoading(true);
     const RESULTS = await readingDiagnosticFlusher();
-    // consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
+    // consoleLog('initlizeAppFlusher readingDiagnostic RESULTS==>', RESULTS);
     setDiagnosticResults(RESULTS);
 
     // const initDiagnosticResponse =
@@ -303,6 +304,7 @@ const Index = ({navigation, route}: any) => {
     buttonActionType: string = '',
     __flushometerStepIndex: number,
   ) => {
+    // consoleLog('flusher step click', __flushometerStepIndex);
     if (__flushometerStepIndex == 0) {
       setflushometerStepResult({
         ...flushometerStepResult,
@@ -315,6 +317,7 @@ const Index = ({navigation, route}: any) => {
         ...flushometerStepResult,
         step2: buttonActionType,
       });
+      setflushometerStepIndex(__flushometerStepIndex + 1);
     } else if (__flushometerStepIndex == 2) {
       const __flushometerStepResult = {
         ...flushometerStepResult,
@@ -526,6 +529,8 @@ const Index = ({navigation, route}: any) => {
   const finishDiagnosticsFlusher = async (
     __flushometerStepResult: FlushometerStepResultProps,
   ) => {
+    setLoading(true);
+    // consoleLog('__flushometerStepResult', __flushometerStepResult);
     // Sensor result
     var sensorResult = 0;
     if (
@@ -537,7 +542,7 @@ const Index = ({navigation, route}: any) => {
     await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_SENSOR_RESULT_SERVICE_UUID,
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_SENSOR_RESULT_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex(sensorResult)),
+      hexToByteSafe(asciiToHex('' + sensorResult, 2)),
     );
 
     // Solenoid Status
@@ -545,10 +550,15 @@ const Index = ({navigation, route}: any) => {
     if (__flushometerStepResult?.step3 == 'Yes') {
       solenoidStatus = 1;
     }
+    // consoleLog('writing DIAGNOSTIC_TURBINE_CHARACTERISTIC_UUID', {
+    //   solenoidStatus,
+    //   ascii: asciiToHex('' + solenoidStatus, 2),
+    //   solenoid: hexToByteSafe(asciiToHex('' + solenoidStatus)),
+    // });
     await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_TURBINE_SERVICE_UUID,
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_TURBINE_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex(solenoidStatus)),
+      hexToByteSafe(asciiToHex('' + solenoidStatus, 2)),
     );
 
     // Battery level at diagnostic
@@ -589,7 +599,7 @@ const Index = ({navigation, route}: any) => {
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-        hexToByteSafe(decimalToHex('0')),
+        hexToByteSafe(asciiToHex('0')),
       );
 
       // consoleLog(
