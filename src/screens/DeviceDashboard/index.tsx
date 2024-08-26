@@ -1146,7 +1146,9 @@ const Index = ({navigation}: any) => {
   // return;
     /** @var characteristicHex for gen2*/
     var characteristicHex = '720a01321400000001CF';
-    BLEService.dispenseWater(characteristicHex);
+    // setLoading(true);
+    await BLEService.dispenseWater(characteristicHex);
+    // setLoading(false);
     // const writableData = fromHexStringUint8Array(characteristicHex);
     // consoleLog('writableData', writableData);
     // consoleLog(

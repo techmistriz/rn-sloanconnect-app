@@ -979,13 +979,13 @@ class BLEServiceInstance {
    */
   dispenseWater = async (characteristicHex: string = '') => {
     if (BLEService.deviceGeneration == 'gen1') {
-      this.dispenseWaterGen1();
+      await this.dispenseWaterGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
-      this.dispenseWaterGen2(characteristicHex);
+      await this.dispenseWaterGen2(characteristicHex);
     } else if (BLEService.deviceGeneration == 'flusher') {
-      this.dispenseWaterFlusher();
+      await this.dispenseWaterFlusher();
     } else if (BLEService.deviceGeneration == 'basys') {
-      this.dispenseWaterBasys();
+      await this.dispenseWaterBasys();
     }
   };
 
@@ -1038,11 +1038,12 @@ class BLEServiceInstance {
    * @param characteristicUUID
    */
   dispenseWaterFlusher = async () => {
+    // consoleLog('dispenseWaterFlusher', {write: hexToByteSafe(asciiToHex('1', 2))});
     const writeCharacteristicWithResponseForDevice =
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_SERVICE_UUID,
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
-        hexToByteSafe(asciiToHex('1')),
+        hexToByteSafe(asciiToHex('1', 2)),
       );
     showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
     // consoleLog(
