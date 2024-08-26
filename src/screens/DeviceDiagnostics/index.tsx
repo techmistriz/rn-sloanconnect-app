@@ -270,7 +270,7 @@ const Index = ({navigation, route}: any) => {
     await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex('1')),
+      hexToByteSafe(asciiToHex('1', 2)),
     );
 
     // consoleLog(
@@ -291,7 +291,7 @@ const Index = ({navigation, route}: any) => {
     await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_SERVICE_UUID,
       BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex('1')),
+      hexToByteSafe(asciiToHex('1', 2)),
     );
 
     // consoleLog(
@@ -301,7 +301,7 @@ const Index = ({navigation, route}: any) => {
     setLoading(false);
   };
 
-  const onNextPress = (
+  const onNextPress = async (
     buttonActionType: string = '',
     __flushometerStepIndex: number,
   ) => {
@@ -325,6 +325,12 @@ const Index = ({navigation, route}: any) => {
         step3: buttonActionType,
       };
       setflushometerStepResult(__flushometerStepResult);
+      // write 1 to activate valve on question 3
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
+        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
+        hexToByteSafe(asciiToHex('1', 2)),
+      );
       finishDiagnosticsFlusher(__flushometerStepResult);
     }
   };
@@ -373,7 +379,7 @@ const Index = ({navigation, route}: any) => {
         await BLEService.writeCharacteristicWithResponseForDevice2(
           BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_SERVICE_UUID,
           BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-          hexToByteSafe(decimalToHex('0')),
+          hexToByteSafe(asciiToHex('0', 2)),
         );
 
         NavigationService.navigate('DeviceDiagnosticTroubleshoot', {
@@ -549,10 +555,10 @@ const Index = ({navigation, route}: any) => {
     setLoading(true);
     // consoleLog('__flushometerStepResult', __flushometerStepResult);
     // Sensor result
-    var sensorResult = 0;
+    let sensorResult = 0;
     if (
       __flushometerStepResult?.step1 == 'Yes' &&
-      __flushometerStepResult?.step2 == 'No'
+      __flushometerStepResult?.step2 == 'Yes'
     ) {
       sensorResult = 1;
     }
@@ -563,7 +569,7 @@ const Index = ({navigation, route}: any) => {
     );
 
     // Solenoid Status
-    var solenoidStatus = 0;
+    let solenoidStatus = 0;
     if (__flushometerStepResult?.step3 == 'Yes') {
       solenoidStatus = 1;
     }
@@ -587,11 +593,15 @@ const Index = ({navigation, route}: any) => {
     );
 
     // D/T of last diagnostic
+    const dateFormat = 'YYMMDDHHmm';
+    const diagnosticDateTimestampInHex = hexToByteSafe(
+      asciiToHex(parseDateTimeInFormat(new Date(), dateFormat)),
+    );
     await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_SERVICE_UUID,
       BLE_CONSTANTS.FLUSHER
         .DIAGNOSTIC_DATE_OF_LAST_DIAGNOSTICS_CHARACTERISTIC_UUID,
-      hexToByteSafe(decimalToHex(timestampInSec())),
+      diagnosticDateTimestampInHex,
     );
 
     setTimeout(async () => {
@@ -616,7 +626,7 @@ const Index = ({navigation, route}: any) => {
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-        hexToByteSafe(asciiToHex('0')),
+        hexToByteSafe(asciiToHex('0', 2)),
       );
 
       // consoleLog(
@@ -642,6 +652,9 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   const finishDiagnosticsBasys = async (waterDispensed: number) => {
     // Battery level at diagnostic
+    // consoleLog('BLEService.batteryLevel', {
+    //   batteryLevel: BLEService.batteryLevel,
+    // });
     await BLEService.writeCharacteristicWithResponseForDevice2(
       BLE_CONSTANTS.BASYS.DIAGNOSTIC_BATTERY_LEVEL_AT_DIAGNOSTIC_SERVICE_UUID,
       BLE_CONSTANTS.BASYS
@@ -650,8 +663,9 @@ const Index = ({navigation, route}: any) => {
     );
 
     // D/T of last diagnostic
-    const diagnosticDateTimestampInHex = fromHexStringUint8Array(
-      decimalToHex(timestampInSec()),
+    const dateFormat = 'YYMMDDHHmm';
+    const diagnosticDateTimestampInHex = hexToByteSafe(
+      asciiToHex(parseDateTimeInFormat(new Date(), dateFormat)),
     );
 
     await BLEService.writeCharacteristicWithResponseForDevice2(
@@ -683,7 +697,7 @@ const Index = ({navigation, route}: any) => {
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_SERVICE_UUID,
         BLE_CONSTANTS.BASYS.DIAGNOSTIC_INIT_CHARACTERISTIC_UUID,
-        hexToByteSafe(decimalToHex('0')),
+        hexToByteSafe(asciiToHex('0', 2)),
       );
 
       // const __initDiagnosticResponse = cleanCharacteristic(
@@ -865,7 +879,7 @@ const Index = ({navigation, route}: any) => {
       />
       <Header hasBackButton headerBackgroundType="solid" />
       <Wrap autoMargin={false} style={styles.sectionContainer}>
-        <Wrap autoMargin={false} style={styles.sectionFake}></Wrap>
+        <Wrap autoMargin={false} style={styles.sectionFake} />
         <Wrap autoMargin={false} style={styles.section1}>
           <Wrap autoMargin={false}>
             <Typography

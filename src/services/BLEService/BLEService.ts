@@ -15,6 +15,7 @@ import {
 } from 'react-native-ble-plx';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {
+  asciiToHex,
   base64EncodeDecode,
   base64EncodeFromByteArray,
   decimalToHex,
@@ -1041,7 +1042,7 @@ class BLEServiceInstance {
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_SERVICE_UUID,
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
-        hexToByteSafe(decimalToHex('1')),
+        hexToByteSafe(asciiToHex('1')),
       );
     showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
     // consoleLog(
@@ -1061,7 +1062,7 @@ class BLEServiceInstance {
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.BASYS.WATER_DISPENCE_SERVICE_UUID,
         BLE_CONSTANTS.BASYS.WATER_DISPENCE_CHARACTERISTIC_UUID,
-        hexToByteSafe(decimalToHex('1')),
+        hexToByteSafe(asciiToHex('1')),
       );
     showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
     consoleLog(
