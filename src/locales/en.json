@@ -212,6 +212,7 @@
     "DISCONNECTING_MSG": "Are you sure you want to disconnect?",
     "WATER_DISPENSE_MSG": "Water dispensed successfully",
 
+    "ENGINEERING_DATA_2": "Engineering Data 2",
     "EOF": "EOF"
   },
   "device_details": {

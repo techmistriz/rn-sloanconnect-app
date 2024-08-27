@@ -4,7 +4,7 @@ import {consoleLog} from 'src/utils/Helpers/HelperFunction';
 import {isObjectEmpty} from 'src/utils/Helpers/array';
 import {cleanCharacteristic} from 'src/utils/Helpers/project';
 import {
-  base64ToHex, hexToDecimal, hexToString,
+  base64ToHex, base64ToText, hexToDecimal, hexToString,
 } from 'src/utils/Helpers/encryption';
 import I18n from 'src/locales/Transaltions';
 
@@ -98,14 +98,13 @@ export const readingDiagnosticFlusher = async () => {
       //   cleanCharacteristic(__characteristicDTLastDiagnostic),
       // );
 
-      const __base64ToHex = base64ToHex(
+      const __base64ToHex = base64ToText(
         __characteristicDTLastDiagnostic?.value,
       );
-      const hexEncodeValue = hexToDecimal(__base64ToHex);
 
       RESULTS.push({
         name: 'D/T of last diagnostic',
-        value: hexEncodeValue,
+        value: __base64ToHex,
         showInList: false,
       });
     }

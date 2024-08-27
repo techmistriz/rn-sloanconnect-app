@@ -4,7 +4,8 @@ import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  getSavedSettingsGen1, getTotalWaterUsaseFlusher,
+  getSavedSettingsGen1,
+  getTotalWaterUsaseFlusher,
   hasLineFlushSetting,
   hasSensorRangeSetting,
   saveSettings,
@@ -34,17 +35,22 @@ import {isObjectEmpty} from 'src/utils/Helpers/array';
 import FlowRateList from 'src/components/@ProjectComponent/DeviceSettingsList/FlowRateList';
 import SensorRangeList from 'src/components/@ProjectComponent/DeviceSettingsList/SensorRangeList';
 import LineFlushList from 'src/components/@ProjectComponent/DeviceSettingsList/LineFlushList';
+import EngineeringDataList from 'src/components/@ProjectComponent/DeviceSettingsList/EngineeringDataList';
 import LoaderOverlay2 from 'src/components/LoaderOverlay2';
 import {CollapsableContainer} from 'src/components/CollapsableContainer';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {
   __base64ToHex,
-  asciiToHex, base64ToDecimal,
-  base64ToHex, base64ToText,
+  asciiToHex,
+  base64ToDecimal,
+  base64ToHex,
+  base64ToText,
   decimalToHex,
   fromHexStringUint8Array,
-  hexToByte, hexToByteSafe,
-  hexToDecimal, stringToByte,
+  hexToByte,
+  hexToByteSafe,
+  hexToDecimal,
+  stringToByte,
 } from 'src/utils/Helpers/encryption';
 import {
   mappingDataCollectionGen2,
@@ -67,15 +73,17 @@ import LineFlushListFlusher from 'src/components/@ProjectComponent/DeviceSetting
 import ActivationTimeListFlusher from 'src/components/@ProjectComponent/DeviceSettingsList/ActivationTimeListFlusher';
 import {
   getActivationTimeFlusherSettings,
+  getEngineeringData2FlusherSettings,
   getFlushFlusherSettings,
   getNoteFlusherSettings,
   getSensorFlusherSettings,
 } from './helperFlusher';
 import {
   getActivationModeSettingsBasys,
-  getFlowSettingsBasys, getFlushSettingsBasys,
+  getFlowSettingsBasys,
+  getFlushSettingsBasys,
   getNoteFlusherSettingsBasys,
-  getSensorSettingsBasys
+  getSensorSettingsBasys,
 } from 'src/screens/DeviceDashboard/helperBasys';
 
 let hasSettingsChanged: boolean = false;
@@ -108,6 +116,7 @@ const Index = ({navigation}: any) => {
   const [flowRateSettings, setFlowRateSettings] = useState<any>();
   const [sensorSettings, setSensorSettings] = useState<any>();
   const [noteSettings, setNoteSettings] = useState<any>();
+  const [engineeringDataSettings, setEngineeringDataSettings] = useState<any>();
 
   /** Var for flusher */
   const [activationTimeFlusherSettings, setActivationTimeFlusherSettings] =
@@ -808,6 +817,20 @@ const Index = ({navigation}: any) => {
         consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
       });
 
+    getEngineeringData2FlusherSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
+        setEngineeringDataSettings(response);
+        BLEReport.mapFaucetSettings(
+          'EngineeringData',
+          response,
+          hasSettingsChanged,
+        );
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 EngineeringData error==>', error);
+      });
+
     setLoading(false);
   };
 
@@ -876,7 +899,10 @@ const Index = ({navigation}: any) => {
         BLEReport.mapFaucetSettings('NoteRange', response, hasSettingsChanged);
       })
       .catch(error => {
-        consoleLog('initlizeAppGen1 getNoteFlusherSettingsBasys error==>', error);
+        consoleLog(
+          'initlizeAppGen1 getNoteFlusherSettingsBasys error==>',
+          error,
+        );
       });
 
     setLoading(false);
@@ -1663,6 +1689,23 @@ const Index = ({navigation}: any) => {
                 applied={applied}
                 showApplySettingButton={showApplySettingButton}
               />
+
+              {BLEService.deviceGeneration == 'flusher' ? (
+                <EngineeringDataList
+                  settings={{
+                    title: I18n.t('device_dashboard.ENGINEERING_DATA_2'),
+                    route: 'EngineeringData',
+                    name: 'EngineeringData',
+                    // serviceUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c940',
+                    // characteristicUUID: 'd0aba888-fb10-4dc9-9b17-bdd8f490c949',
+                  }}
+                  settingsData={engineeringDataSettings}
+                  navigation={navigation}
+                  borderBottom={<Divider color={Theme.colors.lightGray} />}
+                  applied={applied}
+                  showApplySettingButton={showApplySettingButton}
+                />
+              ) : null}
 
               {noteSettings && (
                 <NotesList

@@ -42,6 +42,7 @@ import FlowRateInput from 'src/screens/DeviceSettings/FlowRate/FlowRateInput';
 import SensorRange from 'src/screens/DeviceSettings/SensorRange';
 import Notes from 'src/screens/DeviceSettings/Notes';
 import Header from 'src/components/Header';
+import EngineeringData from 'src/screens/DeviceSettings/EngineeringData';
 
 // create stack navigator
 const Stack = createNativeStackNavigator();
@@ -329,6 +330,15 @@ const MainNavigator = () => {
             headerShown: true,
             // headerRight: () => <Header route={route?.params?.image} />
             header: () => <Header title="Notes" />,
+          }}
+        />
+        <Stack.Screen
+          name="EngineeringData"
+          component={EngineeringData}
+          options={{
+            headerShown: true,
+            // headerRight: () => <Header route={route?.params?.image} />
+            header: () => <Header title="Engineering Data 2" />,
           }}
         />
         <Stack.Screen

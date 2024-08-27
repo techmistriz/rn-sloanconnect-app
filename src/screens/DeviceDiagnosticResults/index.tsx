@@ -46,6 +46,7 @@ const Index = ({navigation, route}: any) => {
     waterDispensed,
     sensorResult,
     dateResult,
+    dateInputFormat,
     dateLastResult,
   } = route?.params || {referrer: undefined};
   const {user, token} = useSelector((state: any) => state?.AuthReducer);
@@ -276,10 +277,16 @@ const Index = ({navigation, route}: any) => {
                         dateResult?.value &&
                         dateResult?.value > 0 &&
                         dateResult?.value?.toString()?.length > 6
-                          ? parseDateHumanFormatFromUnix(
-                              dateResult?.value,
-                              'ddd, DD MMMM YYYY HH:mm:ss a z',
-                            )
+                          ? dateInputFormat
+                            ? parseDateHumanFormat(
+                                dateResult?.value,
+                                'ddd, DD MMMM YYYY HH:mm:ss a z',
+                                dateInputFormat,
+                              )
+                            : parseDateHumanFormatFromUnix(
+                                dateResult?.value,
+                                'ddd, DD MMMM YYYY HH:mm:ss a z',
+                              )
                           : 'N/A'
                       }`}
                       style={{
@@ -332,10 +339,16 @@ const Index = ({navigation, route}: any) => {
                             dateLastResult?.value &&
                             dateLastResult?.value > 0 &&
                             dateLastResult?.value?.toString()?.length > 6
-                              ? parseDateHumanFormatFromUnix(
-                                  dateLastResult?.value,
-                                  'ddd, DD MMMM YYYY HH:mm:ss a z',
-                                )
+                              ? dateInputFormat
+                                ? parseDateHumanFormat(
+                                    dateLastResult?.value,
+                                    'ddd, DD MMMM YYYY HH:mm:ss a z',
+                                    dateInputFormat,
+                                  )
+                                : parseDateHumanFormatFromUnix(
+                                    dateLastResult?.value,
+                                    'ddd, DD MMMM YYYY HH:mm:ss a z',
+                                  )
                               : 'N/A'
                           }`}
                           style={{

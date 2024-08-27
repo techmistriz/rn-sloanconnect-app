@@ -325,6 +325,7 @@ const Index = ({navigation, route}: any) => {
         step3: buttonActionType,
       };
       setflushometerStepResult(__flushometerStepResult);
+      setLoading(true);
       // write 1 to activate valve on question 3
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
@@ -552,7 +553,7 @@ const Index = ({navigation, route}: any) => {
   const finishDiagnosticsFlusher = async (
     __flushometerStepResult: FlushometerStepResultProps,
   ) => {
-    setLoading(true);
+    // setLoading(true);
     // consoleLog('__flushometerStepResult', __flushometerStepResult);
     // Sensor result
     let sensorResult = 0;
@@ -644,6 +645,7 @@ const Index = ({navigation, route}: any) => {
         waterDispensed: 1,
         sensorResult: sensorResult,
         dateResult: dateResult,
+        dateInputFormat: 'YYMMDDHHss',
         dateLastResult: dateLastResult,
       });
     }, 2000);
@@ -719,6 +721,7 @@ const Index = ({navigation, route}: any) => {
         waterDispensed: waterDispensed,
         sensorResult: sensorResult,
         dateResult: dateResult,
+        dateInputFormat: 'YYMMDDHHss',
         dateLastResult: dateLastResult,
       });
     }, 2000);

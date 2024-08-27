@@ -8,7 +8,7 @@ import {
   base64EncodeDecode,
   base64ToDecimal,
   base64ToText,
-  hexToDecimal
+  hexToDecimal,
 } from 'src/utils/Helpers/encryption';
 
 /** Function comments */
@@ -126,6 +126,32 @@ export const getNoteFlusherSettings = async (
   if (!isObjectEmpty(sensorResponse) && sensorResponse?.value) {
     sensorResponse.value = base64ToText(sensorResponse?.value);
     results.note = cleanCharacteristic(sensorResponse);
+  }
+
+  return results;
+};
+
+/** Function comments */
+export const getEngineeringData2FlusherSettings = async (
+  unsavedDeviceSettingsData: any,
+) => {
+  const results = {
+    note: null,
+  };
+
+  var sensorResponse = await BLEService.readCharacteristicForDevice(
+    BLE_CONSTANTS.FLUSHER.ENGINEERING_DATA_2_SERVICE_UUID,
+    BLE_CONSTANTS.FLUSHER.ENGINEERING_DATA_2_CHARACTERISTIC_UUID,
+  );
+
+  consoleLog(
+    'getSensorSettings getEngineeringData2FlusherSettings==>',
+    JSON.stringify(sensorResponse),
+  );
+
+  if (!isObjectEmpty(sensorResponse) && sensorResponse?.value) {
+    sensorResponse.value = base64ToText(sensorResponse?.value);
+    results.engineeringData = cleanCharacteristic(sensorResponse);
   }
 
   return results;

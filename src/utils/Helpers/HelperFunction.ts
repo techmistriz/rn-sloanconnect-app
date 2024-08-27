@@ -618,18 +618,22 @@ export const parseDateTimeInFormat = (
  *
  * @param {*} date
  * @param {*} format
+ * @param inputDateFormat
  * @returns password contains a special char or not
  * @returns true if contains a special char else false
  */
 export const parseDateHumanFormat = (
   date: any,
   format = constants.BASE_DATE_TO_FORMAT,
+  inputDateFormat: string | null = null,
 ) => {
   // consoleLog('parseDateHumanFormat date==>', {date, format});
   var m = '';
   if (!date) return '';
   if (date instanceof Date) {
     m = moment(date).format(format);
+  } else if (inputDateFormat) {
+    m = moment(date, inputDateFormat).format(format);
   } else {
     m = moment(date).format(format);
   }
