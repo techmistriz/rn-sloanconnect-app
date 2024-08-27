@@ -1063,7 +1063,7 @@ class BLEServiceInstance {
       await BLEService.writeCharacteristicWithResponseForDevice2(
         BLE_CONSTANTS.BASYS.WATER_DISPENCE_SERVICE_UUID,
         BLE_CONSTANTS.BASYS.WATER_DISPENCE_CHARACTERISTIC_UUID,
-        hexToByteSafe(asciiToHex('1')),
+        hexToByteSafe(asciiToHex('1', 2)),
       );
     showToastMessage(I18n.t('device_dashboard.WATER_DISPENSE_MSG'), 'success');
     consoleLog(
