@@ -1691,7 +1691,7 @@ const Index = ({navigation}: any) => {
                 showApplySettingButton={showApplySettingButton}
               />
 
-              {BLEService.deviceGeneration == 'flusher' ? (
+              {/* {BLEService.deviceGeneration == 'flusher' ? (
                 <EngineeringDataList
                   settings={{
                     title: I18n.t('device_dashboard.ENGINEERING_DATA_2'),
@@ -1706,7 +1706,7 @@ const Index = ({navigation}: any) => {
                   applied={applied}
                   showApplySettingButton={showApplySettingButton}
                 />
-              ) : null}
+              ) : null} */}
 
               {noteSettings && (
                 <NotesList
