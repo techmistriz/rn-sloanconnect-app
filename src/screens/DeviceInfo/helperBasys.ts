@@ -25,78 +25,78 @@ export const getDeviceInfoNormalBasys = async () => {
 
 /** getDeviceInfoAdvance method for advance */
 export const getDeviceInfoAdvanceBasys = async () => {
-  var BDInformationArr = [];
+  var BDInformationArr: any = [];
 
   /** BLE Device Manufacturing Date  */
-  const charResponse1: any = await BLEService.readCharacteristicForDevice(
-    'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-    'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
-  );
+  // const charResponse1: any = await BLEService.readCharacteristicForDevice(
+  //   'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+  //   'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
+  // );
 
-  if (!isObjectEmpty(charResponse1)) {
-    const decodeValue = base64EncodeDecode(charResponse1?.value, 'decode');
-    consoleLog('charResponse1 decodeValue==>', charResponse1);
+  // if (!isObjectEmpty(charResponse1)) {
+  //   const decodeValue = base64EncodeDecode(charResponse1?.value, 'decode');
+  //   consoleLog('charResponse1 decodeValue==>', charResponse1);
 
-    BDInformationArr.push({
-      name: 'BLE Device Manufacturing Date',
-      nameLocale: `${I18n.t('device_details.CONTROL_BOX_MANUF_DATE_LABEL')}`,
-      prefix: null,
-      postfix: null,
-      uuid: null,
-      position: 3,
-      // value: decodeValue ?? 'N/A',
-      value: formatCharateristicValue(
-        {valueFormat: 'YYMMDD', valueType: 'Date', dateFormat: 'YYYY/MM/DD'},
-        decodeValue,
-      ),
-    });
-  }
+  //   BDInformationArr.push({
+  //     name: 'BLE Device Manufacturing Date',
+  //     nameLocale: `${I18n.t('device_details.CONTROL_BOX_MANUF_DATE_LABEL')}`,
+  //     prefix: null,
+  //     postfix: null,
+  //     uuid: null,
+  //     position: 3,
+  //     // value: decodeValue ?? 'N/A',
+  //     value: formatCharateristicValue(
+  //       {valueFormat: 'YYMMDD', valueType: 'Date', dateFormat: 'YYYY/MM/DD'},
+  //       decodeValue,
+  //     ),
+  //   });
+  // }
 
   /** Sensor Manufacturing Date  */
-  const charResponse2: any = await BLEService.readCharacteristicForDevice(
-    'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-    'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
-  );
+  // const charResponse2: any = await BLEService.readCharacteristicForDevice(
+  //   'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+  //   'd0aba888-fb10-4dc9-9b17-bdd8f490c903',
+  // );
 
-  if (!isObjectEmpty(charResponse2)) {
-    const decodeValue = base64EncodeDecode(charResponse2?.value, 'decode');
-    consoleLog('charResponse2 decodeValue==>', charResponse2);
+  // if (!isObjectEmpty(charResponse2)) {
+  //   const decodeValue = base64EncodeDecode(charResponse2?.value, 'decode');
+  //   consoleLog('charResponse2 decodeValue==>', charResponse2);
 
-    BDInformationArr.push({
-      name: 'Sensor Manufacturing Date',
-      nameLocale: `${I18n.t('device_details.SENSOR_MANUF_DATE_LABEL')}`,
-      prefix: null,
-      postfix: null,
-      uuid: null,
-      position: 4,
-      // value: decodeValue ?? 'N/A',
-      value: formatCharateristicValue(
-        {valueFormat: 'YYMMDD', valueType: 'Date', dateFormat: 'YYYY/MM/DD'},
-        decodeValue,
-      ),
-    });
-  }
+  //   BDInformationArr.push({
+  //     name: 'Sensor Manufacturing Date',
+  //     nameLocale: `${I18n.t('device_details.SENSOR_MANUF_DATE_LABEL')}`,
+  //     prefix: null,
+  //     postfix: null,
+  //     uuid: null,
+  //     position: 4,
+  //     // value: decodeValue ?? 'N/A',
+  //     value: formatCharateristicValue(
+  //       {valueFormat: 'YYMMDD', valueType: 'Date', dateFormat: 'YYYY/MM/DD'},
+  //       decodeValue,
+  //     ),
+  //   });
+  // }
 
   /**Sensor Serial Number  */
-  const charResponse3: any = await BLEService.readCharacteristicForDevice(
-    'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
-    'd0aba888-fb10-4dc9-9b17-bdd8f490c901',
-  );
+  // const charResponse3: any = await BLEService.readCharacteristicForDevice(
+  //   'd0aba888-fb10-4dc9-9b17-bdd8f490c900',
+  //   'd0aba888-fb10-4dc9-9b17-bdd8f490c901',
+  // );
 
-  if (!isObjectEmpty(charResponse3)) {
-    const decodeValue = base64EncodeDecode(charResponse3?.value, 'decode');
-    consoleLog('charResponse3 decodeValue==>', charResponse3);
+  // if (!isObjectEmpty(charResponse3)) {
+  //   const decodeValue = base64EncodeDecode(charResponse3?.value, 'decode');
+  //   consoleLog('charResponse3 decodeValue==>', charResponse3);
 
-    BDInformationArr.push({
-      name: 'Sensor Serial Number',
-      nameLocale: `${I18n.t('device_details.SENSOR_SERIAL_NUMBER_LABEL')}`,
-      prefix: null,
-      postfix: null,
-      uuid: null,
-      position: 5,
-      value: decodeValue ?? 'N/A',
-    });
-  }
+  //   BDInformationArr.push({
+  //     name: 'Sensor Serial Number',
+  //     nameLocale: `${I18n.t('device_details.SENSOR_SERIAL_NUMBER_LABEL')}`,
+  //     prefix: null,
+  //     postfix: null,
+  //     uuid: null,
+  //     position: 5,
+  //     value: decodeValue ?? 'N/A',
+  //   });
+  // }
 
   const statisticsInformationArr = await getStatisticsInformationDataBasys();
   const settingLogArr = await getSettingLogsDataBasys();
@@ -239,7 +239,7 @@ const getStatisticsInformationDataBasys = () => {
       name: 'Accumulated water usage',
       nameLocale: `${I18n.t('device_details.ACCUMULATED_WATER_USAGE_LABEL')}`,
       uuid: null,
-      position: 8,
+      position: 5,
       value: `${__totalWaterUsage} (${totalWaterUsage} L)`,
     });
 
