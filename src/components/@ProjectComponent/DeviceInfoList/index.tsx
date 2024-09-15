@@ -16,9 +16,15 @@ const DeviceSettingList = ({
   borderTop,
   borderBottom,
   style,
+  onPress,
 }: DeviceSettingListProps) => {
   return (
-    <TouchableItem style={styles.wrapper} disabled>
+    <TouchableItem
+      style={styles.wrapper}
+      disabled={!onPress}
+      onPress={() => {
+        onPress && onPress(item);
+      }}>
       <>
         {borderTop && borderTop}
         <Row autoMargin={true} style={styles.row}>

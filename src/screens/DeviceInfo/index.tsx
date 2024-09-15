@@ -33,6 +33,8 @@ import {
   getDeviceInfoAdvanceBasys,
   getDeviceInfoNormalBasys,
 } from './helperBasys';
+import {getEngineeringData2FlusherSettings} from '../DeviceDashboard/helperFlusher';
+import {DeviceEventEmitter} from 'react-native';
 
 const Index = ({navigation, route}: any) => {
   const {referrer} = route?.params || {referrer: undefined};
@@ -41,6 +43,30 @@ const Index = ({navigation, route}: any) => {
   const [viewAdvanceDetails, setViewAdvanceDetails] = useState<boolean>(false);
   const connectedDevice = BLEService.getDevice();
   const [deviceDetails, setDeviceDetails] = useState<any>();
+  const {deviceSettingsData} = useSelector(
+    (state: any) => state?.DeviceSettingsReducer,
+  );
+
+  /**
+   * Hooks method for EngineeringDataSettingsChangedEvent Event
+   */
+  useEffect(() => {
+    DeviceEventEmitter.addListener(
+      'EngineeringDataSettingsChangedEvent',
+      eventPayload => {
+        if (eventPayload) {
+          setTimeout(() => {
+            initialize();
+          }, 200);
+        }
+      },
+    );
+    return () => {
+      DeviceEventEmitter.removeAllListeners(
+        'EngineeringDataSettingsChangedEvent',
+      );
+    };
+  }, []);
 
   /** component hooks method for device disconnect checking */
   useEffect(() => {
@@ -67,6 +93,11 @@ const Index = ({navigation, route}: any) => {
   /** Function comments */
   useEffect(() => {
     // consoleLog('deviceGen', deviceGen);
+    initialize();
+  }, [viewAdvanceDetails]);
+
+  /** Function comments */
+  const initialize = () => {
     if (BLEService.deviceGeneration == 'gen1') {
       initializeGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
@@ -76,7 +107,7 @@ const Index = ({navigation, route}: any) => {
     } else if (BLEService.deviceGeneration == 'basys') {
       initializeBasys();
     }
-  }, [viewAdvanceDetails]);
+  };
 
   /** Function comments */
   const initializeGen1 = () => {
@@ -726,7 +757,6 @@ const Index = ({navigation, route}: any) => {
 
       const sortedDeviceInfoNormal = _.sortBy(deviceInfoNormal, 'position');
       setDeviceDetails(sortedDeviceInfoNormal);
-      
     } catch (error) {
     } finally {
       setLoading(false);
@@ -861,6 +891,25 @@ const Index = ({navigation, route}: any) => {
     });
   };
 
+  const onEngineeringDataSettingsPress = () => {
+    getEngineeringData2FlusherSettings(deviceSettingsData)
+      .then(response => {
+        // consoleLog('onEngineeringDataSettingsPress getEngineeringData2FlusherSettings response==>', response);
+        NavigationService.navigate('EngineeringData', {
+          referrer: 'DeviceInfo',
+          settings: {
+            title: I18n.t('device_dashboard.ENGINEERING_DATA_2'),
+            route: 'EngineeringData',
+            name: 'EngineeringData',
+          },
+          settingsData: response,
+        });
+      })
+      .catch(error => {
+        consoleLog('initlizeAppGen1 EngineeringData error==>', error);
+      });
+  };
+
   return (
     <>
       <AppContainer
@@ -921,6 +970,13 @@ const Index = ({navigation, route}: any) => {
                               index >= 0 ? (
                                 <Divider color={Theme.colors.lightGray} />
                               ) : null
+                            }
+                            onPress={
+                              item?.name?.toUpperCase() == 'ENGINEERING DATA 2'
+                                ? () => {
+                                    onEngineeringDataSettingsPress();
+                                  }
+                                : undefined
                             }
                           />
                         );

@@ -1,5 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  DeviceEventEmitter,
+  Keyboard,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import Theme from 'src/theme';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -19,7 +24,11 @@ import Input from 'src/components/Input';
 import {BLEService} from 'src/services/BLEService/BLEService';
 import {deviceSettingsSuccessAction} from 'src/redux/actions';
 import {findObject, isObjectEmpty} from 'src/utils/Helpers/array';
-import {mapValueGen2, mapValueGenTextToHex} from 'src/utils/Helpers/project';
+import {
+  mapValueGen2,
+  mapValueGenTextToHex,
+  saveSettings,
+} from 'src/utils/Helpers/project';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {cleanString, cleanString2} from 'src/utils/Helpers/encryption';
 import I18n from 'src/locales/Transaltions';
@@ -31,7 +40,6 @@ const Index = ({navigation, route}: any) => {
     (state: any) => state?.DeviceSettingsReducer,
   );
   const {referrer, settings, settingsData} = route?.params;
-
   const [note, setNote] = useState('');
 
   /** component hooks method for device disconnect checking */
@@ -61,7 +69,7 @@ const Index = ({navigation, route}: any) => {
       referrer,
       settings,
       settingsData,
-      deviceSettingsData
+      deviceSettingsData,
     });
     initlizeApp();
   }, []);
@@ -75,8 +83,9 @@ const Index = ({navigation, route}: any) => {
       'engineeringData',
       deviceSettingsData?.EngineeringData,
       {
-      searchKey: 'name',
-    });
+        searchKey: 'name',
+      },
+    );
 
     if (!isObjectEmpty(resultObj)) {
       __note = resultObj?.newValue;
@@ -90,7 +99,9 @@ const Index = ({navigation, route}: any) => {
     Keyboard.dismiss();
     const checkValid = checkValidation();
     if (checkValid) {
-      if (BLEService.deviceGeneration == 'gen1') {} else if (BLEService.deviceGeneration == 'gen2') {} else if (BLEService.deviceGeneration == 'flusher') {
+      if (BLEService.deviceGeneration == 'gen1') {
+      } else if (BLEService.deviceGeneration == 'gen2') {
+      } else if (BLEService.deviceGeneration == 'flusher') {
         onDonePressFlusher();
       } else if (BLEService.deviceGeneration == 'basys') {
       }
@@ -99,28 +110,36 @@ const Index = ({navigation, route}: any) => {
 
   /**function comment */
   const onDonePressFlusher = async () => {
-    var params: any = [];
-    if (settingsData?.note?.value != note) {
-      params.push({
+    var settingsArr: any = [];
+    if (settingsData?.engineeringData?.value != note) {
+      settingsArr.push({
         name: 'engineeringData',
         serviceUUID: BLE_CONSTANTS.FLUSHER.ENGINEERING_DATA_2_SERVICE_UUID,
-        characteristicUUID: BLE_CONSTANTS.FLUSHER.ENGINEERING_DATA_2_CHARACTERISTIC_UUID,
+        characteristicUUID:
+          BLE_CONSTANTS.FLUSHER.ENGINEERING_DATA_2_CHARACTERISTIC_UUID,
         oldValue: settingsData?.engineeringData?.value,
         newValue: note,
         convertToType: 'hex',
-        byteSize: note.length * 2
+        byteSize: note.length * 2,
       });
     }
 
-    if (params && params.length) {
-      dispatch(
-        deviceSettingsSuccessAction({
-          data: {EngineeringData: params},
-        }),
-      );
+    if (settingsArr && settingsArr.length) {
+      if (referrer == 'DeviceInfo') {
+        await saveSettings({EngineeringData: settingsArr});
+      } else {
+        dispatch(
+          deviceSettingsSuccessAction({
+            data: {EngineeringData: settingsArr},
+          }),
+        );
+      }
     }
-    // deviceSettingsData
+
     setTimeout(() => {
+      if (referrer == 'DeviceInfo') {
+        DeviceEventEmitter.emit('EngineeringDataSettingsChangedEvent', true);
+      }
       NavigationService.goBack();
     }, 100);
   };

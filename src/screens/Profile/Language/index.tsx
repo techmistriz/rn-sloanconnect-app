@@ -14,7 +14,7 @@ import {Button} from 'src/components/Button';
 import {constants} from 'src/common';
 import LANGUAGES from 'src/locales/languages.json';
 import I18n from 'src/locales/Transaltions';
-import { DeviceEventEmitter } from 'react-native';
+import {DeviceEventEmitter} from 'react-native';
 
 /** Home compoment */
 const Index = ({route, navigation}: any) => {

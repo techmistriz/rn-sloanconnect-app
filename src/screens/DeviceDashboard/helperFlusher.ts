@@ -136,7 +136,7 @@ export const getEngineeringData2FlusherSettings = async (
   unsavedDeviceSettingsData: any,
 ) => {
   const results = {
-    note: null,
+    engineeringData: null,
   };
 
   var sensorResponse = await BLEService.readCharacteristicForDevice(

@@ -11,4 +11,5 @@ export type DeviceSettingListProps = {
   style?: ViewStyle | ViewStyle[];
   borderTop?: JSX.Element | null;
   borderBottom?: JSX.Element | null;
+  onPress?: (item: any) => void;
 };
