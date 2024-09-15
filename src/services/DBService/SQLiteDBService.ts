@@ -44,6 +44,7 @@ export const createReportTable = async (
   const query = `CREATE TABLE IF NOT EXISTS ${tableName}(
         name varchar(255) DEFAULT NULL,
         value text,
+        endpoint varchar(255) DEFAULT NULL,
         dateTime double DEFAULT NULL,
         status tinyint(1) DEFAULT '0'
     );`;
@@ -65,7 +66,7 @@ export const getReportItems = async (
     const __tableName = 'table_reports';
     const reportItems: ReportItemModel[] = [];
     const results = await db.executeSql(
-      `SELECT rowid as id, name, value, dateTime, status FROM ${__tableName}`,
+      `SELECT rowid as id, name, value, endpoint, dateTime, status FROM ${__tableName}`,
     );
     results.forEach(result => {
       for (let index = 0; index < result.rows.length; index++) {
@@ -85,9 +86,9 @@ export const saveReportItems = async (
 ) => {
   const __tableName = 'table_reports';
   const insertQuery =
-    `INSERT INTO ${__tableName}(name, value, dateTime, status) values` +
+    `INSERT INTO ${__tableName}(name, value, endpoint, dateTime, status) values` +
     reportItems
-      .map(i => `('${i.name}', '${i.value}', '${i.dateTime}', '${i.status}')`)
+      .map(i => `('${i.name}', '${i.value}', '${i.endpoint}', '${i.dateTime}', '${i.status}')`)
       .join(',');
 
   return db.executeSql(insertQuery);

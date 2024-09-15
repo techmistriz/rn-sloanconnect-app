@@ -172,6 +172,7 @@ const Index = ({navigation, route}: any) => {
           .unix(currentTimestamp)
           .format('YYYY-MM-DD HH:mm')}`,
         value: JSON.stringify(allReports),
+        endpoint: 'sloan/save-diagnostic-report',
         dateTime: currentTimestamp,
         status: 0,
       };

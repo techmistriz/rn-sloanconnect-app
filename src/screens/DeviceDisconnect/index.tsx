@@ -87,6 +87,7 @@ const Index = ({navigation, route}: any) => {
           .unix(currentTimestamp)
           .format('YYYY-MM-DD HH:mm')}`,
         value: JSON.stringify(allReports),
+        endpoint: 'sloan/save-device-report',
         dateTime: currentTimestamp,
         status: 0,
       };
@@ -108,7 +109,7 @@ const Index = ({navigation, route}: any) => {
       backgroundType="gradient"
       // loading={loading}
       // loadingText={I18n.t('disconnect.SYNC_MGS')}
-      >
+    >
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>

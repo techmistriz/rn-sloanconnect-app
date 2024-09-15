@@ -1,12 +1,8 @@
-export type ToDoItemModel = {
-  id: number;
-  value: string;
-};
-
 export type ReportItemModel = {
   id?: number;
   name: string;
   value: any;
+  endpoint: string;
   dateTime: number;
   status: number;
 };

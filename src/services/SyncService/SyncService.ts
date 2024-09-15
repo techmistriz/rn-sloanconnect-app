@@ -62,7 +62,11 @@ export const checkAndSyncPendingSycableItems = async (
             : item?.value;
         // consoleLog('onSync payload==>', payload);
 
-        const syncStatus: boolean = await syncToServer(payload, token);
+        const syncStatus: boolean = await syncToServer(
+          payload,
+          token,
+          item?.endpoint,
+        );
 
         promises.push(syncStatus);
         if (syncStatus) {
@@ -88,10 +92,11 @@ export const checkAndSyncPendingSycableItems = async (
 export const syncToServer = async (
   payload: any,
   token: string,
+  endpoint?: string,
 ): Promise<any> => {
   try {
     const response = await Network(
-      'sloan/save-device-report',
+      endpoint ?? 'sloan/save-device-report',
       'POST',
       payload,
       token,
