@@ -653,7 +653,7 @@ const Index = ({navigation, route}: any) => {
           name: I18n.t('device_details.SLOAN_MODEL_LABEL'),
           value: deviceStaticData?.fullNameAllModel,
           uuid: null,
-          position: 0,
+          position: 1,
         });
       }
 
@@ -661,7 +661,7 @@ const Index = ({navigation, route}: any) => {
         name: I18n.t('device_details.BATTERY_STATUS_LABEL'),
         value: `${BLEService.batteryLevel}%`,
         uuid: null,
-        position: 3,
+        position: 10,
       });
 
       const sortedDeviceInfoNormal = _.sortBy(deviceInfoNormal, 'position');

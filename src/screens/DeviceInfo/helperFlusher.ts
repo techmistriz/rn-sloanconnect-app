@@ -91,89 +91,85 @@ const getBDInformationDataFlusher = () => {
       Then the timestamp of “Installation” is = 1714752879 - 360000 = 1714392879
       which means the “Date of Installation” is Monday, April 29, 2024  (GMT)
      */
-    var characteristicStaticHoursOfOperation: any =
-      await BLEService.readCharacteristicForDevice(
-        'f89f13e7-83f8-4b7c-9e8b-364576d88310',
-        'f89f13e7-83f8-4b7c-9e8b-364576d88312',
-      );
+    // var characteristicStaticHoursOfOperation: any =
+    //   await BLEService.readCharacteristicForDevice(
+    //     'f89f13e7-83f8-4b7c-9e8b-364576d88310',
+    //     'f89f13e7-83f8-4b7c-9e8b-364576d88312',
+    //   );
 
-    if (!isObjectEmpty(characteristicStaticHoursOfOperation)) {
-      const decodeValue = hexToDecimal(
-        base64EncodeDecode(
-          characteristicStaticHoursOfOperation?.value,
-          'decode',
-        ),
-      );
-      consoleLog(
-        'characteristicStaticHoursOfOperation decodeValue==>',
-        characteristicStaticHoursOfOperation,
-      );
+    // if (!isObjectEmpty(characteristicStaticHoursOfOperation)) {
+    //   const decodeValue = hexToDecimal(
+    //     base64EncodeDecode(
+    //       characteristicStaticHoursOfOperation?.value,
+    //       'decode',
+    //     ),
+    //   );
+    //   consoleLog(
+    //     'characteristicStaticHoursOfOperation decodeValue==>',
+    //     characteristicStaticHoursOfOperation,
+    //   );
 
-      if (decodeValue >= 0) {
-        const decodeValueInSeconds = parseInt(decodeValue);
-        const currentTimestamp = timestampInSec();
-        const dateOfInstallTimestamp = currentTimestamp - decodeValueInSeconds;
-        // consoleLog('decodeValueInSeconds==>', decodeValueInSeconds);
-        // consoleLog('dateOfInstallTimestamp==>', dateOfInstallTimestamp);
-        data.push({
-          name: 'Date of Installation',
-          nameLocale: `${I18n.t(
-            'device_details.FLUSHER.LABEL_DATE_OF_INSTALLATION',
-          )}`,
-          prefix: null,
-          postfix: null,
-          uuid: null,
-          position: 4,
-          value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
-        });
-      }
-    }
+    //   if (decodeValue >= 0) {
+    //     const decodeValueInSeconds = parseInt(decodeValue);
+    //     const currentTimestamp = timestampInSec();
+    //     const dateOfInstallTimestamp = currentTimestamp - decodeValueInSeconds;
+    //     // consoleLog('decodeValueInSeconds==>', decodeValueInSeconds);
+    //     // consoleLog('dateOfInstallTimestamp==>', dateOfInstallTimestamp);
+    //     data.push({
+    //       name: 'Date of Installation',
+    //       nameLocale: `${I18n.t(
+    //         'device_details.FLUSHER.LABEL_DATE_OF_INSTALLATION',
+    //       )}`,
+    //       prefix: null,
+    //       postfix: null,
+    //       uuid: null,
+    //       position: 4,
+    //       value: moment.unix(dateOfInstallTimestamp).format('MMM Y'),
+    //     });
+    //   }
+    // }
 
     /**
      * Line (Sentinel) Flush Count -> Number Of flushes since day 1
      */
-    var characteristic = await BLEService.readCharacteristicForDevice(
-      'f89f13e7-83f8-4b7c-9e8b-364576d88310',
-      'f89f13e7-83f8-4b7c-9e8b-364576d88313',
-    );
+    // var characteristic = await BLEService.readCharacteristicForDevice(
+    //   'f89f13e7-83f8-4b7c-9e8b-364576d88310',
+    //   'f89f13e7-83f8-4b7c-9e8b-364576d88313',
+    // );
 
-    // consoleLog('getBDInformationDataFlusher characteristic==>', {
-    //   value: characteristic?.value,
-    //   uuid: characteristic?.uuid,
+    // var decodeValue = 'N/A';
+    // if (!isObjectEmpty(characteristic) && characteristic?.value) {
+    //   decodeValue = base64EncodeDecode(characteristic?.value, 'decode');
+    // }
+
+    // data.push({
+    //   name: 'Number Of flushes since day 1',
+    //   nameLocale: `${I18n.t('device_details.FLUSHER.LABEL_NUMBER_OF_FLUSHES')}`,
+    //   prefix: null,
+    //   postfix: null,
+    //   uuid: null,
+    //   position: 5,
+    //   value: decodeValue,
     // });
-    var decodeValue = 'N/A';
-    if (!isObjectEmpty(characteristic) && characteristic?.value) {
-      decodeValue = base64EncodeDecode(characteristic?.value, 'decode');
-    }
-
-    data.push({
-      name: 'Number Of flushes since day 1',
-      nameLocale: `${I18n.t('device_details.FLUSHER.LABEL_NUMBER_OF_FLUSHES')}`,
-      prefix: null,
-      postfix: null,
-      uuid: null,
-      position: 5,
-      value: decodeValue,
-    });
 
     /**
      * ACCUMULATED WATER USAGE -> Total water usage
      */
-    const totalWaterUsage = BLEService.totalWaterUsase; // In gallon
-    const __totalWaterUsage = `${
-      totalWaterUsage
-        ? (totalWaterUsage * 3.78541).toFixed(0)
-        : 0
-    }`;
-    data.push({
-      name: 'Accumulated water usage',
-      nameLocale: `${I18n.t(
-        'device_details.FLUSHER.LABEL_ACCUMULATED_WATER_USAGE',
-      )}`,
-      uuid: null,
-      position: 6,
-      value: `${totalWaterUsage} Gal (${__totalWaterUsage} L)`,
-    });
+    // const totalWaterUsage = BLEService.totalWaterUsase; // In gallon
+    // const __totalWaterUsage = `${
+    //   totalWaterUsage
+    //     ? (totalWaterUsage * 3.78541).toFixed(0)
+    //     : 0
+    // }`;
+    // data.push({
+    //   name: 'Accumulated water usage',
+    //   nameLocale: `${I18n.t(
+    //     'device_details.FLUSHER.LABEL_ACCUMULATED_WATER_USAGE',
+    //   )}`,
+    //   uuid: null,
+    //   position: 6,
+    //   value: `${totalWaterUsage} Gal (${__totalWaterUsage} L)`,
+    // });
 
     // consoleLog('allServices', allServices);
     if (typeof allServices != 'undefined' && Object.entries(allServices)) {
