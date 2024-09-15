@@ -383,8 +383,8 @@
     "POPUP_HEADING": "Disconnect",
     "POPUP_MSG": "Are you sure you want to disconnect?",
     "DISCONNECTING_MSG1": "Disconnecting",
-    "DISCONNECTING_MSG2": "Disconnecting to your",
-    "DISCONNECTING_MSG3": "Disconnecting to your",
+    "DISCONNECTING_MSG2": "Disconnection from your",
+    "DISCONNECTING_MSG3": " Might take a few seconds",
     "SYNC_MGS": "Please wait, system checking and syncing reports to server",
     "SYNC_ERROR_MGS": "Something went wrong with sync process"
   },
