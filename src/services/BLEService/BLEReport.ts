@@ -1313,8 +1313,7 @@ class BLEReportInstance {
 
     try {
       var deviceInfoAdvance = await getDeviceInfoAdvanceFlusher();
-
-      // consoleLog('deviceInfoAdvance==>', deviceInfoAdvance);
+      consoleLog('deviceInfoAdvance==>', deviceInfoAdvance);
 
       let __ADVANCED_DEVICE_DETAILS = {
         battery_status: BLEService.batteryLevel,
