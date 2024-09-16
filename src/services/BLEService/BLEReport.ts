@@ -210,8 +210,8 @@ class BLEReportInstance {
       language: 'EN',
       // timezone: getTimezone(), // Asia/Kolkata (Use whatever suits you)
       timezone: getTimezoneAbbreviation(), // IST (Use whatever suits you)
-      metric_imperial: '',
-      gallon_liter: '',
+      metric_imperial: '', // remain blank as per Deepak
+      gallon_liter: '', // remain blank as per Deepak
     };
 
     this.reportMappingStats.user_app_preferences = __USER_APP_PREFERENCES;
@@ -435,7 +435,7 @@ class BLEReportInstance {
 
   async mapFaucetDeviceDetailsFlusher() {
     const deviceInfoNormal = await getDeviceInfoNormalFlusher();
-    // console.log('deviceInfoNormal==>', deviceInfoNormal);
+    console.log('deviceInfoNormal==>', deviceInfoNormal);
 
     // Sensor Serial Number
     const resultObj1 = findObject(
