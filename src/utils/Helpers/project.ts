@@ -554,20 +554,26 @@ export const getTotalWaterUsaseFlusher = async () => {
   ];
 
   const deviceSku = BLEService.SKU;
-  const __activationsSinceInstall = await BLEService.readCharacteristicForDevice(
+  const __activationsSinceInstall =
+    await BLEService.readCharacteristicForDevice(
       BLE_CONSTANTS.FLUSHER.STATISTICS_SERVICE_UUID,
       BLE_CONSTANTS.FLUSHER.ACTIVATION_SINCE_INSTALL_CHARACTERISTIC_UUID,
-  );
+    );
 
-  const __reducedFlushActivationsSinceInstall = await BLEService.readCharacteristicForDevice(
+  const __reducedFlushActivationsSinceInstall =
+    await BLEService.readCharacteristicForDevice(
       BLE_CONSTANTS.FLUSHER.STATISTICS_SERVICE_UUID,
-      BLE_CONSTANTS.FLUSHER.REDUCED_FLUSH_ACTIVATIONS_SINCE_INSTALL_CHARACTERISTIC_UUID,
-  );
+      BLE_CONSTANTS.FLUSHER
+        .REDUCED_FLUSH_ACTIVATIONS_SINCE_INSTALL_CHARACTERISTIC_UUID,
+    );
 
   let activations = base64ToDecimal(__activationsSinceInstall?.value);
-  let reducedCount = base64ToDecimal(__reducedFlushActivationsSinceInstall?.value);
+  let reducedCount = base64ToDecimal(
+    __reducedFlushActivationsSinceInstall?.value,
+  );
   let waterUsage =
-      (gpf[deviceSku] * (activations - reducedCount) + (reducedCount * REDUCED_VOLUME));
+    gpf[deviceSku] * (activations - reducedCount) +
+    reducedCount * REDUCED_VOLUME;
 
   // consoleLog('waterUsageCalc', {deviceSku, activations, reducedCount, waterUsage, raw1: __activationsSinceInstall, raw2: __reducedFlushActivationsSinceInstall})
   return waterUsage;
@@ -1344,7 +1350,20 @@ export const intiGen2SecurityKey = async () => {
   if (siteIDResponse?.value) {
     siteIdHex = base64ToHex(siteIDResponse?.value);
   } else {
-    siteIdHex = SITE_ID_HEX_FAKE;
+    await BLEService.writeCharacteristicWithResponseForDevice2(
+      SITE_ID_SERVICE_UUID,
+      SITE_ID_CHARACTERISTIC_UUID,
+      SITE_ID_HEX_FAKE,
+    );
+
+    const siteIDResponse = await BLEService.readCharacteristicForDevice(
+      SITE_ID_SERVICE_UUID,
+      SITE_ID_CHARACTERISTIC_UUID,
+    );
+    if (siteIDResponse?.value) {
+      siteIdHex = base64ToHex(siteIDResponse?.value);
+    }
+    // siteIdHex = SITE_ID_HEX_FAKE;
   }
 
   // var siteIdUint8ArrayMock = [
