@@ -834,6 +834,7 @@ export const BLE_GATT_SERVICES_BASYS = {
         type: 'String',
         range: null,
         initialValue: 'N/A',
+        valueFormat: 'YYMMDDHHmm',
         properties: ['R', 'W'],
         sloanApp: '',
         remarks: '10 chars for YYMMDDHHMM',
@@ -841,6 +842,8 @@ export const BLE_GATT_SERVICES_BASYS = {
         prefix: null,
         postfix: null,
         position: 18,
+        valueType: 'DateTime',
+        dateFormat: 'YY/MM/DD HH:mm',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c932': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c932',
