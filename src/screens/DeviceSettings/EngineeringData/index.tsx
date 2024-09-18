@@ -39,6 +39,7 @@ const Index = ({navigation, route}: any) => {
   const {deviceSettingsData} = useSelector(
     (state: any) => state?.DeviceSettingsReducer,
   );
+  const [__loading, __setLoading] = useState(false);
   const {referrer, settings, settingsData} = route?.params;
   const [note, setNote] = useState('');
 
@@ -126,7 +127,9 @@ const Index = ({navigation, route}: any) => {
 
     if (settingsArr && settingsArr.length) {
       if (referrer == 'DeviceInfo') {
+        __setLoading(true);
         await saveSettings({EngineeringData: settingsArr});
+        __setLoading(false);
       } else {
         dispatch(
           deviceSettingsSuccessAction({
@@ -155,7 +158,11 @@ const Index = ({navigation, route}: any) => {
   };
 
   return (
-    <AppContainer scroll={true} scrollViewStyle={{}} backgroundType="gradient">
+    <AppContainer
+      scroll={true}
+      scrollViewStyle={{}}
+      backgroundType="gradient"
+      loading={__loading}>
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
