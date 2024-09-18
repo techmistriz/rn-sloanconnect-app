@@ -56,6 +56,7 @@ const Index = ({navigation, route}: any) => {
       eventPayload => {
         if (eventPayload) {
           setTimeout(() => {
+            setViewAdvanceDetails(true);
             initialize();
           }, 200);
         }
