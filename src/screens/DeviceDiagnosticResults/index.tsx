@@ -33,6 +33,7 @@ import {
   checkTableExistance,
   createReportTable,
   saveReportItems,
+  clearTable,
 } from 'src/services/DBService/SQLiteDBService';
 import {checkAndSyncPendingSycableItems} from 'src/services/SyncService/SyncService';
 import I18n from 'src/locales/Transaltions';
@@ -159,6 +160,9 @@ const Index = ({navigation, route}: any) => {
       const currentTimestamp = timestampInSec();
       const db = await getDBConnection();
       consoleLog('DeviceDisconnect initlizeApp db==>', db);
+
+      // await clearTable(db, 'table_reports');
+
       const isTableExistance = await checkTableExistance(db, 'table_reports');
       if (!isTableExistance) {
         await createReportTable(db, 'table_reports');

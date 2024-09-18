@@ -229,7 +229,7 @@
     "SENSOR_FIRMWARE_VER_LABEL": "Sensor Firmware Number",
     "CONTROL_BOX_MODEL_LABEL": "Control Box Model",
     "CONTROL_BOX_SERIAL_NUMBER_LABEL": "Control Box Serial Number",
-    "CONTROL_BOX_MANUF_DATE_LABEL": "Control Box Manufacturing Data",
+    "CONTROL_BOX_MANUF_DATE_LABEL": "Control Box Manufacturing Date",
     "CONTROL_BOX_HARDWARE_VER_LABEL": "Control Box Hardware Version",
     "CONTROL_BOX_FIRMWARE_VER_LABEL": "Control Box Firmware Version",
     "BATTERY_STATUS_LABEL": "Battery Status",
