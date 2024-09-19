@@ -534,13 +534,13 @@ export const BLE_DEVICE_MODELS = {
     },
     '03': {
       name: 'Flushometer',
-      fullNameAllModel: 'SOLIS 8111-1.1-BT',
+      fullNameAllModel: 'SOLIS Closet-1.1 GPF',
       type: 'ADSKU',
       version: '03',
       generation: '01',
       models: [
         {
-          ETFModel: 'SOLIS 8111- 1.1-BT',
+          ETFModel: 'SOLIS 8111-1.1-BT',
           EBFModel: 'SOLIS RESS-C-1.1-BT',
           displayName: 'SOLIS Closet-1.1 GPF',
           image: require('src/assets/images/products/flusher/flushometer_solis_8111.png'),
@@ -585,15 +585,15 @@ export const BLE_DEVICE_MODELS = {
     },
     '06': {
       name: 'Flushometer',
-      fullNameAllModel: 'ECOS Closet- 1.28 GPF',
+      fullNameAllModel: 'ECOS Closet-1.28 GPF',
       type: 'ADSKU',
       version: '06',
       generation: '01',
       models: [
         {
           ETFModel: 'ECOS 8111-1.28-BT',
-          EBFModel: 'ECOS RESS- C-ВТ',
-          displayName: 'ECOS Closet- 1.28 GPF',
+          EBFModel: 'ECOS RESS-C-ВТ',
+          displayName: 'ECOS Closet-1.28 GPF',
           image: require('src/assets/images/products/flusher/flushometer_ecos_8111_df.png'),
           type: 'Closet',
           notes: '',
@@ -602,7 +602,7 @@ export const BLE_DEVICE_MODELS = {
     },
     '07': {
       name: 'Flushometer',
-      fullNameAllModel: 'ECOS Closet- 1.1 GPF',
+      fullNameAllModel: 'ECOS Closet-1.1 GPF',
       type: 'ADSKU',
       version: '07',
       generation: '01',
@@ -610,7 +610,7 @@ export const BLE_DEVICE_MODELS = {
         {
           ETFModel: 'ECOS 8111- 1.1-BI',
           EBFModel: 'ECOS RESS-C-1.1-BT',
-          displayName: 'ECOS Closet- 1.1 GPF',
+          displayName: 'ECOS Closet-1.1 GPF',
           image: require('src/assets/images/products/flusher/flushometer_ecos_8111_df.png'),
           type: 'Closet',
           notes: '',
