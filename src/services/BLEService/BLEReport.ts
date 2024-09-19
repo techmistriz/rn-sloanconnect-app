@@ -1312,7 +1312,7 @@ class BLEReportInstance {
     consoleLog('mapAdvanceDeviceDetails called');
 
     try {
-      var deviceInfoAdvance = await getDeviceInfoAdvanceFlusher();
+      var deviceInfoAdvance = await getDeviceInfoAdvanceFlusher(true);
       consoleLog('deviceInfoAdvance==>', deviceInfoAdvance);
 
       let __ADVANCED_DEVICE_DETAILS = {
@@ -1427,7 +1427,7 @@ class BLEReportInstance {
   async mapAdvanceDeviceDetailsBasys() {
     consoleLog('mapAdvanceDeviceDetails called');
     try {
-      var deviceInfoAdvance = await getDeviceInfoAdvanceBasys();
+      var deviceInfoAdvance = await getDeviceInfoAdvanceBasys(true);
       // consoleLog('deviceInfoAdvance==>', deviceInfoAdvance);
 
       let __ADVANCED_DEVICE_DETAILS = {

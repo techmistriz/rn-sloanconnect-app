@@ -23,9 +23,13 @@ export const getDeviceInfoNormalFlusher = async () => {
 };
 
 /** getDeviceInfoAdvanceFlusher method for advance */
-export const getDeviceInfoAdvanceFlusher = async () => {
-  var statisticsInformationArr = await getStatisticsInformationDataFlusher();
-  var settingLogs = await getSettingLogsDataFlusher();
+export const getDeviceInfoAdvanceFlusher = async (
+  ignoreDisplayInList: boolean = false,
+) => {
+  var statisticsInformationArr = await getStatisticsInformationDataFlusher(
+    ignoreDisplayInList,
+  );
+  var settingLogs = await getSettingLogsDataFlusher(ignoreDisplayInList);
   // consoleLog('getDeviceInfoAdvanceFlusher settingLogs==>', settingLogs);
 
   const resultObj = findObject('Date of last factory reset', settingLogs, {
@@ -213,7 +217,9 @@ const getBDInformationDataFlusher = () => {
 };
 
 /** getStatisticsInformationDataFlusher method for advance */
-const getStatisticsInformationDataFlusher = () => {
+const getStatisticsInformationDataFlusher = (
+  ignoreDisplayInList: boolean = false,
+) => {
   var deviceVersion = '01';
   var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
   if (__deviceName) {
@@ -511,7 +517,7 @@ const getStatisticsInformationDataFlusher = () => {
 
         if (
           typeof value?.uuid != 'undefined' &&
-          value?.displayInList !== false &&
+          (value?.displayInList !== false || ignoreDisplayInList) &&
           (value?.generation == 'all' || value?.generation == deviceVersion)
         ) {
           var characteristic = await BLEService.readCharacteristicForDevice(
@@ -547,7 +553,7 @@ const getStatisticsInformationDataFlusher = () => {
 };
 
 /** getSettingLogsDataFlusher method for advance */
-const getSettingLogsDataFlusher = () => {
+const getSettingLogsDataFlusher = (ignoreDisplayInList: boolean = false) => {
   return new Promise<any>(async resolve => {
     const serviceUUID = 'f89f13e7-83f8-4b7c-9e8b-364576d88320';
     const allServices = getDeviceCharacteristicsByServiceUUID(
@@ -564,7 +570,7 @@ const getSettingLogsDataFlusher = () => {
         try {
           if (
             typeof value?.uuid != 'undefined' &&
-            value?.displayInList !== false &&
+            (value?.displayInList !== false || ignoreDisplayInList) &&
             (value?.generation == 'all' ||
               value?.generation == BLEService.deviceGeneration)
           ) {

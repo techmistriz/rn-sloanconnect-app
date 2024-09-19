@@ -24,7 +24,9 @@ export const getDeviceInfoNormalBasys = async () => {
 };
 
 /** getDeviceInfoAdvance method for advance */
-export const getDeviceInfoAdvanceBasys = async () => {
+export const getDeviceInfoAdvanceBasys = async (
+  ignoreDisplayInList: boolean = false,
+) => {
   var BDInformationArr: any = [];
 
   /** BLE Device Manufacturing Date  */
@@ -98,8 +100,10 @@ export const getDeviceInfoAdvanceBasys = async () => {
   //   });
   // }
 
-  const statisticsInformationArr = await getStatisticsInformationDataBasys();
-  const settingLogArr = await getSettingLogsDataBasys();
+  const statisticsInformationArr = await getStatisticsInformationDataBasys(
+    ignoreDisplayInList,
+  );
+  const settingLogArr = await getSettingLogsDataBasys(ignoreDisplayInList);
   // consoleLog('getDeviceInfoAdvance settingLogs==>', settingLogs);
   return [...BDInformationArr, ...statisticsInformationArr, ...settingLogArr];
 };
@@ -155,7 +159,9 @@ const getBDInformationDataBasys = () => {
 };
 
 /** BDInformationData method for advance */
-const getStatisticsInformationDataBasys = () => {
+const getStatisticsInformationDataBasys = (
+  ignoreDisplayInList: boolean = false,
+) => {
   var deviceVersion = '01';
   var __deviceName = connectedDevice?.localName ?? connectedDevice?.name;
   if (__deviceName) {
@@ -249,7 +255,7 @@ const getStatisticsInformationDataBasys = () => {
         // console.log(`Key: ${key}, Value: ${JSON.stringify(value)}`);
         if (
           typeof value?.uuid != 'undefined' &&
-          value?.displayInList !== false &&
+          (value?.displayInList !== false || ignoreDisplayInList) &&
           (value?.generation == 'all' || value?.generation == deviceVersion)
         ) {
           var characteristic = await BLEService.readCharacteristicForDevice(
@@ -279,7 +285,7 @@ const getStatisticsInformationDataBasys = () => {
 };
 
 /** BDInformationData method for advance */
-const getSettingLogsDataBasys = () => {
+const getSettingLogsDataBasys = (ignoreDisplayInList: boolean = false) => {
   return new Promise<any>(async resolve => {
     const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c920';
     const allServices = getDeviceCharacteristicsByServiceUUID(
@@ -296,7 +302,7 @@ const getSettingLogsDataBasys = () => {
         try {
           if (
             typeof value?.uuid != 'undefined' &&
-            value?.displayInList !== false &&
+            (value?.displayInList !== false || ignoreDisplayInList) &&
             (value?.generation == 'all' ||
               value?.generation == BLEService.deviceGeneration)
           ) {
