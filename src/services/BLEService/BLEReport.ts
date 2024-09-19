@@ -138,6 +138,7 @@ const __reportMappingStats = {
     accumulated_flush_time: '',
     number_of_ble_connections: '',
     date_of_last_factory: '',
+    date_of_last_activation_time_change: '',
     date_of_last_mode_change: '',
     date_of_last_metered_run_time_change: '',
     date_of_last_ondemand_timeout_change: '',
@@ -1370,6 +1371,14 @@ class BLEReportInstance {
         number_of_ble_connections: '',
         date_of_last_factory: findValueObject(
           'f89f13e7-83f8-4b7c-9e8b-364576d88321',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_activation_time_change: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88327',
           deviceInfoAdvance,
           {
             searchKey: 'uuid',

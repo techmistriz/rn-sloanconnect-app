@@ -55,8 +55,8 @@ const Index = ({navigation, route}: any) => {
       'EngineeringDataSettingsChangedEvent',
       eventPayload => {
         if (eventPayload) {
+          setViewAdvanceDetails(true);
           setTimeout(() => {
-            setViewAdvanceDetails(true);
             initialize();
           }, 200);
         }
