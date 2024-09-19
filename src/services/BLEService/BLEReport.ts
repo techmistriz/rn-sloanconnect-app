@@ -1341,14 +1341,7 @@ class BLEReportInstance {
             valueKey: 'value',
           },
         ),
-        accumulated_activation_time: findValueObject(
-          'd0aba888-fb10-4dc9-9b17-bdd8f490c914',
-          deviceInfoAdvance,
-          {
-            searchKey: 'uuid',
-            valueKey: 'value',
-          },
-        ),
+        accumulated_activation_time: '',
         accumulated_water_usage: findValueObject(
           'Accumulated water usage',
           deviceInfoAdvance,
@@ -1388,7 +1381,7 @@ class BLEReportInstance {
         date_of_last_ondemand_timeout_change: '',
         date_of_last_flush_enable_change: '',
         date_of_last_flush_time_change: findValueObject(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88344',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88324',
           deviceInfoAdvance,
           {
             searchKey: 'uuid',
@@ -1398,7 +1391,7 @@ class BLEReportInstance {
         date_of_last_flush_interval_change: '',
         date_of_last_flow_rate_change: '',
         date_of_last_range_change: findValueObject(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88342',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88322',
           deviceInfoAdvance,
           {
             searchKey: 'uuid',
@@ -1406,7 +1399,7 @@ class BLEReportInstance {
           },
         ),
         date_of_last_bd_note_change: findValueObject(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88346',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88328',
           deviceInfoAdvance,
           {
             searchKey: 'uuid',
