@@ -811,7 +811,7 @@ const Index = ({navigation}: any) => {
       .then(response => {
         // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
         setNoteSettings(response);
-        BLEReport.mapFaucetSettings('NoteRange', response, hasSettingsChanged);
+        BLEReport.mapFaucetSettings('Note', response, hasSettingsChanged);
       })
       .catch(error => {
         consoleLog('initlizeAppGen1 getSensorSettings error==>', error);
@@ -896,7 +896,7 @@ const Index = ({navigation}: any) => {
       .then(response => {
         // consoleLog('initlizeAppGen1 getSensorSettings response==>', response);
         setNoteSettings(response);
-        BLEReport.mapFaucetSettings('NoteRange', response, hasSettingsChanged);
+        BLEReport.mapFaucetSettings('Note', response, hasSettingsChanged);
       })
       .catch(error => {
         consoleLog(
