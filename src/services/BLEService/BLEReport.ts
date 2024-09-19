@@ -434,7 +434,7 @@ class BLEReportInstance {
   }
 
   async mapFaucetDeviceDetailsFlusher() {
-    const deviceInfoNormal = await getDeviceInfoNormalFlusher();
+    const deviceInfoNormal = await getDeviceInfoNormalFlusher(true);
     console.log('deviceInfoNormal==>', deviceInfoNormal);
 
     // Sensor Serial Number
@@ -555,7 +555,7 @@ class BLEReportInstance {
   }
 
   async mapFaucetDeviceDetailsBasys() {
-    const deviceInfoNormal = await getDeviceInfoNormalBasys();
+    const deviceInfoNormal = await getDeviceInfoNormalBasys(true);
     // console.log('deviceInfoNormal==>', deviceInfoNormal);
 
     // Sensor Serial Number

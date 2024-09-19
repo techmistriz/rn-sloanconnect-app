@@ -17,8 +17,10 @@ import I18n from 'src/locales/Transaltions';
 const connectedDevice = BLEService.getDevice();
 
 /** getDeviceInfoNormalFlusher method for normal info */
-export const getDeviceInfoNormalFlusher = async () => {
-  const data = await getBDInformationDataFlusher();
+export const getDeviceInfoNormalFlusher = async (
+  ignoreDisplayInList: boolean = false,
+) => {
+  const data = await getBDInformationDataFlusher(ignoreDisplayInList);
   return [...data];
 };
 
@@ -76,7 +78,7 @@ export const getDeviceInfoAdvanceFlusher = async (
 };
 
 /** getBDInformationDataFlusher method for normal info */
-const getBDInformationDataFlusher = () => {
+const getBDInformationDataFlusher = (ignoreDisplayInList: boolean = false) => {
   return new Promise<any>(async resolve => {
     const serviceUUID = 'f89f13e7-83f8-4b7c-9e8b-364576d88300';
     const allServices = getDeviceCharacteristicsByServiceUUID(
@@ -182,7 +184,7 @@ const getBDInformationDataFlusher = () => {
 
         if (
           typeof value?.uuid != 'undefined' &&
-          value?.displayInList !== false &&
+          (value?.displayInList !== false || ignoreDisplayInList) &&
           (value?.generation == 'all' ||
             value?.generation == BLEService.deviceGeneration)
         ) {
