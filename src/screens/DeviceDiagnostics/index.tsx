@@ -318,6 +318,14 @@ const Index = ({navigation, route}: any) => {
         ...flushometerStepResult,
         step2: buttonActionType,
       });
+      setLoading(true);
+      // write 1 to activate valve on question 3
+      await BLEService.writeCharacteristicWithResponseForDevice2(
+        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
+        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
+        hexToByteSafe(asciiToHex('1', 2)),
+      );
+      setLoading(false);
       setflushometerStepIndex(__flushometerStepIndex + 1);
     } else if (__flushometerStepIndex == 2) {
       const __flushometerStepResult = {
@@ -326,12 +334,6 @@ const Index = ({navigation, route}: any) => {
       };
       setflushometerStepResult(__flushometerStepResult);
       setLoading(true);
-      // write 1 to activate valve on question 3
-      await BLEService.writeCharacteristicWithResponseForDevice2(
-        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_INIT_SERVICE_UUID,
-        BLE_CONSTANTS.FLUSHER.DIAGNOSTIC_VALVE_RESULT_CHARACTERISTIC_UUID,
-        hexToByteSafe(asciiToHex('1', 2)),
-      );
       finishDiagnosticsFlusher(__flushometerStepResult);
     }
   };

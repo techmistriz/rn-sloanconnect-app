@@ -396,7 +396,7 @@ const getStatisticsInformationDataFlusher = () => {
 
     /** Flush Volume  */
     const charResponse6: any = await BLEService.readCharacteristicForDevice(
-      'f89f13e7-83f8-4b7c-9e8b-364576d88320',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88340',
       'f89f13e7-83f8-4b7c-9e8b-364576d88345',
     );
 
@@ -468,7 +468,7 @@ const getStatisticsInformationDataFlusher = () => {
      */
     var characteristicStaticHoursOfOperation: any =
       await BLEService.readCharacteristicForDevice(
-        'f89f13e7-83f8-4b7c-9e8b-364576d88310 ',
+        'f89f13e7-83f8-4b7c-9e8b-364576d88310',
         'f89f13e7-83f8-4b7c-9e8b-364576d88312',
       );
 
