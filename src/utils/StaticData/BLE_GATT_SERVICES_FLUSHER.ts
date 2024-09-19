@@ -321,7 +321,7 @@ export const BLE_GATT_SERVICES_FLUSHER = {
         postfix: ' sec',
         position: 6,
       },
-      'f89f13e7-83f8-4b7c-9e8b-364576d88314 ': {
+      'f89f13e7-83f8-4b7c-9e8b-364576d88314': {
         uuid: 'f89f13e7-83f8-4b7c-9e8b-364576d88314',
         name: 'Number of flushes since day 1',
         nameOG: 'Activations since install',
@@ -460,8 +460,8 @@ export const BLE_GATT_SERVICES_FLUSHER = {
         valueType: 'DateTime',
         dateFormat: 'YY/MM/DD HH:mm',
       },
-      'f89f13e7-83f8-4b7c-9e8b-364576d88324 ': {
-        uuid: 'f89f13e7-83f8-4b7c-9e8b-364576d88324 ',
+      'f89f13e7-83f8-4b7c-9e8b-364576d88324': {
+        uuid: 'f89f13e7-83f8-4b7c-9e8b-364576d88324',
         name: 'Date of last Flush Volume change',
         nameOG: 'D/T of last Flush Volume change',
         nameLocaleKey: 'LABEL_DATE_OF_LAST_FLUSH_VOLUME_CHANGE',
@@ -566,7 +566,7 @@ export const BLE_GATT_SERVICES_FLUSHER = {
       'd0aba888-fb10-4dc9-9b17-bdd8f490c92D': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c92D',
         name: 'Phone of last factory reset',
-        nameOG: 'Phone of last factory reset ',
+        nameOG: 'Phone of last factory reset',
         nameLocaleKey: 'LABEL_PHONE_OF_LAST_FACTORY_RESET',
         size: '15 bytes',
         type: 'String',
@@ -619,8 +619,8 @@ export const BLE_GATT_SERVICES_FLUSHER = {
       },
       'f89f13e7-83f8-4b7c-9e8b-364576d88334': {
         uuid: 'f89f13e7-83f8-4b7c-9e8b-364576d88334',
-        name: 'Phone of last Flush Volume change ',
-        nameOG: 'Phone of last Flush Volume change ',
+        name: 'Phone of last Flush Volume change',
+        nameOG: 'Phone of last Flush Volume change',
         nameLocaleKey: 'LABEL_PHONE_OF_LAST_FLUSH_VOLUME_CHANGE',
         size: '10 bytes',
         type: 'String',
@@ -640,8 +640,8 @@ export const BLE_GATT_SERVICES_FLUSHER = {
       },
       'f89f13e7-83f8-4b7c-9e8b-364576d88335': {
         uuid: 'f89f13e7-83f8-4b7c-9e8b-364576d88335',
-        name: 'Phone of last Dianogstic ',
-        nameOG: 'Phone of last Dianogstic ',
+        name: 'Phone of last Dianogstic',
+        nameOG: 'Phone of last Dianogstic',
         nameLocaleKey: 'LABEL_PHONE_OF_LAST_DIANOGSTIC',
         size: '15 bytes',
         type: 'String',
@@ -695,8 +695,8 @@ export const BLE_GATT_SERVICES_FLUSHER = {
       },
       'f89f13e7-83f8-4b7c-9e8b-364576d88338': {
         uuid: 'f89f13e7-83f8-4b7c-9e8b-364576d88338',
-        name: 'Phone of Note Note change ',
-        nameOG: 'Phone of Flusher Note change ',
+        name: 'Phone of Note Note change',
+        nameOG: 'Phone of Flusher Note change',
         nameLocaleKey: 'LABEL_PHONE_OF_LAST_FLUSHER_NOTE_CHANGE',
         size: '15 bytes',
         type: 'String',
