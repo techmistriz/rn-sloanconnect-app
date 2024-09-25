@@ -39,7 +39,7 @@ const DeviceSettingList = ({
               style={{
                 textAlign: 'left',
               }}
-              color={Theme.colors.midGray}
+              color={Theme.colors.darkGray}
               ff={Theme.fonts.ThemeFontLight}
             />
 

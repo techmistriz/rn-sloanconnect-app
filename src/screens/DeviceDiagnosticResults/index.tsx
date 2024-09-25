@@ -285,12 +285,12 @@ const Index = ({navigation, route}: any) => {
                           ? dateInputFormat
                             ? parseDateHumanFormat(
                                 dateResult?.value,
-                                'ddd, DD MMMM YYYY HH:mm:ss a z',
+                                'ddd, DD MMMM YYYY HH:mm:ss z',
                                 dateInputFormat,
                               )
                             : parseDateHumanFormatFromUnix(
                                 dateResult?.value,
-                                'ddd, DD MMMM YYYY HH:mm:ss a z',
+                                'ddd, DD MMMM YYYY HH:mm:ss z',
                               )
                           : 'N/A'
                       }`}
@@ -298,6 +298,7 @@ const Index = ({navigation, route}: any) => {
                         textAlign: 'left',
                         paddingVertical: 10,
                         paddingLeft: 20,
+                        textTransform: 'capitalize',
                       }}
                       color={Theme.colors.midGray}
                       ff={Theme.fonts.ThemeFontMedium}
@@ -347,12 +348,12 @@ const Index = ({navigation, route}: any) => {
                               ? dateInputFormat
                                 ? parseDateHumanFormat(
                                     dateLastResult?.value,
-                                    'ddd, DD MMMM YYYY HH:mm:ss a z',
+                                    'ddd, DD MMMM YYYY HH:mm:ss z',
                                     dateInputFormat,
                                   )
                                 : parseDateHumanFormatFromUnix(
                                     dateLastResult?.value,
-                                    'ddd, DD MMMM YYYY HH:mm:ss a z',
+                                    'ddd, DD MMMM YYYY HH:mm:ss z',
                                   )
                               : 'N/A'
                           }`}
@@ -360,6 +361,7 @@ const Index = ({navigation, route}: any) => {
                             textAlign: 'left',
                             paddingVertical: 10,
                             paddingLeft: 20,
+                            textTransform: 'capitalize',
                           }}
                           color={Theme.colors.midGray}
                           ff={Theme.fonts.ThemeFontMedium}

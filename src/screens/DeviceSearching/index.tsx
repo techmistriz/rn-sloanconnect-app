@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Image, FlatList} from 'react-native';
+import {Image, FlatList, BackHandler} from 'react-native';
 import Theme from 'src/theme';
 import {Images} from 'src/assets';
 import {
@@ -43,6 +43,23 @@ const Index = ({navigation, route}: any) => {
   const connectedDevice: any = BLEService.getDevice();
   const [searchAgainFlag, setSearchAgain] = useState(0);
   const [isDeviceConnectTimedout, setDeviceConnectTimeout] = useState(false);
+
+  /** component hooks method for hardwareBackPress */
+  useEffect(() => {
+    const backAction = () => {
+      if (navigation.isFocused()) {
+        NavigationService.replace('Welcome', {
+          referrer: 'DeviceSearching',
+        });
+        return true;
+      }
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
 
   /** Hooks for checking if user turned off bluetooth power */
   useEffect(() => {

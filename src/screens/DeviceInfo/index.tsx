@@ -682,7 +682,7 @@ const Index = ({navigation, route}: any) => {
 
       if (deviceStaticData) {
         deviceInfoNormal.push({
-          name: I18n.t('device_details.SLOAN_MODEL_LABEL'),
+          name: I18n.t('device_details.FLUSHER_MODEL_LABEL'),
           value: deviceStaticData?.fullNameAllModel,
           uuid: null,
           position: 1,

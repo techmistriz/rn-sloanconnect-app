@@ -222,6 +222,7 @@
 
     "FAUCET_MODEL_LABEL": "Modelo de grifo",
     "SLOAN_MODEL_LABEL": "Modelo de sloan",
+    "FLUSHER_MODEL_LABEL": "Modelo de Flushometer",
     "SENSOR_SERIAL_NUMBER_LABEL": "Número de serie del sensor",
     "SENSOR_MANUF_DATE_LABEL": "Fecha de fabricación del sensor",
     "SENSOR_HARDWARE_VER_LABEL": "Número de hardware del sensor",
@@ -274,7 +275,7 @@
       "LABEL_FIREWARE_VERSION": "Firmware Version",
       "LABEL_BLE_DEVICE_HARDWARE_VERSION": "Versión de hardware del dispositivo BLE",
       "LABEL_BLE_DEVICE_FIREWARE_VERSION": "Versión de firmware del dispositivo BLE",
-      "LABEL_FLUSHER_VOLUME": "Volumen del descargador",
+      "LABEL_FLUSHER_VOLUME": "Volumen del descarga",
       "LABEL_ENGINEERING_DATA_1": "Datos de ingeniería 1",
       "LABEL_ENGINEERING_DATA_2": "Datos de ingeniería 2",
       "LABEL_LOW_BATTERY_ACTIVATIONS": "Activaciones de batería baja",

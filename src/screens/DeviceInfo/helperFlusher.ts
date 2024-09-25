@@ -412,6 +412,12 @@ const getStatisticsInformationDataFlusher = (
       const decodeValue = base64EncodeDecode(charResponse6?.value, 'decode');
       consoleLog('charResponse6 decodeValue==>', charResponse6);
 
+      var formattedValue = 0;
+      if (decodeValue) {
+        formattedValue =
+          parseInt(decodeValue) / BLE_CONSTANTS.COMMON.GMP_FORMULA;
+      }
+
       data.push({
         name: 'Flush Volume',
         nameLocale: `${I18n.t('device_details.FLUSHER.LABEL_FLUSHER_VOLUME')}`,
@@ -419,7 +425,7 @@ const getStatisticsInformationDataFlusher = (
         postfix: null,
         uuid: null,
         position: 5,
-        value: decodeValue ?? 'N/A',
+        value: formattedValue ?? 'N/A',
       });
     }
 

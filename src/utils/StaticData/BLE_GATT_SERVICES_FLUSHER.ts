@@ -318,7 +318,7 @@ export const BLE_GATT_SERVICES_FLUSHER = {
         remarks: 'in seconds',
         generation: 'all',
         prefix: null,
-        postfix: ' sec',
+        postfix: null,
         position: 6,
       },
       'f89f13e7-83f8-4b7c-9e8b-364576d88314': {

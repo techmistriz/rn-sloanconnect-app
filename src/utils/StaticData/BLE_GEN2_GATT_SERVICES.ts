@@ -307,6 +307,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 22,
                 name: {
                   name: 'Date of last BD note change',
+                  nameLocaleKey: 'DATE_OF_LAST_BD_NOTE_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
@@ -397,6 +398,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 21,
                 name: {
                   name: 'Date of last Flow Rate change',
+                  nameLocaleKey: 'DATE_OF_LAST_FLOW_RATE_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },
