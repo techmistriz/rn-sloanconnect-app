@@ -232,6 +232,18 @@
     "CONTROL_BOX_MANUF_DATE_LABEL": "Date de fabrication de la boîte de contrôle",
     "CONTROL_BOX_HARDWARE_VER_LABEL": "Version du matériel de la boîte de contrôle",
     "CONTROL_BOX_FIRMWARE_VER_LABEL": "Version du firmware de la boîte de contrôle",
+
+    "BLE_MODEL_LABEL": "Control Box Model",
+    "BLE_SERIAL_NUMBER_LABEL": "BLE Serial Number",
+    "BLE_MANUF_DATE_LABEL": "BLE Manufacturing Date",
+    "BLE_HARDWARE_VER_LABEL": "BLE Hardware Version",
+    "BLE_FIRMWARE_VER_LABEL": "BLE Firmware Version",
+
+    "FAUCET_ADAPTER_SERIAL_NUMBER": "Faucet adapter serial number",
+    "FAUCET_ADAPTER_MANUFACTURING_NUMBER": "Faucet adapter manufacturing number",
+    "FAUCET_ADAPTER_HARDWARE_NUMBER": "Faucet adapter hardware number",
+    "FAUCET_ADAPTER_FIRMWARE_NUMBER": "Faucet adapter firmware number",
+
     "BATTERY_STATUS_LABEL": "État de la batterie",
 
     "DATE_OF_INSTALLATION_LABEL": "Date d'installation",

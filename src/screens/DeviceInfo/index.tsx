@@ -753,7 +753,7 @@ const Index = ({navigation, route}: any) => {
         name: I18n.t('device_details.BATTERY_STATUS_LABEL'),
         value: `${BLEService.batteryLevel}%`,
         uuid: null,
-        position: 6,
+        position: 13,
       });
 
       const sortedDeviceInfoNormal = _.sortBy(deviceInfoNormal, 'position');
