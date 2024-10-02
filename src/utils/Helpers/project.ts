@@ -1343,6 +1343,7 @@ export const intiGen2SecurityKey = async () => {
   const SITE_ID_CHARACTERISTIC_UUID =
     BLE_CONSTANTS?.GEN2?.SITE_ID_CHARACTERISTIC_UUID;
 
+  let isDeviceProvisioned = false;
   // SiteID Key
   const SITE_ID_HEX_FAKE = '2AAD580558ED451D813532D71DEA7F23';
   const siteIDResponse = await BLEService.readCharacteristicForDevice(
@@ -1356,7 +1357,11 @@ export const intiGen2SecurityKey = async () => {
 
   if (siteIDResponse?.value) {
     siteIdHex = base64ToHex(siteIDResponse?.value);
-  } else {
+    if (siteIdHex.toLowerCase() == SITE_ID_HEX_FAKE.toLowerCase()) {
+      isDeviceProvisioned = true;
+    }
+  }
+  if (!isDeviceProvisioned) {
     await BLEService.writeCharacteristicWithResponseForDevice2(
       SITE_ID_SERVICE_UUID,
       SITE_ID_CHARACTERISTIC_UUID,
@@ -1370,6 +1375,8 @@ export const intiGen2SecurityKey = async () => {
     if (siteIDResponse?.value) {
       siteIdHex = base64ToHex(siteIDResponse?.value);
     }
+    isDeviceProvisioned = true;
+    // consoleLog('siteIdHex', {siteIdHex});
     // siteIdHex = SITE_ID_HEX_FAKE;
   }
 
@@ -1460,7 +1467,7 @@ export const intiGen2SecurityKey = async () => {
     SERVER_KEY,
     masterKeyUint8Array,
     siteIdUint8Array,
-    true,
+    isDeviceProvisioned,
   );
   console.log('intiGen2SecurityKey sessionKeyNew==>', sessionKeyNew);
 
