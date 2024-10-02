@@ -519,6 +519,36 @@ export const getTotalWaterUsase = async (
   return totalWaterUsage;
 };
 
+const flusherGPF = [
+  0.0, // sku 0
+  1.6, // sku 1
+  1.28, // sku 2
+  1.1, // sku 3
+  1.6, // sku 4
+  1.28, // sku 5
+  1.28, // sku 6
+  1.1, // sku 7
+  1.6, // sku 8
+  1.6, // sku 9
+  0.125, // sku 10
+  0.25, // sku 11
+  0.5, // sku 12
+  1.0, // sku 13
+  1.28, // sku 14
+  0.25, // sku 15
+  0.5, // sku 16
+  1.0, // sku 17
+  0.125, // sku 18
+  0.25, // sku 19
+  0.5, // sku 20
+];
+
+export const getTotalFlushVolumeFlusher = () => {
+  const deviceSku = BLEService.SKU;
+  consoleLog('deviceSkudeviceSku', {deviceSku});
+  return flusherGPF[deviceSku];
+};
+
 /**
  *
  * @param {*} param1
@@ -529,29 +559,6 @@ export const getTotalWaterUsaseFlusher = async () => {
   // const serviceUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c940';
   // const characteristicUUID = 'd0aba888-fb10-4dc9-9b17-bdd8f490c949';
   let REDUCED_VOLUME = 1.1;
-  let gpf = [
-    0.0, // sku 0
-    1.6, // sku 1
-    1.28, // sku 2
-    1.1, // sku 3
-    1.6, // sku 4
-    1.28, // sku 5
-    1.28, // sku 6
-    1.1, // sku 7
-    1.6, // sku 8
-    1.6, // sku 9
-    0.125, // sku 10
-    0.25, // sku 11
-    0.5, // sku 12
-    1.0, // sku 13
-    1.28, // sku 14
-    0.25, // sku 15
-    0.5, // sku 16
-    1.0, // sku 17
-    0.125, // sku 18
-    0.25, // sku 19
-    0.5, // sku 20
-  ];
 
   const deviceSku = BLEService.SKU;
   const __activationsSinceInstall =
@@ -572,7 +579,7 @@ export const getTotalWaterUsaseFlusher = async () => {
     __reducedFlushActivationsSinceInstall?.value,
   );
   let waterUsage =
-    gpf[deviceSku] * (activations - reducedCount) +
+    flusherGPF[deviceSku] * (activations - reducedCount) +
     reducedCount * REDUCED_VOLUME;
 
   // consoleLog('waterUsageCalc', {deviceSku, activations, reducedCount, waterUsage, raw1: __activationsSinceInstall, raw2: __reducedFlushActivationsSinceInstall})

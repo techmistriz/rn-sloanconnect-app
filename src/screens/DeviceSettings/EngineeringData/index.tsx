@@ -150,7 +150,7 @@ const Index = ({navigation, route}: any) => {
   /**function comment */
   const checkValidation = () => {
     if (note.trim() === '' || note.length > 20) {
-      showSimpleAlert('Please enter engineering data 2 upto 20 chars.');
+      showSimpleAlert('Please enter engineering data 2 up to 20 characters.');
       return false;
     } else {
       return true;
@@ -166,15 +166,15 @@ const Index = ({navigation, route}: any) => {
       <Wrap autoMargin={false} style={styles.container}>
         <Wrap autoMargin={false} style={styles.sectionContainer}>
           <Wrap autoMargin={false} style={styles.section1}>
-            <Wrap autoMargin={false} style={styles.row}>
-              <Typography
-                size={18}
-                text={`Notes`}
-                style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}
-                color={Theme.colors.white}
-                ff={Theme.fonts.ThemeFontMedium}
-              />
-            </Wrap>
+            {/*<Wrap autoMargin={false} style={styles.row}>*/}
+            {/*  <Typography*/}
+            {/*    size={18}*/}
+            {/*    text={`Notes`}*/}
+            {/*    style={{textAlign: 'center', marginTop: 0, lineHeight: 25}}*/}
+            {/*    color={Theme.colors.white}*/}
+            {/*    ff={Theme.fonts.ThemeFontMedium}*/}
+            {/*  />*/}
+            {/*</Wrap>*/}
 
             <Wrap autoMargin={true} style={[styles.row]}>
               <Input

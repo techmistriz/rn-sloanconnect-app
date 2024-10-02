@@ -55,6 +55,7 @@ const Index = ({navigation, route}: any) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [infoModal, setInfoModal] = useState<boolean>(false);
   const [reportSentStatus, setReportSentStatus] = useState<boolean>(false);
+  const filteredDiagnosticResults = [];
 
   /** component hooks method for hardwareBackPress */
   useEffect(() => {
@@ -298,7 +299,7 @@ const Index = ({navigation, route}: any) => {
                         textAlign: 'left',
                         paddingVertical: 10,
                         paddingLeft: 20,
-                        textTransform: 'capitalize',
+                        textTransform: 'uppercase',
                       }}
                       color={Theme.colors.midGray}
                       ff={Theme.fonts.ThemeFontMedium}
@@ -310,13 +311,16 @@ const Index = ({navigation, route}: any) => {
 
             <Wrap autoMargin={false} style={styles.container}>
               {diagnosticResults.map((item: any, index: number) => {
+                item?.showInList ? filteredDiagnosticResults.push(item) : null;
+              })}
+              {filteredDiagnosticResults.map((item: any, index: number) => {
                 if (item?.showInList) {
                   return (
                     <DiagnosticResultsList
                       key={index.toString()}
                       item={item}
                       borderBottom={
-                        index >= 0 ? (
+                        index >= 0 && index < filteredDiagnosticResults.length - 1 ? (
                           <Divider color={Theme.colors.lightGray} />
                         ) : null
                       }
@@ -361,7 +365,7 @@ const Index = ({navigation, route}: any) => {
                             textAlign: 'left',
                             paddingVertical: 10,
                             paddingLeft: 20,
-                            textTransform: 'capitalize',
+                            textTransform: 'uppercase',
                           }}
                           color={Theme.colors.midGray}
                           ff={Theme.fonts.ThemeFontMedium}

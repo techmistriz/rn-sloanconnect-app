@@ -82,7 +82,7 @@ export const BLE_GEN2_GATT_SERVICES = {
                 position: 22,
                 name: {
                   name: 'Date of last range change',
-                  nameLocaleKey: 'DATE_OF_LAST_FLOW_RATE_CHANGE_LABEL',
+                  nameLocaleKey: 'DATE_OF_LAST_RANGE_CHANGE_LABEL',
                   size: 1,
                   type: 'uint32_t',
                 },

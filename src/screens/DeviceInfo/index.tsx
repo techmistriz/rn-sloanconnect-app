@@ -53,12 +53,12 @@ const Index = ({navigation, route}: any) => {
   useEffect(() => {
     DeviceEventEmitter.addListener(
       'EngineeringDataSettingsChangedEvent',
-      eventPayload => {
+      async (eventPayload) => {
         if (eventPayload) {
-          setViewAdvanceDetails(true);
+          await setViewAdvanceDetails(true);
           setTimeout(() => {
             initialize();
-          }, 200);
+          }, 300);
         }
       },
     );

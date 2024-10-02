@@ -42,24 +42,23 @@ const LineFlushListFlusher = ({
    * @returns value
    */
   const initlizeApp = async () => {
-    let __flush = settingsData?.flush?.value ?? '1';
+    // let __flush = settingsData?.flush?.value ?? '1';
     let __flushTime = settingsData?.flushTime?.value ?? '';
     let __flushVolume = settingsData?.flushVolume?.value ?? '';
 
-    // consoleLog('initlizeApp==>', {
-    //   __flush,
+    // consoleLog('initlizeApp listing==>', {
     //   __flushTime,
     //   __flushVolume,
     // });
     // Handle unsaved value which were changed
-    const resultObj = findObject('flush', deviceSettingsData?.LineFlushFlusher, {
-      searchKey: 'name',
-    });
+    // const resultObj = findObject('flush', deviceSettingsData?.LineFlushFlusher, {
+    //   searchKey: 'name',
+    // });
     // consoleLog('mapModeSelectionValue resultObj==>', resultObj);
 
-    if (!isObjectEmpty(resultObj)) {
-      __flush = resultObj?.newValue;
-    }
+    // if (!isObjectEmpty(resultObj)) {
+    //   __flush = resultObj?.newValue;
+    // }
 
     const resultObj2 = findObject('flushTime', deviceSettingsData?.LineFlushFlusher, {
       searchKey: 'name',
@@ -80,7 +79,7 @@ const LineFlushListFlusher = ({
       __flushVolume = resultObj3?.newValue;
     }
 
-    setFlush(__flush?.toString());
+    setFlush(__flushTime?.toString() === '0' ? '0' : '1');
     setFlushTime(__flushTime?.toString());
     setFlushVolume(__flushVolume?.toString());
   };
@@ -111,7 +110,7 @@ const LineFlushListFlusher = ({
             />
             <Typography
               size={10}
-              text={flush == '1' ? 'On' : flush == '0' ? 'Off' : ''}
+              text={flush == '0' ? 'Off' : 'On'}
               style={{
                 textAlign: 'left',
               }}

@@ -109,6 +109,7 @@ const Index = ({navigation, route}: any) => {
       __flushVolume = resultObj2?.newValue;
     }
     // setFlushTimeOld(__flushTime);
+    setFlush(__flushTime?.toString() === '0' ? '0' : '1');
     setFlushTime(__flushTime?.toString());
     setFlushVolume(__flushVolume?.toString());
     setSliderOneValue([parseInt(__flushTime)]);
@@ -137,7 +138,7 @@ const Index = ({navigation, route}: any) => {
         oldValue: settingsData?.flushTime?.value,
         newValue: flushTime,
         convertToType: 'hex',
-        byteSize: 2,
+        byteSize: flushTime.length,
       });
 
       params.push({
@@ -203,8 +204,8 @@ const Index = ({navigation, route}: any) => {
     if (flushTime.trim() === '') {
       showSimpleAlert('Please select flush time');
       return false;
-    } else if (Number(flushTime) < 1) {
-      showSimpleAlert('Flush time seconds can`t be less than 1');
+    } else if (Number(flushTime) < 0) {
+      showSimpleAlert('Flush time seconds can`t be less than 0');
       return false;
     } else if (Number(flushTime) > 7) {
       showSimpleAlert('Flush time seconds can`t be greater than 7');
@@ -230,217 +231,236 @@ const Index = ({navigation, route}: any) => {
                     {value: '1', name: 'ON'},
                   ]}
                   onSelect={(response: any) => {
+                    setFlushTime(response?.value);
                     setFlush(response?.value);
                   }}
                 />
               </Wrap>
             </Wrap>
 
-            <Wrap autoMargin={true} style={[styles.row]}>
-              <Typography
-                size={12}
-                text={I18n.t('settings.LINE_FLUSH_FLUSHER')}
-                style={{textAlign: 'center', marginTop: 40, marginBottom: 10}}
-                color={Theme.colors.white}
-                ff={Theme.fonts.ThemeFontLight}
-              />
-
-              <Input
-                onRef={input => {
-                  // @ts-ignore
-                  flushTimeTextInputRef = input;
-                }}
-                onChangeText={text => setFlushTime(text)}
-                onSubmitEditing={() => {
-                  // @ts-ignore
-                  Keyboard.dismiss();
-                }}
-                returnKeyType="done"
-                blurOnSubmit={false}
-                keyboardType="numeric"
-                placeholder=""
-                value={flushTime}
-                editable={false}
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={styles.textInput}
-              />
-
-              <Typography
-                size={12}
-                text={I18n.t('settings.DAYS')}
-                style={{textAlign: 'center', marginTop: 10, marginBottom: 10}}
-                color={Theme.colors.white}
-                ff={Theme.fonts.ThemeFontLight}
-              />
-            </Wrap>
-
-            <Wrap
-              autoMargin={false}
-              style={[styles.row, {alignItems: 'center', marginTop: 80}]}>
-              <MultiSlider
-                values={sliderOneValue}
-                snapped={true}
-                min={flushTimeConfig?.min ?? 1}
-                max={flushTimeConfig?.max ?? 5}
-                step={flushTimeConfig?.step ?? 1}
-                // enableLabel={true}
-                enabledTwo={false}
-                allowOverlap={true}
-                sliderLength={constants.screenWidth - 120}
-                // onValuesChangeStart={sliderOneValuesChangeStart}
-                onValuesChange={sliderOneValuesChange}
-                // onValuesChangeFinish={sliderOneValuesChangeFinish}
-                trackStyle={{backgroundColor: Theme.colors.primaryColor2}}
-                selectedStyle={{backgroundColor: Theme.colors.primaryColor2}}
-                markerStyle={{
-                  height: 20,
-                  width: 20,
-                  backgroundColor: Theme.colors.white,
-                }}
-              />
-
-              <Row autoMargin={false} style={{marginTop: -10, width: '100%'}}>
-                <Wrap autoMargin={false}>
+            {flush == '1' && (
+              <>
+                <Wrap autoMargin={true} style={[styles.row]}>
                   <Typography
                     size={12}
-                    text={`I`}
-                    style={{textAlign: 'center', marginTop: 0}}
+                    text={I18n.t('settings.LINE_FLUSH_FLUSHER')}
+                    style={{
+                      textAlign: 'center',
+                      marginTop: 40,
+                      marginBottom: 10,
+                    }}
                     color={Theme.colors.white}
                     ff={Theme.fonts.ThemeFontLight}
                   />
+
+                  <Input
+                    onRef={input => {
+                      // @ts-ignore
+                      flushTimeTextInputRef = input;
+                    }}
+                    onChangeText={text => setFlushTime(text)}
+                    onSubmitEditing={() => {
+                      // @ts-ignore
+                      Keyboard.dismiss();
+                    }}
+                    returnKeyType="done"
+                    blurOnSubmit={false}
+                    keyboardType="numeric"
+                    placeholder=""
+                    value={flushTime}
+                    editable={false}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.textInput}
+                  />
+
                   <Typography
                     size={12}
-                    text={`1`}
-                    style={{textAlign: 'center', marginTop: 0}}
+                    text={I18n.t('settings.DAYS')}
+                    style={{
+                      textAlign: 'center',
+                      marginTop: 10,
+                      marginBottom: 10,
+                    }}
                     color={Theme.colors.white}
                     ff={Theme.fonts.ThemeFontLight}
                   />
                 </Wrap>
 
-                <Wrap autoMargin={false}>
-                  <Typography
-                    size={12}
-                    text={`I`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
+                <Wrap
+                  autoMargin={false}
+                  style={[styles.row, {alignItems: 'center', marginTop: 80}]}>
+                  <MultiSlider
+                    values={sliderOneValue}
+                    snapped={true}
+                    min={flushTimeConfig?.min ?? 1}
+                    max={flushTimeConfig?.max ?? 5}
+                    step={flushTimeConfig?.step ?? 1}
+                    // enableLabel={true}
+                    enabledTwo={false}
+                    allowOverlap={true}
+                    sliderLength={constants.screenWidth - 120}
+                    // onValuesChangeStart={sliderOneValuesChangeStart}
+                    onValuesChange={sliderOneValuesChange}
+                    // onValuesChangeFinish={sliderOneValuesChangeFinish}
+                    trackStyle={{backgroundColor: Theme.colors.primaryColor2}}
+                    selectedStyle={{
+                      backgroundColor: Theme.colors.primaryColor2,
+                    }}
+                    markerStyle={{
+                      height: 20,
+                      width: 20,
+                      backgroundColor: Theme.colors.white,
+                    }}
                   />
-                  <Typography
-                    size={12}
-                    text={`2`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </Wrap>
 
-                <Wrap autoMargin={false}>
-                  <Typography
-                    size={12}
-                    text={`I`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                  <Typography
-                    size={12}
-                    text={`3`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </Wrap>
+                  <Row
+                    autoMargin={false}
+                    style={{marginTop: -10, width: '100%'}}>
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={'I'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                      <Typography
+                        size={12}
+                        text={'1'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
 
-                <Wrap autoMargin={false}>
-                  <Typography
-                    size={12}
-                    text={`I`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                  <Typography
-                    size={12}
-                    text={`4`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </Wrap>
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={'I'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                      <Typography
+                        size={12}
+                        text={'2'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
 
-                <Wrap autoMargin={false}>
-                  <Typography
-                    size={12}
-                    text={`I`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                  <Typography
-                    size={12}
-                    text={`5`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </Wrap>
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={'I'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                      <Typography
+                        size={12}
+                        text={'3'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
 
-                <Wrap autoMargin={false}>
-                  <Typography
-                    size={12}
-                    text={`I`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                  <Typography
-                    size={12}
-                    text={`6`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </Wrap>
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={'I'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                      <Typography
+                        size={12}
+                        text={'4'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
 
-                <Wrap autoMargin={false}>
-                  <Typography
-                    size={12}
-                    text={`I`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                  <Typography
-                    size={12}
-                    text={`7`}
-                    style={{textAlign: 'center', marginTop: 0}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </Wrap>
-              </Row>
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={'I'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                      <Typography
+                        size={12}
+                        text={'5'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
 
-              <Row autoMargin={false} style={{marginTop: 10, width: '100%'}}>
-                <Wrap autoMargin={false}>
-                  <Typography
-                    size={12}
-                    text={I18n.t('settings.CLOSER')}
-                    style={{textAlign: 'center'}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={'I'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                      <Typography
+                        size={12}
+                        text={'6'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
+
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={'I'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                      <Typography
+                        size={12}
+                        text={'7'}
+                        style={{textAlign: 'center', marginTop: 0}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
+                  </Row>
+
+                  <Row
+                    autoMargin={false}
+                    style={{marginTop: 10, width: '100%'}}>
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={I18n.t('settings.CLOSER')}
+                        style={{textAlign: 'center'}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
+                    <Wrap autoMargin={false}>
+                      <Typography
+                        size={12}
+                        text={I18n.t('settings.FARTHER')}
+                        style={{textAlign: 'center'}}
+                        color={Theme.colors.white}
+                        ff={Theme.fonts.ThemeFontLight}
+                      />
+                    </Wrap>
+                  </Row>
                 </Wrap>
-                <Wrap autoMargin={false}>
-                  <Typography
-                    size={12}
-                    text={I18n.t('settings.FARTHER')}
-                    style={{textAlign: 'center'}}
-                    color={Theme.colors.white}
-                    ff={Theme.fonts.ThemeFontLight}
-                  />
-                </Wrap>
-              </Row>
-            </Wrap>
+              </>
+            )}
           </Wrap>
 
           <Wrap autoMargin={false} style={styles.section2}>

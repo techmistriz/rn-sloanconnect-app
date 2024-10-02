@@ -8,7 +8,7 @@ import {
   formatCharateristicValue,
   getDeviceCharacteristicByServiceUUIDAndCharacteristicUUID,
   getDeviceCharacteristicsByServiceUUID,
-  getDeviceModelData,
+  getDeviceModelData, getTotalFlushVolumeFlusher,
 } from 'src/utils/Helpers/project';
 import BLE_CONSTANTS from 'src/utils/StaticData/BLE_CONSTANTS';
 import {BLE_GATT_SERVICES_FLUSHER} from 'src/utils/StaticData/BLE_GATT_SERVICES_FLUSHER';
@@ -402,32 +402,43 @@ const getStatisticsInformationDataFlusher = (
       value: `${totalWaterUsage} Gal (${__totalWaterUsage} L)`,
     });
 
+    let flushVolumeInGal = getTotalFlushVolumeFlusher();
+    let galToLiter = flushVolumeInGal / BLE_CONSTANTS.COMMON.GAL_TO_LITER;
     /** Flush Volume  */
-    const charResponse6: any = await BLEService.readCharacteristicForDevice(
-      'f89f13e7-83f8-4b7c-9e8b-364576d88340',
-      'f89f13e7-83f8-4b7c-9e8b-364576d88345',
-    );
-
-    if (!isObjectEmpty(charResponse6)) {
-      const decodeValue = base64EncodeDecode(charResponse6?.value, 'decode');
-      consoleLog('charResponse6 decodeValue==>', charResponse6);
-
-      var formattedValue = 0;
-      if (decodeValue) {
-        formattedValue =
-          parseInt(decodeValue) / BLE_CONSTANTS.COMMON.GMP_FORMULA;
-      }
-
-      data.push({
-        name: 'Flush Volume',
-        nameLocale: `${I18n.t('device_details.FLUSHER.LABEL_FLUSHER_VOLUME')}`,
-        prefix: null,
-        postfix: null,
-        uuid: null,
-        position: 5,
-        value: formattedValue ?? 'N/A',
-      });
-    }
+    data.push({
+      name: 'Flush Volume',
+      nameLocale: `${I18n.t('device_details.FLUSHER.LABEL_FLUSHER_VOLUME')}`,
+      prefix: null,
+      postfix: null,
+      uuid: null,
+      position: 5,
+      value: `${flushVolumeInGal} gal (${galToLiter.toFixed(2)} L)`,
+    });
+    // const charResponse6: any = await BLEService.readCharacteristicForDevice(
+    //   'f89f13e7-83f8-4b7c-9e8b-364576d88340',
+    //   'f89f13e7-83f8-4b7c-9e8b-364576d88345',
+    // );
+    //
+    // if (!isObjectEmpty(charResponse6)) {
+    //   const decodeValue = base64EncodeDecode(charResponse6?.value, 'decode');
+    //   consoleLog('charResponse6 decodeValue==>', charResponse6);
+    //
+    //   var formattedValue = 0;
+    //   if (decodeValue) {
+    //     formattedValue =
+    //       parseInt(decodeValue);// / BLE_CONSTANTS.COMMON.GMP_FORMULA;
+    //   }
+    //
+    //   data.push({
+    //     name: 'Flush Volume',
+    //     nameLocale: `${I18n.t('device_details.FLUSHER.LABEL_FLUSHER_VOLUME')}`,
+    //     prefix: null,
+    //     postfix: null,
+    //     uuid: null,
+    //     position: 5,
+    //     value: formattedValue ?? 'N/A',
+    //   });
+    // }
 
     /**
      * Engineering Data 1

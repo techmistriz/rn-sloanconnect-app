@@ -1,5 +1,6 @@
 const COMMON = {
   GMP_FORMULA: 3.78541,
+  GAL_TO_LITER: 0.264172,
   BDSKU_LIST: {
     '1': 'EFP-39-A-1',
     '2': 'EFP-11-A-1',

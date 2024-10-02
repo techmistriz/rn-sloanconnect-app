@@ -653,7 +653,7 @@ export const BLE_DEVICE_MODELS = {
     },
     '10': {
       name: 'Flushometer',
-      fullNameAllModel: 'SOLIS Urinal-0.25 GPF',
+      fullNameAllModel: 'SOLIS Urinal-0.125 GPF',
       type: 'ADSKU',
       version: '10',
       generation: '01',
