@@ -6859,10 +6859,10 @@ react-native-i18n@^2.0.15:
   dependencies:
     i18n-js "3.0.11"
 
-react-native-image-crop-picker@^0.40.3:
-  version "0.40.3"
-  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.40.3.tgz#a6b135cd1218a33ad126c1a148ec5a1bd01737ff"
-  integrity sha512-45PKcTnsnLS+E36YwoXutllQdRSOuOsMN0IRcAcwsFXOuAQIOtugXlAuGGL28JHKb/ATaSSPvqCSrdG65Jv3GA==
+react-native-image-crop-picker@^0.41.2:
+  version "0.41.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.41.3.tgz#323c28872a7eae0d5c42efee5a916880da66b227"
+  integrity sha512-kxohhrEY5tWmsY9wYKOX8hE+wFx1nROTS3yv9Kqx60xTWNeht4WDqQl/E1LiWO/qagrrKd7+RbczCsifswP9MA==
 
 react-native-image-viewing@^0.2.2:
   version "0.2.2"
