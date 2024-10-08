@@ -111,7 +111,7 @@ export const BLE_GATT_SERVICES_BASYS = {
         postfix: null,
         position: 2,
         valueType: 'Date',
-        dateFormat: 'YYYY/MM/DD',
+        dateFormat: 'YY/MM/DD',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c904': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c904',
@@ -131,7 +131,7 @@ export const BLE_GATT_SERVICES_BASYS = {
         postfix: null,
         position: 6,
         valueType: 'Date',
-        dateFormat: 'YYYY/MM/DD',
+        dateFormat: 'YY/MM/DD',
       },
       'd0aba888-fb10-4dc9-9b17-bdd8f490c905': {
         uuid: 'd0aba888-fb10-4dc9-9b17-bdd8f490c905',
