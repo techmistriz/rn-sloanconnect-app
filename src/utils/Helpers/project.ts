@@ -1343,9 +1343,39 @@ export const intiGen2SecurityKey = async () => {
   const SITE_ID_CHARACTERISTIC_UUID =
     BLE_CONSTANTS?.GEN2?.SITE_ID_CHARACTERISTIC_UUID;
 
-  let isDeviceProvisioned = false;
+  // To unprovision the device set this var as false
+  // Make sure we use the right siteID to authenticate the device
+  // Once unprovisioning completes, change this var to false and put any siteID in below variable
+  // and uncomment the section RestartSteps
+  let unProvisionDevice = false;
+
   // SiteID Key
-  const SITE_ID_HEX_FAKE = '2AAD580558ED451D813532D71DEA7F23';
+  // const SITE_ID_HEX_FAKE = '2AAD580558ED451D'; // 813532D71DEA7F23
+  // const SITE_ID_HEX_FAKE = '231564897BCAEFD8231564897BCAEFD3'; //
+  // const SITE_ID_HEX_FAKE = 'ABCDEF12346598758149EBFCDA789465';
+  const SITE_ID_HEX_FAKE = 'e715a50f79aa0473aa7cae4e64a75946';
+
+  var siteIdHex = SITE_ID_HEX_FAKE;
+
+  let writeSiteId = await BLEService.writeCharacteristicWithResponseForDevice2(
+    SITE_ID_SERVICE_UUID,
+    SITE_ID_CHARACTERISTIC_UUID,
+    fromHexStringUint8Array(siteIdHex),
+  );
+
+  // RestartSteps: after unprovisioning we need to do it twice to mimic the two step of writing siteID first and then
+  // start connecting procedure.
+  // let writeSiteId2 = await BLEService.writeCharacteristicWithResponseForDevice2(
+  //     SITE_ID_SERVICE_UUID,
+  //     SITE_ID_CHARACTERISTIC_UUID,
+  //     fromHexStringUint8Array(siteIdHex),
+  // );
+
+  consoleLog('bleservicewritechar', {
+    writeSiteId,
+    siteId: fromHexStringUint8Array(siteIdHex),
+  });
+
   const siteIDResponse = await BLEService.readCharacteristicForDevice(
     SITE_ID_SERVICE_UUID,
     SITE_ID_CHARACTERISTIC_UUID,
@@ -1353,31 +1383,9 @@ export const intiGen2SecurityKey = async () => {
 
   // intiGen2SecurityKey SiteIDResult==> Kq1YBVjtRR2BNTLXHep/Iw==
   // consoleLog('intiGen2SecurityKey SiteIDResult==>', siteIDResponse?.value);
-  var siteIdHex: string;
 
   if (siteIDResponse?.value) {
     siteIdHex = base64ToHex(siteIDResponse?.value);
-    if (siteIdHex.toLowerCase() == SITE_ID_HEX_FAKE.toLowerCase()) {
-      isDeviceProvisioned = true;
-    }
-  }
-  if (!isDeviceProvisioned) {
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      SITE_ID_SERVICE_UUID,
-      SITE_ID_CHARACTERISTIC_UUID,
-      SITE_ID_HEX_FAKE,
-    );
-
-    const siteIDResponse = await BLEService.readCharacteristicForDevice(
-      SITE_ID_SERVICE_UUID,
-      SITE_ID_CHARACTERISTIC_UUID,
-    );
-    if (siteIDResponse?.value) {
-      siteIdHex = base64ToHex(siteIDResponse?.value);
-    }
-    isDeviceProvisioned = true;
-    // consoleLog('siteIdHex', {siteIdHex});
-    // siteIdHex = SITE_ID_HEX_FAKE;
   }
 
   // var siteIdUint8ArrayMock = [
@@ -1467,7 +1475,7 @@ export const intiGen2SecurityKey = async () => {
     SERVER_KEY,
     masterKeyUint8Array,
     siteIdUint8Array,
-    isDeviceProvisioned,
+    unProvisionDevice,
   );
   console.log('intiGen2SecurityKey sessionKeyNew==>', sessionKeyNew);
 
@@ -1521,7 +1529,7 @@ const generateSessionKey = async (
   SERVER_KEY: any,
   masterKeyUint8Array: any,
   siteIdUint8Array: any,
-  isProvision: boolean,
+  unProvisionDevice: boolean,
 ) => {
   //session_time is an unixtime from the App, which could also be extracted from session key
   var sessionTime = timestampUint8Array;
@@ -1611,7 +1619,7 @@ const generateSessionKey = async (
   for (let i = 0; i < 32; i++) {
     __sessionUintArray[i + 4] = sessionUintArraySHA[i];
   }
-  __sessionUintArray[36] = isProvision ? 1 : 0;
+  __sessionUintArray[36] = unProvisionDevice ? 0 : 1;
   // console.log('generateSessionKey __sessionUintArray==>', __sessionUintArray);
   return __sessionUintArray;
 };
