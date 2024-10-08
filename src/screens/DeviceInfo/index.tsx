@@ -55,10 +55,7 @@ const Index = ({navigation, route}: any) => {
       'EngineeringDataSettingsChangedEvent',
       async (eventPayload) => {
         if (eventPayload) {
-          await setViewAdvanceDetails(true);
-          setTimeout(() => {
-            initialize();
-          }, 300);
+          await initializeAdvanceFlusher();
         }
       },
     );
