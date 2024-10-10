@@ -61,7 +61,7 @@ const Index = ({route, navigation}: any) => {
   const onDeleteAccountPress = async () => {
     try {
       setLoading(true);
-      const response = await Network('profile', 'DELETE', {}, token);
+      const response = await Network('delete-profile', 'DELETE', {}, token);
       if (response?.status) {
         showToastMessage(response?.message, 'success');
         onLogout();

@@ -192,6 +192,7 @@ class BLEReportInstance {
     let __MOBILE_DEVICE_INFO = {
       os: constants.isIOS ? 'ios' : 'android',
       model: DeviceInfo.getModel(),
+      utc_time_offset: new Date().getTimezoneOffset() / 60,
       bluetooth_ver: '',
       // app_version: DeviceInfo.getVersion(),
       bluetooth_rssi: BLEService?.deviceRaw?.rssi,
@@ -755,20 +756,23 @@ class BLEReportInstance {
     // );
   }
 
-  async mapDiagnosticReport() {
+  async mapDiagnosticReport(previousDiagnosticResults: any = []) {
     consoleLog('mapFaucetDeviceDetails called');
     if (BLEService.deviceGeneration == 'gen1') {
-      await this.mapDiagnosticReportGen1();
+      await this.mapDiagnosticReportGen1(previousDiagnosticResults);
     } else if (BLEService.deviceGeneration == 'gen2') {
-      await this.mapDiagnosticReportGen2();
+      await this.mapDiagnosticReportGen2(previousDiagnosticResults);
     } else if (BLEService.deviceGeneration == 'flusher') {
-      await this.mapDiagnosticReportFlusher();
+      await this.mapDiagnosticReportFlusher(previousDiagnosticResults);
     } else if (BLEService.deviceGeneration == 'basys') {
-      await this.mapDiagnosticReportBasys();
+      await this.mapDiagnosticReportBasys(previousDiagnosticResults);
     }
   }
 
-  async mapDiagnosticReportGen1(hasSettingsChanged: boolean = false) {
+  async mapDiagnosticReportGen1(
+    previousDiagnosticResults: any = [],
+    hasSettingsChanged: boolean = false,
+  ) {
     const RESULTS = await readingDiagnostic();
     consoleLog('initlizeAppGen1 readingDiagnostic RESULTS==>', RESULTS);
 
@@ -777,21 +781,75 @@ class BLEReportInstance {
     let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
     let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
 
-    let __DIAGNOSTIC_REPORT = hasSettingsChanged
-      ? __DIAGNOSTIC_REPORT_ALL?.current
-      : __DIAGNOSTIC_REPORT_ALL?.prev;
+    // consoleLog('initlizeAppGen1 readingDiagnostic __DIAGNOSTIC_REPORT==>', {
+    //   hasSettingsChanged,
+    //   all: __DIAGNOSTIC_REPORT_ALL,
+    // });
 
-    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+    __DIAGNOSTIC_REPORT_PREV.sensor = findValueObject(
+      'Sensor',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    __DIAGNOSTIC_REPORT_PREV.valve = findValueObject(
+      'Valve',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    __DIAGNOSTIC_REPORT_PREV.turbine = findValueObject(
+      'Turbine',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    // __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
+    //   'Water Dispense',
+    //   RESULTS,
+    //   {
+    //     searchKey: 'name',
+    //     valueKey: 'value',
+    //   },
+    // );
+    __DIAGNOSTIC_REPORT_PREV.battery = findValueObject(
+      'Battery Level at Diagnostic',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT_PREV.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    // Current
+    __DIAGNOSTIC_REPORT_CURRENT.sensor = findValueObject('Sensor', RESULTS, {
       searchKey: 'name',
       valueKey: 'value',
     });
 
-    __DIAGNOSTIC_REPORT.valve = findValueObject('Valve', RESULTS, {
+    __DIAGNOSTIC_REPORT_CURRENT.valve = findValueObject('Valve', RESULTS, {
       searchKey: 'name',
       valueKey: 'value',
     });
 
-    __DIAGNOSTIC_REPORT.turbine = findValueObject('Turbine', RESULTS, {
+    __DIAGNOSTIC_REPORT_CURRENT.turbine = findValueObject('Turbine', RESULTS, {
       searchKey: 'name',
       valueKey: 'value',
     });
@@ -804,7 +862,7 @@ class BLEReportInstance {
     //     valueKey: 'value',
     //   },
     // );
-    __DIAGNOSTIC_REPORT.battery = findValueObject(
+    __DIAGNOSTIC_REPORT_CURRENT.battery = findValueObject(
       'Battery Level at Diagnostic',
       RESULTS,
       {
@@ -812,7 +870,7 @@ class BLEReportInstance {
         valueKey: 'value',
       },
     );
-    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
+    __DIAGNOSTIC_REPORT_CURRENT.date_of_diagnostic = findValueObject(
       'D/T of last diagnostic',
       RESULTS,
       {
@@ -821,51 +879,102 @@ class BLEReportInstance {
       },
     );
 
-    if (hasSettingsChanged) {
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
-      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
-    } else {
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
-      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
-    }
+    __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT_CURRENT;
+    __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_PREV;
 
+    // consoleLog('finalReportAfterMapping', {
+    //   hasSettingsChanged,
+    //   all: __DIAGNOSTIC_REPORT_ALL,
+    // });
     this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
   }
 
-  async mapDiagnosticReportGen2(hasSettingsChanged: boolean = false) {
+  async mapDiagnosticReportGen2(
+    previousDiagnosticResults: any = [],
+    hasSettingsChanged: boolean = false,
+  ) {
     const RESULTS = await readingDiagnosticGen2(
       BLEService.characteristicMonitorDiagnosticMapped,
     );
-    consoleLog(
-      'mapDiagnosticReportGen2 readingDiagnosticGen2 RESULTS==>',
-      RESULTS,
-    );
+    // consoleLog('mapDiagnosticReportGen2 readingDiagnosticGen2 RESULTS==>', {
+    //   previousDiagnosticResults,
+    //   RESULTS,
+    // });
 
     let __DIAGNOSTIC_REPORT_ALL = this.reportMappingStats.diagnostic_report;
 
     let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
     let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
 
-    let __DIAGNOSTIC_REPORT = hasSettingsChanged
-      ? __DIAGNOSTIC_REPORT_ALL?.current
-      : __DIAGNOSTIC_REPORT_ALL?.prev;
+    __DIAGNOSTIC_REPORT_PREV.sensor = findValueObject(
+      'Sensor',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
 
-    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+    __DIAGNOSTIC_REPORT_PREV.valve = findValueObject(
+      'Valve',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    __DIAGNOSTIC_REPORT_PREV.turbine = findValueObject(
+      'Turbine',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    // __DIAGNOSTIC_REPORT_PREV.water_dispence = findValueObject(
+    //   'Water Dispense',
+    //   previousDiagnosticResults,
+    //   {
+    //     searchKey: 'name',
+    //     valueKey: 'value',
+    //   },
+    // );
+    __DIAGNOSTIC_REPORT_PREV.battery = findValueObject(
+      'Battery Level at Diagnostic',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT_PREV.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    // Current
+    __DIAGNOSTIC_REPORT_CURRENT.sensor = findValueObject('Sensor', RESULTS, {
       searchKey: 'name',
       valueKey: 'value',
     });
 
-    __DIAGNOSTIC_REPORT.valve = findValueObject('Valve', RESULTS, {
+    __DIAGNOSTIC_REPORT_CURRENT.valve = findValueObject('Valve', RESULTS, {
       searchKey: 'name',
       valueKey: 'value',
     });
 
-    __DIAGNOSTIC_REPORT.turbine = findValueObject('Turbine', RESULTS, {
+    __DIAGNOSTIC_REPORT_CURRENT.turbine = findValueObject('Turbine', RESULTS, {
       searchKey: 'name',
       valueKey: 'value',
     });
 
-    // __DIAGNOSTIC_REPORT.water_dispence = findValueObject(
+    // __DIAGNOSTIC_REPORT_CURRENT.water_dispence = findValueObject(
     //   'Water Dispense',
     //   RESULTS,
     //   {
@@ -873,7 +982,7 @@ class BLEReportInstance {
     //     valueKey: 'value',
     //   },
     // );
-    __DIAGNOSTIC_REPORT.battery = findValueObject(
+    __DIAGNOSTIC_REPORT_CURRENT.battery = findValueObject(
       'Battery Level at Diagnostic',
       RESULTS,
       {
@@ -881,27 +990,29 @@ class BLEReportInstance {
         valueKey: 'value',
       },
     );
-    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
-      'D/T of last diagnostic',
-      RESULTS,
+    __DIAGNOSTIC_REPORT_CURRENT.date_of_diagnostic = findValueObject(
+      'Current Date',
+      previousDiagnosticResults,
       {
         searchKey: 'name',
         valueKey: 'value',
       },
     );
 
-    if (hasSettingsChanged) {
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
-      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
-    } else {
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
-      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
-    }
-
-    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
+    // consoleLog('finalGen2Report', {
+    //   current: __DIAGNOSTIC_REPORT_CURRENT,
+    //   prev: __DIAGNOSTIC_REPORT_PREV,
+    // });
+    this.reportMappingStats.diagnostic_report = {
+      current: __DIAGNOSTIC_REPORT_CURRENT,
+      prev: __DIAGNOSTIC_REPORT_PREV,
+    };
   }
 
-  async mapDiagnosticReportFlusher(hasSettingsChanged: boolean = false) {
+  async mapDiagnosticReportFlusher(
+    previousDiagnosticResults: any = [],
+    hasSettingsChanged: boolean = false,
+  ) {
     const RESULTS = await readingDiagnosticFlusher();
     consoleLog(
       'mapDiagnosticReportFlusher readingDiagnosticFlusher RESULTS==>',
@@ -913,21 +1024,57 @@ class BLEReportInstance {
     let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
     let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
 
-    let __DIAGNOSTIC_REPORT = hasSettingsChanged
-      ? __DIAGNOSTIC_REPORT_ALL?.current
-      : __DIAGNOSTIC_REPORT_ALL?.prev;
+    __DIAGNOSTIC_REPORT_PREV.sensor = findValueObject(
+      'Sensor',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
 
-    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+    __DIAGNOSTIC_REPORT_PREV.solenoid = findValueObject(
+      'Solenoid',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    __DIAGNOSTIC_REPORT_PREV.battery = findValueObject(
+      'Battery Level at Diagnostic',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT_PREV.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    // Current
+    __DIAGNOSTIC_REPORT_CURRENT.sensor = findValueObject('Sensor', RESULTS, {
       searchKey: 'name',
       valueKey: 'value',
     });
 
-    __DIAGNOSTIC_REPORT.solenoid = findValueObject('Solenoid', RESULTS, {
-      searchKey: 'name',
-      valueKey: 'value',
-    });
+    __DIAGNOSTIC_REPORT_CURRENT.solenoid = findValueObject(
+      'Solenoid',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
 
-    __DIAGNOSTIC_REPORT.battery = findValueObject(
+    __DIAGNOSTIC_REPORT_CURRENT.battery = findValueObject(
       'Battery Level at Diagnostic',
       RESULTS,
       {
@@ -935,7 +1082,7 @@ class BLEReportInstance {
         valueKey: 'value',
       },
     );
-    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
+    __DIAGNOSTIC_REPORT_CURRENT.date_of_diagnostic = findValueObject(
       'D/T of last diagnostic',
       RESULTS,
       {
@@ -944,18 +1091,16 @@ class BLEReportInstance {
       },
     );
 
-    if (hasSettingsChanged) {
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
-      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
-    } else {
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
-      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
-    }
-
-    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
+    this.reportMappingStats.diagnostic_report = {
+      current: __DIAGNOSTIC_REPORT_CURRENT,
+      prev: __DIAGNOSTIC_REPORT_PREV,
+    };
   }
 
-  async mapDiagnosticReportBasys(hasSettingsChanged: boolean = false) {
+  async mapDiagnosticReportBasys(
+    previousDiagnosticResults: any = [],
+    hasSettingsChanged: boolean = false,
+  ) {
     const RESULTS = await readingDiagnosticBasys();
     consoleLog(
       'mapDiagnosticReportBasys readingDiagnosticBasys RESULTS==>',
@@ -967,21 +1112,57 @@ class BLEReportInstance {
     let __DIAGNOSTIC_REPORT_PREV = __DIAGNOSTIC_REPORT_ALL?.prev;
     let __DIAGNOSTIC_REPORT_CURRENT = __DIAGNOSTIC_REPORT_ALL?.current;
 
-    let __DIAGNOSTIC_REPORT = hasSettingsChanged
-      ? __DIAGNOSTIC_REPORT_ALL?.current
-      : __DIAGNOSTIC_REPORT_ALL?.prev;
+    __DIAGNOSTIC_REPORT_PREV.sensor = findValueObject(
+      'Sensor',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
 
-    __DIAGNOSTIC_REPORT.sensor = findValueObject('Sensor', RESULTS, {
+    __DIAGNOSTIC_REPORT_PREV.solenoid = findValueObject(
+      'Solenoid',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    __DIAGNOSTIC_REPORT_PREV.battery = findValueObject(
+      'Battery Level at Diagnostic',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+    __DIAGNOSTIC_REPORT_PREV.date_of_diagnostic = findValueObject(
+      'D/T of last diagnostic',
+      previousDiagnosticResults,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
+
+    // Current
+    __DIAGNOSTIC_REPORT_CURRENT.sensor = findValueObject('Sensor', RESULTS, {
       searchKey: 'name',
       valueKey: 'value',
     });
 
-    __DIAGNOSTIC_REPORT.solenoid = findValueObject('Solenoid', RESULTS, {
-      searchKey: 'name',
-      valueKey: 'value',
-    });
+    __DIAGNOSTIC_REPORT_CURRENT.solenoid = findValueObject(
+      'Solenoid',
+      RESULTS,
+      {
+        searchKey: 'name',
+        valueKey: 'value',
+      },
+    );
 
-    __DIAGNOSTIC_REPORT.battery = findValueObject(
+    __DIAGNOSTIC_REPORT_CURRENT.battery = findValueObject(
       'Battery Level at Diagnostic',
       RESULTS,
       {
@@ -989,7 +1170,7 @@ class BLEReportInstance {
         valueKey: 'value',
       },
     );
-    __DIAGNOSTIC_REPORT.date_of_diagnostic = findValueObject(
+    __DIAGNOSTIC_REPORT_CURRENT.date_of_diagnostic = findValueObject(
       'D/T of last diagnostic',
       RESULTS,
       {
@@ -998,15 +1179,10 @@ class BLEReportInstance {
       },
     );
 
-    if (hasSettingsChanged) {
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
-      __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT_CURRENT;
-    } else {
-      __DIAGNOSTIC_REPORT_ALL.current = __DIAGNOSTIC_REPORT;
-      // __DIAGNOSTIC_REPORT_ALL.prev = __DIAGNOSTIC_REPORT;
-    }
-
-    this.reportMappingStats.diagnostic_report = __DIAGNOSTIC_REPORT_ALL;
+    this.reportMappingStats.diagnostic_report = {
+      current: __DIAGNOSTIC_REPORT_CURRENT,
+      prev: __DIAGNOSTIC_REPORT_PREV,
+    };
   }
 
   async mapAdvanceDeviceDetails() {
@@ -1351,26 +1527,58 @@ class BLEReportInstance {
             valueKey: 'value',
           },
         ),
+        flush_volume: '',
         activations_since_last_change: '',
         line_flushes_since_day1: findValueObject(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88344',
+          'f89f13e7-83f8-4b7c-9e8b-364576d88313',
           deviceInfoAdvance,
           {
             searchKey: 'uuid',
             valueKey: 'value',
           },
         ),
-        accumulated_flush_time: findValueObject(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88345',
+        reduced_flush_count: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88315',
           deviceInfoAdvance,
           {
             searchKey: 'uuid',
             valueKey: 'value',
           },
         ),
-        number_of_ble_connections: '',
+        engineering_data_1: findValueObject(
+          'Engineering Data 1',
+          deviceInfoAdvance,
+          {
+            searchKey: 'name',
+            valueKey: 'value',
+          },
+        ),
+        engineering_data_2: findValueObject(
+          'Engineering Data 2',
+          deviceInfoAdvance,
+          {
+            searchKey: 'name',
+            valueKey: 'value',
+          },
+        ),
+        low_battery_activations: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88311',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
         date_of_last_factory: findValueObject(
           'f89f13e7-83f8-4b7c-9e8b-364576d88321',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_diagnostic: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88325',
           deviceInfoAdvance,
           {
             searchKey: 'uuid',
@@ -1385,20 +1593,14 @@ class BLEReportInstance {
             valueKey: 'value',
           },
         ),
-        date_of_last_mode_change: '',
-        date_of_last_metered_run_time_change: '',
-        date_of_last_ondemand_timeout_change: '',
-        date_of_last_flush_enable_change: '',
-        date_of_last_flush_time_change: findValueObject(
-          'f89f13e7-83f8-4b7c-9e8b-364576d88324',
+        date_of_last_flush_interval_change: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88323',
           deviceInfoAdvance,
           {
             searchKey: 'uuid',
             valueKey: 'value',
           },
         ),
-        date_of_last_flush_interval_change: '',
-        date_of_last_flow_rate_change: '',
         date_of_last_range_change: findValueObject(
           'f89f13e7-83f8-4b7c-9e8b-364576d88322',
           deviceInfoAdvance,
@@ -1415,6 +1617,29 @@ class BLEReportInstance {
             valueKey: 'value',
           },
         ),
+
+        accumulated_flush_time: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88345',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        number_of_ble_connections: '',
+        date_of_last_mode_change: '',
+        date_of_last_metered_run_time_change: '',
+        date_of_last_ondemand_timeout_change: '',
+        date_of_last_flush_enable_change: '',
+        date_of_last_flush_time_change: findValueObject(
+          'f89f13e7-83f8-4b7c-9e8b-364576d88324',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
+        date_of_last_flow_rate_change: '',
       };
 
       this.reportMappingStats.advanced_device_details =
@@ -1571,7 +1796,14 @@ class BLEReportInstance {
             valueKey: 'value',
           },
         ),
-        date_of_last_bd_note_change: '',
+        date_of_last_bd_note_change: findValueObject(
+          'd0aba888-fb10-4dc9-9b17-bdd8f490c931',
+          deviceInfoAdvance,
+          {
+            searchKey: 'uuid',
+            valueKey: 'value',
+          },
+        ),
       };
 
       this.reportMappingStats.advanced_device_details =
@@ -1587,6 +1819,7 @@ class BLEReportInstance {
     user: any,
     shouldMapDiagnostic: boolean = false,
     isReportManual: string = 'yes',
+    previousDiagnosticResults: any,
   ) {
     const currentTimestamp = timestampInSec();
     this.reportMappingStats.is_report_manual = isReportManual;
@@ -1600,7 +1833,8 @@ class BLEReportInstance {
     this.mapUserPreference();
     await this.mapFaucetDeviceDetails();
     // this.mapFaucetSettings(); this is called from dashboard for gen1 and gen2 both for filling values
-    shouldMapDiagnostic && (await this.mapDiagnosticReport());
+    shouldMapDiagnostic &&
+      (await this.mapDiagnosticReport(previousDiagnosticResults));
     await this.mapAdvanceDeviceDetails();
     return this.reportMappingStats;
   }

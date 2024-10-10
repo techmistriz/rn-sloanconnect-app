@@ -537,11 +537,18 @@ const Index = ({navigation, route}: any) => {
 
       // consoleLog('finishDiagnosticsGen2==>', {dateResult, dateLastResult});
       // return false;
+      let previousDiagnosticResults = diagnosticResults;
+      previousDiagnosticResults.push({
+        name: 'Current Date',
+        nameLocale: 'Sensor',
+        showInList: true,
+        value: currentTimestamp,
+      });
 
       NavigationService.navigate('DeviceDiagnosticResults', {
         referrer: 'DeviceDiagnostic',
         previousScreen: previousScreen,
-        previousDiagnosticResults: diagnosticResults,
+        previousDiagnosticResults: previousDiagnosticResults,
         diagnosticResults: RESULTS,
         waterDispensed: waterDispensed,
         sensorResult: sensorResult,
