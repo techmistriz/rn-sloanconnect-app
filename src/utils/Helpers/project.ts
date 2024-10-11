@@ -90,7 +90,7 @@ export function getBleDeviceGeneration(str: string | null | undefined = '') {
       var __version = arr[1];
       if (__version) {
         var __versionFinal = __version.replace(/[^0-9]/g, '');
-        if (parseInt(__versionFinal) >= 20) {
+        if (parseInt(__versionFinal) >= 20 && parseInt(__versionFinal) <= 24) {
           result = 'basys';
         }
       }
