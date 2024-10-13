@@ -626,6 +626,7 @@ export const parseDateHumanFormat = (
   date: any,
   format = constants.BASE_DATE_TO_FORMAT,
   inputDateFormat: string | null = null,
+  sendRawOnParseError: Boolean = false,
 ) => {
   // consoleLog('parseDateHumanFormat date==>', {date, format});
   var m = '';
@@ -637,7 +638,7 @@ export const parseDateHumanFormat = (
   } else {
     m = moment(date).format(format);
   }
-  return m == 'Invalid date' ? 'N/A' : m;
+  return m == 'Invalid date' ? (sendRawOnParseError ? date : 'N/A') : m;
 };
 
 /**
@@ -650,12 +651,14 @@ export const parseDateHumanFormat = (
 export const parseDateHumanFormatFromUnix = (
   unixTimestamp: any,
   format = constants.BASE_DATE_TO_FORMAT,
+  sendRawOnParseError: Boolean = false,
 ) => {
   var m = '';
   if (!unixTimestamp) return '';
   try {
     return moment.unix(unixTimestamp).tz(getTimezone()).format(format);
   } catch (error) {
+    if (sendRawOnParseError) return unixTimestamp;
     return 'N/A';
   }
 };
