@@ -356,10 +356,12 @@ const Index = ({navigation, route}: any) => {
                                     dateLastResult?.value,
                                     'ddd, DD MMMM YYYY HH:mm:ss z',
                                     dateInputFormat,
+                                    true,
                                   )
                                 : parseDateHumanFormatFromUnix(
                                     dateLastResult?.value,
                                     'ddd, DD MMMM YYYY HH:mm:ss z',
+                                    true,
                                   )
                               : 'N/A'
                           }`}
