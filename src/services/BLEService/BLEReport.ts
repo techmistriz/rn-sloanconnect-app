@@ -756,16 +756,16 @@ class BLEReportInstance {
     // );
   }
 
-  async mapDiagnosticReport(previousDiagnosticResults: any = []) {
+  async mapDiagnosticReport(previousDiagnosticResults: any = [], diagnosticResults: any = []) {
     consoleLog('mapFaucetDeviceDetails called');
     if (BLEService.deviceGeneration == 'gen1') {
-      await this.mapDiagnosticReportGen1(previousDiagnosticResults);
+      await this.mapDiagnosticReportGen1(previousDiagnosticResults, diagnosticResults);
     } else if (BLEService.deviceGeneration == 'gen2') {
-      await this.mapDiagnosticReportGen2(previousDiagnosticResults);
+      await this.mapDiagnosticReportGen2(previousDiagnosticResults, diagnosticResults);
     } else if (BLEService.deviceGeneration == 'flusher') {
-      await this.mapDiagnosticReportFlusher(previousDiagnosticResults);
+      await this.mapDiagnosticReportFlusher(previousDiagnosticResults, diagnosticResults);
     } else if (BLEService.deviceGeneration == 'basys') {
-      await this.mapDiagnosticReportBasys(previousDiagnosticResults);
+      await this.mapDiagnosticReportBasys(previousDiagnosticResults, diagnosticResults);
     }
   }
 
@@ -891,6 +891,7 @@ class BLEReportInstance {
 
   async mapDiagnosticReportGen2(
     previousDiagnosticResults: any = [],
+    diagnosticResults: any = [],
     hasSettingsChanged: boolean = false,
   ) {
     const RESULTS = await readingDiagnosticGen2(
@@ -898,6 +899,7 @@ class BLEReportInstance {
     );
     // consoleLog('mapDiagnosticReportGen2 readingDiagnosticGen2 RESULTS==>', {
     //   previousDiagnosticResults,
+    //   diagnosticResults,
     //   RESULTS,
     // });
 
@@ -991,8 +993,8 @@ class BLEReportInstance {
       },
     );
     __DIAGNOSTIC_REPORT_CURRENT.date_of_diagnostic = findValueObject(
-      'Current Date',
-      previousDiagnosticResults,
+      'D/T of last diagnostic',
+      diagnosticResults,
       {
         searchKey: 'name',
         valueKey: 'value',
@@ -1527,7 +1529,10 @@ class BLEReportInstance {
             valueKey: 'value',
           },
         ),
-        flush_volume: '',
+        flush_volume: findValueObject('Flush Volume', deviceInfoAdvance, {
+          searchKey: 'name',
+          valueKey: 'value',
+        }),
         activations_since_last_change: '',
         line_flushes_since_day1: findValueObject(
           'f89f13e7-83f8-4b7c-9e8b-364576d88313',
@@ -1820,6 +1825,7 @@ class BLEReportInstance {
     shouldMapDiagnostic: boolean = false,
     isReportManual: string = 'yes',
     previousDiagnosticResults: any,
+    diagnosticResults: any,
   ) {
     const currentTimestamp = timestampInSec();
     this.reportMappingStats.is_report_manual = isReportManual;
@@ -1834,7 +1840,7 @@ class BLEReportInstance {
     await this.mapFaucetDeviceDetails();
     // this.mapFaucetSettings(); this is called from dashboard for gen1 and gen2 both for filling values
     shouldMapDiagnostic &&
-      (await this.mapDiagnosticReport(previousDiagnosticResults));
+      (await this.mapDiagnosticReport(previousDiagnosticResults, diagnosticResults));
     await this.mapAdvanceDeviceDetails();
     return this.reportMappingStats;
   }

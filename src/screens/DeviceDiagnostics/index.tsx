@@ -243,19 +243,10 @@ const Index = ({navigation, route}: any) => {
     setDiagnosticResults(RESULTS);
 
     consoleLog(
-      'initlizeAppGen1 readingDiagnosticGen2 PREVIOUS RESULTS==>',
+      'initlizeAppGen2 readingDiagnosticGen2 PREVIOUS RESULTS==>',
       RESULTS,
     );
 
-    const diagnosticInitMappedValue = mapValueGen2(
-      BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DIAGNOSTIC_INIT,
-      '1',
-    );
-    await BLEService.writeCharacteristicWithResponseForDevice2(
-      BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-      BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-      fromHexStringUint8Array(diagnosticInitMappedValue),
-    );
     setLoading(false);
   };
 
@@ -360,6 +351,15 @@ const Index = ({navigation, route}: any) => {
     } else if (BLEService.deviceGeneration == 'gen2') {
       if (waterDispensed) {
         setLoading(true);
+        const diagnosticInitMappedValue = mapValueGen2(
+          BLE_CONSTANTS.GEN2.WRITE_DATA_MAPPING.DIAGNOSTIC_INIT,
+          '1',
+        );
+        await BLEService.writeCharacteristicWithResponseForDevice2(
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+          fromHexStringUint8Array(diagnosticInitMappedValue),
+        );
         setTimeout(() => {
           finishDiagnosticsGen2(waterDispensed);
         }, 1000);
@@ -527,28 +527,28 @@ const Index = ({navigation, route}: any) => {
         currentTimestamp,
       );
 
-      await BLEService.writeCharacteristicWithResponseForDevice2(
-        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
-        BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
-        fromHexStringUint8Array(diagnosticDateTimestampMappedValue),
-      );
+      let writeResponseDate =
+        await BLEService.writeCharacteristicWithResponseForDevice2(
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_SERVICE_UUID,
+          BLE_CONSTANTS.GEN2.DEVICE_DATA_INTEGER_CHARACTERISTIC_UUID,
+          fromHexStringUint8Array(diagnosticDateTimestampMappedValue),
+        );
 
       setLoading(false);
 
-      // consoleLog('finishDiagnosticsGen2==>', {dateResult, dateLastResult});
+      // consoleLog('finishDiagnosticsGen2==>', {
+      //   writeResponseDate,
+      //   dateResult,
+      //   dateLastResult,
+      //   diagnosticResults,
+      //   RESULTS,
+      // });
       // return false;
-      let previousDiagnosticResults = diagnosticResults;
-      previousDiagnosticResults.push({
-        name: 'Current Date',
-        nameLocale: 'Sensor',
-        showInList: true,
-        value: currentTimestamp,
-      });
 
       NavigationService.navigate('DeviceDiagnosticResults', {
         referrer: 'DeviceDiagnostic',
         previousScreen: previousScreen,
-        previousDiagnosticResults: previousDiagnosticResults,
+        previousDiagnosticResults: diagnosticResults,
         diagnosticResults: RESULTS,
         waterDispensed: waterDispensed,
         sensorResult: sensorResult,

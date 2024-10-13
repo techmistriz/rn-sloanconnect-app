@@ -20,27 +20,27 @@ export const mappingDiagnosticGen2 = async (
   __allPack: string[],
 ) => {
   var result: any = [];
-  consoleLog(
-    'mappingDiagnosticGen2 __BLE_GATT_SERVICES==>',
-    __BLE_GATT_SERVICES,
-  );
-  consoleLog('mappingDiagnosticGen2 __allPack==>', __allPack);
+  // consoleLog(
+  //   'mappingDiagnosticGen2 __BLE_GATT_SERVICES==>',
+  //   __BLE_GATT_SERVICES,
+  // );
+  // consoleLog('mappingDiagnosticGen2 __allPack==>', __allPack);
 
   const __BLE_GATT_SERVICES_TMP = __BLE_GATT_SERVICES?.[__SERVICE_UUID];
-  consoleLog(
-    'mappingDiagnosticGen2 __BLE_GATT_SERVICES_TMP==>',
-    __BLE_GATT_SERVICES_TMP,
-  );
+  // consoleLog(
+  //   'mappingDiagnosticGen2 __BLE_GATT_SERVICES_TMP==>',
+  //   __BLE_GATT_SERVICES_TMP,
+  // );
   if (isObjectEmpty(__BLE_GATT_SERVICES_TMP)) {
     return result;
   }
 
   const __BLE_GATT_SERVICES_TMP2 =
     __BLE_GATT_SERVICES_TMP?.characteristics?.[__CHARACTERISTIC_UUID];
-  consoleLog(
-    'mappingDiagnosticGen2 __BLE_GATT_SERVICES_TMP2==>',
-    __BLE_GATT_SERVICES_TMP2,
-  );
+  // consoleLog(
+  //   'mappingDiagnosticGen2 __BLE_GATT_SERVICES_TMP2==>',
+  //   __BLE_GATT_SERVICES_TMP2,
+  // );
   if (isObjectEmpty(__BLE_GATT_SERVICES_TMP2)) {
     return result;
   }
@@ -50,21 +50,21 @@ export const mappingDiagnosticGen2 = async (
   // Byte Position 1: Integer value for the byte length of the package (includes all header bytes and End Flag).
   __allPack.forEach((element, index) => {
     if (element != '71ff04') {
-      consoleLog('mappingDeviceDataStringGen2 index==>', index);
-      consoleLog('mappingDeviceDataStringGen2 element==>', element);
+      // consoleLog('mappingDeviceDataStringGen2 index==>', index);
+      // consoleLog('mappingDeviceDataStringGen2 element==>', element);
       const __element = addSeparatorInString(element, 2, ' ');
-      consoleLog('mappingDeviceDataStringGen2 __element==>', __element);
+      // consoleLog('mappingDeviceDataStringGen2 __element==>', __element);
       const __elementArr = __element.split(' ');
 
       if (Array.isArray(__elementArr) && __elementArr?.[0] == '76') {
-        consoleLog('mappingDeviceDataStringGen2 __elementArr==>', __elementArr);
+        // consoleLog('mappingDeviceDataStringGen2 __elementArr==>', __elementArr);
         const lengthHex = __elementArr[2];
         const lengthDec = hexToDecimal(lengthHex);
 
-        consoleLog('mappingDeviceDataStringGen2 hexToDecimal==>', lengthDec);
+        // consoleLog('mappingDeviceDataStringGen2 hexToDecimal==>', lengthDec);
 
         const __uuidData = __BLE_GATT_SERVICES_TMP2?.chunks?.[index]?.uuidData;
-        consoleLog('mappingDeviceDataStringGen2 __uuidData==>', __uuidData);
+        // consoleLog('mappingDeviceDataStringGen2 __uuidData==>', __uuidData);
 
         if (isObjectEmpty(__uuidData)) {
           return false;
@@ -73,47 +73,47 @@ export const mappingDiagnosticGen2 = async (
         // Removing start flags
         const __elementArrTmp = [...__elementArr];
         const startFlags = __elementArrTmp.splice(0, 2);
-        consoleLog(
-          'mappingDeviceDataStringGen2 __elementArrTmp==>',
-          __elementArrTmp,
-        );
-        consoleLog('mappingDeviceDataStringGen2 startFlags==>', startFlags);
+        // consoleLog(
+        //   'mappingDeviceDataStringGen2 __elementArrTmp==>',
+        //   __elementArrTmp,
+        // );
+        // consoleLog('mappingDeviceDataStringGen2 startFlags==>', startFlags);
 
         __uuidData.forEach((characteristic: any, __index: number) => {
           const __characteristicTmp = {...characteristic};
           const __keyValueArr = __elementArrTmp.splice(0, characteristic?.size);
-          consoleLog(
-            'mappingDeviceDataStringGen2 __characteristicTmp==>',
-            __characteristicTmp,
-          );
-          consoleLog(
-            'mappingDeviceDataStringGen2 removedArr==>',
-            __keyValueArr,
-          );
+          // consoleLog(
+          //   'mappingDeviceDataStringGen2 __characteristicTmp==>',
+          //   __characteristicTmp,
+          // );
+          // consoleLog(
+          //   'mappingDeviceDataStringGen2 removedArr==>',
+          //   __keyValueArr,
+          // );
 
           //
           const __keyValueArrTmp = [...__keyValueArr];
           const keyArr = __keyValueArrTmp.splice(0, characteristic?.name?.size);
-          consoleLog(
-            'mappingDeviceDataStringGen2 __keyValueArrTmp==>',
-            __keyValueArrTmp,
-          );
-          consoleLog('mappingDeviceDataStringGen2 keyArr==>', keyArr);
+          // consoleLog(
+          //   'mappingDeviceDataStringGen2 __keyValueArrTmp==>',
+          //   __keyValueArrTmp,
+          // );
+          // consoleLog('mappingDeviceDataStringGen2 keyArr==>', keyArr);
 
           // consoleLog("mappingDeviceDataStringGen2 characteristic==>", characteristic);
           // const __characteristic = [...characteristic];
           // __characteristic.splice(0, 1);
           // consoleLog("mappingDeviceDataStringGen2 __characteristic==>", __characteristic);
           const __characteristicHex = __keyValueArrTmp.join('');
-          consoleLog(
-            'mappingDeviceDataStringGen2 __characteristicHex==>',
-            __characteristicHex,
-          );
+          // consoleLog(
+          //   'mappingDeviceDataStringGen2 __characteristicHex==>',
+          //   __characteristicHex,
+          // );
           const __characteristicValueInText = hexToDecimal(__characteristicHex);
-          consoleLog(
-            'mappingDeviceDataStringGen2 __characteristicValueInText==>',
-            __characteristicValueInText,
-          );
+          // consoleLog(
+          //   'mappingDeviceDataStringGen2 __characteristicValueInText==>',
+          //   __characteristicValueInText,
+          // );
 
           if (__uuidData?.[__index]?.value) {
             __uuidData[__index].value.currentValue = __characteristicValueInText
@@ -139,6 +139,10 @@ export const readingDiagnosticGen2 = async (
   const characteristicMonitorDeviceDataIntegersMapped =
     BLEService?.characteristicMonitorDeviceDataIntegersMapped;
   let RESULTS = [];
+  // consoleLog(
+  //     'initialize characteristicMonitorDeviceDataIntegersMapped==>',
+  //     JSON.stringify(characteristicMonitorDeviceDataIntegersMapped),
+  // );
 
   //  Sensor result
   const __characteristicSensor =
@@ -225,8 +229,7 @@ export const readingDiagnosticGen2 = async (
   });
 
   //  DTLastDiagnostic result
-  const __characteristicDTLastDiagnostic =
-    characteristicMonitorDeviceDataIntegersMapped?.chunks?.[0]?.uuidData?.[13];
+  const __characteristicDTLastDiagnostic = characteristicMonitorDeviceDataIntegersMapped?.chunks?.[0]?.uuidData?.[13];
 
   consoleLog(
     'initialize __characteristicDTLastDiagnostic==>',

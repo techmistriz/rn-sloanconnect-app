@@ -157,6 +157,7 @@ const Index = ({navigation, route}: any) => {
         true,
         isReportManual,
         previousDiagnosticResults,
+        diagnosticResults,
       );
       consoleLog('DeviceDisconnect initlizeApp==>', allReports);
       const currentTimestamp = timestampInSec();
