@@ -258,7 +258,7 @@ const Index = ({navigation, route}: any) => {
     BLEService.connectToDevice(item?.id, item)
       .then(async () => {
         try {
-          await onConnectSuccess(item?.id);
+          await onConnectSuccess(item);
         } catch (e) {
           if (retries < 2) {
             clearTimeout(timeoutIDForConnecting);
@@ -285,7 +285,8 @@ const Index = ({navigation, route}: any) => {
   };
 
   /** Function comments */
-  const onConnectSuccess = async (deviceId: any = null) => {
+  const onConnectSuccess = async (device: any = null) => {
+    let deviceId = device?.id;
     consoleLog('onConnectSuccess', {isDeviceConnectTimedout, deviceId});
     if (timeoutIDForConnecting) clearTimeout(timeoutIDForConnecting);
     if (isDeviceConnectTimedout && deviceId) {
@@ -293,7 +294,7 @@ const Index = ({navigation, route}: any) => {
       return;
     }
     await BLEService.discoverAllServicesAndCharacteristicsForDevice();
-    await BLEService.initDeviceData();
+    await BLEService.initDeviceData(device);
     // NavigationService.navigate('DeviceDashboard');
     setTimeout(() => {
       NavigationService.resetAllAction('BottomTabNavigator');

@@ -1336,7 +1336,7 @@ export const hasPhoneSetting = (__characteristicMain: any, __user: any) => {
   return data;
 };
 
-export const intiGen2SecurityKey = async () => {
+export const intiGen2SecurityKey = async (device: any) => {
   const SERVER_KEY = BLE_CONSTANTS?.GEN2?.SERVER_KEY;
   consoleLog('intiGen2SecurityKey SERVER_KEY==>', toHexString(SERVER_KEY));
   const SITE_ID_SERVICE_UUID = BLE_CONSTANTS?.GEN2?.SITE_ID_SERVICE_UUID;
@@ -1360,39 +1360,13 @@ export const intiGen2SecurityKey = async () => {
   let writeSiteId = await BLEService.writeCharacteristicWithResponseForDevice2(
     SITE_ID_SERVICE_UUID,
     SITE_ID_CHARACTERISTIC_UUID,
-    fromHexStringUint8Array(siteIdHex),
+    fromHexStringUint8Array(siteIdHex.toLowerCase()),
   );
-
-  // RestartSteps: after unprovisioning we need to do it twice to mimic the two step of writing siteID first and then
-  // start connecting procedure.
-  // let writeSiteId2 = await BLEService.writeCharacteristicWithResponseForDevice2(
-  //     SITE_ID_SERVICE_UUID,
-  //     SITE_ID_CHARACTERISTIC_UUID,
-  //     fromHexStringUint8Array(siteIdHex),
-  // );
 
   consoleLog('bleservicewritechar', {
     writeSiteId,
     siteId: fromHexStringUint8Array(siteIdHex),
   });
-
-  const siteIDResponse = await BLEService.readCharacteristicForDevice(
-    SITE_ID_SERVICE_UUID,
-    SITE_ID_CHARACTERISTIC_UUID,
-  );
-
-  // intiGen2SecurityKey SiteIDResult==> Kq1YBVjtRR2BNTLXHep/Iw==
-  // consoleLog('intiGen2SecurityKey SiteIDResult==>', siteIDResponse?.value);
-
-  if (siteIDResponse?.value) {
-    siteIdHex = base64ToHex(siteIDResponse?.value);
-  }
-
-  // var siteIdUint8ArrayMock = [
-  //   0x2a, 0xad, 0x58, 0x05, 0x58, 0xed, 0x45, 0x1d, 0x81, 0x35, 0x32, 0xd7,
-  //   0x1d, 0xea, 0x7f, 0x23,
-  // ];
-  // var siteIdUint8Array = new Uint8Array(siteIdUint8ArrayMock);
 
   // console.log('intiGen2SecurityKey siteIdHex==>', siteIdHex);
   var siteIdUint8Array = fromHexStringUint8Array(siteIdHex);
@@ -1430,45 +1404,11 @@ export const intiGen2SecurityKey = async () => {
     toHexString(masterKeyUint8Array),
   );
 
-  // Timestamp
-  var timestamp = getTimestampInSeconds();
-  // consoleLog('intiGen2SecurityKey timestamp==>', timestamp);
+  var timestampUint8Array = fromHexStringUint8Array(decimalToHex(getTimestampInSeconds()));
 
-  var timestampHex = decimalToHex(timestamp);
-  // consoleLog('intiGen2SecurityKey timestampHex==>', timestampHex);
-
-  var timestampUint8Array = fromHexStringUint8Array(timestampHex);
-
-  // var timestampHexMock = [0x66, 0x1e, 0xa6, 0xdf];
-  // var timestampUint8Array = new Uint8Array(timestampHexMock);
-
-  console.log(
-    'intiGen2SecurityKey timestampUint8Array==>',
-    toHexString(timestampUint8Array),
-  );
-
-  // const tmp_session = [
-  //   0x17, 0xa0, 0x8f, 0x02, 0x8f, 0x50, 0xfc, 0x1d, 0x34, 0x02, 0xac, 0x3e,
-  //   0x98, 0x2c, 0x35, 0xe0, 0x0a, 0x29, 0x17, 0x60, 0x6b, 0x48, 0xcd, 0x6a,
-  //   0xba, 0x47, 0x00, 0x48, 0x65, 0xa1, 0x9f, 0x40,
-  // ];
-
-  // const tmpSHA = [
-  //   0x0a, 0x14, 0x4d, 0xe0, 0x20, 0xec, 0xcc, 0x04, 0x46, 0xd5, 0x94, 0x7e,
-  //   0xbc, 0xf4, 0xa7, 0x40, 0x31, 0x17, 0x84, 0x2e, 0xa1, 0x26, 0x7f, 0x29,
-  //   0xe6, 0x53, 0xf7, 0x02, 0x41, 0x7e, 0x4e, 0xb6,
-  // ];
-  // console.log('intiGen2SecurityKey tmp_session==>', tmp_session);
-  // console.log('intiGen2SecurityKey tmpSHA==>', tmpSHA);
-
-  // var sessionUintArrayTmpBytes = Array.from(tmp_session);
-  // var sessionUintArrayTmpBytesSHA = await sha256Bytes(
-  //   sessionUintArrayTmpBytes,
-  // );
-  // var sessionUintArraySHA = fromHexStringUint8Array(
-  //   sessionUintArrayTmpBytesSHA,
-  // );
-  // console.log('intiGen2SecurityKey sha256Bytes==>', sessionUintArraySHA);
+  // console.log('intiGen2SecurityKey timestampUint8Array==>', {
+  //   hex: toHexString(timestampUint8Array),
+  // });
 
   const sessionKeyNew = await generateSessionKey(
     timestampUint8Array,
@@ -1477,27 +1417,68 @@ export const intiGen2SecurityKey = async () => {
     siteIdUint8Array,
     unProvisionDevice,
   );
-  console.log('intiGen2SecurityKey sessionKeyNew==>', sessionKeyNew);
+  //console.log('intiGen2SecurityKey sessionKeyNew==>', sessionKeyNew);
 
-  // const __sessionKeyDecArr1 = [
-  //   102, 35, 88, 156, 88, 156, 35, 102, 9, 154, 173, 239, 88, 95, 49, 202,
-  //   169, 255, 122, 187, 101, 87, 198, 146, 116, 140, 68, 2, 54, 228, 130, 31,
-  //   228, 163, 246, 198, 1,
-  // ];
+  const authorizationResponse = await writeSessionKeyToDeviceGen2(
+    sessionKeyNew,
+  );
 
-  // const __sessionKeyDecArr = [
-  //   166, 223, 30, 102, 10, 20, 77, 224, 32, 236, 204, 4, 70, 213, 148, 126,
-  //   188, 244, 167, 64, 49, 23, 132, 46, 161, 38, 127, 41, 230, 83, 247, 2, 65,
-  //   126, 78, 182, 1,
-  // ];
+  let authorizationResponseDecoded = base64ToHex(authorizationResponse?.value);
+  consoleLog(
+    'intiGen2SecurityKey authorizationResponse==>',
+    authorizationResponseDecoded,
+  );
+  if (authorizationResponseDecoded != '02') {
+    // that means security failed
+    const siteIDResponse = await BLEService.readCharacteristicForDevice(
+      SITE_ID_SERVICE_UUID,
+      SITE_ID_CHARACTERISTIC_UUID,
+    );
 
-  // const __sessionKeyDecArrUint8Array = new Uint8Array(sessionKeyNew);
-  // consoleLog('intiGen2SecurityKey __sessionKeyDecArr==>', __sessionKeyDecArr);
-  // consoleLog(
-  //   'intiGen2SecurityKey __sessionKeyDecArrUint8Array==>',
-  //   __sessionKeyDecArrUint8Array,
-  // );
+    // intiGen2SecurityKey SiteIDResult==> Kq1YBVjtRR2BNTLXHep/Iw==
+    consoleLog(
+      'intiGen2SecurityKey ReadSiteIDResult==>',
+      siteIDResponse?.value,
+    );
 
+    if (siteIDResponse?.value) {
+      siteIdHex = base64ToHex(siteIDResponse?.value);
+    }
+    consoleLog('gen2AfterReadingSiteIdHex', siteIdHex);
+
+    siteIdUint8Array = fromHexStringUint8Array(siteIdHex);
+    unProvisionDevice = false;
+
+    let timestampUint8Array2 = fromHexStringUint8Array(
+      decimalToHex(getTimestampInSeconds()),
+    );
+    consoleLog('intiGen2SecurityKey timestampUint8Array2==>', {
+      hex: toHexString(timestampUint8Array2),
+    });
+
+    const sessionKeyNew2 = await generateSessionKey(
+      timestampUint8Array2,
+      SERVER_KEY,
+      masterKeyUint8Array,
+      siteIdUint8Array,
+      unProvisionDevice,
+    );
+    console.log('intiGen2SecurityKey sessionKeyNew2==>', sessionKeyNew2);
+
+    const authorizationResponseAfterReadingSiteId =
+      await writeSessionKeyToDeviceGen2(sessionKeyNew2);
+    authorizationResponseDecoded = base64ToHex(
+      authorizationResponseAfterReadingSiteId?.value,
+    );
+    consoleLog(
+      'authorizationResponseAfterReadingSiteId',
+      authorizationResponseDecoded,
+    );
+  }
+};
+
+const writeSessionKeyToDeviceGen2 = async sessionKey => {
+  consoleLog('writingSessionKeyToGen2', sessionKey);
   const SESSION_KEY_SERVICE_UUID =
     BLE_CONSTANTS?.GEN2?.SESSION_KEY_SERVICE_UUID;
   const SESSION_KEY_CHARACTERISTIC_UUID =
@@ -1506,7 +1487,7 @@ export const intiGen2SecurityKey = async () => {
   await BLEService.writeCharacteristicWithResponseForDevice2(
     SESSION_KEY_SERVICE_UUID,
     SESSION_KEY_CHARACTERISTIC_UUID,
-    sessionKeyNew,
+    sessionKey,
   );
 
   // Authorization Key
@@ -1518,10 +1499,7 @@ export const intiGen2SecurityKey = async () => {
     AUTHORIZATION_KEY_SERVICE_UUID,
     AUTHORIZATION_KEY_CHARACTERISTIC_UUID,
   );
-  consoleLog(
-    'intiGen2SecurityKey authorizationResponse==>',
-    base64ToHex(authorizationResponse?.value),
-  );
+  return authorizationResponse;
 };
 
 const generateSessionKey = async (

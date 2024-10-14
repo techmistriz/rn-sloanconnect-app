@@ -1158,13 +1158,13 @@ class BLEServiceInstance {
     this.connectedDeviceStaticData = deviceStaticData;
   }
 
-  initDeviceData = async () => {
+  initDeviceData = async (device: any) => {
     await this.setDeviceSku();
     // return;
     if (BLEService.deviceGeneration == 'gen1') {
       await this.initDeviceDataGen1();
     } else if (BLEService.deviceGeneration == 'gen2') {
-      await this.initDeviceDataGen2();
+      await this.initDeviceDataGen2(device);
     } else if (BLEService.deviceGeneration == 'flusher') {
       await this.initDeviceDataFlusher();
     } else if (BLEService.deviceGeneration == 'basys') {
@@ -1190,8 +1190,8 @@ class BLEServiceInstance {
     await this.setDeviceModelData();
   };
 
-  initDeviceDataGen2 = async () => {
-    await intiGen2SecurityKey();
+  initDeviceDataGen2 = async (device: any) => {
+    await intiGen2SecurityKey(device);
     await this.setDeviceModelData();
   };
 
